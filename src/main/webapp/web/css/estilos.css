@@ -1,0 +1,134 @@
+@charset "UTF-8";
+/* CSS Document */
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {margin: 0; padding: 0; border: 0; font-size: 100%; font: inherit; vertical-align: baseline;}
+
+html {position: relative; min-height: 100%; }
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {display: block;}
+body {font-family: Arial,Helvetica,Verdana,sans-serif;width:100%;height:100%;min-height: 100%;}
+ol, ul {list-style: none;}
+
+.salto {clear:both;line-height:0;}
+.break {clear: left;}
+.breakRight {clear: right;}
+
+a:hover, a:focus {text-decoration: none;}
+
+header {position: fixed; top:0px; z-index:1000; width:100%; background-color: #ffffff;}
+
+header ~ article{top:175px}
+
+header .content{width: 800px; height: 165px;  margin: 0 auto;}
+header .imagen_logo_titulo_corpo{ position:absolute; top: 0px; width: 525px; height: 135px;}
+
+header .rigth{position:relative; float:right; top:16px; width: 190px;}
+header #idioma{ position:relative; width: 100px; height: 25px; float:right; margin-bottom: 15px; margin-right:35px;}
+header .precio{position:relative; width: 190px; height: 70px; color: #25438E; background-color: #f4f5f0; text-align:center;}
+header .precio a {color: #25438E; text-decoration: none;}
+header .texto_precio_prueba {font-size: 1.0em; color: #AF505F;}
+
+header nav{position:relative; float:left; top: 30px; margin-left:160px}
+header nav a{padding:0 11px !important; margin-left:15px; text-decoration:none; color: #fff; background-color: #0093d5;}
+header nav a.active{ -webkit-box-shadow: inset 0 3px 0 #25438E; -moz-box-shadow: inset 0 3px 0 #25438E; box-shadow: inset 0 3px 0 #25438E;}
+
+header .line {background-color: #EFBD25; height: 4px; margin-top: 7px; width: 100%;}
+
+footer{position:relative; float:left;  width:100%; background-color: #2D343E;}
+footer .content{width: 800px; height: 100px; margin: 0 auto;}
+footer .footer_copyright{position:relative; top:12px; font-size: 11px; color : #999999; width:430px; height:31px; }
+footer .footer_copyright a:link, footer_copyright a:active, .footer_copyright a:visited {color:#3399cc; text-decoration: none;}
+
+article ~ footer {top:175px}
+
+section{position:absolute; top:0; left:0; width:100%; height:100%;z-index:1;display:none;}
+section.show{z-index:2;display:block}
+
+article{position:relative; top:0; visibility:hidden;display:none;z-index:0;}
+.show{visibility:visible;display:block;z-index:1;}
+
+article .content{width: 800px; height: 570px; margin: 0 auto;}
+
+.home {background-color: #f4f5f0;}
+.home .cuadro_contenido{position:relative; top:30px; float:left; width: 550px; height: 170px; margin-bottom:15px;}
+.home .cuadro_contenido img {margin-right:20px; float:left; width:200px; height:150px;}
+.home .cuadro_contenido h2 {font-size: 1.3em; color: #25438E; float: left; margin:10px 0 0 0; padding:0 10px 0 0;}
+.home .cuadro_contenido h1 {margin-top:35px; font-size: 0.9em; color: #666666; text-align:justify;}
+
+.features {background-color: #B1D5D0;}
+.features .content {height: 400px;}.features .cuadro_contenido{position:relative; top:5px; float:left; width: 333px; height: 110px; margin-bottom:15px;}
+.features .cuadro_contenido .imgFeature {margin-right:20px; float:left; height:160px;}
+.features .cuadro_contenido img {width:60px; height:60px;}
+.features .cuadro_contenido h2 {font-size: 1.2em; color: #666666; float: left; margin:2px 0 0 0; padding:0 5px 0 0;}
+.features .cuadro_contenido h1 {margin-top:25px; font-size: 0.9em; color: #666666; text-align:justify;}
+.features .right{margin-left:20px;}
+
+.contact {background-color: #F1F1D1;}
+.contact .content {height: 735px;}
+.contact .cuadro_contenido {position:relative; top:15px; float:left; width: 700px; margin-bottom:25px; color: #666666;}
+.contact .cuadro_contenido h2 {font-sizes: 1.1em;  margin-bottom:10px;}
+.contact .cuadro_contenido h2 .strong {font-weight: bold;}
+.contact .cuadro_contenido h2 a {color: #666666; text-decoration: none; font}
+.contact .cuadro_contenido h1 {margin-top:10px; font-size: 0.9em; text-align:justify;}
+
+.contact .cuadro_contenido form label {font-size: 1.0em; margin-bottom:10px;}
+
+.contact .content form input[type="text"] {
+    background: none repeat scroll 0 0 #E8E8E8;
+    border: 1px solid #F2F2F2;
+    border-radius: 5px;
+    box-shadow: 0 2px 3px #BCBCBC inset;
+    color: #5F6A5F;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 0 10px;
+    padding: 5px;
+    width: 95%;
+}
+
+.contact .content form textarea {
+    background: none repeat scroll 0 0 #E8E8E8;
+    border: 1px solid #F2F2F2;
+    border-radius: 5px;
+    box-shadow: 0 2px 3px #BCBCBC inset;
+    color: #5F6A5F;
+    font-size: 100%;
+    height: 155px;
+    margin: 0 20px 10px 0;
+    padding: 10px 5px;
+    width: 85%;
+}
+
+
+
+.contact .content input[type="button"] {
+    background: -moz-linear-gradient(center top , #498695 0%, #0093D5 100%) repeat scroll 0 0 #498695;
+    box-shadow: 0 1px 2px #939DA2;
+    color: #FEFEFE;
+    font-size: 100%;
+    margin: 8px 0 22px 340px;
+    text-shadow: 0 1px 1px #003547;
+    border: medium none;
+    border-radius: 4px;
+    cursor: pointer;
+    height: 45px;
+    width: 85px;
+}
+
+
+.contact .content .required{
+    color: #FF0000;
+}

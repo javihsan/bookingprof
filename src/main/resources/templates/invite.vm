@@ -1,0 +1,29 @@
+BEGIN:VCALENDAR
+PRODID:-//BookingProf//HAIR 1.0//ES
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:REQUEST
+BEGIN:VEVENT
+DTSTART:${model.getFormatICSDtStart()}
+DTEND:${model.getFormatICSDtEnd()}
+DTSTAMP:${model.getFormatICSDtStamp()}
+ORGANIZER;CN=${model.getNocOrgName()}:mailto:${model.getNocOrgEmail()}
+UID:${model.getNocUID()}
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=CONFIRMED;RSVP=
+ TRUE;X-NUM-GUESTS=0:mailto:${model.getNocDesEmail()}
+CREATED:${model.getFormatICSDtCreated()}
+X-ALT-DESC;FMTTYPE=text/html:${model.getNocContent()}
+LOCATION:${model.getNocLocation()}
+SEQUENCE:0
+STATUS:CONFIRMED
+SUMMARY:${model.getNocSummary()}
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:Display
+DESCRIPTION:${model.getNocSummary()}
+TRIGGER:-P0DT24H0M0S
+REPEAT:2
+DURATION:PT22H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

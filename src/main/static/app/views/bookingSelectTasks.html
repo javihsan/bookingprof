@@ -1,0 +1,77 @@
+<form>
+	<md-content>
+	  	<div layout="column">
+		  	<md-list>
+		  		<div ng-show="local.locNumPersonsApo > 1" class="block-sep">
+			  		<md-list-item  class="md-2-line">
+			 			<md-icon md-font-library="material-icons" class="md-24">person_add</md-icon>
+				  		<div class="md-list-item-text">
+							<p lnt-id="task.select.people"></p>		
+						</div>
+					</md-list-item>
+					<md-list-item class="md-2-line">
+						<md-icon></md-icon>
+			  			<div class="md-list-item-text">
+			  				<md-input-container>
+			  					<md-select ng-model="personscope.numPersons" ng-change="disabledNextTabs();changeNumPersons()" aria-label="{{findLangTextElement('task.select.people')}}">
+					  				<md-option ng-repeat="numPerson in personscope.persons" value="{{numPerson.id}}">
+					  					{{numPerson.name}}
+					  				</md-option>
+					  			</md-select>
+					  		</md-input-container>
+					  	</div>		
+					</md-list-item>
+				</div>		
+				<div ng-show="!isAdveo" ng-repeat="numPerson in personscope.persons | limitTo:personscope.numPersons" class="block-sep">
+			  		<md-list-item class="md-2-line">
+						<md-icon ng-if="local.locNumPersonsApo == 1" md-font-library="material-icons" class="md-24">build</md-icon>
+						<md-icon ng-if="local.locNumPersonsApo > 1" md-font-library="material-icons" class="md-24">looks_{{icons_num($index)}}</md-icon>
+						<div class="md-list-item-text">
+				  			<p lnt-id="label.template.job"></p>
+						</div>
+					</md-list-item>
+					<md-list-item class="md-2-line">
+						<md-icon></md-icon>
+						<div class="md-list-item-text taskSelect">
+							<a ng-href="" ng-click="goToSelectTaskPerson(numPerson.id)">
+								<font>{{personscope.selectedTasksPersonsStr[$index]}}</font>
+							</a>
+							<md-button ng-controller="LangsController" ng-show="sectionBack==null && existsMenu" ng-click="goToSelectTaskPerson(numPerson.id)">
+	          					<md-icon md-font-library="material-icons" class="md-24">arrow_drop_down</md-icon>
+							</md-button>
+						</div>
+					</md-list-item>
+				</div>	
+				
+				<md-list-item ng-show="isAdveo" class="md-2-line">
+					<label id="error_numLines" style="color:red;"></label> <label>{{findLangTextElement("label.template.selNumLines")}}: </label></br>
+					<input id="numLines" size="3" type="number" ng-model="personscope.selectedTasksPersons[0][0].numLines" max="999" min="1" required>
+					<label id="error_numPallets" style="color:red;"></label> <label>{{findLangTextElement("label.template.selNumPallets")}}: </label></br>
+					<input id="numPallets" size="3" type="number" ng-model="personscope.selectedTasksPersons[0][0].numPallets" max="999" min="1" required>
+				</md-list-item>
+				
+				<div ng-show="local.locSelCalendar == 1" class="block-sep">
+					<md-list-item class="md-2-line">
+						<md-icon md-font-library="material-icons" class="md-24 md-hue-3">perm_contact_calendar</md-icon>
+						<div class="md-list-item-text">
+							<p lnt-id="place.select.cabText"></p>
+					  	</div>
+					</md-list-item>
+					<md-list-item class="md-2-line">
+						<md-icon></md-icon>
+						<div class="md-list-item-text">
+					    	<md-input-container>
+						    	<md-select ng-model="selCalendar.selectedCalendar[0].id" ng-change="disabledNextTabs()" aria-label="{{findLangTextElement('place.select.cabText')}}">
+						    		<md-option value="-1">{{findLangTextElement("general.anyone")}}</md-option>
+						  			<md-option ng-repeat="calendar in selCalendar.calendars" value="{{calendar.id}}">
+						  				{{calendar.calName}}
+						  			</md-option>
+						  		</md-select>
+						  	</md-input-container>	
+					  	</div>
+					</md-list-item>
+				</div>
+		  	</md-list>	
+		</div>
+	</md-content>
+</form> 

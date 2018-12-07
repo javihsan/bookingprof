@@ -1,0 +1,62 @@
+<article class="booking_calendar">
+ 		<md-tabs id="tabsbook" md-selected="$parent.selectedTabIndex" md-dynamic-height md-border-bottom md-autoselect>
+ 		
+	    	<md-tab label="{{tabsBook[0].title}}" ng-disabled="tabsBook[0].disabled" ng-click="$parent.selectedTabIndex = 0;">
+		  		<loading></loading>
+		 	  	<md-toolbar ng-show="!isViewLoading && selectedDate">
+				    <div class="md-toolbar-tools date" >
+				      	<span flex></span>
+				      	<span flex></span>
+				      	<span flex></span>
+				  	</div>
+				    <div class="md-toolbar-tools date year" layout-align="start center">
+				    	<span flex ng-bind="extractYear()"></span>
+				      	<span flex></span>
+				      	<span flex></span>
+				     </div>
+				    <div class="md-toolbar-tools date" layout-align="start center">
+				    	<span flex="70" ng-bind="extractDayWeekMonth()"></span>
+				    	<span flex></span>
+						<md-button ng-click="toggleSelectDate()">
+				        	<md-icon md-font-library="material-icons" class="md-24 md-light">arrow_drop_down_circle</md-icon>
+				        </md-button>
+				  	</div>
+			    </md-toolbar>
+				<show-month id="table-month" ng-show="!isViewLoading && showSelectedDate">
+				</show-month>
+								
+				<show-tasks ng-show="!isViewLoading && selectedDate">
+				</show-tasks>
+				
+				<md-divider class="clear">
+				
+				<div ng-show="!isViewLoading && selectedDate" layout="row" class="md-actions" layout-align="start center">
+	    			<span flex></span>
+	    			<md-button ng-click="saveTaskSelect()" class="md-primary md-hue-2">
+	    				<span lnt-id="event.searchHours">Ver resultados</span>
+	    				<md-icon md-font-library="material-icons" class="md-24 md-accents">search</md-icon>
+	    			</md-button>
+	    			<span flex></span>
+	   			</div>	
+			</md-tab>
+    	
+    		<md-tab label="{{tabsBook[1].title}}" ng-disabled="tabsBook[1].disabled" ng-click="$parent.selectedTabIndex = 1;">
+    			<loading></loading>
+     			<show-apos-day ng-show="!isViewLoading" />
+			</show-apos-day>
+      		</md-tab>
+      		
+      		<md-tab label="{{tabsBook[2].title}}" ng-disabled="tabsBook[2].disabled" ng-click="$parent.selectedTabIndex = 2;">
+      			<loading></loading>
+				<show-apos-new ng-show="!isViewLoading" />
+      		</md-tab>
+
+			<md-tab label="{{tabsBook[3].title}}" ng-disabled="tabsBook[3].disabled" ng-click="$parent.selectedTabIndex = 3;">
+      			<loading></loading>
+				<show-apos-end ng-show="!isViewLoading" />
+      		</md-tab>
+
+   	</md-tabs>
+</article>
+
+	

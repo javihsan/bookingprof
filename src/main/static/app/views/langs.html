@@ -1,0 +1,9 @@
+<div class="md-toolbar-tools">
+
+	<md-radio-group ng-model="langApp" class="green md-hue-1" layout="row" layout-align="space-between center">
+       	<md-radio-button ng-value="lang.lanCode" class="md-primary md-hue-2" ng-repeat="lang in langs" ng-click="selectLang(lang.lanCode)">
+           <span>{{lang.lanName}}</span>
+       	</md-radio-button>
+ 	</md-radio-group>	
+</div>
+

@@ -1,0 +1,49 @@
+
+	<md-subheader class="md-no-sticky md-primary">
+		<div layout="row" layout-align="space-around center">
+			<div flex="70" layout="row" layout-align="start center">
+				<md-button ng-click="loadMonth(-1)">
+			        <md-icon md-font-library="material-icons" class="md-primary md-24">navigate_before</md-icon>
+			    </md-button>
+			    <span flex="none" class="month-year"></span>
+			    <md-button ng-click="loadMonth(+1)">
+			        <md-icon md-font-library="material-icons" class="md-primary md-24">navigate_next</md-icon>
+			    </md-button>
+			</div>
+			<md-button ng-click="onToday()">
+				<span lnt-id="label.header.today">Today</span>
+			   	<md-icon md-font-library="material-icons" class="md-primary md-24">today</md-icon>
+			</md-button>
+			<span flex></span>
+	    </div>
+	</md-subheader>
+	<md-divider>
+	<md-grid-list md-cols="7" md-gutter="0px" md-row-height="16px">
+		<md-grid-tile> 
+			<span id="dateWeek" lnt-id="general.daysWeekMon">Mon</span>
+		</md-grid-tile>
+		<md-grid-tile> 
+			<span id="dateWeek" lnt-id="general.daysWeekTue">Tue</span>
+		</md-grid-tile>
+		<md-grid-tile>
+			<span id="dateWeek" lnt-id="general.daysWeekWed">Wed</span> 
+		</md-grid-tile>
+		<md-grid-tile>
+			<span id="dateWeek" lnt-id="general.daysWeekThu">Thu</span> 
+		</md-grid-tile>
+		<md-grid-tile>
+			<span id="dateWeek" lnt-id="general.daysWeekFri">Fri</span> 
+		</md-grid-tile>
+		<md-grid-tile>
+			<span id="dateWeek" lnt-id="general.daysWeekSat">Sat</span> 
+		</md-grid-tile>
+		<md-grid-tile>
+			<span id="dateWeek" lnt-id="general.daysWeekSun">Sun</span> 
+		</md-grid-tile>
+	</md-grid-list>
+    <md-divider>
+    <md-grid-list id="tableDates" md-cols="7" md-gutter="0px" md-row-height="fit">
+		<md-grid-tile ng-repeat="a in range(42) track by $index" ng-click="disabledNextTabs(); onSelectDate($event)">
+    		<span id="date"></span>
+		</md-grid-tile>
+	</md-grid-list>    	

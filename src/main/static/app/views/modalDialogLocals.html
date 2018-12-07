@@ -1,0 +1,73 @@
+<md-dialog aria-label="{{titleDialog}}" ng-cloak>
+  <form>
+  <md-toolbar md-scroll-shrink>
+  	<div class="md-toolbar-tools title">
+    	<span flex></span>
+      	<span flex></span>
+      	<md-button ng-show="$parent.local!=null" class="md-icon-button" ng-click="cancel()">
+       		<md-icon md-font-library="material-icons" class="md-24 md-light">close</md-icon>
+      	</md-button>
+    </div>
+    <div class="md-toolbar-tools">
+    	<span flex></span>
+      	<span flex></span>
+      	<span flex></span>
+  	</div>
+    <div class="md-toolbar-tools title">
+    	<span flex></span>
+      	<span ng-show="returnObj==null" flex>{{titleDialog}}</span>
+      	<span ng-show="returnObj!=null" flex>{{returnObj.locName}}</span>
+      	<span flex></span>
+  	</div>
+  </md-toolbar>
+  <md-dialog-content class="detail">
+  	<div ng-show="$parent.listLocal.length>1" class="md-dialog-content">
+  		<div layout="column" layout-margin>
+	    	<md-subheader class="md-no-sticky">{{titleContent}}</md-subheader>
+	 		<md-radio-group ng-model="returnObj" layout="column" layout-align="space-between start">
+	        	<md-radio-button ng-value="localElem" class="md-primary md-hue-2" ng-repeat="localElem in $parent.listLocal" ng-click="selectObj(localElem)">
+	            	{{ localElem.locName }}
+	          	</md-radio-button>
+          	</md-radio-group>
+	    </div>	
+  	</div>
+  	<div ng-show="returnObj!=null" class="md-dialog-content">
+	  	<div layout="column" layout-margin>
+		  	<md-list>
+			  	<md-list-item class="md-2-line">
+			  		<md-icon md-font-library="material-icons" class="md-24">phone</md-icon>
+			  		<div class="md-list-item-text">
+	          			<p> {{ returnObj.locRespon.whoTelf1 }} </p>
+	        		</div>
+	        	</md-list-item>
+	        	<md-divider>
+	            <md-list-item class="md-2-line">
+	        		<md-icon md-font-library="material-icons" class="md-24">email</md-icon>
+			  		<div class="md-list-item-text">
+	          			<p> {{ returnObj.locRespon.whoEmail }} </p>
+	        		</div>
+	            </md-list-item>
+	            <md-divider>
+	            <md-list-item class="md-2-line">
+	        		<md-icon md-font-library="material-icons" class="md-24">home</md-icon>
+			  		<div class="md-list-item-text">
+	          			<p>{{ returnObj.locWhere.wheAddress }} {{ returnObj.locWhere.wheCity }}</p>
+	        		</div>
+	            </md-list-item>
+	    	</md-list>	
+		</div>
+	</div>  	
+  </md-dialog-content>
+  <md-dialog-actions ng-show="$parent.listLocal.length>1" layout="row" layout-align="space-around center">
+  	<span flex></span>
+    <md-button ng-show="$parent.local!=null" ng-click="cancel()" class="md-primary md-hue-2">
+     {{cancelText}}
+    </md-button>
+    <md-button ng-disabled="returnObj==null" ng-click="answer()" class="md-primary md-hue-2">
+     {{acceptText}}
+    </md-button>
+    <span flex></span>
+  </md-dialog-actions>
+  </form>
+</md-dialog>
+

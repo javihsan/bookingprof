@@ -1,0 +1,114 @@
+<md-content>	
+	<md-content ng-show="!errorSave">
+	    <md-toolbar>
+		    <div class="md-toolbar-tools notif cab">
+		    	<span flex></span>
+		      	<span flex></span>
+		      	<span flex></span>
+		  	</div>
+		    <div class="md-toolbar-tools notif">
+		    	<span flex></span>
+		      	<span flex>{{findLangTextElement("label.notification.bookedApo.title")}}</span>
+		      	<span flex></span>
+		  	</div>
+	  	</md-toolbar>
+		<md-divider class="clear-min">
+		<div layout="column" layout-gt-sm="row" layout-align="space-between center">
+		  	<md-list>
+		  		<md-list-item class="md-1-line">
+		  			<p>{{findLangTextElement("label.notification.bookedApo.text")}}</p>
+				</md-list-item>
+				<md-divider>
+		  		<md-list-item>
+		  			<div layout="column" layout-align="center start" layout-gt-sm="row" layout-align-gt-sm="start center">
+			  			<div layout="row" style="margin-right: 32px;">
+				 			<md-icon md-font-library="material-icons" class="md-24" style="margin-right: 32px;">today</md-icon>
+				 			<p>{{formatDateSelected()}}</p>
+			 			</div>
+			 			<div layout="row">
+					 		<md-icon md-font-library="material-icons" class="md-24" style="margin-right: 32px;">schedule</md-icon>
+							<p>{{appo.appoSel.apoName}}</p>
+						</div>
+					</div>	
+				</md-list-item>
+				<md-divider>
+		  		<md-list-item ng-show="local.locNumPersonsApo > 1" >
+		 			<md-icon md-font-library="material-icons" class="md-24">person_add</md-icon>
+					<p>{{findLangTextElement("label.html.apoFor1")}} {{personscope.numPersons}} {{findLangTextElement("label.html.apoFor2")}}</p>  
+				</md-list-item>
+				
+		  		<md-list-item ng-show="!isAdveo" ng-repeat="numPerson in personscope.persons | limitTo:personscope.numPersons">
+					<md-icon ng-if="local.locNumPersonsApo == 1" md-font-library="material-icons" class="md-24">build</md-icon>
+					<md-icon ng-if="local.locNumPersonsApo > 1" md-font-library="material-icons" class="md-24">looks_{{icons_num($index)}}</md-icon>
+			  		<p ng-show="!tasMultiple">{{personscope.selectedTasksPersons[$index][0].tasName}}</p> 
+			  		<p ng-show="tasMultiple">{{personscope.selectedTasksPersonsStr[$index]}}</p>
+	  			</md-list-item>
+				
+				<md-list-item ng-show="isAdveo">
+		  	  		<p>{{findLangTextElement("label.template.numLines")}}: {{personscope.selectedTasksPersons[0][0].numLines}}</p>
+		  	  		<p>{{findLangTextElement("label.template.numPallets")}}: {{personscope.selectedTasksPersons[0][0].numPallets}}</p> 
+				</md-list-item>
+				
+				<md-list-item ng-show="local.locSelCalendar == 1 && selCalendar.selectedCalendar[0].calName">
+					<md-icon md-font-library="material-icons" class="md-24 fmd-hue-3">perm_contact_calendar</md-icon>
+				  	<p>{{findLangTextElement("label.header.places")}}: {{selCalendar.selectedCalendar[0].calName}}</p> 
+				</md-list-item> 
+				<md-divider>
+				<md-list-item>
+					<md-icon md-font-library="material-icons" class="md-24">person</md-icon>
+					<p>{{client.name}}</p>
+				</md-list-item>
+				<md-list-item>
+					<div layout="column" layout-align="center start" layout-gt-sm="row" layout-align-gt-sm="start center">
+						<div layout="row" style="margin-right: 32px;">
+							<md-icon md-font-library="material-icons" class="md-24" style="margin-right: 32px;">email</md-icon>
+							<p>{{client.email}}</p>
+						</div>
+			 			<div layout="row">
+			 			    <md-icon md-font-library="material-icons" class="md-24" style="margin-right: 32px;">phone</md-icon>
+							<p>{{client.telf}}</p>
+			 			</div>
+			 		</div>		
+				</md-list-item>
+				<md-list-item ng-show="client.celebrationDate">
+					<md-icon md-font-library="material-icons" class="md-24">today</md-icon>
+					<p>{{formatDateCelebration()}}</p>
+				</md-list-item>
+				<md-list-item ng-show="client.observ!=''">
+					<md-icon md-font-library="material-icons" class="md-24">insert_comment</md-icon>
+					<p>{{client.observ}}</p>
+				</md-list-item>	
+		  	</md-list>	
+		</div>
+	</md-content>
+	<md-content ng-show="errorSave">
+		<md-toolbar>
+		    <div class="md-toolbar-tools notif cab">
+		    	<span flex></span>
+		      	<span flex></span>
+		      	<span flex></span>
+		  	</div>
+		    <div class="md-toolbar-tools notif notsave">
+		    	<span flex></span>
+		      	<span flex>{{findLangTextElement("label.notification.errorBase.title")}}</span>
+		      	<span flex></span>
+		  	</div>
+	  	</md-toolbar>
+	  	<md-divider class="clear-min">
+	  	<div layout="column" layout-gt-sm="row" layout-align="space-between center">
+		  	<md-list>
+		  		<md-list-item class="md-1-line">
+		  			<p>{{errorSave}}</p>
+				</md-list-item>
+			</md-list>
+		</div>		
+	</md-content>		
+	<md-divider class="clear-min">
+	<div layout="row" class="md-actions" layout-align="start center">
+		<span flex></span>
+		<md-button ng-click="initBook(1)" class="md-primary md-hue-2">
+	   		<span lnt-id="form.accept">Aceptar</span>
+	   	</md-button>
+	   	<span flex></span>
+	</div>
+</md-content>

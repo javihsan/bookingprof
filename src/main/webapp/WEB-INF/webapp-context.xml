@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 	xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+		default-lazy-init="false">
+
+	<context:component-scan base-package="com.diloso.bookhair.app.controllers, com.diloso.bookhair.app.negocio.utils.templates, com.diloso.bookhair.app.persist.manager, com.diloso.bookhair.app.persist.transformer"/>
+	
+	
+	<bean id="applicationContextProvider" class="com.diloso.bookhair.app.negocio.utils.ApplicationContextProvider" />
+	
+	<!-- responsible for converting from the HTTP request message to an object and converting from an object to the HTTP response body. -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"> 
+		<property name="interceptors">
+        	<ref bean="localeChangeInterceptor" />
+    	</property> 
+	</bean>
+	
+	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+    	<property name="paramName" value="lang" />
+	</bean>
+	
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver" />
+		
+	<bean id="messageSource" class="com.diloso.bookhair.app.negocio.utils.ExtendMessageSource">
+    	<property name="basenames" value="classpath:com/diloso/bookhair/app/client/messages,classpath:com/diloso/bookhair/web/client/messages" />
+	</bean>
+	
+	<!-- For ResponseBody -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<ref bean="jsonConverter" />
+			</list> 
+		</property>
+	</bean>
+	
+ 
+	<!-- For ResponseBody -->
+	<bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="supportedMediaTypes" value="application/json" />
+	</bean>
+	
+	<!-- For ModelAndView -->
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="mediaTypes">
+		    <map>
+				<entry key="xml" value="application/xml"/>
+				<entry key="json" value="application/json"/>
+				<entry key="html" value="text/html"/>
+		    </map>
+		</property>
+		<property name="viewResolvers">
+		    <list>
+		    	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
+		        <bean class="com.diloso.bookhair.app.controllers.ReplaceInternalResourceViewResolver">
+                	<property name="identAPP" value="/app" />
+                	<property name="prefixAPP" value="/app/jsp" />
+                    <property name="sufixAPP" value=".jsp"/>
+                    <property name="prefixAPPMaterial" value="" />
+                    <property name="sufixAPPMaterial" value=".html"/>
+		            <property name="prefixWEB" value="/web/jsp/" />
+                    <property name="sufixWEB" value=".jsp"/>
+                 </bean>
+			</list>
+		</property>
+		<property name="defaultViews">
+		    <list>
+		      <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+		    </list>
+		</property>
+	</bean>
+		
+	<bean id="beanEMF" class="com.diloso.bookhair.app.persist.manager.EMF" />
+		
+</beans>

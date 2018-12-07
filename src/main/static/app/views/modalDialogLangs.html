@@ -1,0 +1,46 @@
+<md-dialog aria-label="{{titleDialog}}" ng-cloak>
+  <form>
+  <md-toolbar>
+  	<div class="md-toolbar-tools title">
+    	<span flex></span>
+      	<span flex></span>
+      	<md-button class="md-icon-button" ng-click="cancel()">
+       		<md-icon md-font-library="material-icons" class="md-24 md-light">close</md-icon>
+      	</md-button>
+    </div>
+    <div class="md-toolbar-tools">
+    	<span flex></span>
+      	<span flex></span>
+      	<span flex></span>
+  	</div>
+    <div class="md-toolbar-tools title">
+    	<span flex></span>
+      	<span flex>{{titleDialog}}</span>
+      	<span flex></span>
+  	</div>
+  </md-toolbar>
+  <md-dialog-content>
+  	<div class="md-dialog-content">
+  		<div layout="column" layout-margin>
+	      	<md-subheader class="md-no-sticky">{{titleContent}}</md-subheader>
+	      	<md-radio-group ng-model="returnObj" layout="column" layout-align="space-between start">
+        		<md-radio-button ng-value="lang.lanCode" class="md-primary md-hue-2" ng-repeat="lang in $parent.langs" ng-click="selectObj(lang.lanCode)">
+            		{{ lang.lanName }}
+          		</md-radio-button>
+	        </md-radio-group>
+	    </div> 
+  	</div>
+  </md-dialog-content>
+   <md-dialog-actions layout="row" layout-align="space-around center">
+    <span flex></span>
+    <md-button ng-click="cancel()" class="md-primary md-hue-2">
+     {{cancelText}}
+    </md-button>
+    <md-button ng-click="answer()" class="md-primary md-hue-2">
+     {{acceptText}}
+    </md-button>
+    <span flex></span>
+  </md-dialog-actions>
+  </form>
+</md-dialog>
+

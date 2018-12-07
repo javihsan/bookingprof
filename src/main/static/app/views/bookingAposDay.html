@@ -1,0 +1,105 @@
+<md-content>
+	<md-content ng-show="!errorApoDay">
+		<loading></loading>
+		<div>
+			<md-grid-list md-cols="5" md-gutter="0px" md-row-height="16px">
+				<md-grid-tile> 
+					<span id="dateWeek" ng-bind="extractSemDay(-2)"></span>
+				</md-grid-tile>
+				<md-grid-tile>
+					<span id="dateWeek" ng-bind="extractSemDay(-1)"></span>
+				</md-grid-tile>
+				<md-grid-tile>
+					<span id="dateWeek" ng-bind="extractSemDay()"></span>
+				</md-grid-tile>
+				<md-grid-tile>
+					<span id="dateWeek" ng-bind="extractSemDay(1)"></span>
+				</md-grid-tile>
+				<md-grid-tile>
+					<span id="dateWeek" ng-bind="extractSemDay(2)"></span>
+				</md-grid-tile>
+			</md-grid-list>
+		    <md-divider>
+		    <md-grid-list id="tableDatesAux" md-cols="5" md-gutter="0px" md-row-height="56px">
+				<md-grid-tile ng-class="{date_not_enabled:isNotSel(-2)}" ng-click="initDayAppos(-2, $event)"> 
+					<span ng-bind="extractDayMonth(-2)"></span>
+				</md-grid-tile>
+				<md-grid-tile ng-class="{date_not_enabled:isNotSel(-1)}" ng-click="initDayAppos(-1, $event)">
+					<span ng-bind="extractDayMonth(-1)"></span> 
+				</md-grid-tile>
+				<md-grid-tile class="date_not_enabled">
+					<span class="today" ng-bind="extractDayMonth()"></span>
+				</md-grid-tile>
+				<md-grid-tile ng-class="{date_not_enabled:isNotSel(1)}" ng-click="initDayAppos(1, $event)">
+					<span ng-bind="extractDayMonth(1)"></span>
+				</md-grid-tile>
+				<md-grid-tile ng-class="{date_not_enabled:isNotSel(2)}" ng-click="initDayAppos(2, $event)">
+					<span ng-bind="extractDayMonth(2)"></span>
+				</md-grid-tile>
+			</md-grid-list>  
+		</div>	
+		<md-divider class="clear">
+		<div>
+		    <md-grid-list id="tableDays" md-cols="{{appo.cols}}" md-gutter-sm="4px" md-row-height="fit" style="height:{{appo.height}}px !important;">
+				<md-grid-tile ng-repeat="appointment in appo.appointments" ng-click="onSelectDayAppo(appointment)">
+					
+					<span ng-hidess="appointment.bgColor>0" class="calendarDayText">
+						{{appointment.apoName}}
+						<span ng-show="appointment.bgColor>0" class="calendarDayText">
+						{{appointment.apoCalendarName}}
+						</span>	
+						<md-icon md-font-library="material-icons" class="md-warn">check</md-icon>
+					</span>
+							<!-- 		<div ng-show="appointment.bgColor>0" class="calendarDaySP bg-color{{bgColor}}" style="margin-top: {{appointment.apoX}}px; left: {{appointment.apoY}}%;">
+											<p class="calendarDayText">{{appointment.apoName}}</p>
+											<p class="calendarDayText special">{{appointment.apoCalendarName}}</p>
+										</div> -->						
+					
+				</md-grid-tile>
+			</md-grid-list>    	
+		</div>
+	</md-content>
+	<md-content ng-show="errorApoDay">
+		<md-toolbar>
+		    <div class="md-toolbar-tools notif cab">
+		    	<span flex></span>
+		      	<span flex></span>
+		      	<span flex></span>
+		  	</div>
+		    <div class="md-toolbar-tools notif notsave">
+		    	<span flex></span>
+		      	<span flex>{{findLangTextElement("label.notification.notavailable.title")}}</span>
+		      	<span flex></span>
+		  	</div>
+	  	</md-toolbar>
+	  	<md-divider class="clear-min"> 
+	  	<div layout="column" layout-gt-sm="row" layout-align="space-between center">
+		  	 <md-list>
+		  		<md-list-item class="md-1-line">
+		  			<p>{{findLangTextElement("label.notification.notavailable.text")}}</p>
+				</md-list-item>
+				<md-list-item ng-show="appo.nextDays.length>0" class="md-1-line">
+		  			<p ng-showS="!isSubViewLoading">{{findLangTextElement("localTask.notavailablesearchresult")}} {{formatDateSelected()}}</p>
+				</md-list-item>
+			</md-list>
+		</div>
+		<div ng-hide="appo.nextDays.length==0">
+			<loading_sub></loading_sub>
+			<md-grid-list ng-show="!isSubViewLoading" id="tableDatesNext" md-cols-xs="2" md-cols="4" md-gutter-sm="10px" md-gutter="0px" md-row-height="76px">
+				<md-grid-tile ng-repeat="nextDay in appo.nextDays" ng-click="initDayAppos(null, $event, nextDay)"> 
+					<span ng-bind="extractDayWeek(nextDay)"></span>
+				</md-grid-tile>
+			</md-grid-list>
+		</div>  
+		<div ng-show="!isSubViewLoading && appo.nextDays.length==0">
+			<md-divider class="clear-min">
+			<div layout="row" class="md-actions" layout-align="start center">
+				<span flex></span>
+				<md-button ng-click="initBook(1)" class="md-primary md-hue-2">
+			   		<span lnt-id="form.accept">Aceptar</span>
+			   	</md-button>
+			   	<span flex></span>
+			</div>
+		</div>	
+	</md-content>
+</md-content>	

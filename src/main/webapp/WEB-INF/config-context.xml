@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 	xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="
+			http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+		default-lazy-init="false">
+
+    
+    <!-- Identificativo en BBDD 01-Pelu 02-Moda 03-Club 04-Gym -3 digitos para variedades -->
+	<!-- configFirmPelu  01-001 -->
+	<bean id="CF01001" class="com.diloso.bookhair.app.negocio.config.impl.ConfigFirm">
+		<!-- Config del local -->
+		<property name="configLocal">
+			<ref bean="configLocalPelu"/>
+		</property>
+		<!-- Config de Seguridad -->
+		<property name="configAut">
+			<ref bean="configAutFree"/>
+		</property>
+		<!-- Config de Denominacion -->
+		<property name="configDenon">
+			<ref bean="configDenonPelu"/>
+		</property>
+		<!-- Config de Cliente -->
+		<property name="configClient">
+			<ref bean="configClientDefault"/>
+		</property>
+		<!-- Config de Pagos -->
+		<property name="configPay">
+			<ref bean="configPayNoPay"/>
+		</property>
+		<!-- Config de Eventos -->
+		<property name="configEvent">
+			<ref bean="configEventNoCourse"/>
+		</property>
+	</bean>
+	
+	<!-- Identificativo en BBDD 01-Pelu 02-Moda 03-Club 04-Gym -3 digitos para variedades -->
+	<!-- configFirmModa  02-001 -->
+	<bean id="CF02001" class="com.diloso.bookhair.app.negocio.config.impl.ConfigFirm">
+		<!-- Config del local -->
+		<property name="configLocal">
+			<ref bean="configLocalModa"/>
+		</property>
+		<!-- Config de Seguridad -->
+		<property name="configAut">
+			<ref bean="configAutFree"/>
+		</property>
+		<!-- Config de Denominacion -->
+		<property name="configDenon">
+			<ref bean="configDenonModa"/>
+		</property>
+		<!-- Config de Cliente -->
+		<property name="configClient">
+			<ref bean="configClientModa"/>
+		</property>
+		<!-- Config de Pagos -->
+		<property name="configPay">
+			<ref bean="configPayNoPay"/>
+		</property>
+		<!-- Config de Eventos -->
+		<property name="configEvent">
+			<ref bean="configEventNoCourse"/>
+		</property>
+	</bean>
+	
+	<!-- Identificativo en BBDD 01-Pelu 02-Moda 03-Club 04-Gym -3 digitos para variedades -->
+	<!-- configFirmClub  03-001 -->
+	<bean id="CF03001" class="com.diloso.bookhair.app.negocio.config.impl.ConfigFirm">
+		<!-- Config del local -->
+		<property name="configLocal">
+			<ref bean="configLocalClub"/>
+		</property>
+		<!-- Config de Seguridad -->
+		<property name="configAut">
+			<ref bean="configAutFree"/>
+		</property>
+		<!-- Config de Denominacion -->
+		<property name="configDenon">
+			<ref bean="configDenonClub"/>
+		</property>
+		<!-- Config de Cliente -->
+		<property name="configClient">
+			<ref bean="configClientDefault"/>
+		</property>
+		<!-- Config de Pagos -->
+		<property name="configPay">
+			<ref bean="configPayNoPay"/>
+		</property>
+		<!-- Config de Eventos -->
+		<property name="configEvent">
+			<ref bean="configEventNoCourse"/>
+		</property>
+	</bean>
+	
+	<!-- Identificativo en BBDD 01-Pelu 02-Moda 03-Club 04-Gym -3 digitos para variedades -->
+	<!-- configFirmFisio  04-001 -->
+	<bean id="CF04001" class="com.diloso.bookhair.app.negocio.config.impl.ConfigFirm">
+		<!-- Config del local -->
+		<property name="configLocal">
+			<ref bean="configLocalOneConsul"/>
+		</property>
+		<!-- Config de Seguridad -->
+		<property name="configAut">
+			<ref bean="configAutFree"/>
+		</property>
+		<!-- Config de Denominacion -->
+		<property name="configDenon">
+			<ref bean="configDenonProfSanidad"/>
+		</property>
+		<!-- Config de Cliente -->
+		<property name="configClient">
+			<ref bean="configClientDefault"/>
+		</property>
+		<!-- Config de Pagos -->
+		<property name="configPay">
+			<ref bean="configPayNoPay"/>
+		</property>
+		<!-- Config de Eventos -->
+		<property name="configEvent">
+			<ref bean="configEventNoCourse"/>
+		</property>
+	</bean>
+	
+	<!-- Identificativo en BBDD 01-Pelu 02-Moda 03-Club 04-Gym -3 digitos para variedades -->
+	<!-- configFirmPsicologia  05-001 -->
+	<bean id="CF05001" class="com.diloso.bookhair.app.negocio.config.impl.ConfigFirm">
+		<!-- Config del local -->
+		<property name="configLocal">
+			<ref bean="configLocalOneConsul"/>
+		</property>
+		<!-- Config de Seguridad -->
+		<property name="configAut">
+			<ref bean="configAutFree"/>
+		</property>
+		<!-- Config de Denominacion -->
+		<property name="configDenon">
+			<ref bean="configDenonProfSanidad"/>
+		</property>
+		<!-- Config de Cliente -->
+		<property name="configClient">
+			<ref bean="configClientDefault"/>
+		</property>
+		<!-- Config de Pagos -->
+		<property name="configPay">
+			<ref bean="configPayNoPay"/>
+		</property>
+		<!-- Config de Eventos -->
+		<property name="configEvent">
+			<ref bean="configEventNoCourse"/>
+		</property>
+	</bean>
+	
+	<!-- Identificativo en BBDD 01-Pelu 02-Moda 03-Club 04-Gym -3 digitos para variedades -->
+	<!-- configFirmPodologia  06-001 -->
+	<bean id="CF06001" class="com.diloso.bookhair.app.negocio.config.impl.ConfigFirm">
+		<!-- Config del local -->
+		<property name="configLocal">
+			<ref bean="configLocalOneConsul"/>
+		</property>
+		<!-- Config de Seguridad -->
+		<property name="configAut">
+			<ref bean="configAutFree"/>
+		</property>
+		<!-- Config de Denominacion -->
+		<property name="configDenon">
+			<ref bean="configDenonProfSanidad"/>
+		</property>
+		<!-- Config de Cliente -->
+		<property name="configClient">
+			<ref bean="configClientDefault"/>
+		</property>
+		<!-- Config de Pagos -->
+		<property name="configPay">
+			<ref bean="configPayNoPay"/>
+		</property>
+		<!-- Config de Eventos -->
+		<property name="configEvent">
+			<ref bean="configEventNoCourse"/>
+		</property>
+	</bean>
+	
+	<!-- Identificativo en BBDD 01-Pelu 02-Moda 03-Club 04-Gym -3 digitos para variedades -->
+	<!-- configFirmDentista  07-001 -->
+	<bean id="CF07001" class="com.diloso.bookhair.app.negocio.config.impl.ConfigFirm">
+		<!-- Config del local -->
+		<property name="configLocal">
+			<ref bean="configLocalOneConsul"/>
+		</property>
+		<!-- Config de Seguridad -->
+		<property name="configAut">
+			<ref bean="configAutFree"/>
+		</property>
+		<!-- Config de Denominacion -->
+		<property name="configDenon">
+			<ref bean="configDenonDoctor"/>
+		</property>
+		<!-- Config de Cliente -->
+		<property name="configClient">
+			<ref bean="configClientDefault"/>
+		</property>
+		<!-- Config de Pagos -->
+		<property name="configPay">
+			<ref bean="configPayNoPay"/>
+		</property>
+		<!-- Config de Eventos -->
+		<property name="configEvent">
+			<ref bean="configEventNoCourse"/>
+		</property>
+	</bean>
+	
+	 <!-- Identificativo en BBDD 01-Pelu 02-Moda 03-Club 04-Gym -3 digitos para variedades -->
+	<!-- configFirmCanina  08-001 -->
+	<bean id="CF08001" class="com.diloso.bookhair.app.negocio.config.impl.ConfigFirm">
+		<!-- Config del local -->
+		<property name="configLocal">
+			<ref bean="configLocalCanine"/>
+		</property>
+		<!-- Config de Seguridad -->
+		<property name="configAut">
+			<ref bean="configAutFree"/>
+		</property>
+		<!-- Config de Denominacion -->
+		<property name="configDenon">
+			<ref bean="configDenonPelu"/>
+		</property>
+		<!-- Config de Cliente -->
+		<property name="configClient">
+			<ref bean="configClientDefault"/>
+		</property>
+		<!-- Config de Pagos -->
+		<property name="configPay">
+			<ref bean="configPayNoPay"/>
+		</property>
+		<!-- Config de Eventos -->
+		<property name="configEvent">
+			<ref bean="configEventNoCourse"/>
+		</property>
+	</bean>
+	
+	<!-- Identificativo en BBDD 01-Pelu 02-Moda 03-Club 04-Gym -3 digitos para variedades -->
+	<!-- configFirmMercancia  07-009 -->
+	<bean id="CF09001" class="com.diloso.bookhair.app.negocio.config.impl.ConfigFirm">
+		<!-- Config del local -->
+		<property name="configLocal">
+			<ref bean="configLocalGoods"/>
+		</property>
+		<!-- Config de Seguridad -->
+		<property name="configAut">
+			<ref bean="configAutRes"/>
+		</property>
+		<!-- Config de Denominacion -->
+		<property name="configDenon">
+			<ref bean="configDenonGoods"/>
+		</property>
+		<!-- Config de Cliente -->
+		<property name="configClient">
+			<ref bean="configClientDefault"/>
+		</property>
+		<!-- Config de Pagos -->
+		<property name="configPay">
+			<ref bean="configPayNoPay"/>
+		</property>
+		<!-- Config de Eventos -->
+		<property name="configEvent">
+			<ref bean="configEventNoCourse"/>
+		</property>
+	</bean>
+	
+	<!-- configLocalPelu -->
+	<bean id="configLocalPelu" class="com.diloso.bookhair.app.negocio.config.impl.ConfigLocal">
+		<!-- Permitir configurar "Número de personas en la reserva" -->
+		<property name="configLocNumPer"><value>1</value></property>
+		<!-- Permitir configurar "Permitir seleccionar múltiples servicios en la reserva" -->
+		<property name="configLocMulSer"><value>1</value></property>
+		<!-- Permitir configurar "El cliente puede seleccionar puesto en la reserva antes de ver horas libres" -->
+		<property name="configLocSelCal"><value>1</value></property>
+		<!-- El cliente puede seleccionar puesto en la reserva despues de ver horas libres -->
+		<property name="configLocSelCalAfter"><value>0</value></property>
+		<!-- Incluye Repeats -->
+		<property name="configLocRepeat"><value>0</value></property>
+	</bean>
+	
+	<!-- configLocalModa -->
+	<bean id="configLocalModa" class="com.diloso.bookhair.app.negocio.config.impl.ConfigLocal">
+		<!-- Permitir configurar "Número de personas en la reserva" -->
+		<property name="configLocNumPer"><value>1</value></property>
+		<!-- Permitir configurar "Permitir seleccionar múltiples servicios en la reserva" -->
+		<property name="configLocMulSer"><value>1</value></property>
+		<!-- Permitir configurar "El cliente puede seleccionar puesto en la reserva antes de ver horas libres" -->
+		<property name="configLocSelCal"><value>0</value></property>
+		<!-- El cliente puede seleccionar puesto en la reserva despues de ver horas libres -->
+		<property name="configLocSelCalAfter"><value>0</value></property>
+		<!-- Incluye Repeats -->
+		<property name="configLocRepeat"><value>0</value></property>
+	</bean>
+	
+	<!-- configLocalClub -->
+	<bean id="configLocalClub" class="com.diloso.bookhair.app.negocio.config.impl.ConfigLocal">
+		<!-- Permitir configurar "Número de personas en la reserva" -->
+		<property name="configLocNumPer"><value>0</value></property>
+		<!-- Permitir configurar "Permitir seleccionar múltiples servicios en la reserva" -->
+		<property name="configLocMulSer"><value>0</value></property>
+		<!-- Permitir configurar "El cliente puede seleccionar puesto en la reserva antes de ver horas libres" -->
+		<property name="configLocSelCal"><value>0</value></property>
+		<!-- El cliente puede seleccionar puesto en la reserva despues de ver horas libres -->
+		<property name="configLocSelCalAfter"><value>1</value></property>
+		<!-- Incluye Repeats -->
+		<property name="configLocRepeat"><value>1</value></property>
+	</bean>
+	
+	<!-- configLocalOneConsul -->
+	<bean id="configLocalOneConsul" class="com.diloso.bookhair.app.negocio.config.impl.ConfigLocal">
+		<!-- Permitir configurar "Número de personas en la reserva" -->
+		<property name="configLocNumPer"><value>0</value></property>
+		<!-- Permitir configurar "Permitir seleccionar múltiples servicios en la reserva" -->
+		<property name="configLocMulSer"><value>0</value></property>
+		<!-- Permitir configurar "El cliente puede seleccionar puesto en la reserva antes de ver horas libres" -->
+		<property name="configLocSelCal"><value>1</value></property>
+		<!-- El cliente puede seleccionar puesto en la reserva despues de ver horas libres -->
+		<property name="configLocSelCalAfter"><value>1</value></property>
+		<!-- Incluye Repeats -->
+		<property name="configLocRepeat"><value>0</value></property>
+	</bean>
+	
+	<!-- configLocalCanine -->
+	<bean id="configLocalCanine" class="com.diloso.bookhair.app.negocio.config.impl.ConfigLocal">
+		<!-- Permitir configurar "Número de personas en la reserva" -->
+		<property name="configLocNumPer"><value>0</value></property>
+		<!-- Permitir configurar "Permitir seleccionar múltiples servicios en la reserva" -->
+		<property name="configLocMulSer"><value>0</value></property>
+		<!-- Permitir configurar "El cliente puede seleccionar puesto en la reserva antes de ver horas libres" -->
+		<property name="configLocSelCal"><value>0</value></property>
+		<!-- El cliente puede seleccionar puesto en la reserva despues de ver horas libres -->
+		<property name="configLocSelCalAfter"><value>0</value></property>
+		<!-- Incluye Repeats -->
+		<property name="configLocRepeat"><value>0</value></property>
+	</bean>
+	
+	<!-- configLocalGoods -->
+	<bean id="configLocalGoods" class="com.diloso.bookhair.app.negocio.config.impl.ConfigLocal">
+		<!-- Permitir configurar "Número de personas en la reserva" -->
+		<property name="configLocNumPer"><value>0</value></property>
+		<!-- Permitir configurar "Permitir seleccionar múltiples servicios en la reserva" -->
+		<property name="configLocMulSer"><value>0</value></property>
+		<!-- Permitir configurar "El cliente puede seleccionar puesto en la reserva antes de ver horas libres" -->
+		<property name="configLocSelCal"><value>0</value></property>
+		<!-- El cliente puede seleccionar puesto en la reserva despues de ver horas libres -->
+		<property name="configLocSelCalAfter"><value>0</value></property>
+		<!-- Incluye Repeats -->
+		<property name="configLocRepeat"><value>0</value></property>
+	</bean>
+		
+	<!-- configAut Libre  -->
+	<bean id="configAutFree" class="com.diloso.bookhair.app.negocio.config.impl.ConfigAut">
+		<!-- Acceso nivel usuario libre o restringido 0-Acceso libre, 1-Restringido -->
+		<property name="configAutNivelUser"><value>0</value></property>
+	</bean>
+
+	<!-- configAut Restringido -->
+	<bean id="configAutRes" class="com.diloso.bookhair.app.negocio.config.impl.ConfigAut">
+		<!-- Acceso nivel usuario libre o restringido 0-Acceso libre, 1-Restringido -->
+		<property name="configAutNivelUser"><value>1</value></property>
+	</bean>
+
+	<!-- configPay Sin pagos -->
+	<bean id="configPayNoPay" class="com.diloso.bookhair.app.negocio.config.impl.ConfigPay">
+		<!-- 0-Sin pagos, 1-TPV -->
+		<property name="configPayAdmin"><value>0</value></property>
+	</bean>
+
+	<!-- configPay TPV -->
+	<bean id="configPayTPV" class="com.diloso.bookhair.app.negocio.config.impl.ConfigPay">
+		<!-- 0-Sin pagos, 1-TPV -->
+		<property name="configPayAdmin"><value>1</value></property>
+	</bean>
+		
+	<!-- configEvent sin cursos  -->
+	<bean id="configEventNoCourse" class="com.diloso.bookhair.app.negocio.config.impl.ConfigEvent">
+		<!-- Recurso adicional Performer en predefinidos y en admin -->
+		<property name="configEventPerformer"><value>0</value></property>
+	</bean>
+
+	<!-- configEvent con cursos  -->
+	<bean id="configEventCourse" class="com.diloso.bookhair.app.negocio.config.impl.ConfigEvent">
+		<!-- Recurso adicional Performer en predefinidos y en admin -->
+		<property name="configEventPerformer"><value>1</value></property>
+	</bean>
+	
+		
+	<!-- configDenonPelu  -->
+	<bean id="configDenonPelu" class="com.diloso.bookhair.app.negocio.config.impl.ConfigDenon">
+		<property name="listDenon">
+			<map>
+				<!-- Local (Local, Centro, Tienda, Clínica, Oficina, Sede, Peluquería, Gymnasio, Dependencia, Concejalía) -->
+				<entry key="configDenLoc"><value>center</value></entry>
+				<!-- Puesto(Puesto, Profesional, Doctor, Pista, Probador, Sala, Aula, Oficina, Edificio) -->
+				<entry key="configDenCal"><value>prof</value></entry>
+				<!-- Profesional-Ejecutor (Profesor, Árbitro, Monitor, Administrativo, Empleado) -->
+				<entry key="configDenPer"><value>professional.cabText</value></entry>
+				<!-- Cliente (Cliente, Alumno, Jugador) -->
+				<entry key="configDenCli"><value>label.aside.clients</value></entry>
+				<!-- Servicio (Servicio, Actividad) -->
+				<entry key="configDenSer"><value>service</value></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- configDenonModa  -->
+	<bean id="configDenonModa" class="com.diloso.bookhair.app.negocio.config.impl.ConfigDenon">
+		<property name="listDenon">
+			<map>
+				<!-- Local (Local, Centro, Tienda, Clínica, Oficina, Sede, Peluquería, Gymnasio, Dependencia, Concejalía) -->
+				<entry key="configDenLoc"><value>shop</value></entry>
+				<!-- Puesto(Puesto, Profesional, Doctor, Pista, Probador, Sala, Aula, Oficina, Edificio) -->
+				<entry key="configDenCal"><value>place</value></entry>
+				<!-- Profesional-Ejecutor (Profesor, Árbitro, Monitor, Administrativo, Empleado) -->
+				<entry key="configDenPer"><value>professional.cabText</value></entry>
+				<!-- Cliente (Cliente, Alumno, Jugador) -->
+				<entry key="configDenCli"><value>label.aside.clients</value></entry>
+				<!-- Servicio (Servicio, Actividad) -->
+				<entry key="configDenSer"><value>service</value></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- configDenonClub  -->
+	<bean id="configDenonClub" class="com.diloso.bookhair.app.negocio.config.impl.ConfigDenon">
+		<property name="listDenon">
+			<map>
+				<!-- Local (Local, Centro, Tienda, Clínica, Oficina, Sede, Peluquería, Gymnasio, Dependencia, Concejalía) -->
+				<entry key="configDenLoc"><value>center</value></entry>
+				<!-- Puesto(Puesto, Profesional, Doctor, Pista, Probador, Sala, Aula, Oficina, Edificio) -->
+				<entry key="configDenCal"><value>court</value></entry>
+				<!-- Profesional-Ejecutor (Profesor, Árbitro, Monitor, Administrativo, Empleado) -->
+				<entry key="configDenPer"><value>professional.cabText</value></entry>
+				<!-- Cliente (Cliente, Alumno, Jugador) -->
+				<entry key="configDenCli"><value>label.aside.clients</value></entry>
+				<!-- Servicio (Servicio, Actividad) -->
+				<entry key="configDenSer"><value>activity</value></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- configDenonDoctor  -->
+	<bean id="configDenonDoctor" class="com.diloso.bookhair.app.negocio.config.impl.ConfigDenon">
+		<property name="listDenon">
+			<map>
+				<!-- Local (Local, Centro, Tienda, Clínica, Oficina, Sede, Peluquería, Gymnasio, Dependencia, Concejalía) -->
+				<entry key="configDenLoc"><value>clinic</value></entry>
+				<!-- Puesto(Puesto, Profesional, Doctor, Pista, Probador, Sala, Aula, Oficina, Edificio) -->
+				<entry key="configDenCal"><value>doctor</value></entry>
+				<!-- Profesional-Ejecutor (Profesor, Árbitro, Monitor, Administrativo, Empleado) -->
+				<entry key="configDenPer"><value>professional.cabText</value></entry>
+				<!-- Cliente (Cliente, Alumno, Jugador) -->
+				<entry key="configDenCli"><value>label.aside.clients</value></entry>
+				<!-- Servicio (Servicio, Actividad) -->
+				<entry key="configDenSer"><value>service</value></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- configDenonProfSanidad  -->
+	<bean id="configDenonProfSanidad" class="com.diloso.bookhair.app.negocio.config.impl.ConfigDenon">
+		<property name="listDenon">
+			<map>
+				<!-- Local (Local, Centro, Tienda, Clínica, Oficina, Sede, Peluquería, Gymnasio, Dependencia, Concejalía) -->
+				<entry key="configDenLoc"><value>clinic</value></entry>
+				<!-- Puesto(Puesto, Profesional, Doctor, Pista, Probador, Sala, Aula, Oficina, Edificio) -->
+				<entry key="configDenCal"><value>prof</value></entry>
+				<!-- Profesional-Ejecutor (Profesor, Árbitro, Monitor, Administrativo, Empleado) -->
+				<entry key="configDenPer"><value>professional.cabText</value></entry>
+				<!-- Cliente (Cliente, Alumno, Jugador) -->
+				<entry key="configDenCli"><value>label.aside.clients</value></entry>
+				<!-- Servicio (Servicio, Actividad) -->
+				<entry key="configDenSer"><value>service</value></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- configDenonGoods  -->
+	<bean id="configDenonGoods" class="com.diloso.bookhair.app.negocio.config.impl.ConfigDenon">
+		<property name="listDenon">
+			<map>
+				<!-- Local (Local, Centro, Tienda, Clínica, Oficina, Sede, Peluquería, Gymnasio, Dependencia, Concejalía) -->
+				<entry key="configDenLoc"><value>center</value></entry>
+				<!-- Puesto(Puesto, Profesional, Doctor, Pista, Probador, Sala, Aula, Oficina, Edificio) -->
+				<entry key="configDenCal"><value>place</value></entry>
+				<!-- Profesional-Ejecutor (Profesor, Árbitro, Monitor, Administrativo, Empleado) -->
+				<entry key="configDenPer"><value>professional.cabText</value></entry>
+				<!-- Cliente (Cliente, Alumno, Jugador) -->
+				<entry key="configDenCli"><value>label.aside.clients</value></entry>
+				<!-- Servicio (Servicio, Actividad) -->
+				<entry key="configDenSer"><value>service</value></entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- configClientDefault  -->
+	<bean id="configClientDefault" class="com.diloso.bookhair.app.negocio.config.impl.ConfigClient">
+			<!-- Campos extra ficha  -->		
+			<property name="extraTable">
+				<map />
+			</property>
+			<!-- Campos extra reserva  -->		
+			<property name="extraBook">
+				<map />
+			</property>
+	</bean>
+	
+	<!-- configClientModa  -->
+	<bean id="configClientModa" class="com.diloso.bookhair.app.negocio.config.impl.ConfigClient">
+		<!-- Campos extra ficha  -->		
+		<property name="extraTable">
+			<map />
+		</property>
+		<!-- Campos extra reserva  -->		
+		<property name="extraBook">
+			<map>
+				<!-- Fecha de la celebración -->
+				<entry key="celebrationDate">
+					<ref bean="configClientFieldCelebrationDate"/>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	
+	<!-- configClientFields  -->
+	
+	<!-- NIF  -->
+	<bean id="configClientFieldNIF" class="com.diloso.bookhair.app.negocio.config.impl.ConfigClientField">
+		<!-- Nombre campo -->
+		<property name="name"><value>NIF</value></property>
+		<!-- Tipo campo -->
+		<property name="type"><value>Text</value></property>
+		<!-- Display campo -->
+		<property name="textLang"><value>client.nif</value></property>
+	</bean>
+	
+		<!-- Num Member  -->
+	<bean id="configClientFieldNumMember" class="com.diloso.bookhair.app.negocio.config.impl.ConfigClientField">
+		<!-- Nombre campo -->
+		<property name="name"><value>numMember</value></property>
+		<!-- Tipo campo -->
+		<property name="type"><value>Text</value></property>
+		<!-- Display campo -->
+		<property name="textLang"><value>client.numMember</value></property>
+	</bean>
+	
+	<!-- Fecha de la celebración del evento -->
+	<bean id="configClientFieldCelebrationDate" class="com.diloso.bookhair.app.negocio.config.impl.ConfigClientField">
+		<!-- Nombre campo -->
+		<property name="name"><value>celebrationDate</value></property>
+		<!-- Tipo campo -->
+		<property name="type"><value>Date</value></property>
+		<!-- Display campo -->
+		<property name="textLang"><value>client.celebrationDate</value></property>
+	</bean>
+		
+</beans>

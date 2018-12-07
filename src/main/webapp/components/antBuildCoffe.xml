@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="coffee_project">
+	<!--property file="ant.properties"/-->
+	<target name="coffee">
+		<exec executable="../app/model/coffee/tocoffee.bat" failonerror="true" />
+		<exec executable="../app/view/coffee/tocoffee.bat" failonerror="true" />
+		<exec executable="../app/controller/coffee/tocoffee.bat" failonerror="true" />
+	</target>
+</project> 

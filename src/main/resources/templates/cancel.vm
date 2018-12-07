@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+PRODID:-//BookingProf//HAIR 1.0//ES
+VERSION:2.0
+CALSCALE:GREGORIAN
+METHOD:CANCEL
+BEGIN:VEVENT
+DTSTART:${model.getFormatICSDtStart()}
+DTSTAMP:${model.getFormatICSDtStamp()}
+ORGANIZER;CN=${model.getNocOrgName()}:mailto:${model.getNocOrgEmail()}
+UID:${model.getNocUID()}
+ATTENDEE;CUTYPE=INDIVIDUAL;ROLE=REQ-PARTICIPANT;PARTSTAT=CANCELLED;RSVP=
+ TRUE;X-NUM-GUESTS=0:mailto:${model.getNocDesEmail()}
+CREATED:${model.getFormatICSDtCreated()}
+X-ALT-DESC;FMTTYPE=text/html:${model.getNocOrgEmail()}
+LOCATION:${model.getNocLocation()}
+SEQUENCE:1
+STATUS:CANCELLED
+SUMMARY:${model.getNocSummary()}
+TRANSP:TRANSPARENT
+END:VEVENT
+END:VCALENDAR

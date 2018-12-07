@@ -1,0 +1,2898 @@
+[
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.client.nameReq",
+		"mulLanCode": "es",
+		"mulText": "Nombre es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.foot.diary",
+		"mulLanCode": "es",
+		"mulText": "Agenda",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "firm.config",
+		"mulLanCode": "es",
+		"mulText": "Configuración de la firma",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.hours",
+		"mulLanCode": "es",
+		"mulText": "Horarios",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.tasks",
+		"mulLanCode": "es",
+		"mulText": "Servicios para este profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.notavailable.title",
+		"mulLanCode": "es",
+		"mulText": "No disponible",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.restricted",
+		"mulLanCode": "es",
+		"mulText": "Espacio de tiempo en minutos restringidos desde la hora actual para reservar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.job",
+		"mulLanCode": "es",
+		"mulText": "Seleccione servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.select.cabText",
+		"mulLanCode": "es",
+		"mulText": "Seleccione profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.modifyHourWithApo.title",
+		"mulLanCode": "es",
+		"mulText": "Modificar fecha con citas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.places",
+		"mulLanCode": "es",
+		"mulText": "Profesionales",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.calendar.nameReq",
+		"mulLanCode": "es",
+		"mulText": "Nombre es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "professional.birthday",
+		"mulLanCode": "es",
+		"mulText": "Fecha de nacimiento",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.localTaskSelectOne.title",
+		"mulLanCode": "es",
+		"mulText": "Seleccione servicios",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.salvedData.text",
+		"mulLanCode": "es",
+		"mulText": "Los datos se han guardado correctamente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "tab.tabClient.title",
+		"mulLanCode": "es",
+		"mulText": "Tus datos",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.bookable",
+		"mulLanCode": "es",
+		"mulText": "Reservable",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "product.name",
+		"mulLanCode": "es",
+		"mulText": "Nombre",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "task.select.people",
+		"mulLanCode": "es",
+		"mulText": "Personas en la reserva",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "where.city",
+		"mulLanCode": "es",
+		"mulText": "Ciudad",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.notification.selectRange.title",
+		"mulLanCode": "es",
+		"mulText": "Rango del informe",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.repeat.nameReq",
+		"mulLanCode": "es",
+		"mulText": "Nombre es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.report.encode",
+		"mulLanCode": "es",
+		"mulText": "text/html; charset=UTF-8",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.range.startDate",
+		"mulLanCode": "es",
+		"mulText": "Fecha de inicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "client.telf",
+		"mulLanCode": "es",
+		"mulText": "Teléfono",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.ok",
+		"mulLanCode": "es",
+		"mulText": "Ok",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.hoursSun",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Domingo",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.bookedApo.text",
+		"mulLanCode": "es",
+		"mulText": "La cita se ha reservado correctamente. Recibir&aacute; un email con los datos",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.info",
+		"mulLanCode": "es",
+		"mulText": "Información",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.finFin",
+		"mulLanCode": "es",
+		"mulText": "Terminar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.product.nameReq",
+		"mulLanCode": "es",
+		"mulText": "Nombre es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "client.name",
+		"mulLanCode": "es",
+		"mulText": "Nombre",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.total",
+		"mulLanCode": "es",
+		"mulText": "Total",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.hour",
+		"mulLanCode": "es",
+		"mulText": "Hora de la cita",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.invoice.clientReq",
+		"mulLanCode": "es",
+		"mulText": "Cliente es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.newCabText",
+		"mulLanCode": "es",
+		"mulText": "Cita para el",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.existsClient.title",
+		"mulLanCode": "es",
+		"mulText": "Cliente existe",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.enabled",
+		"mulLanCode": "es",
+		"mulText": "Habilitado",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.cancelNotEmail",
+		"mulLanCode": "es",
+		"mulText": "Email de cliente no disponible. Cancele la cita sin enviar email",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.enabledFirm.text",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea habilitar/cerrar esta firma",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.selectTask.text",
+		"mulLanCode": "es",
+		"mulText": "Seleccione los objetivos de su cita",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.client.apoBooked",
+		"mulLanCode": "es",
+		"mulText": "Otro usuario ya ha reservado esta hora",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.noData.title",
+		"mulLanCode": "es",
+		"mulText": "No hay datos",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.maxLengthData",
+		"mulLanCode": "es",
+		"mulText": "Dato demasiado largo",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.rate",
+		"mulLanCode": "es",
+		"mulText": "Precio del servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.deleteFile",
+		"mulLanCode": "es",
+		"mulText": "Eliminar archivo",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.sales.task",
+		"mulLanCode": "es",
+		"mulText": "Servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "professional.gender",
+		"mulLanCode": "es",
+		"mulText": "Género",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.daysWeekWed",
+		"mulLanCode": "es",
+		"mulText": "Mie",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.existsDomain.title",
+		"mulLanCode": "es",
+		"mulText": "Dominio existe",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.errorBase.text",
+		"mulLanCode": "es",
+		"mulText": "Error de conexi&oacute;n",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deleteRate.text",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea eliminar esta tarifa",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.hoursFri",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Viernes",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.foot.invoice",
+		"mulLanCode": "es",
+		"mulText": "Facturar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.numPallets",
+		"mulLanCode": "es",
+		"mulText": "Número de palets",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.legal",
+		"mulLanCode": "es",
+		"mulText": "Condiciones legales",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.new",
+		"mulLanCode": "es",
+		"mulText": "Nuevo cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.firms",
+		"mulLanCode": "es",
+		"mulText": "Firmas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.by",
+		"mulLanCode": "es",
+		"mulText": "por",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.deleteImg",
+		"mulLanCode": "es",
+		"mulText": "Eliminar imagen",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.daysWeek",
+		"mulLanCode": "es",
+		"mulText": "['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo']",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.invoiceOneTask.text",
+		"mulLanCode": "es",
+		"mulText": "Debe haber al menos un servicio a facturar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.localGeneral",
+		"mulLanCode": "es",
+		"mulText": "General",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.langsAdmin",
+		"mulLanCode": "es",
+		"mulText": "Idiomas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "client.surname",
+		"mulLanCode": "es",
+		"mulText": "Apellidos",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.header.places",
+		"mulLanCode": "es",
+		"mulText": "Profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.invoice.timeReq",
+		"mulLanCode": "es",
+		"mulText": "Fecha es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.requiredData",
+		"mulLanCode": "es",
+		"mulText": "Dato requerido",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.notavailableAdmin.text",
+		"mulLanCode": "es",
+		"mulText": "Esta fecha no tiene citas disponibles habituales para las servicios seleccionadas. Podr&aacute; reservar en una hora distinta",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.hourMayor.text",
+		"mulLanCode": "es",
+		"mulText": "El horario hasta debe ser posterior al desde",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.products",
+		"mulLanCode": "es",
+		"mulText": "Productos",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.bookedApo.title",
+		"mulLanCode": "es",
+		"mulText": "Cita reservada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.notavailable.text",
+		"mulLanCode": "es",
+		"mulText": "Esta fecha no tiene citas disponibles para los servicios seleccionados",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "firm.guser",
+		"mulLanCode": "es",
+		"mulText": "Usuario de seguridad",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.selectTask.title",
+		"mulLanCode": "es",
+		"mulText": "&iquest;Qu&eacute; quiere hacer?",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.label.aside.apo",
+		"mulLanCode": "es",
+		"mulText": "Citas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.finTitle",
+		"mulLanCode": "es",
+		"mulText": "Terminar cita",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.apo.workedPie",
+		"mulLanCode": "es",
+		"mulText": "Total de servicios trabajados",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.sales.product",
+		"mulLanCode": "es",
+		"mulText": "Producto",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.cancelText",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea cancelar esta cita",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.notBilled",
+		"mulLanCode": "es",
+		"mulText": "No facturable",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.cancel.title",
+		"mulLanCode": "es",
+		"mulText": "cancelada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.invite.text",
+		"mulLanCode": "es",
+		"mulText": "<p><table><tbody><tr><td>Nombre:</td><td>${model.getNocDesName()} / ${model.getNocDesEmail()} </td></tr><tr><td>Localización: </td><td>${model.getNocLocation()}</td></tr><tr><td>Fecha: </td><td>${model.getFormatTextDtStart()}</td></tr><tr><td>Servicios: </td><td>${model.getNocTasks()}</td></tr><tr><td>Contacto: </td><td>Por favor, no responda a este correo.<br>Para anular esta cita o resolver cualquier duda o incidencia con ${model.getNocLocName()}:<br> Email: ${model.getNocLocEmail()}<br> Telf: ${model.getNocLocTelf()}</td></tr></tbody></table></p>",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.oneHour.text",
+		"mulLanCode": "es",
+		"mulText": "Debe haber al menos un intervalo horario",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.cabText",
+		"mulLanCode": "es",
+		"mulText": "Datos del profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.apo.worked",
+		"mulLanCode": "es",
+		"mulText": "Trabajados",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.daysWeekTue",
+		"mulLanCode": "es",
+		"mulText": "Mar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.daysWeekMon",
+		"mulLanCode": "es",
+		"mulText": "Lun",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.closeApo.title",
+		"mulLanCode": "es",
+		"mulText": "Terminar cita",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "client.desc",
+		"mulLanCode": "es",
+		"mulText": "Observaciones sobre este cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.selectTask",
+		"mulLanCode": "es",
+		"mulText": "Seleccione servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.cacheTasks",
+		"mulLanCode": "es",
+		"mulText": "Guardar los servicios seleccionados en la anterior reserva",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.client.bookingOne2",
+		"mulLanCode": "es",
+		"mulText": "dias",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.apo.allPie.cab",
+		"mulLanCode": "es",
+		"mulText": "Total de citas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.client.bookingOne1",
+		"mulLanCode": "es",
+		"mulText": "Solo es posible reservar una vez por usuario en ",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.cabText",
+		"mulLanCode": "es",
+		"mulText": "Datos del centro",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "client.email",
+		"mulLanCode": "es",
+		"mulText": "Email",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.langDisabled",
+		"mulLanCode": "es",
+		"mulText": "Desactivado en este centro",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "professional.movil",
+		"mulLanCode": "es",
+		"mulText": "Movil",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.client.dateInv",
+		"mulLanCode": "es",
+		"mulText": "Fecha de reserva no v&aacute;lida",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.displayUntil",
+		"mulLanCode": "es",
+		"mulText": "Mostrando hasta el",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "tab.tabEvent.title",
+		"mulLanCode": "es",
+		"mulText": "Cita",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.openDays",
+		"mulLanCode": "es",
+		"mulText": "Número de días con la agenda abierta",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.range.yearDate",
+		"mulLanCode": "es",
+		"mulText": "Anual",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "client.birthday",
+		"mulLanCode": "es",
+		"mulText": "Fecha de nacimiento",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.invoiceBillableTask.text",
+		"mulLanCode": "es",
+		"mulText": "Todos los servicios deben ser facturables",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.post",
+		"mulLanCode": "es",
+		"mulText": "Duración extra del servicio que no ocupa tiempo del calendario. Contabilizar para no superar la fecha de cierre",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.hours",
+		"mulLanCode": "es",
+		"mulText": "Fechas con horarios especiales del profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.daysWeekSat",
+		"mulLanCode": "es",
+		"mulText": "Sab",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.hoursNewText",
+		"mulLanCode": "es",
+		"mulText": "Horarios para el",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.product.rateReq",
+		"mulLanCode": "es",
+		"mulText": "Precio es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.cancel",
+		"mulLanCode": "es",
+		"mulText": "Cancelar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.openApo.text",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea establecer esta cita como no terminada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.modifyHourWithApo.text",
+		"mulLanCode": "es",
+		"mulText": "Esta fecha contiene citas que no podr&aacute;n ser atendidas. Confirme que desea modificar el horario de esta fecha",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.combi",
+		"mulLanCode": "es",
+		"mulText": "Combinación",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.bookings",
+		"mulLanCode": "es",
+		"mulText": "Reservas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.mobileApp.text",
+		"mulLanCode": "es",
+		"mulText": "Mobile application no optimizada para pc",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.placeEnabled.text",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea habilitar/cerrar este profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.notification.selectRange.text",
+		"mulLanCode": "es",
+		"mulText": "Seleccione el rango del informe",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.desde",
+		"mulLanCode": "es",
+		"mulText": "Desde",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.salvedData.title",
+		"mulLanCode": "es",
+		"mulText": "Datos guardados",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.add",
+		"mulLanCode": "es",
+		"mulText": "Añadir",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.selectCalendar",
+		"mulLanCode": "es",
+		"mulText": "El cliente puede seleccionar profesional para reservar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.male",
+		"mulLanCode": "es",
+		"mulText": "Masculino",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deletedRate.title",
+		"mulLanCode": "es",
+		"mulText": "Tarifa eliminada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "professional.cabText",
+		"mulLanCode": "es",
+		"mulText": "Datos del profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.existsClient.text",
+		"mulLanCode": "es",
+		"mulText": "El email ya existe. El cliente no es nuevo",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.apo.booking",
+		"mulLanCode": "es",
+		"mulText": "Reservadas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.foot.booking",
+		"mulLanCode": "es",
+		"mulText": "Reserva",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.label.aside.sales",
+		"mulLanCode": "es",
+		"mulText": "Ventas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deleteClient.text",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea eliminar este cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.hoursThu",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Jueves",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "client.gender",
+		"mulLanCode": "es",
+		"mulText": "Género",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.duration",
+		"mulLanCode": "es",
+		"mulText": "Duración del servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deletedLocalTask.title",
+		"mulLanCode": "es",
+		"mulText": "Servicio eliminado",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.required",
+		"mulLanCode": "es",
+		"mulText": "(* Campos obligatorios)",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.header.today",
+		"mulLanCode": "es",
+		"mulText": "Hoy",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.localTask.existsCombi",
+		"mulLanCode": "es",
+		"mulText": "Existen servicios combinados que incluyen este servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.invoice.rateReq",
+		"mulLanCode": "es",
+		"mulText": "Precio es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.notification.mail.send.title",
+		"mulLanCode": "es",
+		"mulText": "Informe enviado por email",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.disabled",
+		"mulLanCode": "es",
+		"mulText": "Deshabilitado",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.download",
+		"mulLanCode": "es",
+		"mulText": "Descargar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.mailBookign",
+		"mulLanCode": "es",
+		"mulText": "Recibir email en las reservas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deletedRate.text",
+		"mulLanCode": "es",
+		"mulText": "La tarifa se ha eliminado correctamente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "where.cp",
+		"mulLanCode": "es",
+		"mulText": "Código Postal",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.hoursWed",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Miércoles",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.placeSelectOne.text",
+		"mulLanCode": "es",
+		"mulText": "Debe seleccionar al menos un profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.localTask.rateReq",
+		"mulLanCode": "es",
+		"mulText": "Precio es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.select.cabText",
+		"mulLanCode": "es",
+		"mulText": "Seleccione servicios",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.invite.tasks2",
+		"mulLanCode": "es",
+		"mulText": "servicios",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.invite.tasks1",
+		"mulLanCode": "es",
+		"mulText": "Cita con",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.mobileApp.title",
+		"mulLanCode": "es",
+		"mulText": "Mobile application",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.selNumPallets",
+		"mulLanCode": "es",
+		"mulText": "Seleccione número de palets",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.sales.totalAll.cab",
+		"mulLanCode": "es",
+		"mulText": "Total de ventas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.mail.title",
+		"mulLanCode": "es",
+		"mulText": "Informe sobre",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.localTaskCombiDiferent.text",
+		"mulLanCode": "es",
+		"mulText": "El servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "task.select.cabText",
+		"mulLanCode": "es",
+		"mulText": "Objetivos de su cita",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.sender",
+		"mulLanCode": "es",
+		"mulText": "info@bookingprof.com",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.localTaskCombiNotSingle.title",
+		"mulLanCode": "es",
+		"mulText": "Error cargando servicios",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "product.rate",
+		"mulLanCode": "es",
+		"mulText": "Precio del producto",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.localTasks",
+		"mulLanCode": "es",
+		"mulText": "Servicios",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.calendar.dateClosed",
+		"mulLanCode": "es",
+		"mulText": "Fecha cerrada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.pressDisplayMore",
+		"mulLanCode": "es",
+		"mulText": "Pulse para mostrar más",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.invoiceOneTask.title",
+		"mulLanCode": "es",
+		"mulText": "Error en los servicios seleccionados",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "firm.billedModule",
+		"mulLanCode": "es",
+		"mulText": "Usa el módulo de facturación",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.cabTextNew",
+		"mulLanCode": "es",
+		"mulText": "Datos del servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.select.cabText",
+		"mulLanCode": "es",
+		"mulText": "Seleccione centro",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "invoice.newClient",
+		"mulLanCode": "es",
+		"mulText": "Nuevo cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.delete",
+		"mulLanCode": "es",
+		"mulText": "Eliminar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.user.title",
+		"mulLanCode": "es",
+		"mulText": "Opciones",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.oneHour.title",
+		"mulLanCode": "es",
+		"mulText": "Error en horario",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "firm.server",
+		"mulLanCode": "es",
+		"mulText": "Dominio propio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.send",
+		"mulLanCode": "es",
+		"mulText": "Enviar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.hoursTue",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Martes",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.daysWeekSun",
+		"mulLanCode": "es",
+		"mulText": "Dom",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.hoursMon",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Lunes",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.cancelSend",
+		"mulLanCode": "es",
+		"mulText": "Enviar email al cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.notBookable",
+		"mulLanCode": "es",
+		"mulText": "No reservable",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.peopleBook",
+		"mulLanCode": "es",
+		"mulText": "Número de personas por reserva",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.canceledApo.title",
+		"mulLanCode": "es",
+		"mulText": "Cita cancelada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deleteLocalTask.text",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea eliminar este servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.closeDateWithApo.title",
+		"mulLanCode": "es",
+		"mulText": "Cerrar fecha con citas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "where.adddress",
+		"mulLanCode": "es",
+		"mulText": "Dirección",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.finReject",
+		"mulLanCode": "es",
+		"mulText": "Rechazar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.hoursFri",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Viernes",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.escritoel",
+		"mulLanCode": "es",
+		"mulText": "escrito el",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "professional.telf",
+		"mulLanCode": "es",
+		"mulText": "Teléfono",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.client.surnameReq",
+		"mulLanCode": "es",
+		"mulText": "Apellido es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deletedProduct.text",
+		"mulLanCode": "es",
+		"mulText": "El producto se ha eliminado correctamente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.closeApo.text",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea establecer esta cita como terminada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.hours",
+		"mulLanCode": "es",
+		"mulText": "Fechas con horarios especiales",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.langEnabled",
+		"mulLanCode": "es",
+		"mulText": "Activado en este centro",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.existsDomain.text",
+		"mulLanCode": "es",
+		"mulText": "El dominio ya existe",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.name",
+		"mulLanCode": "es",
+		"mulText": "Nombre",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.hoursSat",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Sábado",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.report.template",
+		"mulLanCode": "es",
+		"mulText": "/templates/report.vm",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.bookedApoAdmin.title",
+		"mulLanCode": "es",
+		"mulText": "Cita reservada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "professional.name",
+		"mulLanCode": "es",
+		"mulText": "Nombre",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.mulServices",
+		"mulLanCode": "es",
+		"mulText": "El cliente puede seleccionar varios servicios para reservar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.openApo.title",
+		"mulLanCode": "es",
+		"mulText": "Deshacer cita",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.single",
+		"mulLanCode": "es",
+		"mulText": "Individual",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.cancel.text",
+		"mulLanCode": "es",
+		"mulText": "<p><table><tbody><tr><td>Nombre:</td><td>${model.getNocDesName()} / ${model.getNocDesEmail()} </td></tr><tr><td>Localización: </td><td>${model.getNocLocation()}</td></tr><tr><td>Fecha: </td><td>${model.getFormatTextDtStart()}</td></tr><tr><td>Contacto: </td><td>Por favor, no responda a este correo.<br>Para resolver cualquier duda o incidencia con ${model.getNocLocName()}:<br> Email: ${model.getNocLocEmail()}<br> Telf: ${model.getNocLocTelf()}</td></tr></tbody></table></p>",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.com",
+		"mulLanCode": "es",
+		"mulText": "Comentarios para la cita",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "product.cabTextNew",
+		"mulLanCode": "es",
+		"mulText": "Datos del producto",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.localTaskdefault",
+		"mulLanCode": "es",
+		"mulText": "Por defecto",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.enabledFirm.title",
+		"mulLanCode": "es",
+		"mulText": "Habilitar firma",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.invoice.taskReq",
+		"mulLanCode": "es",
+		"mulText": "Servicio es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.header.settings",
+		"mulLanCode": "es",
+		"mulText": "Config",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deleteRate.title",
+		"mulLanCode": "es",
+		"mulText": "Eliminar tarifa",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deleteLocalTask.title",
+		"mulLanCode": "es",
+		"mulText": "Eliminar servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deleteProduct.text",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea eliminar este producto",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "billed.rate",
+		"mulLanCode": "es",
+		"mulText": "Precio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.clean",
+		"mulLanCode": "es",
+		"mulText": "Limpiar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.calendar.descReq",
+		"mulLanCode": "es",
+		"mulText": "Observaciones es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.searchHours",
+		"mulLanCode": "es",
+		"mulText": "OK. Buscar horario disponible",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.jobForPerson",
+		"mulLanCode": "es",
+		"mulText": "para persona",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.invite.template",
+		"mulLanCode": "es",
+		"mulText": "/templates/invite.vm",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.finCom",
+		"mulLanCode": "es",
+		"mulText": "Comentarios o incidencias",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.sales.tasks",
+		"mulLanCode": "es",
+		"mulText": "Servicios",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.invite.encode",
+		"mulLanCode": "es",
+		"mulText": "text/calendar; charset=UTF-8",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "professional.surname",
+		"mulLanCode": "es",
+		"mulText": "Apellidos",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "where.state",
+		"mulLanCode": "es",
+		"mulText": "Provincia",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.closeDateWithApo.text",
+		"mulLanCode": "es",
+		"mulText": "Esta fecha contiene citas que no podr&aacute;n ser atendidas. Confirme que desea cerrar esta fecha",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "invoice.date",
+		"mulLanCode": "es",
+		"mulText": "Fecha facturada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.newClientDefault",
+		"mulLanCode": "es",
+		"mulText": "Por defecto es nuevo cliente para reservar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deletedClient.title",
+		"mulLanCode": "es",
+		"mulText": "Cliente eliminado",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "invoice.client",
+		"mulLanCode": "es",
+		"mulText": "Cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.lockBook",
+		"mulLanCode": "es",
+		"mulText": "Número de días para volver a reservar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "invoice.cabTextNew",
+		"mulLanCode": "es",
+		"mulText": "Datos de la factura",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.apoDuration",
+		"mulLanCode": "es",
+		"mulText": "Espacio de tiempo entre citas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.billed",
+		"mulLanCode": "es",
+		"mulText": "Facturable",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.closed",
+		"mulLanCode": "es",
+		"mulText": "Cerrado",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.product.rateNum",
+		"mulLanCode": "es",
+		"mulText": "Precio debe ser num&eacute;rico",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.cancelCom",
+		"mulLanCode": "es",
+		"mulText": "Comentarios para el cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "invoice.desc",
+		"mulLanCode": "es",
+		"mulText": "Observaciones",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.range.cabText",
+		"mulLanCode": "es",
+		"mulText": "Seleccione el rango del informe",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.sales.totalProduct.cab",
+		"mulLanCode": "es",
+		"mulText": "Total de ventas por productos",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.apo.prof",
+		"mulLanCode": "es",
+		"mulText": "Por la empresa",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "billed.selectTask",
+		"mulLanCode": "es",
+		"mulText": "Seleccione servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.appName",
+		"mulLanCode": "es",
+		"mulText": "BookingProf",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.localTask.durationReq",
+		"mulLanCode": "es",
+		"mulText": "Duraci&oacute;n es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.pressDisplay",
+		"mulLanCode": "es",
+		"mulText": "Pulse para mostrar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.notification.mail.send.text",
+		"mulLanCode": "es",
+		"mulText": "El informe se ha enviado por email correctamente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.enabledLocal.text",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea habilitar/cerrar este local",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.cancel.encode",
+		"mulLanCode": "es",
+		"mulText": "text/calendar; charset=UTF-8",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.no",
+		"mulLanCode": "es",
+		"mulText": "No",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.noData.text",
+		"mulLanCode": "es",
+		"mulText": "Listado vacio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.sales.sales",
+		"mulLanCode": "es",
+		"mulText": "Ventas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deleteClient.title",
+		"mulLanCode": "es",
+		"mulText": "Eliminar cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "client.historyVisits",
+		"mulLanCode": "es",
+		"mulText": "Histórico de visitas del cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.telf",
+		"mulLanCode": "es",
+		"mulText": "Teléfono",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.searchCli",
+		"mulLanCode": "es",
+		"mulText": "Buscar ciente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.and",
+		"mulLanCode": "es",
+		"mulText": "y",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.localTaskCombiDiferent.title",
+		"mulLanCode": "es",
+		"mulText": "Error en los servicios seleccionados",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "client.movil",
+		"mulLanCode": "es",
+		"mulText": "Movil",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.apo.unfinished",
+		"mulLanCode": "es",
+		"mulText": "No terminadas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.months",
+		"mulLanCode": "es",
+		"mulText": "['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.mail",
+		"mulLanCode": "es",
+		"mulText": "Email",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.hoursSun",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Domingo",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.langs",
+		"mulLanCode": "es",
+		"mulText": "Idioma",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.invoice.rateNum",
+		"mulLanCode": "es",
+		"mulText": "Precio debe ser num&eacute;rico",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.reset",
+		"mulLanCode": "es",
+		"mulText": "Resetear",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.hoursWed",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Miércoles",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.accept",
+		"mulLanCode": "es",
+		"mulText": "Aceptar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.title",
+		"mulLanCode": "es",
+		"mulText": "Admin",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.daysWeekThu",
+		"mulLanCode": "es",
+		"mulText": "Jue",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "firm.classTasks",
+		"mulLanCode": "es",
+		"mulText": "Tipo de tareas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.clients",
+		"mulLanCode": "es",
+		"mulText": "Clientes",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "where.location",
+		"mulLanCode": "es",
+		"mulText": "Localización",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.report.fileName",
+		"mulLanCode": "es",
+		"mulText": "report.html",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.movil",
+		"mulLanCode": "es",
+		"mulText": "Móvil",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.hasta",
+		"mulLanCode": "es",
+		"mulText": "Hasta",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.return",
+		"mulLanCode": "es",
+		"mulText": "Volver",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.prev",
+		"mulLanCode": "es",
+		"mulText": "Ant",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.localTask.rateNum",
+		"mulLanCode": "es",
+		"mulText": "Precio debe ser num&eacute;rico",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.name",
+		"mulLanCode": "es",
+		"mulText": "Nombre",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.client.emailReq",
+		"mulLanCode": "es",
+		"mulText": "Email obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.client.emailRep",
+		"mulLanCode": "es",
+		"mulText": "Email repetido, el usuario ya existe",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.apo.apos",
+		"mulLanCode": "es",
+		"mulText": "Citas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.durationCombiTasks",
+		"mulLanCode": "es",
+		"mulText": "Tiempo entre servicios",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.numLines",
+		"mulLanCode": "es",
+		"mulText": "Número de líneas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.html.apoFor3",
+		"mulLanCode": "es",
+		"mulText": "Pulse para cambiar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.html.apoFor2",
+		"mulLanCode": "es",
+		"mulText": "personas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.html.apoFor1",
+		"mulLanCode": "es",
+		"mulText": "Cita para",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.placeEnabled.title",
+		"mulLanCode": "es",
+		"mulText": "Habilitar profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "where.country",
+		"mulLanCode": "es",
+		"mulText": "Pais",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.typePatternData",
+		"mulLanCode": "es",
+		"mulText": "Tipo o formato de dato incorrecto",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "billed.selectCalendar",
+		"mulLanCode": "es",
+		"mulText": "Seleccione profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.visible",
+		"mulLanCode": "es",
+		"mulText": "Visible para el cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.undefined",
+		"mulLanCode": "es",
+		"mulText": "Sin especificar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deletedProduct.title",
+		"mulLanCode": "es",
+		"mulText": "Producto eliminado",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "firm.cabText",
+		"mulLanCode": "es",
+		"mulText": "Datos de firmas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.canceledApo.text",
+		"mulLanCode": "es",
+		"mulText": "La cita se ha cancelado correctamente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deletedClient.text",
+		"mulLanCode": "es",
+		"mulText": "El cliente se ha eliminado correctamente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.localTaskCombiDiferent.text2",
+		"mulLanCode": "es",
+		"mulText": "está duplicado",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deletedLocalTask.text",
+		"mulLanCode": "es",
+		"mulText": "El servicio se ha eliminado correctamente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "professional.email",
+		"mulLanCode": "es",
+		"mulText": "Email",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.finished",
+		"mulLanCode": "es",
+		"mulText": "Terminada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.enable_disable",
+		"mulLanCode": "es",
+		"mulText": "Habilitar / Deshabilitar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.range.endDate",
+		"mulLanCode": "es",
+		"mulText": "Fecha de fin",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.range.monthDate",
+		"mulLanCode": "es",
+		"mulText": "Mensual",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.currency",
+		"mulLanCode": "es",
+		"mulText": "Divisa",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.localTaskSelectOne.text",
+		"mulLanCode": "es",
+		"mulText": "Debe seleccionar al menos un servicio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.closeDateHolidays.text",
+		"mulLanCode": "es",
+		"mulText": "Las fechas festivas en un año se han cerrado correctamente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.invite.fileName",
+		"mulLanCode": "es",
+		"mulText": "invite.ics",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "billed.selectProduct",
+		"mulLanCode": "es",
+		"mulText": "Seleccione producto",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.cabCombiTextNew",
+		"mulLanCode": "es",
+		"mulText": "Datos del servicio combinado",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.client.telfReq",
+		"mulLanCode": "es",
+		"mulText": "Tel&eacute;fono. obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.hoursTue",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Martes",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.cancelTitle",
+		"mulLanCode": "es",
+		"mulText": "Cancelar cita",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.hoursMon",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Lunes",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.rejected",
+		"mulLanCode": "es",
+		"mulText": "Rechazada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.locals",
+		"mulLanCode": "es",
+		"mulText": "Centros",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.cancel.fileName",
+		"mulLanCode": "es",
+		"mulText": "cancel.ics",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.bookingClient",
+		"mulLanCode": "es",
+		"mulText": "Reserva por clientes habilitada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "firm.name",
+		"mulLanCode": "es",
+		"mulText": "Nombre",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "invoice.rate",
+		"mulLanCode": "es",
+		"mulText": "PRECIO TOTAL",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.gHoliday",
+		"mulLanCode": "es",
+		"mulText": "Google Calendar Holiday ",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.aside.rates",
+		"mulLanCode": "es",
+		"mulText": "Tarifas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.invite.title",
+		"mulLanCode": "es",
+		"mulText": "Cita en",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "local.hoursSat",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Sábado",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.selNumLines",
+		"mulLanCode": "es",
+		"mulText": "Seleccione número de líneas o referencias",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.localTaskCombiNotSingle.text",
+		"mulLanCode": "es",
+		"mulText": "No existen servicios individuales",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "client.cabText",
+		"mulLanCode": "es",
+		"mulText": "Datos del cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.localTask.nameReq",
+		"mulLanCode": "es",
+		"mulText": "Nombre es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.placeSelectOne.title",
+		"mulLanCode": "es",
+		"mulText": "Seleccione profesionales",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.daysWeekFri",
+		"mulLanCode": "es",
+		"mulText": "Vie",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.errorBase.title",
+		"mulLanCode": "es",
+		"mulText": "Error",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.closeDateHolidays.title",
+		"mulLanCode": "es",
+		"mulText": "Fechas festivas cerradas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.apo.finished",
+		"mulLanCode": "es",
+		"mulText": "Terminadas",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.female",
+		"mulLanCode": "es",
+		"mulText": "Femenino",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.localTask.taskReq",
+		"mulLanCode": "es",
+		"mulText": "Servicio es obligatorio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.finText",
+		"mulLanCode": "es",
+		"mulText": "Confirme que desea establecer esta cita como terminada",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "mail.cancel.template",
+		"mulLanCode": "es",
+		"mulText": "/templates/cancel.vm",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.invoiceBillableTask.title",
+		"mulLanCode": "es",
+		"mulText": "Error en los servicios seleccionados",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.notavailableAdmin.title",
+		"mulLanCode": "es",
+		"mulText": "No disponible",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.bookedApoAdmin.text",
+		"mulLanCode": "es",
+		"mulText": "La cita se ha reservado correctamente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.sales.totalTask.cab",
+		"mulLanCode": "es",
+		"mulText": "Total de ventas por servicios",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.hourMayor.title",
+		"mulLanCode": "es",
+		"mulText": "Error en horario",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "tab.tabHour.title",
+		"mulLanCode": "es",
+		"mulText": "Horario",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "localTask.selectSystemTask",
+		"mulLanCode": "es",
+		"mulText": "Seleccione servicio de sistema",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.baby",
+		"mulLanCode": "es",
+		"mulText": "Niño",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.enabledLocal.title",
+		"mulLanCode": "es",
+		"mulText": "Habilitar local",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.displayFrom",
+		"mulLanCode": "es",
+		"mulText": "Mostrando desde el",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "firm.domain",
+		"mulLanCode": "es",
+		"mulText": "Dominio",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.next",
+		"mulLanCode": "es",
+		"mulText": "Sig",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "event.finSel",
+		"mulLanCode": "es",
+		"mulText": "&iquest;Qu&eacute; quiere hacer?",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.header.festives",
+		"mulLanCode": "es",
+		"mulText": "Festivos",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.search",
+		"mulLanCode": "es",
+		"mulText": "Buscar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.notification.deleteProduct.title",
+		"mulLanCode": "es",
+		"mulText": "Eliminar producto",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.all",
+		"mulLanCode": "es",
+		"mulText": "Todos",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.anyone",
+		"mulLanCode": "es",
+		"mulText": "Cualquiera",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.template.hourFromUntil",
+		"mulLanCode": "es",
+		"mulText": "Hora desde-hasta",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "general.yes",
+		"mulLanCode": "es",
+		"mulText": "Sí",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.hoursThu",
+		"mulLanCode": "es",
+		"mulText": "Horarios del Jueves",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.name",
+		"mulLanCode": "es",
+		"mulText": "Nombre",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.apo.client",
+		"mulLanCode": "es",
+		"mulText": "Por cliente",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.select",
+		"mulLanCode": "es",
+		"mulText": "Seleccionar",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "place.desc",
+		"mulLanCode": "es",
+		"mulText": "Observaciones sobre este profesional",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "report.sales.products",
+		"mulLanCode": "es",
+		"mulText": "Productos",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "label.foot.month",
+		"mulLanCode": "es",
+		"mulText": "Mes",
+		"mulLanName": null
+	},
+	{
+		"id": null,
+		"enabled": null,
+		"mulKey": "form.error.productClass.nameReq",
+		"mulLanCode": "es",
+		"mulText": "Nombre es obligatorio",
+		"mulLanName": null
+	}
+]

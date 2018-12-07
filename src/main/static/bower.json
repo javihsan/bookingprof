@@ -1,0 +1,41 @@
+{
+  "name": "bookhair",
+  "version": "4.0.0",
+  "dependencies": {
+    "angular": "1.7.2",
+    "angular-aria": "1.7.2",
+    "angular-resource": "1.7.2",
+    "angular-route": "1.7.2",
+	"angular-ui-router": "1.0.13",
+    "angular-sanitize": "1.7.2",
+    "angular-touch": "1.7.2",
+    "angular-animate": "1.7.2",
+    "angular-translate": "~2.8.1",
+    "angular-translate-loader-static-files": "~2.11.0",
+    "angular-translate-loader-partial": "~2.11.0",
+    "angular-dynamic-locale": "^0.1.32",
+    "angular-material": "^1.1.10",
+    "angular-bootstrap": "^2.3.1",
+    "angular-img-cropper": "1.1.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.20.0",
+    "ng-file-upload": "^12.2.13",
+    "angular-loading-bar": "^0.9.0",
+    "base-64": "^0.1.0",
+    "angular-messages": "1.7.2",
+    "angular-svg-round-progressbar": "0.4.8",
+    "angular-gantt": "^1.3.3",
+    "angular-momentjs": "^0.2.2",
+    "angular-ui-tree": "^2.22.6",
+	"jquery": "^2.1.1"
+  },
+  "devDependencies": {
+    "angular-mocks": "1.7.2"
+  },
+  "appPath": "app",
+  "moduleName": "app",
+  "resolutions": {
+    "angular": "1.7.2",
+    "angular-translate": "^2.11.0"
+  }
+}

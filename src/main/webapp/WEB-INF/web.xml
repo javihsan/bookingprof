@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	version="3.0"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			/WEB-INF/applicationContext-security.xml
+        </param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>contextClass</param-name>
+	  	<param-value>com.diloso.bookhair.app.negocio.utils.CustomXmlWebApplicationContext</param-value>
+	</context-param>
+
+	<!-- Filters -->
+	<filter>
+		<filter-name>encoding-filter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+
+	<filter-mapping>
+        <filter-name>encoding-filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>default</servlet-name>
+		<servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
+	</servlet>
+	 	
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>FileUpload</servlet-name>
+		<servlet-class>com.diloso.bookhair.web.server.FileUpload</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>FileServe</servlet-name>
+		<servlet-class>com.diloso.bookhair.web.server.FileServe</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>ImageServe</servlet-name>
+		<servlet-class>com.diloso.bookhair.web.server.ImageServe</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>_ah_sessioncleanup</servlet-name>
+		<servlet-class>com.diloso.weblogin.SessionCleanServe</servlet-class>
+	</servlet>
+	
+	<servlet-mapping> 
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.htm</url-pattern> 
+		<url-pattern>*.html</url-pattern>
+		<url-pattern>*.js</url-pattern> 
+		<url-pattern>*.css</url-pattern>
+		<url-pattern>*.ico</url-pattern>
+		<url-pattern>*.svg</url-pattern>
+		<url-pattern>*.woff</url-pattern>
+		<url-pattern>*.woff2</url-pattern>
+		<url-pattern>*.mustache</url-pattern>
+		<url-pattern>/images/*</url-pattern>
+		<url-pattern>/img/*</url-pattern>
+		<url-pattern>*.json</url-pattern>
+	</servlet-mapping> 
+		
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+		
+	
+	<servlet-mapping>
+		<servlet-name>FileUpload</servlet-name>
+		<url-pattern>/fileUpload</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>FileServe</servlet-name>
+		<url-pattern>/fileServe</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>ImageServe</servlet-name>
+		<url-pattern>/imageServe</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+    	<servlet-name>_ah_sessioncleanup</servlet-name>
+    	<url-pattern>/_ah/sessioncleanup</url-pattern>
+  	</servlet-mapping>
+
+
+	<!-- - Loads the root application context of this web app at startup. - 
+		The application context is then available via - WebApplicationContextUtils.getWebApplicationContext(servletContext). -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- - Publishes events for session creation and destruction through the 
+		application - context. Optional unless concurrent session control is being 
+		used. -->
+	<listener>
+		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+	</listener>
+
+
+	<login-config>
+		<auth-method>BASIC</auth-method>
+	</login-config>
+
+</web-app>

@@ -1,0 +1,15 @@
+<li>
+ 	<div style="margin-bottom:15px;" data-id="divBilTaskId">
+		<div class="right tag accept"> {{texts.changePush}}</div>
+		<div style="display: none;" id="error_bilTaskId{{bilId}}" data-id="bilTaskIdError" class="right tag cancel">{{texts.notBilled}} </div>
+		<label>{{texts.selectTask}} {{tasSelName}}</label>: </br>
+		<span id="bilTaskId{{bilId}}" data-id="bilTaskId"></span>
+	</div>
+  	<label>{{texts.selectCalendar}}</label>:
+  	<label class="select">
+    	<select id="bilCalendarId{{bilId}}" data-id="bilCalendarId" class="custom"></select>
+  	</label>
+  	<label id="error_bilRate{{bilId}}" data-id="bilRateError" style="color:red;"></label> <label>{{texts.rate}}</label> <span>{{texts.currency}}</span> (nnnn,dd):
+	<input id="bilRate{{bilId}}" data-id="bilRate" size="5" type="number" value="{{bilRate}}" pattern="\\d{1,4}([,|.]\\d{1,2})?" required>
+ 	<button class="small" id="clear-completed"> {{texts.delete}}</button>
+</li>

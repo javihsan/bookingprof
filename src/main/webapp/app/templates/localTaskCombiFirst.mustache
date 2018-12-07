@@ -1,0 +1,20 @@
+<li class="dark">{{texts.cabCombiTextNew}}</li>
+<li>
+	<label>{{texts.lotVisible}}</label>:
+	<label class="select">
+		<select id="lotVisible" data-id="lotVisible" class="custom">
+			<option value="1">{{texts.yes}}</option>
+			<option value="0">{{texts.no}}</option>
+		</select>
+	</label>
+ 	<label>{{texts.selectTask}}</label>:
+ 	<label class="select">
+    	<select id="lotTaskIdFirst{{lotId}}" data-id="lotTaskSelect" class="custom"></select>
+  	</label>
+  	<label data-id="lotTaskDurationError" id="lotTaskDurationError{{lotId}}" style="color:red;"></label> <label>{{texts.durationCombiTasks}}</label>:
+    <input id="lotTaskDuration{{lotId}}" type="number" value="{{lotTaskCombiRes}}" pattern="\\d{1,2}" required />
+    <label>{{texts.selectTask}}</label>:
+  	<label class="select">
+    	<select id="lotTaskIdSecond{{lotId}}" data-id="lotTaskSelect" class="custom"></select>
+  	</label>
+</li>

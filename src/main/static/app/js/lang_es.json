@@ -1,0 +1,45 @@
+[
+{
+	"id": null,
+	"enabled": null,
+	"mulKey": "general.months",
+	"mulLanCode": "es",
+	"mulText": "['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']",
+	"mulLanName": null
+}, {
+	"id": null,
+	"enabled": null,
+	"mulKey": "general.deleteFile",
+	"mulLanCode": "es",
+	"mulText": "Eliminar archivo",
+	"mulLanName": null
+}, {
+	"id": null,
+	"enabled": null,
+	"mulKey": "general.daysWeekWed",
+	"mulLanCode": "es",
+	"mulText": "Mie",
+	"mulLanName": null
+}, {
+	"id": null,
+	"enabled": null,
+	"mulKey": "general.by",
+	"mulLanCode": "es",
+	"mulText": "por",
+	"mulLanName": null
+}, {
+	"id": null,
+	"enabled": null,
+	"mulKey": "general.deleteImg",
+	"mulLanCode": "es",
+	"mulText": "Eliminar imagen",
+	"mulLanName": null
+}, {
+	"id": null,
+	"enabled": null,
+	"mulKey": "general.daysWeek",
+	"mulLanCode": "es",
+	"mulText": "['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo']",
+	"mulLanName": null
+}
+]

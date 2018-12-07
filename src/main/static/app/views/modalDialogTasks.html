@@ -1,0 +1,48 @@
+<md-dialog aria-label="{{titleDialog}}" ng-cloak>
+  <form>
+  <md-toolbar>
+  	<div class="md-toolbar-tools title">
+    	<span flex></span>
+      	<span flex></span>
+      	<md-button class="md-icon-button" ng-click="cancel()">
+       		<md-icon md-font-library="material-icons" class="md-24 md-light">close</md-icon>
+      	</md-button>
+    </div>
+   
+    <div class="md-toolbar-tools title">
+    	<span flex></span>
+      	<span flex="70">{{titleDialog}}</span>
+      	<span flex></span>
+  	</div>
+  </md-toolbar>
+  <md-dialog-content>
+  	<div class="md-dialog-content">
+  		<div layout="column" layout-margin>
+	      	<md-subheader class="md-no-sticky">{{titleContent}}</md-subheader>
+	        <div ng-cloak ng-repeat='task in $parent.combiTasks'>
+				<md-checkbox aria-label="task.lotName" class="md-primary md-hue-2" ng-checked="selectedTasksPersonsChecks.indexOf(task.id) > -1" ng-click="selectObj(task.id)">
+            		{{ task.lotName }}
+          		</md-checkbox>
+			</div>
+	    </div> 
+  	</div>
+  </md-dialog-content>
+  	<md-dialog-actions layout="row" layout-align="space-around center">
+    	<span flex ng-show="!tasMultiple"></span>
+    	<md-button ng-show="tasMultiple" class="md-fab md-mini md-primary md-hue-2">
+	    	<span>{{selectedTasksPersonsChecks.length}}</span>
+	    </md-button>
+    	<md-button ng-show="tasMultiple" ng-click="cleanTaskPerson()" class="md-primary md-hue-2">
+     		{{cleanText}}
+    	</md-button>
+    	<md-button ng-click="cancel()" class="md-primary md-hue-2">
+     	{{cancelText}}
+    	</md-button>
+    	<md-button ng-click="answer()" class="md-primary md-hue-2" ng-disabled="selectedTasksPersonsChecks.length==0">
+     		{{acceptText}}	
+    	</md-button>
+    	<span flex></span>
+  </md-dialog-actions>
+  </form>
+</md-dialog>
+

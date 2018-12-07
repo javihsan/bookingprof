@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ES-es">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="description" content="">
+<meta name="author" content="Diloso">
+<meta name="format-detection" content="telephone=no">
+<meta http-equiv="cleartype" content="on">
+<meta name="viewport" content="width=device-width">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="Shortcut Icon" href="images/logo.png" type="image/png" />
+<link rel="icon" href="images/logo.png" type="image/png" />
+
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css(.) styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+  <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+  <link rel="stylesheet" href="bower_components/angular-gantt/assets/angular-gantt.css" />
+  <link rel="stylesheet" href="bower_components/angular-gantt/assets/angular-gantt-plugins.css" />
+  <link rel="stylesheet" href="bower_components/angular-ui-tree/dist/angular-ui-tree.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
+  
+  <!-- build:css(.tmp) styles/style.css -->
+  <link rel="stylesheet" href="styles/booking.css">
+  <link rel="stylesheet" href="styles/skin.css">
+  <!-- endbuild -->
+
+  <!-- build:js(.) scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-aria/angular-aria.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-touch/angular-touch.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-translate/angular-translate.js"></script>
+  <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+  <script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+  <script src="bower_components/angular-dynamic-locale/dist/tmhDynamicLocale.js"></script>
+  <script src="bower_components/angular-messages/angular-messages.js"></script>
+  <script src="bower_components/angular-material/angular-material.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="bower_components/angular-img-cropper/dist/angular-img-cropper.min.js"></script>
+  <script src="bower_components/lodash/lodash.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+  <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+  <script src="bower_components/base-64/base64.js"></script>
+  <script src="bower_components/angular-svg-round-progressbar/build/roundProgress.js"></script>
+  <script src="bower_components/angular-moment/angular-moment.js"></script>
+  <script src="bower_components/angular-gantt/assets/angular-gantt.js"></script>
+  <script src="bower_components/angular-gantt/assets/angular-gantt-plugins.js"></script>
+  <script src="bower_components/angular-momentjs/angular-momentjs.js"></script>
+  <script src="bower_components/angular-ui-tree/dist/angular-ui-tree.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
+
+
+</head>
+<body layout="row">
+
+	<md-sidenav ng-show="sectionBack==null && existsMenu" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-xs')">
+		<header class="nav-header">
+			<!-- <img src="images/logoMain.png" alt="">-->
+			<div layout="column" layout-align="space-around center">
+				<h1><span ng-show="sectionBack==null && existsMenu" class="md-breadcrumb-page"> {{firm.firName}}</span></h1>
+				<div layout="row" layout-align="start center">
+	      			<md-button class="md-fab md-mini md-hue-1" ng-show="sectionBack==null && existsMenu" ng-click="showLocals($rootScope.findLangTextElement('label.aside.locals'),$rootScope.findLangTextElement('general.select'))">
+	          			<span>{{local.locName.charAt(0)}}</span>
+	          		</md-button>
+	          		<md-button ng-show="sectionBack==null && existsMenu" ng-click="showLocals($rootScope.findLangTextElement('label.aside.locals'),$rootScope.findLangTextElement('general.select'))" style="text-transform: none;">
+	          			<span>{{local.locName}}</span>
+	          		</md-button>
+          		</div>	
+          	</div>
+    	</header>
+    	<md-content flex="">
+	        <ul class="mainMenu" ng-controller="MenuBehaviour">
+		      	<li ng-click="toggleSidenav()" onClick="document.location='#/booking'" ng-class="{current: isActive('booking')}">
+		      		<md-icon md-font-library="material-icons" class="md-24">border_color</md-icon>
+		      		<a lnt-id="label.aside.bookings">Booking</a>
+		      	</li>
+		      	<md-divider></md-divider>
+		      	<li ng-click="toggleSidenav()" onClick="document.location='#/info'" ng-class="{current: isActive('info')}">
+		      		<md-icon md-font-library="material-icons" class="md-24">info</md-icon>
+		      		<a lnt-id="label.aside.info">Info</a>
+		      	</li>
+		      	<md-divider></md-divider>
+		    </ul>
+        </md-content>
+	</md-sidenav>	
+    
+    <div layout="column" style="width:100%">
+		<div flex="initial" layout="column" ng-controller="MenuBehaviour">
+			<md-toolbar>
+				<div class="md-toolbar-tools" layout-align="space-around center">
+					<md-button ng-click="toggleSidenav()" ng-show="sectionBack==null && existsMenu" hide-gt-xs class="md-icon-button"> 
+						<md-icon md-font-library="material-icons" class="md-24">menu</md-icon>
+					</md-button>
+					<div flex="65" layout="row" layout-align="space-around center">
+	          			<h1>
+	            			<span class="md-breadcrumb-page">{{sectionTit}} </span>
+	          			</h1>
+	           		</div>
+	           		<md-button ng-controller="LangsController" ng-show="sectionBack==null && existsMenu" ng-click="toggleLangTools()">
+	          			<span>{{langAppName}}</span>
+	          			<md-icon md-font-library="material-icons" class="md-24">arrow_drop_down_circle</md-icon>
+					</md-button>
+				</div>	
+			</md-toolbar>
+			<md-toolbar id="langSelect" ng-show="showLang">
+				<show-langs></show-langs>
+			</md-toolbar>	
+		</div>
+		<md-content id="contentParent" layout="column" flex class="md-padding" ui-view></md-content>
+	</div>	
+	
+	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+    
+	<script src="app.js"></script>
+	<script src="facadeCore.js"></script>
+	<script src="utils.js"></script>
+
+	<script src="calendar.js"></script>
+
+	<script src="controllers/mainCtrl.js"></script>
+	<script src="controllers/bookCtrl.js"></script>
+	<script src="controllers/langsCtrl.js"></script>
+	<script src="/controllers/legalCtrl.js"></script>
+ 	
+ 	<!-- endbuild -->
+	
+	<script>
+		app
+				.run([
+						'$rootScope',
+						'$q',
+						'httpService',
+						'cacheService',
+						'$location',
+						'$interval',
+						function($rootScope, $q, httpService, cacheService, $location, $interval) {
+							var stop = $interval(function() {
+								if (appFirmDomain != '') {
+									$rootScope.readyBooking();
+									// impedimos que se vuelva a ejecutar esta funci�n
+									$interval.cancel(stop);
+								}
+							}, 250);
+
+							$rootScope.readyBooking = function() {
+								console.log("readyBooking");
+
+								$rootScope.adminOption = false;
+								$rootScope.operatorRead = false;
+
+								var urlListLocal = protocol_url + appHost + "/local/listAllClient";
+								var data = {
+									domain : appFirmDomain
+								};
+								var promiseListLocal = httpService.GET(urlListLocal, data);
+								var thenListLocal = function(response) {
+									$rootScope.listLocal = response.data;
+									if ($rootScope.listLocal.length > 1) { // Hay m�s de un local
+										localId = __FacadeCore.Storage_get(appName+ "localId");
+										if (localId == null) { // No hay Storage localId
+											return $rootScope.showLocals($rootScope.findLangTextElement("label.aside.locals"),$rootScope.findLangTextElement("general.select"));
+											//return __FacadeCore.Router_article("booking","list-local");
+										} else { // Hay Storage localId
+											return $rootScope.localReady();
+										}
+									} else if ($rootScope.listLocal.length == 1) { // Solo hay un local
+										__FacadeCore.Storage_set(appName + "localId", $rootScope.listLocal[0].id);
+										return $rootScope.localReady();
+									} else { // No hay locales
+										return $rootScope.showLocals($rootScope.findLangTextElement("label.aside.locals"),$rootScope.findLangTextElement("general.select"));
+										//__FacadeCore.Router_article("booking","list-local");
+									}
+								};
+
+								promiseListLocal.then(thenListLocal);
+							} // fin readyBooking
+
+							$rootScope.localReady = function() {
+								//console.log ("localReady");
+
+								$rootScope.existsMenu = true;
+
+								$rootScope.selectedTasks = undefined;
+								$rootScope.selectedTasksCount = undefined;
+								//__FacadeCore.Cache_remove(appName + "selectedTasks");
+								//__FacadeCore.Cache_remove(appName + "selectedTasksCount");
+
+								var url = protocol_url + appHost + "/firm/get";
+								var data = {
+									domain : appFirmDomain
+								};
+								var promiseFirm = httpService.GET(url, data);
+
+								localId = __FacadeCore.Storage_get(appName + "localId");
+
+								url = protocol_url + appHost + "/local/getClient";
+								data = {
+									id : localId
+								};
+								var promiseLocal = httpService.GET(url, data);
+
+								$q
+										.all([ promiseFirm, promiseLocal ])
+										.then(
+												function(response) {
+
+													$rootScope.firm = response[0].data;
+													$rootScope.local = response[1].data;
+
+													if ($rootScope.local.id) {
+
+														url = protocol_url	+ appHost + "/localTask/listCombi";
+														data = {
+															localId : $rootScope.local.id,
+															lanCode:$rootScope.langApp
+														};
+														var promiseLocalTask = httpService.GET(url, data);
+														promiseLocalTask.then(function(response) {
+															var combiTasks = __Utils.sortByPropChar(response.data, "lotName", true);
+															$rootScope.combiTasks = combiTasks;
+															
+															// Se pone aqui porque se supone que es la que más tarda, pero debería hacerse un agrupamiento de promesas y hacerlo al acabar todas
+															
+															/*newDayAux = new Date();
+															year = newDayAux.getFullYear();
+															month = newDayAux.getMonth() + 1;
+															day = newDayAux.getDate();
+															selectedDate = year	+ "-" + month + "-" + day;
+															$rootScope.selectedDate = new String(selectedDate);*/
+
+															if (appFirmDomain == 'adveo' ){
+																$rootScope.urlListApoByDay = protocol_url + appHost + "/calendar/operator/listApoByDayGoods";
+																$rootScope.urlNextAposDay = protocol_url + appHost + "/calendar/booking/listNextDayWithApoGoods";
+																$rootScope.urlEventNew = protocol_url + appHost + "/event/operator/newGoods";
+															} else if ($rootScope.firm.firConfig.configLocal.configLocSP) {
+																$rootScope.urlListApoByDay = protocol_url + appHost + "/calendar/operator/listApoByDaySP";
+																$rootScope.urlNextAposDay = protocol_url + appHost + "/calendar/booking/listNextDayWithApoSP";
+																$rootScope.urlEventNew = protocol_url + appHost + "/event/operator/newSP";
+															} else {
+																$rootScope.urlListApoByDay = protocol_url + appHost + "/calendar/operator/listApoByDay";
+																$rootScope.urlNextAposDay = protocol_url + appHost + "/calendar/booking/listNextDayWithApo";
+																$rootScope.urlEventNew = protocol_url + appHost + "/event/operator/new";
+															}
+
+															var title = $rootScope.firm.firName	+ " - " + $rootScope.local.locName;
+															document.title = "BookingProf - "+ title;
+
+															var path = $location.path();
+															if (path != "/booking") {
+																$location.replace().path("/booking");
+															} else {
+																$rootScope.currentScope.initBook(1);
+															}
+															// Se pone aqui porque se supone que es la que más tarda, pero debería hacerse un agrupamiento de promesas y hacerlo al acabar todas
+														});
+
+														url = protocol_url	+ appHost + "/calendar/list";
+														var promiseCalendars = httpService.GET(url, data);
+														promiseCalendars.then(function(response) {
+															var calCandidates = __Utils.sortByPropChar(response.data, "calName", true);
+															$rootScope.calCandidates = calCandidates;
+														});
+
+														url = protocol_url	+ appHost + "/calendar/numCals";
+														var promiseNumCals = httpService.GET(url, data);
+														promiseNumCals.then(function(response) {
+															$rootScope.numCals = response.data;
+														});
+
+														url = protocol_url+appHost+"/lang/list"
+														var promiseLangs = httpService.GET(url, null);
+														promiseLangs.then(function(response) {
+															$rootScope.langs = [];
+															var lang;
+															for (var i = 0; i < response.data.length; i++) {
+																lang = response.data[i];
+																if (__Utils.findByProp($rootScope.local.locLangs, 'lanCode', lang.lanCode)){
+																	$rootScope.langs.push(lang);
+																}
+															}
+														});	
+			
+														/*if (firm.firConfig.configAut.configAutNivelUser==1){
+															url = protocol_url+appHost+"/client/booking/getBySession";
+														data = {firmId:firm.id};
+														clientAux = $$.json (url, data);
+														clientSession = new __Model.Client({
+														         enabled: true,
+														         cliId: clientAux.id,
+														         cliName: clientAux.whoName,
+														         cliSurname: clientAux.whoSurname,
+														         cliEmail: clientAux.whoEmail,
+														         cliGender: clientAux.whoGender,
+														         cliBirthday: clientAux.whoBirthday,
+														         cliTelf1: clientAux.whoTelf1,
+														         cliTelf2: clientAux.whoTelf2,
+														         cliDesc: clientAux.whoDesc
+														       });
+														__FacadeCore.Cache_remove(appName + "clientSession");
+															__FacadeCore.Cache_set(appName + "clientSession", clientSession);
+														}*/
+
+													} else {
+														//console.log ("localId invalido");
+														__FacadeCore.Storage_remove(appName + "localId");
+														return $rootScope.showLocals($rootScope.findLangTextElement("label.aside.locals"),$rootScope.findLangTextElement("general.select"));
+														//__FacadeCore.Router_article("booking","list-local");
+													}
+												});
+							} // fin localReady 
+
+						} ]);
+	</script>
+</body>
+</html>

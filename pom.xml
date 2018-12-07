@@ -1,0 +1,501 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.diloso</groupId>
+
+	<!-- NOMBRE DE LA APLICACION -->
+	<artifactId>dilosohairapp</artifactId>
+
+	<!-- VERSION -->
+	<version>r8-0-0</version>
+
+	<packaging>war</packaging>
+	<name>${project.artifactId}</name>
+
+	<!-- DESCRIPCION -->
+	<description>${project.artifactId}</description>
+
+	<properties>
+		<!-- PROPIEDADES GENERALES -->
+		<appengine.app.name>${project.artifactId}</appengine.app.name>
+		<appengine.app.id>${appengine.app.name}</appengine.app.id>
+		<appengine.app.version>${project.version}</appengine.app.version>
+		<base.package>diloso</base.package>
+
+		<!-- DIMENSIONAMIENTO DE INSTANCIAS No pueden ser B4 las de backend porque 
+			tiene puesto escalado automático -->
+		<default.prod.type>F1</default.prod.type>
+
+		<!-- Common configuration -->
+		<local.port>8888</local.port>
+		<protocol>https</protocol>
+		<root.package>com/${base.package}</root.package>
+		<project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
+		<target.dist.temp.folder>${project.build.directory}/dist</target.dist.temp.folder>
+
+		<!-- Dependencies versions -->
+		<appengine.target.version>1.9.60</appengine.target.version>
+		<servlet.api.version>2.5</servlet.api.version>
+		<spring.version>3.0.3.RELEASE</spring.version>
+		<junit.version>4.12</junit.version>
+		<mockito.version>1.10.19</mockito.version>
+		<datanucleus.jpa.version>3.1.3</datanucleus.jpa.version>
+
+		<!-- Plugins versions -->
+		<maven.minimum.version>3.3.0</maven.minimum.version>
+		<maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
+		<maven.replacer.plugin.version>1.5.3</maven.replacer.plugin.version>
+		<maven.war.plugin.version>2.6</maven.war.plugin.version>
+		<maven.resources.plugin.version>3.0.1</maven.resources.plugin.version>
+		<maven.exec.plugin.version>1.4.0</maven.exec.plugin.version>
+		<maven.builder.helper.plugin.version>1.10</maven.builder.helper.plugin.version>
+		<maven.clean.plugin.version>3.0.0</maven.clean.plugin.version>
+		<maven.antrun.plugin.version>1.8</maven.antrun.plugin.version>
+
+		<!-- Compiler configuration -->
+		<java.source>1.8</java.source>
+		<java.target>1.8</java.target>
+		<java.runtime>java8</java.runtime>
+		
+		<module>default</module>
+		<module.package>com/${base.package}/**/*.java</module.package>
+
+	</properties>
+	<profiles>
+		<profile>
+			<id>debug</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<protocol>http</protocol>
+				<environment>local</environment>
+				<module.instance.type>F1</module.instance.type>
+				<environment>local</environment>
+				<web.xml.filename>web.xml</web.xml.filename>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.google.appengine</groupId>
+						<artifactId>appengine-maven-plugin</artifactId>
+						<version>${appengine.target.version}</version>
+						<configuration>
+							<jvmFlags>
+								<jvmFlag>-Xdebug</jvmFlag>
+								<jvmFlag>
+									-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
+								</jvmFlag>
+								<jvmFlag>
+									-Ddatastore.backing_store=${project.basedir}/local_db.bin
+								</jvmFlag>
+								<jvmFlag>
+									-DLocalSearchService.useDirectory=${project.basedir}
+								</jvmFlag>
+								<jvmFlag>
+									-XX:MaxPermSize=512m
+								</jvmFlag>
+								<jvmFlag>
+									-Duser.timezone=UTC
+								</jvmFlag>
+							</jvmFlags>
+							<disableUpdateCheck>true</disableUpdateCheck>
+							<fullScanSeconds>2</fullScanSeconds>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<protocol>http</protocol>
+				<module.instance.type>F1</module.instance.type>
+				<environment>local</environment>
+				<web.xml.filename>web.xml</web.xml.filename>
+			</properties>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<environment>prod</environment>
+				<module.instance.type>${default.prod.type}</module.instance.type>
+				<web.xml.filename>web.xml</web.xml.filename>
+				<module.scaling.type><![CDATA[<automatic-scaling/>]]></module.scaling.type>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+		                <groupId>org.codehaus.mojo</groupId>
+		                <artifactId>exec-maven-plugin</artifactId>
+		                <version>${maven.exec.plugin.version}</version>
+		                  <executions>
+		                    <execution>
+		                        <id>npm</id>
+		                        <phase>generate-sources</phase>
+		                        <goals>
+		                            <goal>exec</goal>
+		                        </goals>
+		                        <configuration>
+		                            <executable>npm</executable>
+		                            <arguments>
+		                                <argument>install</argument>
+		                            </arguments>
+		                            <workingDirectory>src/main/static</workingDirectory>
+		                        </configuration>
+		                    </execution>
+		                    <execution>
+		                        <id>bower</id>
+		                        <phase>generate-sources</phase>
+		                        <goals>
+		                            <goal>exec</goal>
+		                        </goals>
+		                        <configuration>
+		                            <executable>bower</executable>
+		                            <arguments>
+		                                <argument>install</argument>
+		                            </arguments>
+		                            <workingDirectory>src/main/static</workingDirectory>
+		                        </configuration>
+		                    </execution>
+		                    <execution>
+		                        <id>grunt</id>
+		                        <phase>generate-sources</phase>
+		                        <goals>
+		                            <goal>exec</goal>
+		                        </goals>
+		                        <configuration>
+		                            <executable>grunt</executable>
+		                            <arguments>
+		                                <argument>--force</argument>
+		                            </arguments>
+		                            <workingDirectory>src/main/static</workingDirectory>
+		                        </configuration>
+		                    </execution>
+		                </executions>
+		            </plugin>
+				</plugins>
+			</build>	
+		</profile>
+	</profiles>
+	<dependencies>
+	
+		<!-- AppEngine -->
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-1.0-sdk</artifactId>
+			<version>${appengine.target.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-testing</artifactId>
+			<version>${appengine.target.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine</groupId>
+			<artifactId>appengine-api-stubs</artifactId>
+			<version>${appengine.target.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.google.apis</groupId>
+		    <artifactId>google-api-services-calendar</artifactId>
+		    <version>v3-rev287-1.23.0</version>
+		</dependency>
+	
+		<dependency>
+	    	<groupId>com.google.apis</groupId>
+	    	<artifactId>google-api-services-gmail</artifactId>
+	    	<version>v1-rev79-1.23.0</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.codehaus.jackson</groupId>
+		    <artifactId>jackson-mapper-asl</artifactId>
+		    <version>1.9.13</version>
+		</dependency>
+		
+		<!-- Velocity -->
+		<dependency>
+		    <groupId>org.apache.velocity</groupId>
+		    <artifactId>velocity-tools</artifactId>
+		    <version>2.0</version>
+		</dependency>
+		
+		<!-- commons -->
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.8.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.0</version>
+		</dependency>	
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-text</artifactId>
+		    <version>1.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-collections</groupId>
+		    <artifactId>commons-collections</artifactId>
+		    <version>3.0</version>
+		</dependency>	
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+
+ 		
+		<dependency>
+		    <groupId>org.eclipse.persistence</groupId>
+		    <artifactId>javax.persistence</artifactId>
+		    <version>2.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-api-jpa</artifactId>
+			<version>${datanucleus.jpa.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.datanucleus</groupId>
+			<artifactId>datanucleus-core</artifactId>
+			<version>${datanucleus.jpa.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.appengine.orm</groupId>
+			<artifactId>datanucleus-appengine</artifactId>
+			<version>2.1.2</version>
+		</dependency>
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- Test -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+		<outputDirectory>target/${project.artifactId}/WEB-INF/classes</outputDirectory>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>*.jar</include>
+					<include>*.properties</include>
+					<include>*.json</include>
+					<include>*.txt</include>
+					<include>*.xml</include>
+					<include>*.html</include>
+					<include>*.htm</include>
+					<include>*.p12</include>
+					<include>META-INF/*.xml</include>
+					<include>documentos/*.*</include>
+					<include>fotos/*.*</include>
+					<include>imagenes/*.*</include>
+					<include>jsp/*.xml</include>
+					<include>util/*.js</include>
+					<include>templates/*.vm</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>com/diloso/bookhair/app/client/*.properties</include>
+					<include>com/diloso/bookhair/web/client/*.properties</include>
+				</includes>
+			</resource>
+		</resources>
+		<plugins>
+			<!-- Compile java files -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>${java.source}</source>
+					<target>${java.target}</target>
+					<includes>
+						<include>${root.package}/**/**/*.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
+			<!-- Resources plugin -->
+			<!-- Copy web files to temp directory "dist". -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>copy-web-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${target.dist.temp.folder}</outputDirectory>
+							<resources>
+							    <resource>
+									<directory>${project.basedir}/src/main/static/dist</directory>
+								</resource>
+								<resource>
+									<directory>${project.basedir}/src/main/webapp</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Replaces the web.xml file with the currently defined one for the 
+				module -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>${maven.antrun.plugin.version}</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<configuration>
+							<target>
+								<copy file="${target.dist.temp.folder}/WEB-INF/${web.xml.filename}"
+									tofile="${target.dist.temp.folder}/WEB-INF/web.xml" overwrite="true"
+									force="true" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- WAR plugin -->
+			<!-- Make the package directory and war file only with content from "dist" 
+				directory filtering files to replace with properties values from pom.xml 
+				and excluding profile files. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven.war.plugin.version}</version>
+				<configuration>
+					<warSourceExcludes>**</warSourceExcludes>
+					<webResources>
+						<webResource>
+							<directory>${target.dist.temp.folder}</directory>
+							<filtering>true</filtering>
+							<excludes>${excludedFiles}</excludes>
+						</webResource>
+					</webResources>
+				</configuration>
+			</plugin>
+
+
+			<!-- AppEngine plugin -->
+			<plugin>
+				<groupId>com.google.appengine</groupId>
+				<artifactId>appengine-maven-plugin</artifactId>
+				<version>${appengine.target.version}</version>
+				<configuration>
+					<address>0.0.0.0</address>
+					<port>${local.port}</port>
+					<oauth2>true</oauth2>
+					<disableUpdateCheck>true</disableUpdateCheck>
+					<noCookies>true</noCookies>
+					<jvmFlags>
+						<jvmFlag>
+							-Ddatastore.backing_store=${project.basedir}/local_db.bin
+						</jvmFlag>
+						<jvmFlag>
+							-DLocalSearchService.useDirectory=${project.basedir}
+						</jvmFlag>
+						<jvmFlag>-XX:MaxPermSize=512m</jvmFlag>
+					</jvmFlags>
+				</configuration>
+			</plugin>
+		    <plugin>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>maven-datanucleus-plugin</artifactId>
+                <version>${datanucleus.jpa.version}</version>
+
+                <configuration>
+                    <api>JPA</api>
+                    <mappingIncludes>**/entity/*.class</mappingIncludes>
+                    <verbose>true</verbose>
+                    <fork>false</fork>
+                </configuration>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.datanucleus</groupId>
+                        <artifactId>datanucleus-core</artifactId>
+                        <version>${datanucleus.jpa.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

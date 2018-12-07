@@ -1,0 +1,24 @@
+/* color de fondo de toda la aplicacion */
+html, body {background-color: #eceff1;}
+.booking_calendar md-grid-list#tableDates md-grid-tile:hover {background-color: #eceff1;}
+
+.nav-header {background:url(../images/wallpaper_menu.png) no-repeat center center / cover}
+
+/* Color de fondo de la cabecera */
+/*md-toolbar {background-color: teal !important;}
+
+/* Color de los radio */
+/*md-radio-group.green .md-checked .md-on {background-color: teal !important;}
+md-radio-group.green .md-checked .md-off {border-color: teal !important;} */
+
+/* Color de fondo del menu lateral 
+md-sidenav {background:url(../images/verso-fondo.png) no-repeat center} */
+
+/* Color y grosor de la linea de separacion de cada opcion del mennu lateral */ 
+/*ul.mainMenu md-divider {border-top:1px solid #c3da4e;}
+ul.mainMenu md-divider:last-child{border-top:none} */
+ul.mainMenu md-divider {border-top:none}
+/* Color del texto del mennu lateral */
+ul.mainMenu li a {color:black;}
+/* Color de la opcion del mennu lateral seleccionada */
+ul.mainMenu .current {background-color: #eceff1}

@@ -1,0 +1,272 @@
+<!-- Indices written at Wed, 2 Nov 2011 15:04:00 UTC -->
+
+<datastore-indexes autoGenerate="false">
+
+   <datastore-index kind="Firm" ancestor="false" source="manual">
+		<property name="__key__" direction="desc" />
+	</datastore-index>
+    
+    <datastore-index kind="Firm" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="Firm" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="firDomain" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Firm" ancestor="false" source="manual">
+        <property name="firDomain" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Firm" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="firServer" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Local" ancestor="false" source="manual">
+		<property name="__key__" direction="desc" />
+	</datastore-index>
+
+  	<datastore-index kind="Local" ancestor="false" source="manual">
+        <property name="resFirId" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Local" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="resFirId" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Local" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="locBookingClient" direction="desc"/>
+        <property name="resFirId" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Calendar" ancestor="false" source="manual">
+		<property name="__key__" direction="desc" />
+	</datastore-index>
+	
+	<datastore-index kind="Calendar" ancestor="false" source="manual">
+        <property name="calLocalId" direction="desc"/>
+        <property name="calName" direction="asc"/>
+    </datastore-index>
+	
+  	<datastore-index kind="Calendar" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="calLocalId" direction="desc"/>
+        <property name="calName" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="manual">
+		<property name="__key__" direction="desc" />
+	</datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="manual">
+        <property name="eveCalendarId" direction="desc"/>
+        <property name="eveStartTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="eveCalendarId" direction="desc"/>
+        <property name="eveStartTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="eveCalendarId" direction="desc"/>
+        <property name="eveBooking" direction="desc"/>
+        <property name="eveStartTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+         <property name="eveClientId" direction="desc"/>
+        <property name="eveCalendarId" direction="desc"/>
+        <property name="eveBookingTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+         <property name="eveClientId" direction="desc"/>
+        <property name="eveCalendarId" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="eveCalendarId" direction="desc"/>
+        <property name="eveConsumed" direction="desc"/>
+        <property name="eveStartTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="eveCalendarId" direction="desc"/>
+        <property name="eveConsumed" direction="desc"/>
+        <property name="eveStartTime" direction="asc"/>
+        <property name="eveRate" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="eveCalendarId" direction="desc"/>
+        <property name="eveConsumed" direction="desc"/>
+         <property name="eveLocalTaskId" direction="desc"/>
+        <property name="eveStartTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Event" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="eveCalendarId" direction="desc"/>
+        <property name="eveLocalTaskId" direction="desc"/>
+        <property name="eveStartTime" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Client" ancestor="false" source="manual">
+		<property name="__key__" direction="desc" />
+	</datastore-index>
+ 	
+  	<datastore-index kind="Client" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="resFirId" direction="desc"/>
+        <property name="whoEmail" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Client" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="resFirId" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Professional" ancestor="false" source="manual">
+		<property name="__key__" direction="desc" />
+	</datastore-index>
+ 	
+  	<datastore-index kind="Professional" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="resFirId" direction="desc"/>
+        <property name="whoEmail" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Professional" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="resFirId" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="AnnualDiary" ancestor="false" source="manual">
+		<property name="__key__" direction="desc" />
+	</datastore-index>
+	
+	<datastore-index kind="AnnualDiary" ancestor="false" source="manual">
+        <property name="anuLocalId" direction="desc"/>
+        <property name="enabled" direction="desc"/>
+        <property name="anuDate" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="AnnualDiary" ancestor="false" source="manual">
+        <property name="anuLocalId" direction="desc"/>
+        <property name="enabled" direction="desc"/>
+        <property name="anuDate" direction="desc"/>
+         <property name="__key__" direction="desc" />
+    </datastore-index>
+	
+	<datastore-index kind="AnnualDiary" ancestor="false" source="manual">
+        <property name="anuCalendarId" direction="desc"/>
+        <property name="enabled" direction="desc"/>
+        <property name="anuDate" direction="desc"/>
+        <property name="__key__" direction="desc" />
+    </datastore-index>
+
+	<datastore-index kind="Diary" ancestor="false" source="manual">
+		<property name="__key__" direction="desc" />
+	</datastore-index>
+
+	<datastore-index kind="SemanalDiary" ancestor="false" source="manual">
+		<property name="__key__" direction="desc" />
+	</datastore-index>
+    
+    <datastore-index kind="Lang" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="lanName" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Lang" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="lanName" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Lang" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="lanCode" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="MultiText" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="__key__" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="MultiText" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="mulLanCode" direction="desc"/>
+        <property name="__key__" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="MultiText" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="mulKey" direction="desc"/>
+        <property name="__key__" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="MultiText" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="mulLanCode" direction="desc"/>
+        <property name="mulKey" direction="desc"/>
+        <property name="__key__" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Rate" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="ratLocalId" direction="desc"/>
+        <property name="__key__" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Where" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="resFirId" direction="desc"/>
+        <property name="__key__" direction="desc"/>
+    </datastore-index>
+    
+    <datastore-index kind="LocalTask" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="lotLocalId" direction="desc"/>
+        <property name="__key__" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="LocalTask" ancestor="false" source="manual">
+        <property name="lotLocalId" direction="desc"/>
+        <property name="__key__" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Task" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="__key__" direction="asc"/>
+    </datastore-index>
+    
+    <datastore-index kind="Repeat" ancestor="false" source="manual">
+        <property name="enabled" direction="desc"/>
+        <property name="eveCalendarId" direction="desc"/>
+        <property name="eveEndTime" direction="asc"/>
+    </datastore-index>
+    
+</datastore-indexes>
