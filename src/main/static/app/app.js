@@ -1,7 +1,7 @@
 var protocol_url = location.protocol+'//';
 var domainOfi = 'bookingprof.com';
-var domainLocalOfi = 'localhost:8888'; // arrancar en local con el java delante
-//var domainLocalOfi = 'localhost:9001'; // arrancar en local solo el front
+//var domainLocalOfi = '127.0.0.1:8888';//'localhost:8888'; // arrancar en local con el java delante
+var domainLocalOfi = '127.0.0.1:9001';//'localhost:9001'; // arrancar en local solo el front
 var domainSpotOfi = 'dilosohairapp.appspot.com';
 
 var appHost = location.host;
@@ -205,8 +205,8 @@ var App = {
 				__Utils = new Utils($rootScope);
 				__FacadeCore = new FacadeCore(cacheService);
 						
-				var url = protocol_url + appHost + "/multiText/listLocaleTexts";
-				//var url = "/js/lang_es.json" // Para rapidez al debugear solo con front
+				//var url = protocol_url + appHost + "/multiText/listLocaleTexts";
+				var url = "/js/lang_es.json" // Para rapidez al debugear solo con front
 				var data = {lanCode:lanCode,domain:appFirmDomain};
 								
 				httpService.GET(url,data).then(
@@ -330,12 +330,12 @@ var App = {
 					|| appHost.toLowerCase() == domainLocalOfi
 					|| appHost.toLowerCase().indexOf(domainSpotOfi) != -1) {
 				
-				//console.log ("Sin dominio propio");
+				console.log ("Sin dominio propio");
 				
 				a = location.pathname.split("/");
 				appFirmDomain = a[1];
-				//appFirmDomain = 'galanovias' // Para local arrancado solo con front
-				//appHost = 'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
+				appFirmDomain = 'demo' // Para local arrancado solo con front
+				appHost = '127.0.0.1:8888';//'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
 				
 				appHost += '/'+appFirmDomain;
 				appName = 'BookingProf-' + appFirmDomain;
@@ -344,21 +344,25 @@ var App = {
 				$rootScope.changeLang($rootScope.langApp);
 
 			} else {
-				
+	
 				//console.log ("Dominio propio: ",appServerName);
 
-				url = protocol_url+appHost+"/firm/getDomainServer";
-				data = {server:appServerName};
-				httpService.GET(url,data).then(function(response) {
-					appFirmDomain = JSON.parse(response.data);
+				var url = protocol_url + appHost + "/firm/getDomainServer";
+				var data = {server:appServerName};
+				
+				httpService.GET(url,data).then(
+					function(response) {
+				
+						appFirmDomain = response.data;
 
-					appHost += '/'+appFirmDomain;
-					appName = 'BookingProf-' + appFirmDomain;
+						appHost += '/'+appFirmDomain;
+						appName = 'BookingProf-' + appFirmDomain;
 					
-					// set Text multiLanguaje
-					$rootScope.changeLang($rootScope.langApp);
+						// set Text multiLanguaje
+						$rootScope.changeLang($rootScope.langApp);
 
-				});	
+					}
+				);	
 			}
 		
 		}

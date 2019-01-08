@@ -14,6 +14,14 @@ grunt build --force construir
 
 hay que contruir con el grunt build cualquier cambio en la static app si queremos que lo coja el pom del "java"
 
+npm install bower -g  (archivo .bowerrc para proxy)
+npm install grunt -g
+instalar ruby en windows (scoop ruby)
+SET HTTP_PROXY=http://proxy.santander.corp:8080
+gem install campass
+npm install coffee-script@1.12.7 -g
+
+
 en app: 
 
 //var domainLocalOfi = 'localhost:8888'; // arrancar en local con el java delante
@@ -30,3 +38,8 @@ var url = "/js/lang_es.json" // Para rapidez al debugear solo con front
 				appFirmDomain = a[1];
 cuidado con esto				appFirmDomain = 'demo' // Para local arrancado solo con front
 cuidado con esto				appHost = 'localhost:8888'; //Para tirar de un determinado back
+
+Para Operator en local solo con el front
+en applicationContext-security.xml
+
+<!--<intercept-url pattern="/**/**operator**/**" access="hasAnyRole('ADMIN','OPERATOR','OPERATOR_READ')" />-->

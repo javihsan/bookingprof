@@ -1,7 +1,7 @@
 var lngAppName = 'BookingProf';
 
 var domainOfi = 'bookingprof.com';
-var domainLocalOfi = 'localhost:8888';
+var domainLocalOfi = '127.0.0.1:8888';//'localhost:8888';
 var domainSpotOfi = 'dilosohairapp.appspot.com';
 
 var appHost = location.host;

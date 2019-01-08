@@ -1,1 +1,1 @@
-coffee --compile --output C:\work\Diloso\workspaceBooking\BookHair\src\main\webapp\app\controller C:\work\Diloso\workspaceBooking\BookHair\src\main\webapp\app\controller\coffee
+coffee --compile --output C:\work\repository\bookingprof\src\main\webapp\app\controller C:\work\repository\bookingprof\src\main\webapp\app\controller\coffee

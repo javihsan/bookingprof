@@ -14,11 +14,12 @@ public class InitController {
 	public static final String URL_APP = "app.bookingprof.com";
 	public static final String URL_APPSPOT = "dilosohairapp.appspot.com";
 	public static final String URL_LOCAL = "localhost";
+	public static final String URL_LOCAL2 = "127.0.0.1";
 	public static final String DEMO_APP = "demo";
 	public static final String PATH_BOOKING = "/booking";
 	
-	public static final String[] PATHS_APP = {URL_WEB,URL_APP,URL_APPSPOT,URL_LOCAL};
-	public static final String[] PATHS_HOME = {URL_WEB,URL_APPSPOT,URL_LOCAL};
+	public static final String[] PATHS_APP = {URL_WEB,URL_APP,URL_APPSPOT,URL_LOCAL,URL_LOCAL2};
+	public static final String[] PATHS_HOME = {URL_WEB,URL_APPSPOT,URL_LOCAL,URL_LOCAL2};
 	
 	@RequestMapping(value="*", headers="host=app.bookingprof.com")
 	protected ModelAndView initAppDemo(HttpServletRequest arg0,

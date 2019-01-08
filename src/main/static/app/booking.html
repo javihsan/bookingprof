@@ -173,7 +173,6 @@
 										localId = __FacadeCore.Storage_get(appName+ "localId");
 										if (localId == null) { // No hay Storage localId
 											return $rootScope.showLocals($rootScope.findLangTextElement("label.aside.locals"),$rootScope.findLangTextElement("general.select"));
-											//return __FacadeCore.Router_article("booking","list-local");
 										} else { // Hay Storage localId
 											return $rootScope.localReady();
 										}

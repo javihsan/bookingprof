@@ -10,8 +10,8 @@
 <meta name="viewport" content="width=device-width">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<link rel="Shortcut Icon" href="images/logo.png" type="image/png" />
-<link rel="icon" href="images/logo.png" type="image/png" />
+<link rel="Shortcut Icon" href="/images/logo.png" type="image/png" />
+<link rel="icon" href="/images/logo.png" type="image/png" />
 
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
   <!-- build:css(.) styles/vendor.css -->
@@ -25,8 +25,8 @@
   <!-- endbuild -->
   
   <!-- build:css(.tmp) styles/style.css -->
-  <link rel="stylesheet" href="styles/booking.css">
-  <link rel="stylesheet" href="styles/skin.css">
+  <link rel="stylesheet" href="/styles/booking.css">
+  <link rel="stylesheet" href="/styles/skin.css">
   <!-- endbuild -->
 
   <!-- build:js(.) scripts/vendor.js -->
@@ -83,15 +83,15 @@
     	</header>
     	<md-content flex="">
 	        <ul class="mainMenu" ng-controller="MenuBehaviour">
-		      	<li ng-click="toggleSidenav()" onClick="document.location='#/booking'" ng-class="{current: isActive('booking')}">
+		      	<li ng-click="toggleSidenav()" onClick="document.location='#!/booking'" ng-class="{current: isActive('booking')}">
 		      		<md-icon md-font-library="material-icons" class="md-24">border_color</md-icon>
 		      		<a lnt-id="label.aside.bookings">Booking</a>
-		      	</li>
+		      	</li><!--
 		      	<md-divider></md-divider>
-		      	<li ng-click="toggleSidenav()" onClick="document.location='#/info'" ng-class="{current: isActive('info')}">
+		      	<li ng-click="toggleSidenav()" onClick="document.location='#!/legal'" ng-class="{current: isActive('legal')}">
 		      		<md-icon md-font-library="material-icons" class="md-24">info</md-icon>
 		      		<a lnt-id="label.aside.info">Info</a>
-		      	</li>
+		      	</li>-->
 		      	<md-divider></md-divider>
 		    </ul>
         </md-content>
@@ -106,7 +106,8 @@
 					</md-button>
 					<div flex="65" layout="row" layout-align="space-around center">
 	          			<h1>
-	            			<span class="md-breadcrumb-page">{{sectionTit}} </span>
+	            			<span hide-gt-xs class="md-breadcrumb-page">{{firm.firName}} - {{local.locName}} </span>
+	            			<span hide-xs class="md-breadcrumb-page">{{sectionTit}} </span>
 	          			</h1>
 	           		</div>
 	           		<md-button ng-controller="LangsController" ng-show="sectionBack==null && existsMenu" ng-click="toggleLangTools()">
@@ -124,15 +125,15 @@
 	
 	<!-- build:js({.tmp,app}) scripts/scripts.js -->
     
-	<script src="app.js"></script>
-	<script src="facadeCore.js"></script>
-	<script src="utils.js"></script>
+	<script src="/app.js"></script>
+	<script src="/facadeCore.js"></script>
+	<script src="/utils.js"></script>
 
-	<script src="calendar.js"></script>
+	<script src="/calendar.js"></script>
 
-	<script src="controllers/mainCtrl.js"></script>
-	<script src="controllers/bookCtrl.js"></script>
-	<script src="controllers/langsCtrl.js"></script>
+	<script src="/controllers/mainCtrl.js"></script>
+	<script src="/controllers/bookCtrl.js"></script>
+	<script src="/controllers/langsCtrl.js"></script>
 	<script src="/controllers/legalCtrl.js"></script>
  	
  	<!-- endbuild -->
@@ -150,29 +151,28 @@
 							var stop = $interval(function() {
 								if (appFirmDomain != '') {
 									$rootScope.readyBooking();
-									// impedimos que se vuelva a ejecutar esta funci�n
+									// impedimos que se vuelva a ejecutar esta función
 									$interval.cancel(stop);
 								}
 							}, 250);
 
 							$rootScope.readyBooking = function() {
-								console.log("readyBooking");
+								console.log("readyBookingOperator");
 
-								$rootScope.adminOption = false;
+								$rootScope.adminOption = true;
 								$rootScope.operatorRead = false;
 
-								var urlListLocal = protocol_url + appHost + "/local/listAllClient";
+								var urlListLocal = protocol_url + appHost + "/local/listAll";
 								var data = {
 									domain : appFirmDomain
 								};
 								var promiseListLocal = httpService.GET(urlListLocal, data);
 								var thenListLocal = function(response) {
 									$rootScope.listLocal = response.data;
-									if ($rootScope.listLocal.length > 1) { // Hay m�s de un local
+									if ($rootScope.listLocal.length > 1) { // Hay más de un local
 										localId = __FacadeCore.Storage_get(appName+ "localId");
 										if (localId == null) { // No hay Storage localId
 											return $rootScope.showLocals($rootScope.findLangTextElement("label.aside.locals"),$rootScope.findLangTextElement("general.select"));
-											//return __FacadeCore.Router_article("booking","list-local");
 										} else { // Hay Storage localId
 											return $rootScope.localReady();
 										}
@@ -195,9 +195,7 @@
 
 								$rootScope.selectedTasks = undefined;
 								$rootScope.selectedTasksCount = undefined;
-								//__FacadeCore.Cache_remove(appName + "selectedTasks");
-								//__FacadeCore.Cache_remove(appName + "selectedTasksCount");
-
+	
 								var url = protocol_url + appHost + "/firm/get";
 								var data = {
 									domain : appFirmDomain
@@ -206,7 +204,7 @@
 
 								localId = __FacadeCore.Storage_get(appName + "localId");
 
-								url = protocol_url + appHost + "/local/getClient";
+								url = protocol_url + appHost + "/local/get";
 								data = {
 									id : localId
 								};
@@ -240,7 +238,6 @@
 															day = newDayAux.getDate();
 															selectedDate = year	+ "-" + month + "-" + day;
 															$rootScope.selectedDate = new String(selectedDate);*/
-
 															if (appFirmDomain == 'adveo' ){
 																$rootScope.urlListApoByDay = protocol_url + appHost + "/calendar/operator/listApoByDayGoods";
 																$rootScope.urlNextAposDay = protocol_url + appHost + "/calendar/booking/listNextDayWithApoGoods";
