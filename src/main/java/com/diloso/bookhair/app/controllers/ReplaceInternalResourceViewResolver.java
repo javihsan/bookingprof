@@ -22,7 +22,7 @@ public class ReplaceInternalResourceViewResolver extends
             throws Exception {
     	int indx = viewName.indexOf(getIdentAPP());
     	if (indx>=0){
-    		if (viewName.endsWith("/booking") || viewName.endsWith("/bookingOperator")){
+    		if (viewName.endsWith("/booking") || viewName.endsWith("/bookingOperatorNew")){
     			viewName = viewName.substring(indx+getIdentAPP().length());
     			viewName += getSufixAPPMaterial();
     		} else {

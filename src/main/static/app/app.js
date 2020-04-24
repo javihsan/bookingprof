@@ -205,8 +205,8 @@ var App = {
 				__Utils = new Utils($rootScope);
 				__FacadeCore = new FacadeCore(cacheService);
 						
-				//var url = protocol_url + appHost + "/multiText/listLocaleTexts";
-				var url = "/js/lang_es.json" // Para rapidez al debugear solo con front
+				var url = protocol_url + appHost + "/multiText/listLocaleTexts";
+				//var url = "/js/lang_es.json" // Para rapidez al debugear solo con front
 				var data = {lanCode:lanCode,domain:appFirmDomain};
 								
 				httpService.GET(url,data).then(

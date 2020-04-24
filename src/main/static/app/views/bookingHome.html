@@ -42,13 +42,16 @@
     	
     		<md-tab label="{{tabsBook[1].title}}" ng-disabled="tabsBook[1].disabled" ng-click="$parent.selectedTabIndex = 1;">
     			<loading></loading>
-     			<show-apos-day ng-show="!isViewLoading" />
-			</show-apos-day>
+     			<show-apos-day ng-show="!isViewLoading">
+				</show-apos-day>
       		</md-tab>
       		
       		<md-tab label="{{tabsBook[2].title}}" ng-disabled="tabsBook[2].disabled" ng-click="$parent.selectedTabIndex = 2;">
       			<loading></loading>
-				<show-apos-new ng-show="!isViewLoading" />
+				<show-apos-new ng-show="!isViewLoading && !adminOption">
+				</show-apos-new>
+				<show-apos-new-admin ng-show="!isViewLoading && adminOption">
+				</show-apos-new-admin>
       		</md-tab>
 
 			<md-tab label="{{tabsBook[3].title}}" ng-disabled="tabsBook[3].disabled" ng-click="$parent.selectedTabIndex = 3;">

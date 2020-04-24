@@ -792,9 +792,14 @@ app
 								}
 								
 								// Obtener cliente
-								if ($rootScope.adminOption) {  // Si el entorno es manager lo obtenemos de la seleccion del listado	
-									$scope.client = __FacadeCore.Cache_get(appName	+ "selectClient");
-								} else { // Si el entorno es cliente final lo obtenemos de sesion 
+								if ($rootScope.adminOption) {  // Si el entorno es manager
+									$scope.client = {};
+									$scope.client.name = "";
+									$scope.client.email = "";
+									$scope.client.telf = "";
+									$scope.client.observ = "";
+								} else { 
+									// Intentamos obtener el cliente de sesion 
 									$scope.client = __FacadeCore.Cache_get(appName + "clientSession");
 									if (!$scope.client) { // Si no, lo obtenemos de la cookie del dispositivo
 										$scope.client = __FacadeCore.Storage_get(appName+ "eveClient");
@@ -805,8 +810,8 @@ app
 											$scope.client.telf = "";
 										}
 									}
+									$scope.client.observ = "";
 								}
-								$scope.client.observ = "";
 								
 								if ($rootScope.firm.firConfig.configClient.extraBook.celebrationDate) {
 									$scope.isCelebration = true;
@@ -928,10 +933,65 @@ app
 									promiseSave.then(thenSave, errorSave);
 							      
 							   //}
-							};
+							};							
 							
+							this.querySearch =  $scope.querySearch;
+							this.selectedItemChange = $scope.selectedItemChange
+							this.actionNewClient = $scope.actionNewClient
+							this.isNewClient = $scope.isNewClient
+							this.textChange = $scope.textChange
+							
+							$scope.newCient = true;
+							
+							$scope.isNewClient = function() {
+								return $scope.newCient;
+							}
+							
+							$scope.actionNewClient = function() {
+								//console.log("actionNewClient")
+								$scope.newCient = true;
+								$scope.client.email = "";
+						    	$scope.client.telf = "";
+							}
 
+							$scope.querySearch = function(query) {
+								//var results = $rootScope.clients;
+							    var results = query ? $rootScope.clients.filter($scope.createFilterFor(query)) : $rootScope.clients,
+						          deferred;
+				       			return results;
+							    
+//							    	var urlClients = protocol_url + appHost + "/client/operator/list"
+//								    var data = {domain:appFirmDomain}
+//							        return httpService.GET(urlClients,data).then(
+//							       		function(response) {
+//							       			var results = response.data;
+//							       			return results;
+//										}
+//									)
+						    }
+
+					
+							$scope.createFilterFor = function(query) {   	
+							      var lowercaseQuery = query.toLowerCase();
+							      return function filterFn(client) {
+							    	  var lowercaseClient = client.whoName.toLowerCase();
+									      return (lowercaseClient.indexOf(lowercaseQuery) !== -1);
+									  };
+							}
+
+							$scope.selectedItemChange = function(item) {    
+						      	if (item){
+						    		//console.log('Item changed to ' + JSON.stringify(item));
+						    		$scope.client = {};
+						    		$scope.client.name = item.whoName;
+						    		$scope.client.email = item.whoEmail;
+						    		$scope.client.telf = item.whoTelf1;
+						    		$scope.newCient = false;
+						    	}
+						    }
+							
 						} ]);
+
 
 app.directive('showMonth', function() {
 	return {
@@ -957,6 +1017,13 @@ app.directive('showAposDay', function() {
 app.directive('showAposNew', function() {
 	return {
 		templateUrl : 'views/bookingAposNew.html',
+		restrict : 'E'
+	};
+});
+
+app.directive('showAposNewAdmin', function() {
+	return {
+		templateUrl : 'views/bookingAposNewAdmin.html',
 		restrict : 'E'
 	};
 });

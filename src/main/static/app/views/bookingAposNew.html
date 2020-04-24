@@ -44,13 +44,14 @@
 		<div layout="column" layout-gt-sm="row">
 			<md-input-container class="md-block" flex-gt-sm>
 			    <md-icon md-font-library="material-icons" class="md-24">person</md-icon>
-				<label>{{findLangTextElement("client.name")}}</label> <input name="cliName" ng-model="client.name" ng-maxlength="100" required />
+				<label>{{findLangTextElement("client.name")}}</label> 
+				<input name="cliName" ng-model="client.name" ng-maxlength="100" required />
 				<div ng-messages="apoNewForm.cliName.$error">
 					<div ng-message="required">{{findLangTextElement("label.requiredData")}}</div>
 					<div ng-message="maxlength">{{findLangTextElement("label.maxLengthData")}}</div>
 				</div>
 			</md-input-container>
- 			<md-input-container class="md-block" flex-gt-sm>
+			<md-input-container class="md-block" flex-gt-sm>
 				<md-icon md-font-library="material-icons" class="md-24">email</md-icon>
 				<label>{{findLangTextElement("client.email")}}</label> <input type="email" name="cliEmail" ng-model="client.email" required ng-pattern="/^.+@.+\..+$/" />
 				<div ng-messages="apoNewForm.cliEmail.$error">
@@ -64,7 +65,7 @@
 					<div ng-message="required">{{findLangTextElement("label.requiredData")}}</div>
 				</div>
 			</md-input-container>
-		</div>
+		</div>	
 		
 		<md-divider class="clear-min">
 		

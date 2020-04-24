@@ -1,0 +1,132 @@
+<form name="apoNewAdminForm">
+	<md-content>
+		<div layout="column" layout-gt-sm="row" layout-align="space-between center">
+		  	<md-list>
+		  		<md-list-item>
+		  			<div layout="column" layout-align="center start" layout-gt-sm="row" layout-align-gt-sm="start center">
+			  			<div layout="row" style="margin-right: 32px;">
+				 			<md-icon md-font-library="material-icons" class="md-24" style="margin-right: 32px;">today</md-icon>
+				 			<p>{{formatDateSelected()}}</p>
+			 			</div>
+			 			<div layout="row">
+					 		<md-icon md-font-library="material-icons" class="md-24" style="margin-right: 32px;">schedule</md-icon>
+							<p>{{appo.appoSel.apoName}}</p>
+						</div>
+					</div>	
+				</md-list-item>
+				<md-divider>
+		  		<md-list-item ng-show="local.locNumPersonsApo > 1" >
+		 			<md-icon md-font-library="material-icons" class="md-24">person_add</md-icon>
+					<p>{{findLangTextElement("label.html.apoFor1")}} {{personscope.numPersons}} {{findLangTextElement("label.html.apoFor2")}}</p>  
+				</md-list-item>
+				<md-divider>
+		  		<md-list-item ng-show="!isAdveo" ng-repeat="numPerson in personscope.persons | limitTo:personscope.numPersons">
+					<md-icon ng-if="local.locNumPersonsApo == 1" md-font-library="material-icons" class="md-24">build</md-icon>
+					<md-icon ng-if="local.locNumPersonsApo > 1" md-font-library="material-icons" class="md-24">looks_{{icons_num($index)}}</md-icon>
+			  		<p ng-show="!tasMultiple">{{personscope.selectedTasksPersons[$index][0].tasName}}</p> 
+			  		<p ng-show="tasMultiple">{{personscope.selectedTasksPersonsStr[$index]}}</p>
+	  			</md-list-item>
+				
+				<md-list-item ng-show="isAdveo">
+		  	  		<p>{{findLangTextElement("label.template.numLines")}}: {{personscope.selectedTasksPersons[0][0].numLines}}</p>
+		  	  		<p>{{findLangTextElement("label.template.numPallets")}}: {{personscope.selectedTasksPersons[0][0].numPallets}}</p> 
+				</md-list-item>
+				<md-divider ng-show="local.locSelCalendar == 1 && selCalendar.selectedCalendar[0].calName">				
+				<md-list-item ng-show="local.locSelCalendar == 1 && selCalendar.selectedCalendar[0].calName">
+					<md-icon md-font-library="material-icons" class="md-24 fmd-hue-3">perm_contact_calendar</md-icon>
+				  	<p>{{findLangTextElement("label.header.places")}}: {{selCalendar.selectedCalendar[0].calName}}</p> 
+				</md-list-item>
+		  	</md-list>	
+		</div>
+		
+		<md-divider class="clear-min">
+		
+		<div layout="column" layout-gt-sm="row" ng-controller="BookController as ctrl">
+
+			<md-icon md-font-library="material-icons" class="md-24 person-autocomplete">person</md-icon>
+			<md-autocomplete required md-floating-label="{{findLangTextElement('client.name')}}" md-min-length="3" md-input-name="cliName" md-input-maxlength="100" md-no-cache="true"
+				    md-items="item in ctrl.querySearch(ctrl.searchText)"
+          			md-item-text="item.whoName"
+          			md-selected-item="ctrl.selectedItem"
+			        md-search-text="ctrl.searchText"
+			        md-selected-item-change="ctrl.selectedItemChange(item)"
+			        md-search-text-change="ctrl.actionNewClient()"
+			        md-escape-options="clear"
+			        placeholder="{{findLangTextElement('client.name')}}"
+          	>
+          		 <md-item-template>
+          			<span md-highlight-text="ctrl.searchText">{{item.whoName}}</span>
+        		 </md-item-template>
+                 <md-not-found>
+          			Nuebo cienre
+          			<a ng-click="ctrl.actionNewClient()">Create a new one!</a>
+        		  </md-not-found>
+				 <div ng-messages="apoNewAdminForm.cliName.$error">
+					<div ng-message="required">{{findLangTextElement("label.requiredData")}}</div>
+					<div ng-message="maxlength">{{findLangTextElement("label.maxLengthData")}}</div>
+				</div>
+			</md-autocomplete>
+			
+ 			<md-input-container class="md-block" flex-gt-sm>
+				<md-icon md-font-library="material-icons" class="md-24">email</md-icon>
+				<label>{{findLangTextElement("client.email")}}</label> 
+				<input ng-disabled="!ctrl.isNewClient()" type="email" name="cliEmail" ng-model="client.email" required ng-pattern="/^.+@.+\..+$/" />
+				<div ng-messages="apoNewAdminForm.cliEmail.$error">
+					<div ng-message-exp="['required', 'pattern']">{{findLangTextElement("label.requiredData")}} / {{findLangTextElement("label.typePatternData")}}</div>
+				</div>
+			</md-input-container> 
+			<md-input-container class="md-block" flex-gt-sm>
+				<md-icon md-font-library="material-icons" class="md-24">phone</md-icon>
+				<label>{{findLangTextElement("client.telf")}}</label> 
+				<input ng-disabled="!ctrl.isNewClient()" type="tel" name="cliTelf" ng-model="client.telf" required placeholder="9.. / 6.." />
+				<div ng-messages="apoNewAdminForm.cliTelf.$error">
+					<div ng-message="required">{{findLangTextElement("label.requiredData")}}</div>
+				</div>
+			</md-input-container>
+		</div>
+		
+		<md-divider class="clear-min">
+		
+		<div layout="column" ng-show="isCelebration">	
+			<md-input-container class="md-block" flex-gt-sm>
+				<label>{{findLangTextElement("client.celebrationDate")}}</label> <md-datepicker ng-model="client.celebrationDate" md-min-date="client.celebrationDate"></md-datepicker>
+			</md-input-container>
+		</div>
+		
+		<md-divider class="clear-min">
+		
+		<div layout="column">	
+			<md-input-container class="md-block" flex-gt-sm>
+				<md-icon md-font-library="material-icons" class="md-24">insert_comment</md-icon>
+				<label>{{findLangTextElement("event.com")}}</label> <textarea name="cliObserv" ng-model="client.observ" ng-maxlength="300"></textarea>
+				<div ng-messages="apoNewAdminForm.cliObserv.$error">
+					<div ng-message="maxlength">{{findLangTextElement("label.maxLengthData")}}</div>
+				</div>
+			</md-input-container>
+		</div>
+
+		<!-- <md-divider class="clear-min"> -->
+<!-- 
+		<div layout="column">	
+			<md-input-container class="md-block" flex-gt-sm>
+				<md-icon md-font-library="material-icons" class="md-24">report</md-icon>
+				<label>{{findLangTextElement("event.legal")}}</label> 
+				 <!-- <md-checkbox ng-model="client.legal"> Checkbox 1: {{ data.cb1 }}</md-checkbox>-->
+				<!-- <div ng-messages="apoNewAdminForm.cliLegal.$error">
+					<div ng-message="maxlength">{{findLangTextElement("label.maxLengthData")}}</div>
+				</div> -->
+		<!-- 	</md-input-container>
+		</div> -->
+
+		<md-divider class="clear-min">
+				
+		<div layout="row" class="md-actions" layout-align="start center">
+   			<span flex></span>
+   			<md-button ng-click="(apoNewAdminForm.$invalid=true) && sendNewAppo()" class="md-primary md-hue-2" ng-disabled="apoNewAdminForm.$invalid">
+   				<span lnt-id="form.send">Enviar</span>
+   				<md-icon md-font-library="material-icons" class="md-24 md-accents">send</md-icon>
+   			</md-button>
+   			<span flex></span>
+  		</div>	
+	</md-content>
+</form>

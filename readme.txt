@@ -3,7 +3,6 @@
  - no hay citas, ventana proxima cita disponible en el día x
    si es admins, además, posibilidad de ir a una hora "fuera de horario" de ese dia
    
-- nuevo campo para galanovias fecha novia
 - info legal
 - mail con citas previas
   y posibiliadad cancelar 
