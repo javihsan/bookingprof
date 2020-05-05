@@ -37,7 +37,7 @@ class ClientNewCtrl extends Monocle.Controller
 			Lungo.Element.loading @buttonCancel.selector, "black"
 			client = __FacadeCore.Cache_get appName + "client"
 			url = "http://"+appHost+"/client/operator/update" 
-			data = {id:client.cliId,cliEmail: @cliEmail.val(), cliGender: @cliGender.val(), cliBirthday: @cliBirthday.val(), cliName: @cliName.val(), cliSurname: @cliSurname.val(), cliTelf1: @cliTelf1.val(), cliDesc: @cliDesc.val()}
+			data = {id:client.cliId,cliEmail: @cliEmail.val(), cliGender: @cliGender.val(), cliBirthday: @cliBirthday.val(), cliName: @cliName.val(), cliSurname: @cliSurname.val(), cliTelf1: @cliTelf1.val(), cliTelf2: @cliTelf2.val(), cliDesc: @cliDesc.val()}
 			_this = this
 			$$.put url, data, () -> 
 					#console.log "onSuccess"

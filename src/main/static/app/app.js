@@ -1,7 +1,7 @@
 var protocol_url = location.protocol+'//';
 var domainOfi = 'bookingprof.com';
-//var domainLocalOfi = '127.0.0.1:8888';//'localhost:8888'; // arrancar en local con el java delante
-var domainLocalOfi = '127.0.0.1:9001';//'localhost:9001'; // arrancar en local solo el front
+var domainLocalOfi = '127.0.0.1:8888';//'localhost:8888'; // arrancar en local con el java delante
+//var domainLocalOfi = '127.0.0.1:9001';//'localhost:9001'; // arrancar en local solo el front
 var domainSpotOfi = 'dilosohairapp.appspot.com';
 
 var appHost = location.host;
@@ -334,8 +334,8 @@ var App = {
 				
 				a = location.pathname.split("/");
 				appFirmDomain = a[1];
-				appFirmDomain = 'demo' // Para local arrancado solo con front
-				appHost = '127.0.0.1:8888';//'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
+				//appFirmDomain = 'demo' // Para local arrancado solo con front
+				//appHost = '127.0.0.1:8888';//'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
 				
 				appHost += '/'+appFirmDomain;
 				appName = 'BookingProf-' + appFirmDomain;

@@ -1,7 +1,7 @@
 var protocol_url = location.protocol+'//';
 var domainOfi = 'bookingprof.com';
-//var domainLocalOfi = '127.0.0.1:8888';//'localhost:8888'; // arrancar en local con el java delante
-var domainLocalOfi = 'localhost';//'localhost:9001'; // arrancar en local solo el front
+var domainLocalOfi = '127.0.0.1:8888';//'localhost:8888'; // arrancar en local con el java delante
+//var domainLocalOfi = '127.0.0.1:9001';//'localhost:9001'; // arrancar en local solo el front
 var domainSpotOfi = 'dilosohairapp.appspot.com';
 
 var appHost = location.host;
@@ -335,8 +335,8 @@ var App = {
 				
 				a = location.pathname.split("/");
 				appFirmDomain = a[1];
-				appFirmDomain = 'demo' // Para local arrancado solo con front
-				appHost = '127.0.0.1:8888';//'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
+				//appFirmDomain = 'demo' // Para local arrancado solo con front
+				//appHost = '127.0.0.1:8888';//'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
 				
 				appHost += '/'+appFirmDomain;
 				appName = 'BookingProf-' + appFirmDomain;
@@ -1116,13 +1116,15 @@ app
 							// Se esta cargando la pagina
 							$rootScope.isViewLoading = true;
 							
+							$scope.childAuto = {};
+
 							// Para evitar error en el html angular, anchura de tabla de dias
 							$scope.appo = {};
 							$scope.appo.cols = 1;							
 							
 							$scope.disabledNextTabs = function() {
 							    //console.log ("disabledNextTabs");
-							    $scope.tabsBook[1].disabled = true;
+							  $scope.tabsBook[1].disabled = true;
 								$scope.tabsBook[2].disabled = true;
 								$scope.tabsBook[3].disabled = true;
 							    
@@ -1787,7 +1789,7 @@ app
 										appointment.enabled = true;
 										appointment.bgColor = bgColor;
 										$scope.appo.appointments.push(appointment);
-								}
+								  }
 									//console.log("$scope.appo.appointments",$scope.appo.appointments);
 									return $rootScope.isViewLoading = false;
 								} else {
@@ -1797,6 +1799,9 @@ app
 										$rootScope.isViewLoading = false;
 										return $scope.nextDayAppos();
 									} else {
+										$rootScope.openNotif($rootScope.findLangTextElement("label.notification.notavailablesearch") + " " + $scope.formatDateSelected(), 3, null);
+										$rootScope.isViewLoading = false;
+										return $scope.nextDayAppos();
 //										Lungo.Notification
 //												.success(
 //														findLangTextElement("label.notification.notavailableAdmin.title"),
@@ -1902,19 +1907,18 @@ app
 									$scope.client.telf = "";
 									$scope.client.observ = "";
 								} else { 
-									// Intentamos obtener el cliente de sesion 
-									$scope.client = __FacadeCore.Cache_get(appName + "clientSession");
-									if (!$scope.client) { // Si no, lo obtenemos de la cookie del dispositivo
-										$scope.client = __FacadeCore.Storage_get(appName+ "eveClient");
-										if (!$scope.client){ // Si no, lo inicializamos
-											$scope.client = {};
-											$scope.client.name = "";
-											$scope.client.email = "";
-											$scope.client.telf = "";
-										}
+									// Intentamos obtener el cliente de la cookie del dispositivo
+									$scope.client = __FacadeCore.Storage_get(appName+ "eveClient");
+									if (!$scope.client){ // Si no, lo inicializamos
+										$scope.client = {};
+										$scope.client.name = "";
+										$scope.client.email = "";
+										$scope.client.telf = "";
 									}
 									$scope.client.observ = "";
 								}
+								// Limpiamos el input auto de nombre de ciente
+								$scope.childAuto.cleanSelItem();			
 								
 								if ($rootScope.firm.firConfig.configClient.extraBook.celebrationDate) {
 									$scope.isCelebration = true;
@@ -1934,132 +1938,21 @@ app
 								}
 							};
 
-							
-							$scope.sendNewAppo = function() {
-								//console.log("sendNewAppo");
-																
-								var a, appointment, startTime, data, eveClient, selectedTasks, selectTaskParam, taskSel, selectedTasksCount, selectedCalendarsParam, selectedCalendars, calendarSel, promiseListLocal;
-								$rootScope.isViewLoading = true;
-							    //if (this.changeCliEmail(event)) {
-							        appointment = $scope.appo.appoSel;
-							        startTime = appointment.apoStartTime;
-							        if ($rootScope.adminOption) {
-							          a = this.eveTime.val().split(':');
-							          startTime = new Date(startTime);
-							          startTime.setUTCHours(a[0]);
-							          startTime.setUTCMinutes(a[1]);
-							          startTime = startTime.getTime();
-							          if (this.eveClientNew.val() === "0") {
-							            eveClient = __FacadeCore.Cache_get(appName + "selectClient");
-							          }
-							        }
-							        data = {
-							          eveDescAlega: $scope.client.observ,
-							          localId : $rootScope.local.id,
-							          eveStartTime: startTime
-							        };
-							        if (eveClient) {
-							          data.cliId = eveClient.cliId;
-							        } else {
-							          data.cliName = $scope.client.name;
-							          data.cliEmail = $scope.client.email;
-							          data.cliTelf = $scope.client.telf;
-							        }
-							        
-							        selectedTasks = $rootScope.selectedTasks;
-							        selectTaskParam = new Array();
-							        for (i in selectedTasks){
-							        	selectTaskParam[i] = selectedTasks[i].id;
-									}
-							        data.selectedTasks = selectTaskParam;
-							       
-							        selectedTasksCount = $rootScope.selectedTasksCount;
-							        data.selectedTasksCount = selectedTasksCount;
-							        
-							        selectedCalendars = $scope.selCalendar.selectedCalendar;
-									if ($scope.local.locSelCalendar == 1 && selectedCalendars[0].id ==-1) {
-										selectedCalendarsParam = "";
-									} else {
-										selectedCalendarsParam = new Array();
-										for (i in selectedCalendars){
-											selectedCalendarsParam[i] = selectedCalendars[i].id;
-										}
-									}
-							        data.selectedCalendars = selectedCalendarsParam;
-							      
-							        if (selectedTasks[0].numLines) {
-							          data.numLines = selectedTasks[0].numLines;
-							          data.numPallets = selectedTasks[0].numPallets;
-							        }
-							        
-							        if ($scope.isCelebration){
-							        	data.celebrationDate = __Utils.dateToStringYearLast($scope.client.celebrationDate);
-							        }
-							        
-									promiseSave = httpService.POST($rootScope.urlEventNew, data);
-									
-									var thenSave = function(response) {
-										//console.log("thenSave");
-										$scope.errorSave = undefined;
-										if ($rootScope.adminOption) {
-											// message = findLangTextElement("label.notification.bookedApoAdmin.title")
-								        } else {
-								        	// message = findLangTextElement("label.notification.bookedApo.title")
-								            __FacadeCore.Storage_set(appName + "eveClient", null);
-								            __FacadeCore.Storage_set(appName + "eveClient", $scope.client);
-								        }
-										$rootScope.isViewLoading = false;
-											
-										$scope.tabsBook[3].disabled = false;
-										$scope.selectedTabIndex = 3;
-											
-										$scope.tabsBook[0].disabled = true;
-										$scope.tabsBook[1].disabled = true;
-										return $scope.tabsBook[2].disabled = true;
-									};
-
-									var errorSave = function(response) {
-										//console.log("errorSave");
-										$scope.errorSave = response.statusText;
-										$rootScope.isViewLoading = false;
-										$rootScope.openNotif(response.statusText, 5, null);
-										
-										$scope.tabsBook[3].disabled = false;
-										$scope.selectedTabIndex = 3;
-											
-										$scope.tabsBook[0].disabled = true;
-										$scope.tabsBook[1].disabled = true;
-										return $scope.tabsBook[2].disabled = true;
-
-									};
-								
-									promiseSave.then(thenSave, errorSave);
-							      
-							   //}
-							};							
-							
-							this.querySearch =  $scope.querySearch;
-							this.selectedItemChange = $scope.selectedItemChange
-							this.actionNewClient = $scope.actionNewClient
-							this.isNewClient = $scope.isNewClient
-							this.textChange = $scope.textChange
-							
 							$scope.newCient = true;
 							
 							$scope.isNewClient = function() {
 								return $scope.newCient;
 							}
 							
-							$scope.actionNewClient = function() {
-								//console.log("actionNewClient")
+							$scope.actionNewClient = function(text) {
 								$scope.newCient = true;
+								$scope.client.name = text;
 								$scope.client.email = "";
-						    	$scope.client.telf = "";
+						    $scope.client.telf = "";
 							}
 
 							$scope.querySearch = function(query) {
-								//var results = $rootScope.clients;
-							    var results = query ? $rootScope.clients.filter($scope.createFilterFor(query)) : $rootScope.clients,
+								    var results = query ? $rootScope.clients.filter($scope.createFilterFor(query)) : $rootScope.clients,
 						          deferred;
 				       			return results;
 							    
@@ -2075,27 +1968,170 @@ app
 
 					
 							$scope.createFilterFor = function(query) {   	
-							      var lowercaseQuery = query.toLowerCase();
-							      return function filterFn(client) {
-							    	  var lowercaseClient = client.whoName.toLowerCase();
-									      return (lowercaseClient.indexOf(lowercaseQuery) !== -1);
-									  };
+									var lowercaseQuery = query.toLowerCase();
+									return function filterFn(client) {
+										var lowercaseClient = client.whoName.toLowerCase();
+											return (lowercaseClient.indexOf(lowercaseQuery) !== -1);
+									};
 							}
 
 							$scope.selectedItemChange = function(item) {    
-						      	if (item){
+									if (item){
 						    		//console.log('Item changed to ' + JSON.stringify(item));
-						    		$scope.client = {};
+										$scope.client = {};
+										$scope.client.id = item.id;
 						    		$scope.client.name = item.whoName;
 						    		$scope.client.email = item.whoEmail;
 						    		$scope.client.telf = item.whoTelf1;
 						    		$scope.newCient = false;
 						    	}
-						    }
+							}
 							
+							$scope.changeCliEmail = function() {    
+								//console.log('changeCliEmail ',$scope.client.email );
+								var clients = $scope.client.email ? $rootScope.clients.filter($scope.createFilterForEmail($scope.client.email)) : $rootScope.clients,
+										deferred;
+								if (clients.length==1){
+									// Asignamos el cliente
+								  $scope.childAuto.setSelItem(clients[0]);	
+								}
+							}
+							 
+							$scope.createFilterForEmail = function(email) {   	
+								var lowercaseQuery = email.toLowerCase();
+								return function filterFn(client) {
+									var lowercaseClient = client.whoEmail.toLowerCase();
+									if (lowercaseClient === lowercaseQuery){
+										return client;
+									}	
+								};
+						}
+
+							$scope.sendNewAppo = function() {
+								//console.log("sendNewAppo");
+																
+								var a, appointment, startTime, data, eveClient, selectedTasks, selectTaskParam, taskSel, selectedTasksCount, selectedCalendarsParam, selectedCalendars, calendarSel, promiseListLocal;
+								$rootScope.isViewLoading = true;
+							   
+								appointment = $scope.appo.appoSel;
+								startTime = appointment.apoStartTime;
+								/*if ($rootScope.adminOption) {
+									a = this.eveTime.val().split(':');
+									startTime = new Date(startTime);
+									startTime.setUTCHours(a[0]);
+									startTime.setUTCMinutes(a[1]);
+									startTime = startTime.getTime();
+									}
+								}*/
+								data = {
+									eveDescAlega: $scope.client.observ,
+									localId : $rootScope.local.id,
+									eveStartTime: startTime
+								};
+								if ($scope.newCient == false){
+									data.cliId = $scope.client.id;
+								}
+								data.cliName = $scope.client.name;
+								data.cliEmail = $scope.client.email;
+								data.cliTelf = $scope.client.telf;
+																		
+								selectedTasks = $rootScope.selectedTasks;
+								selectTaskParam = new Array();
+								for (i in selectedTasks){
+									selectTaskParam[i] = selectedTasks[i].id;
+								}
+								data.selectedTasks = selectTaskParam;
+								
+								selectedTasksCount = $rootScope.selectedTasksCount;
+								data.selectedTasksCount = selectedTasksCount;
+								
+								selectedCalendars = $scope.selCalendar.selectedCalendar;
+								if ($scope.local.locSelCalendar == 1 && selectedCalendars[0].id ==-1) {
+									selectedCalendarsParam = "";
+								} else {
+									selectedCalendarsParam = new Array();
+									for (i in selectedCalendars){
+										selectedCalendarsParam[i] = selectedCalendars[i].id;
+									}
+								}
+								data.selectedCalendars = selectedCalendarsParam;
+							
+								if (selectedTasks[0].numLines) {
+									data.numLines = selectedTasks[0].numLines;
+									data.numPallets = selectedTasks[0].numPallets;
+								}
+								
+								if ($scope.isCelebration){
+									data.celebrationDate = __Utils.dateToStringYearLast($scope.client.celebrationDate);
+								}
+								
+								promiseSave = httpService.POST($rootScope.urlEventNew, data);
+						
+								var thenSave = function(response) {
+									//console.log("thenSave");
+									$scope.errorSave = undefined;
+									if (!$rootScope.adminOption) {	
+										__FacadeCore.Storage_set(appName + "eveClient", null);
+										__FacadeCore.Storage_set(appName + "eveClient", $scope.client);
+									}
+									$rootScope.isViewLoading = false;
+									
+									$scope.tabsBook[3].disabled = false;
+									$scope.selectedTabIndex = 3;
+									
+									$scope.tabsBook[0].disabled = true;
+									$scope.tabsBook[1].disabled = true;
+									return $scope.tabsBook[2].disabled = true;
+								};
+
+								var errorSave = function(response) {
+									//console.log("errorSave");
+									$scope.errorSave = response.statusText;
+									$rootScope.isViewLoading = false;
+									$rootScope.openNotif(response.statusText, 5, null);
+									
+									$scope.tabsBook[3].disabled = false;
+									$scope.selectedTabIndex = 3;
+										
+									$scope.tabsBook[0].disabled = true;
+									$scope.tabsBook[1].disabled = true;
+									return $scope.tabsBook[2].disabled = true;
+								};
+					
+							  promiseSave.then(thenSave, errorSave);
+		
+							};	
+							
+						
 						} ]);
 
+						app
+						.controller(
+								"BookControllerAuto",
+								[
+										"$scope",
+										"$rootScope",
+										function($scope, $rootScope) {
 
+						var parentScope = $scope.$parent.$parent;
+						parentScope.childAuto = $scope;
+						
+						var self = this;
+						self.querySearch =  $scope.querySearch;
+						self.selectedItemChange = $scope.selectedItemChange;
+						self.actionNewClient = $scope.actionNewClient;
+						self.isNewClient = $scope.isNewClient;
+				
+						$scope.cleanSelItem = function() {
+							self.selectedItem = null;
+							self.searchText = "";
+						}
+
+						$scope.setSelItem = function(client) {
+							self.selectedItem = client;
+						}
+												
+					} ]);
 app.directive('showMonth', function() {
 	return {
 		templateUrl : 'views/tableMonthBooking.html',
@@ -2293,12 +2329,12 @@ angular.module('app').run(['$templateCache', function($templateCache) {
     "<md-content> <md-content ng-show=\"!errorApoDay\"> <loading></loading> <div> <md-grid-list md-cols=\"5\" md-gutter=\"0px\" md-row-height=\"16px\"> <md-grid-tile> <span id=\"dateWeek\" ng-bind=\"extractSemDay(-2)\"></span> </md-grid-tile> <md-grid-tile> <span id=\"dateWeek\" ng-bind=\"extractSemDay(-1)\"></span> </md-grid-tile> <md-grid-tile> <span id=\"dateWeek\" ng-bind=\"extractSemDay()\"></span> </md-grid-tile> <md-grid-tile> <span id=\"dateWeek\" ng-bind=\"extractSemDay(1)\"></span> </md-grid-tile> <md-grid-tile> <span id=\"dateWeek\" ng-bind=\"extractSemDay(2)\"></span> </md-grid-tile> </md-grid-list> <md-divider> <md-grid-list id=\"tableDatesAux\" md-cols=\"5\" md-gutter=\"0px\" md-row-height=\"56px\"> <md-grid-tile ng-class=\"{date_not_enabled:isNotSel(-2)}\" ng-click=\"initDayAppos(-2, $event)\"> <span ng-bind=\"extractDayMonth(-2)\"></span> </md-grid-tile> <md-grid-tile ng-class=\"{date_not_enabled:isNotSel(-1)}\" ng-click=\"initDayAppos(-1, $event)\"> <span ng-bind=\"extractDayMonth(-1)\"></span> </md-grid-tile> <md-grid-tile class=\"date_not_enabled\"> <span class=\"today\" ng-bind=\"extractDayMonth()\"></span> </md-grid-tile> <md-grid-tile ng-class=\"{date_not_enabled:isNotSel(1)}\" ng-click=\"initDayAppos(1, $event)\"> <span ng-bind=\"extractDayMonth(1)\"></span> </md-grid-tile> <md-grid-tile ng-class=\"{date_not_enabled:isNotSel(2)}\" ng-click=\"initDayAppos(2, $event)\"> <span ng-bind=\"extractDayMonth(2)\"></span> </md-grid-tile> </md-grid-list> </md-divider></div> <md-divider class=\"clear\"> <div> <md-grid-list id=\"tableDays\" md-cols=\"{{appo.cols}}\" md-gutter-sm=\"4px\" md-row-height=\"fit\" style=\"height:{{appo.height}}px !important\"> <md-grid-tile ng-repeat=\"appointment in appo.appointments\" ng-click=\"onSelectDayAppo(appointment)\"> <span ng-hidess=\"appointment.bgColor>0\" class=\"calendarDayText\"> {{appointment.apoName}} <span ng-show=\"appointment.bgColor>0\" class=\"calendarDayText\"> {{appointment.apoCalendarName}} </span> <md-icon md-font-library=\"material-icons\" class=\"md-warn\">check</md-icon> </span> <!-- \t\t<div ng-show=\"appointment.bgColor>0\" class=\"calendarDaySP bg-color{{bgColor}}\" style=\"margin-top: {{appointment.apoX}}px; left: {{appointment.apoY}}%;\">\n" +
     "\t\t\t\t\t\t\t\t\t\t\t<p class=\"calendarDayText\">{{appointment.apoName}}</p>\n" +
     "\t\t\t\t\t\t\t\t\t\t\t<p class=\"calendarDayText special\">{{appointment.apoCalendarName}}</p>\n" +
-    "\t\t\t\t\t\t\t\t\t\t</div> --> </md-grid-tile> </md-grid-list> </div> </md-divider></md-content> <md-content ng-show=\"errorApoDay\"> <md-toolbar> <div class=\"md-toolbar-tools notif cab\"> <span flex></span> <span flex></span> <span flex></span> </div> <div class=\"md-toolbar-tools notif notsave\"> <span flex></span> <span flex>{{findLangTextElement(\"label.notification.notavailable.title\")}}</span> <span flex></span> </div> </md-toolbar> <md-divider class=\"clear-min\"> <div layout=\"column\" layout-gt-sm=\"row\" layout-align=\"space-between center\"> <md-list> <md-list-item class=\"md-1-line\"> <p>{{findLangTextElement(\"label.notification.notavailable.text\")}}</p> </md-list-item> <md-list-item ng-show=\"appo.nextDays.length>0\" class=\"md-1-line\"> <p ng-shows=\"!isSubViewLoading\">{{findLangTextElement(\"localTask.notavailablesearchresult\")}} {{formatDateSelected()}}</p> </md-list-item> </md-list> </div> <div ng-hide=\"appo.nextDays.length==0\"> <loading_sub></loading_sub> <md-grid-list ng-show=\"!isSubViewLoading\" id=\"tableDatesNext\" md-cols-xs=\"2\" md-cols=\"4\" md-gutter-sm=\"10px\" md-gutter=\"0px\" md-row-height=\"76px\"> <md-grid-tile ng-repeat=\"nextDay in appo.nextDays\" ng-click=\"initDayAppos(null, $event, nextDay)\"> <span ng-bind=\"extractDayWeek(nextDay)\"></span> </md-grid-tile> </md-grid-list> </div> <div ng-show=\"!isSubViewLoading && appo.nextDays.length==0\"> <md-divider class=\"clear-min\"> <div layout=\"row\" class=\"md-actions\" layout-align=\"start center\"> <span flex></span> <md-button ng-click=\"initBook(1)\" class=\"md-primary md-hue-2\"> <span lnt-id=\"form.accept\">Aceptar</span> </md-button> <span flex></span> </div> </md-divider></div> </md-divider></md-content> </md-content>"
+    "\t\t\t\t\t\t\t\t\t\t</div> --> </md-grid-tile> </md-grid-list> </div> </md-divider></md-content> <md-content ng-show=\"errorApoDay\"> <md-toolbar> <div class=\"md-toolbar-tools notif cab\"> <span flex></span> <span flex></span> <span flex></span> </div> <div class=\"md-toolbar-tools notif notsave\"> <span flex></span> <span flex>{{findLangTextElement(\"label.notification.notavailable.title\")}}</span> <span flex></span> </div> </md-toolbar> <md-divider class=\"clear-min\"> <div layout=\"column\" layout-gt-sm=\"row\" layout-align=\"space-between center\"> <md-list> <md-list-item class=\"md-1-line\"> <p>{{findLangTextElement(\"label.notification.notavailable.text\")}}</p> </md-list-item> <md-list-item ng-show=\"appo.nextDays.length>0\" class=\"md-1-line\"> <p ng-show=\"!isSubViewLoading\">{{findLangTextElement(\"localTask.notavailablesearchresult\")}} {{formatDateSelected()}}</p> </md-list-item> </md-list> </div> <div ng-hide=\"appo.nextDays.length==0\"> <loading_sub></loading_sub> <md-grid-list ng-show=\"!isSubViewLoading\" id=\"tableDatesNext\" md-cols-xs=\"2\" md-cols=\"4\" md-gutter-sm=\"10px\" md-gutter=\"0px\" md-row-height=\"76px\"> <md-grid-tile ng-repeat=\"nextDay in appo.nextDays\" ng-click=\"initDayAppos(null, $event, nextDay)\"> <span ng-bind=\"extractDayWeek(nextDay)\"></span> </md-grid-tile> </md-grid-list> </div> <div ng-show=\"!isSubViewLoading && appo.nextDays.length==0\"> <md-divider class=\"clear-min\"> <div layout=\"row\" class=\"md-actions\" layout-align=\"start center\"> <span flex></span> <md-button ng-click=\"initBook(1)\" class=\"md-primary md-hue-2\"> <span lnt-id=\"form.accept\">Aceptar</span> </md-button> <span flex></span> </div> </md-divider></div> </md-divider></md-content> </md-content>"
   );
 
 
   $templateCache.put('views/bookingAposEnd.html',
-    "<md-content> <md-content ng-show=\"!errorSave\"> <md-toolbar> <div class=\"md-toolbar-tools notif cab\"> <span flex></span> <span flex></span> <span flex></span> </div> <div class=\"md-toolbar-tools notif\"> <span flex></span> <span flex>{{findLangTextElement(\"label.notification.bookedApo.title\")}}</span> <span flex></span> </div> </md-toolbar> <md-divider class=\"clear-min\"> <div layout=\"column\" layout-gt-sm=\"row\" layout-align=\"space-between center\"> <md-list> <md-list-item class=\"md-1-line\"> <p>{{findLangTextElement(\"label.notification.bookedApo.text\")}}</p> </md-list-item> <md-divider> <md-list-item> <div layout=\"column\" layout-align=\"center start\" layout-gt-sm=\"row\" layout-align-gt-sm=\"start center\"> <div layout=\"row\" style=\"margin-right: 32px\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">today</md-icon> <p>{{formatDateSelected()}}</p> </div> <div layout=\"row\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">schedule</md-icon> <p>{{appo.appoSel.apoName}}</p> </div> </div> </md-list-item> <md-divider> <md-list-item ng-show=\"local.locNumPersonsApo > 1\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\">person_add</md-icon> <p>{{findLangTextElement(\"label.html.apoFor1\")}} {{personscope.numPersons}} {{findLangTextElement(\"label.html.apoFor2\")}}</p> </md-list-item> <md-list-item ng-show=\"!isAdveo\" ng-repeat=\"numPerson in personscope.persons | limitTo:personscope.numPersons\"> <md-icon ng-if=\"local.locNumPersonsApo == 1\" md-font-library=\"material-icons\" class=\"md-24\">build</md-icon> <md-icon ng-if=\"local.locNumPersonsApo > 1\" md-font-library=\"material-icons\" class=\"md-24\">looks_{{icons_num($index)}}</md-icon> <p ng-show=\"!tasMultiple\">{{personscope.selectedTasksPersons[$index][0].tasName}}</p> <p ng-show=\"tasMultiple\">{{personscope.selectedTasksPersonsStr[$index]}}</p> </md-list-item> <md-list-item ng-show=\"isAdveo\"> <p>{{findLangTextElement(\"label.template.numLines\")}}: {{personscope.selectedTasksPersons[0][0].numLines}}</p> <p>{{findLangTextElement(\"label.template.numPallets\")}}: {{personscope.selectedTasksPersons[0][0].numPallets}}</p> </md-list-item> <md-list-item ng-show=\"local.locSelCalendar == 1 && selCalendar.selectedCalendar[0].calName\"> <md-icon md-font-library=\"material-icons\" class=\"md-24 fmd-hue-3\">perm_contact_calendar</md-icon> <p>{{findLangTextElement(\"label.header.places\")}}: {{selCalendar.selectedCalendar[0].calName}}</p> </md-list-item> <md-divider> <md-list-item> <md-icon md-font-library=\"material-icons\" class=\"md-24\">person</md-icon> <p>{{client.name}}</p> </md-list-item> <md-list-item> <div layout=\"column\" layout-align=\"center start\" layout-gt-sm=\"row\" layout-align-gt-sm=\"start center\"> <div layout=\"row\" style=\"margin-right: 32px\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">email</md-icon> <p>{{client.email}}</p> </div> <div layout=\"row\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">phone</md-icon> <p>{{client.telf}}</p> </div> </div> </md-list-item> <md-list-item ng-show=\"client.celebrationDate\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\">today</md-icon> <p>{{formatDateCelebration()}}</p> </md-list-item> <md-list-item ng-show=\"client.observ!=''\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\">insert_comment</md-icon> <p>{{client.observ}}</p> </md-list-item> </md-divider></md-divider></md-divider></md-list> </div> </md-divider></md-content> <md-content ng-show=\"errorSave\"> <md-toolbar> <div class=\"md-toolbar-tools notif cab\"> <span flex></span> <span flex></span> <span flex></span> </div> <div class=\"md-toolbar-tools notif notsave\"> <span flex></span> <span flex>{{findLangTextElement(\"label.notification.errorBase.title\")}}</span> <span flex></span> </div> </md-toolbar> <md-divider class=\"clear-min\"> <div layout=\"column\" layout-gt-sm=\"row\" layout-align=\"space-between center\"> <md-list> <md-list-item class=\"md-1-line\"> <p>{{errorSave}}</p> </md-list-item> </md-list> </div> </md-divider></md-content> <md-divider class=\"clear-min\"> <div layout=\"row\" class=\"md-actions\" layout-align=\"start center\"> <span flex></span> <md-button ng-click=\"initBook(1)\" class=\"md-primary md-hue-2\"> <span lnt-id=\"form.accept\">Aceptar</span> </md-button> <span flex></span> </div> </md-divider></md-content>"
+    "<md-content> <md-content ng-show=\"!errorSave\"> <md-toolbar> <div class=\"md-toolbar-tools notif cab\"> <span flex></span> <span flex></span> <span flex></span> </div> <div class=\"md-toolbar-tools notif\"> <span flex></span> <span ng-show=\"!adminOption\" flex>{{findLangTextElement(\"label.notification.bookedApo.title\")}}</span> <span ng-show=\"adminOption\" flex>{{findLangTextElement(\"label.notification.bookedApoAdmin.title\")}}</span> <span flex></span> </div> </md-toolbar> <md-divider class=\"clear-min\"> <div layout=\"column\" layout-gt-sm=\"row\" layout-align=\"space-between center\"> <md-list> <md-list-item class=\"md-1-line\"> <p ng-show=\"!adminOption\">{{findLangTextElement(\"label.notification.bookedApo.text\")}}</p> <p ng-show=\"adminOption\">{{findLangTextElement(\"label.notification.bookedApoAdmin.text\")}}</p> </md-list-item> <md-divider> <md-list-item> <div layout=\"column\" layout-align=\"center start\" layout-gt-sm=\"row\" layout-align-gt-sm=\"start center\"> <div layout=\"row\" style=\"margin-right: 32px\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">today</md-icon> <p>{{formatDateSelected()}}</p> </div> <div layout=\"row\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">schedule</md-icon> <p>{{appo.appoSel.apoName}}</p> </div> </div> </md-list-item> <md-divider> <md-list-item ng-show=\"local.locNumPersonsApo > 1\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\">person_add</md-icon> <p>{{findLangTextElement(\"label.html.apoFor1\")}} {{personscope.numPersons}} {{findLangTextElement(\"label.html.apoFor2\")}}</p> </md-list-item> <md-list-item ng-show=\"!isAdveo\" ng-repeat=\"numPerson in personscope.persons | limitTo:personscope.numPersons\"> <md-icon ng-if=\"local.locNumPersonsApo == 1\" md-font-library=\"material-icons\" class=\"md-24\">build</md-icon> <md-icon ng-if=\"local.locNumPersonsApo > 1\" md-font-library=\"material-icons\" class=\"md-24\">looks_{{icons_num($index)}}</md-icon> <p ng-show=\"!tasMultiple\">{{personscope.selectedTasksPersons[$index][0].tasName}}</p> <p ng-show=\"tasMultiple\">{{personscope.selectedTasksPersonsStr[$index]}}</p> </md-list-item> <md-list-item ng-show=\"isAdveo\"> <p>{{findLangTextElement(\"label.template.numLines\")}}: {{personscope.selectedTasksPersons[0][0].numLines}}</p> <p>{{findLangTextElement(\"label.template.numPallets\")}}: {{personscope.selectedTasksPersons[0][0].numPallets}}</p> </md-list-item> <md-list-item ng-show=\"local.locSelCalendar == 1 && selCalendar.selectedCalendar[0].calName\"> <md-icon md-font-library=\"material-icons\" class=\"md-24 fmd-hue-3\">perm_contact_calendar</md-icon> <p>{{findLangTextElement(\"label.header.places\")}}: {{selCalendar.selectedCalendar[0].calName}}</p> </md-list-item> <md-divider> <md-list-item> <md-icon md-font-library=\"material-icons\" class=\"md-24\">person</md-icon> <p>{{client.name}}</p> </md-list-item> <md-list-item> <div layout=\"column\" layout-align=\"center start\" layout-gt-sm=\"row\" layout-align-gt-sm=\"start center\"> <div layout=\"row\" style=\"margin-right: 32px\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">email</md-icon> <p>{{client.email}}</p> </div> <div layout=\"row\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">phone</md-icon> <p>{{client.telf}}</p> </div> </div> </md-list-item> <md-list-item ng-show=\"client.celebrationDate\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\">today</md-icon> <p>{{formatDateCelebration()}}</p> </md-list-item> <md-list-item ng-show=\"client.observ!=''\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\">insert_comment</md-icon> <p>{{client.observ}}</p> </md-list-item> </md-divider></md-divider></md-divider></md-list> </div> </md-divider></md-content> <md-content ng-show=\"errorSave\"> <md-toolbar> <div class=\"md-toolbar-tools notif cab\"> <span flex></span> <span flex></span> <span flex></span> </div> <div class=\"md-toolbar-tools notif notsave\"> <span flex></span> <span flex>{{findLangTextElement(\"label.notification.errorBase.title\")}}</span> <span flex></span> </div> </md-toolbar> <md-divider class=\"clear-min\"> <div layout=\"column\" layout-gt-sm=\"row\" layout-align=\"space-between center\"> <md-list> <md-list-item class=\"md-1-line\"> <p>{{errorSave}}</p> </md-list-item> </md-list> </div> </md-divider></md-content> <md-divider class=\"clear-min\"> <div layout=\"row\" class=\"md-actions\" layout-align=\"start center\"> <span flex></span> <md-button ng-click=\"initBook(1)\" class=\"md-primary md-hue-2\"> <span lnt-id=\"form.accept\">Aceptar</span> </md-button> <span flex></span> </div> </md-divider></md-content>"
   );
 
 
@@ -2316,7 +2352,10 @@ angular.module('app').run(['$templateCache', function($templateCache) {
 
 
   $templateCache.put('views/bookingAposNewAdmin.html',
-    "<form name=\"apoNewAdminForm\"> <md-content> <div layout=\"column\" layout-gt-sm=\"row\" layout-align=\"space-between center\"> <md-list> <md-list-item> <div layout=\"column\" layout-align=\"center start\" layout-gt-sm=\"row\" layout-align-gt-sm=\"start center\"> <div layout=\"row\" style=\"margin-right: 32px\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">today</md-icon> <p>{{formatDateSelected()}}</p> </div> <div layout=\"row\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">schedule</md-icon> <p>{{appo.appoSel.apoName}}</p> </div> </div> </md-list-item> <md-divider> <md-list-item ng-show=\"local.locNumPersonsApo > 1\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\">person_add</md-icon> <p>{{findLangTextElement(\"label.html.apoFor1\")}} {{personscope.numPersons}} {{findLangTextElement(\"label.html.apoFor2\")}}</p> </md-list-item> <md-divider> <md-list-item ng-show=\"!isAdveo\" ng-repeat=\"numPerson in personscope.persons | limitTo:personscope.numPersons\"> <md-icon ng-if=\"local.locNumPersonsApo == 1\" md-font-library=\"material-icons\" class=\"md-24\">build</md-icon> <md-icon ng-if=\"local.locNumPersonsApo > 1\" md-font-library=\"material-icons\" class=\"md-24\">looks_{{icons_num($index)}}</md-icon> <p ng-show=\"!tasMultiple\">{{personscope.selectedTasksPersons[$index][0].tasName}}</p> <p ng-show=\"tasMultiple\">{{personscope.selectedTasksPersonsStr[$index]}}</p> </md-list-item> <md-list-item ng-show=\"isAdveo\"> <p>{{findLangTextElement(\"label.template.numLines\")}}: {{personscope.selectedTasksPersons[0][0].numLines}}</p> <p>{{findLangTextElement(\"label.template.numPallets\")}}: {{personscope.selectedTasksPersons[0][0].numPallets}}</p> </md-list-item> <md-divider ng-show=\"local.locSelCalendar == 1 && selCalendar.selectedCalendar[0].calName\"> <md-list-item ng-show=\"local.locSelCalendar == 1 && selCalendar.selectedCalendar[0].calName\"> <md-icon md-font-library=\"material-icons\" class=\"md-24 fmd-hue-3\">perm_contact_calendar</md-icon> <p>{{findLangTextElement(\"label.header.places\")}}: {{selCalendar.selectedCalendar[0].calName}}</p> </md-list-item> </md-divider></md-divider></md-divider></md-list> </div> <md-divider class=\"clear-min\"> <div layout=\"column\" layout-gt-sm=\"row\" ng-controller=\"BookController as ctrl\"> <md-icon md-font-library=\"material-icons\" class=\"md-24 person-autocomplete\">person</md-icon> <md-autocomplete required md-floating-label=\"{{findLangTextElement('client.name')}}\" md-min-length=\"3\" md-input-name=\"cliName\" md-input-maxlength=\"100\" md-no-cache=\"true\" md-items=\"item in ctrl.querySearch(ctrl.searchText)\" md-item-text=\"item.whoName\" md-selected-item=\"ctrl.selectedItem\" md-search-text=\"ctrl.searchText\" md-selected-item-change=\"ctrl.selectedItemChange(item)\" md-search-text-change=\"ctrl.actionNewClient()\" md-escape-options=\"clear\" placeholder=\"{{findLangTextElement('client.name')}}\"> <md-item-template> <span md-highlight-text=\"ctrl.searchText\">{{item.whoName}}</span> </md-item-template> <md-not-found> Nuebo cienre <a ng-click=\"ctrl.actionNewClient()\">Create a new one!</a> </md-not-found> <div ng-messages=\"apoNewAdminForm.cliName.$error\"> <div ng-message=\"required\">{{findLangTextElement(\"label.requiredData\")}}</div> <div ng-message=\"maxlength\">{{findLangTextElement(\"label.maxLengthData\")}}</div> </div> </md-autocomplete> <md-input-container class=\"md-block\" flex-gt-sm> <md-icon md-font-library=\"material-icons\" class=\"md-24\">email</md-icon> <label>{{findLangTextElement(\"client.email\")}}</label> <input ng-disabled=\"!ctrl.isNewClient()\" type=\"email\" name=\"cliEmail\" ng-model=\"client.email\" required ng-pattern=\"/^.+@.+\\..+$/\"> <div ng-messages=\"apoNewAdminForm.cliEmail.$error\"> <div ng-message-exp=\"['required', 'pattern']\">{{findLangTextElement(\"label.requiredData\")}} / {{findLangTextElement(\"label.typePatternData\")}}</div> </div> </md-input-container> <md-input-container class=\"md-block\" flex-gt-sm> <md-icon md-font-library=\"material-icons\" class=\"md-24\">phone</md-icon> <label>{{findLangTextElement(\"client.telf\")}}</label> <input ng-disabled=\"!ctrl.isNewClient()\" type=\"tel\" name=\"cliTelf\" ng-model=\"client.telf\" required placeholder=\"9.. / 6..\"> <div ng-messages=\"apoNewAdminForm.cliTelf.$error\"> <div ng-message=\"required\">{{findLangTextElement(\"label.requiredData\")}}</div> </div> </md-input-container> </div> <md-divider class=\"clear-min\"> <div layout=\"column\" ng-show=\"isCelebration\"> <md-input-container class=\"md-block\" flex-gt-sm> <label>{{findLangTextElement(\"client.celebrationDate\")}}</label> <md-datepicker ng-model=\"client.celebrationDate\" md-min-date=\"client.celebrationDate\"></md-datepicker> </md-input-container> </div> <md-divider class=\"clear-min\"> <div layout=\"column\"> <md-input-container class=\"md-block\" flex-gt-sm> <md-icon md-font-library=\"material-icons\" class=\"md-24\">insert_comment</md-icon> <label>{{findLangTextElement(\"event.com\")}}</label> <textarea name=\"cliObserv\" ng-model=\"client.observ\" ng-maxlength=\"300\"></textarea> <div ng-messages=\"apoNewAdminForm.cliObserv.$error\"> <div ng-message=\"maxlength\">{{findLangTextElement(\"label.maxLengthData\")}}</div> </div> </md-input-container> </div> <!-- <md-divider class=\"clear-min\"> --> <!-- \n" +
+    "<form name=\"apoNewAdminForm\"> <md-content> <div layout=\"column\" layout-gt-sm=\"row\" layout-align=\"space-between center\"> <md-list> <md-list-item> <div layout=\"column\" layout-align=\"center start\" layout-gt-sm=\"row\" layout-align-gt-sm=\"start center\"> <div layout=\"row\" style=\"margin-right: 32px\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">today</md-icon> <p>{{formatDateSelected()}}</p> </div> <div layout=\"row\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\" style=\"margin-right: 32px\">schedule</md-icon> <p>{{appo.appoSel.apoName}}</p> </div> </div> </md-list-item> <md-divider> <md-list-item ng-show=\"local.locNumPersonsApo > 1\"> <md-icon md-font-library=\"material-icons\" class=\"md-24\">person_add</md-icon> <p>{{findLangTextElement(\"label.html.apoFor1\")}} {{personscope.numPersons}} {{findLangTextElement(\"label.html.apoFor2\")}}</p> </md-list-item> <md-divider> <md-list-item ng-show=\"!isAdveo\" ng-repeat=\"numPerson in personscope.persons | limitTo:personscope.numPersons\"> <md-icon ng-if=\"local.locNumPersonsApo == 1\" md-font-library=\"material-icons\" class=\"md-24\">build</md-icon> <md-icon ng-if=\"local.locNumPersonsApo > 1\" md-font-library=\"material-icons\" class=\"md-24\">looks_{{icons_num($index)}}</md-icon> <p ng-show=\"!tasMultiple\">{{personscope.selectedTasksPersons[$index][0].tasName}}</p> <p ng-show=\"tasMultiple\">{{personscope.selectedTasksPersonsStr[$index]}}</p> </md-list-item> <md-list-item ng-show=\"isAdveo\"> <p>{{findLangTextElement(\"label.template.numLines\")}}: {{personscope.selectedTasksPersons[0][0].numLines}}</p> <p>{{findLangTextElement(\"label.template.numPallets\")}}: {{personscope.selectedTasksPersons[0][0].numPallets}}</p> </md-list-item> <md-divider ng-show=\"local.locSelCalendar == 1 && selCalendar.selectedCalendar[0].calName\"> <md-list-item ng-show=\"local.locSelCalendar == 1 && selCalendar.selectedCalendar[0].calName\"> <md-icon md-font-library=\"material-icons\" class=\"md-24 fmd-hue-3\">perm_contact_calendar</md-icon> <p>{{findLangTextElement(\"label.header.places\")}}: {{selCalendar.selectedCalendar[0].calName}}</p> </md-list-item> </md-divider></md-divider></md-divider></md-list> </div> <md-divider class=\"clear-min\"> <div layout=\"column\" layout-gt-sm=\"row\" ng-controller=\"BookControllerAuto as ctrl\"> <md-icon md-font-library=\"material-icons\" class=\"md-24 person-autocomplete\">person</md-icon> <md-autocomplete required md-floating-label=\"{{findLangTextElement('client.name')}}\" md-min-length=\"3\" md-input-name=\"cliName\" md-input-maxlength=\"100\" md-no-cache=\"true\" md-items=\"item in ctrl.querySearch(ctrl.searchText)\" md-item-text=\"item.whoName\" md-selected-item=\"ctrl.selectedItem\" md-search-text=\"ctrl.searchText\" md-selected-item-change=\"ctrl.selectedItemChange(item)\" md-search-text-change=\"ctrl.actionNewClient(ctrl.searchText)\" md-escape-options=\"clear\" md-clear-button=\"true\"> <md-item-template> <span md-highlight-text=\"ctrl.searchText\">{{item.whoName}}</span> </md-item-template> <!--<md-not-found>\n" +
+    "          \t\t\tNuebo cienre\n" +
+    "          \t\t\t<a ng-click=\"ctrl.actionNewClient()\">Create a new one!</a>\n" +
+    "        \t\t  </md-not-found>--> <div ng-messages=\"apoNewAdminForm.cliName.$error\"> <div ng-message=\"required\">{{findLangTextElement(\"label.requiredData\")}}</div> <div ng-message=\"maxlength\">{{findLangTextElement(\"label.maxLengthData\")}}</div> </div> </md-autocomplete> <md-input-container class=\"md-block\" flex-gt-sm> <md-icon md-font-library=\"material-icons\" class=\"md-24\">email</md-icon> <label>{{findLangTextElement(\"client.email\")}}</label> <input ng-disabled=\"!ctrl.isNewClient()\" type=\"email\" name=\"cliEmail\" ng-model=\"client.email\" required ng-pattern=\"/^.+@.+\\..+$/\" ng-change=\"changeCliEmail()\"> <div ng-messages=\"apoNewAdminForm.cliEmail.$error\"> <div ng-message-exp=\"['required', 'pattern']\">{{findLangTextElement(\"label.requiredData\")}} / {{findLangTextElement(\"label.typePatternData\")}}</div> </div> </md-input-container> <md-input-container class=\"md-block\" flex-gt-sm> <md-icon md-font-library=\"material-icons\" class=\"md-24\">phone</md-icon> <label>{{findLangTextElement(\"client.telf\")}}</label> <input ng-disabled=\"!ctrl.isNewClient()\" type=\"tel\" name=\"cliTelf\" ng-model=\"client.telf\" required placeholder=\"9.. / 6..\"> <div ng-messages=\"apoNewAdminForm.cliTelf.$error\"> <div ng-message=\"required\">{{findLangTextElement(\"label.requiredData\")}}</div> </div> </md-input-container> </div> <md-divider class=\"clear-min\"> <div layout=\"column\" ng-show=\"isCelebration\"> <md-input-container class=\"md-block\" flex-gt-sm> <label>{{findLangTextElement(\"client.celebrationDate\")}}</label> <md-datepicker ng-model=\"client.celebrationDate\" md-min-date=\"client.celebrationDate\"></md-datepicker> </md-input-container> </div> <md-divider class=\"clear-min\"> <div layout=\"column\"> <md-input-container class=\"md-block\" flex-gt-sm> <md-icon md-font-library=\"material-icons\" class=\"md-24\">insert_comment</md-icon> <label>{{findLangTextElement(\"event.com\")}}</label> <textarea name=\"cliObserv\" ng-model=\"client.observ\" ng-maxlength=\"300\"></textarea> <div ng-messages=\"apoNewAdminForm.cliObserv.$error\"> <div ng-message=\"maxlength\">{{findLangTextElement(\"label.maxLengthData\")}}</div> </div> </md-input-container> </div> <!-- <md-divider class=\"clear-min\"> --> <!-- \n" +
     "\t\t<div layout=\"column\">\t\n" +
     "\t\t\t<md-input-container class=\"md-block\" flex-gt-sm>\n" +
     "\t\t\t\t<md-icon md-font-library=\"material-icons\" class=\"md-24\">report</md-icon>\n" +

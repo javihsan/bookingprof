@@ -7,7 +7,7 @@
 	<artifactId>dilosohairapp</artifactId>
 
 	<!-- VERSION -->
-	<version>r8-0-1</version>
+	<version>r8-1-0</version>
 
 	<packaging>war</packaging>
 	<name>${project.artifactId}</name>

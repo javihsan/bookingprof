@@ -26,7 +26,7 @@ en app:
 //var domainLocalOfi = 'localhost:8888'; // arrancar en local con el java delante
 var domainLocalOfi = 'localhost:9001'; // arrancar en local solo el front
 
-$rootScope.changeLang ruta de los txtos 
+$rootScope.changeLang ruta de los textos 
 //var url = protocol_url + appHost + "/multiText/listLocaleTexts";
 var url = "/js/lang_es.json" // Para rapidez al debugear solo con front
 
@@ -42,3 +42,7 @@ Para Operator en local solo con el front
 en applicationContext-security.xml
 
 <!--<intercept-url pattern="/**/**operator**/**" access="hasAnyRole('ADMIN','OPERATOR','OPERATOR_READ')" />-->
+
+
+hora editable
+ir a ese dia con fuera d ehoea cuando no hay

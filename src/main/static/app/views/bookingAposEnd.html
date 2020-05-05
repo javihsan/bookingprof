@@ -8,7 +8,8 @@
 		  	</div>
 		    <div class="md-toolbar-tools notif">
 		    	<span flex></span>
-		      	<span flex>{{findLangTextElement("label.notification.bookedApo.title")}}</span>
+						<span ng-show="!adminOption" flex>{{findLangTextElement("label.notification.bookedApo.title")}}</span>
+						<span ng-show="adminOption" flex>{{findLangTextElement("label.notification.bookedApoAdmin.title")}}</span>
 		      	<span flex></span>
 		  	</div>
 	  	</md-toolbar>
@@ -16,7 +17,8 @@
 		<div layout="column" layout-gt-sm="row" layout-align="space-between center">
 		  	<md-list>
 		  		<md-list-item class="md-1-line">
-		  			<p>{{findLangTextElement("label.notification.bookedApo.text")}}</p>
+						<p ng-show="!adminOption">{{findLangTextElement("label.notification.bookedApo.text")}}</p>
+						<p ng-show="adminOption">{{findLangTextElement("label.notification.bookedApoAdmin.text")}}</p>
 				</md-list-item>
 				<md-divider>
 		  		<md-list-item>

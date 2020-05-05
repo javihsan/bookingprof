@@ -58,6 +58,7 @@
           cliName: this.cliName.val(),
           cliSurname: this.cliSurname.val(),
           cliTelf1: this.cliTelf1.val(),
+          cliTelf2: this.cliTelf2.val(),
           cliDesc: this.cliDesc.val()
         };
         _this = this;

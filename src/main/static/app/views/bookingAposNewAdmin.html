@@ -41,7 +41,7 @@
 		
 		<md-divider class="clear-min">
 		
-		<div layout="column" layout-gt-sm="row" ng-controller="BookController as ctrl">
+		<div layout="column" layout-gt-sm="row" ng-controller="BookControllerAuto as ctrl">
 
 			<md-icon md-font-library="material-icons" class="md-24 person-autocomplete">person</md-icon>
 			<md-autocomplete required md-floating-label="{{findLangTextElement('client.name')}}" md-min-length="3" md-input-name="cliName" md-input-maxlength="100" md-no-cache="true"
@@ -50,17 +50,17 @@
           			md-selected-item="ctrl.selectedItem"
 			        md-search-text="ctrl.searchText"
 			        md-selected-item-change="ctrl.selectedItemChange(item)"
-			        md-search-text-change="ctrl.actionNewClient()"
-			        md-escape-options="clear"
-			        placeholder="{{findLangTextElement('client.name')}}"
-          	>
+			        md-search-text-change="ctrl.actionNewClient(ctrl.searchText)"
+					md-escape-options="clear"
+					md-clear-button="true"
+			>
           		 <md-item-template>
           			<span md-highlight-text="ctrl.searchText">{{item.whoName}}</span>
         		 </md-item-template>
-                 <md-not-found>
+                 <!--<md-not-found>
           			Nuebo cienre
           			<a ng-click="ctrl.actionNewClient()">Create a new one!</a>
-        		  </md-not-found>
+        		  </md-not-found>-->
 				 <div ng-messages="apoNewAdminForm.cliName.$error">
 					<div ng-message="required">{{findLangTextElement("label.requiredData")}}</div>
 					<div ng-message="maxlength">{{findLangTextElement("label.maxLengthData")}}</div>
@@ -70,7 +70,9 @@
  			<md-input-container class="md-block" flex-gt-sm>
 				<md-icon md-font-library="material-icons" class="md-24">email</md-icon>
 				<label>{{findLangTextElement("client.email")}}</label> 
-				<input ng-disabled="!ctrl.isNewClient()" type="email" name="cliEmail" ng-model="client.email" required ng-pattern="/^.+@.+\..+$/" />
+				<input ng-disabled="!ctrl.isNewClient()" type="email" name="cliEmail" 
+						   ng-model="client.email" required ng-pattern="/^.+@.+\..+$/" 
+						   ng-change="changeCliEmail()"/>
 				<div ng-messages="apoNewAdminForm.cliEmail.$error">
 					<div ng-message-exp="['required', 'pattern']">{{findLangTextElement("label.requiredData")}} / {{findLangTextElement("label.typePatternData")}}</div>
 				</div>

@@ -14,13 +14,15 @@ app
 							// Se esta cargando la pagina
 							$rootScope.isViewLoading = true;
 							
+							$scope.childAuto = {};
+
 							// Para evitar error en el html angular, anchura de tabla de dias
 							$scope.appo = {};
 							$scope.appo.cols = 1;							
 							
 							$scope.disabledNextTabs = function() {
 							    //console.log ("disabledNextTabs");
-							    $scope.tabsBook[1].disabled = true;
+							  $scope.tabsBook[1].disabled = true;
 								$scope.tabsBook[2].disabled = true;
 								$scope.tabsBook[3].disabled = true;
 							    
@@ -684,7 +686,7 @@ app
 										appointment.enabled = true;
 										appointment.bgColor = bgColor;
 										$scope.appo.appointments.push(appointment);
-								}
+								  }
 									//console.log("$scope.appo.appointments",$scope.appo.appointments);
 									return $rootScope.isViewLoading = false;
 								} else {
@@ -694,6 +696,9 @@ app
 										$rootScope.isViewLoading = false;
 										return $scope.nextDayAppos();
 									} else {
+										$rootScope.openNotif($rootScope.findLangTextElement("label.notification.notavailablesearch") + " " + $scope.formatDateSelected(), 3, null);
+										$rootScope.isViewLoading = false;
+										return $scope.nextDayAppos();
 //										Lungo.Notification
 //												.success(
 //														findLangTextElement("label.notification.notavailableAdmin.title"),
@@ -799,19 +804,18 @@ app
 									$scope.client.telf = "";
 									$scope.client.observ = "";
 								} else { 
-									// Intentamos obtener el cliente de sesion 
-									$scope.client = __FacadeCore.Cache_get(appName + "clientSession");
-									if (!$scope.client) { // Si no, lo obtenemos de la cookie del dispositivo
-										$scope.client = __FacadeCore.Storage_get(appName+ "eveClient");
-										if (!$scope.client){ // Si no, lo inicializamos
-											$scope.client = {};
-											$scope.client.name = "";
-											$scope.client.email = "";
-											$scope.client.telf = "";
-										}
+									// Intentamos obtener el cliente de la cookie del dispositivo
+									$scope.client = __FacadeCore.Storage_get(appName+ "eveClient");
+									if (!$scope.client){ // Si no, lo inicializamos
+										$scope.client = {};
+										$scope.client.name = "";
+										$scope.client.email = "";
+										$scope.client.telf = "";
 									}
 									$scope.client.observ = "";
 								}
+								// Limpiamos el input auto de nombre de ciente
+								$scope.childAuto.cleanSelItem();			
 								
 								if ($rootScope.firm.firConfig.configClient.extraBook.celebrationDate) {
 									$scope.isCelebration = true;
@@ -831,132 +835,21 @@ app
 								}
 							};
 
-							
-							$scope.sendNewAppo = function() {
-								//console.log("sendNewAppo");
-																
-								var a, appointment, startTime, data, eveClient, selectedTasks, selectTaskParam, taskSel, selectedTasksCount, selectedCalendarsParam, selectedCalendars, calendarSel, promiseListLocal;
-								$rootScope.isViewLoading = true;
-							    //if (this.changeCliEmail(event)) {
-							        appointment = $scope.appo.appoSel;
-							        startTime = appointment.apoStartTime;
-							        if ($rootScope.adminOption) {
-							          a = this.eveTime.val().split(':');
-							          startTime = new Date(startTime);
-							          startTime.setUTCHours(a[0]);
-							          startTime.setUTCMinutes(a[1]);
-							          startTime = startTime.getTime();
-							          if (this.eveClientNew.val() === "0") {
-							            eveClient = __FacadeCore.Cache_get(appName + "selectClient");
-							          }
-							        }
-							        data = {
-							          eveDescAlega: $scope.client.observ,
-							          localId : $rootScope.local.id,
-							          eveStartTime: startTime
-							        };
-							        if (eveClient) {
-							          data.cliId = eveClient.cliId;
-							        } else {
-							          data.cliName = $scope.client.name;
-							          data.cliEmail = $scope.client.email;
-							          data.cliTelf = $scope.client.telf;
-							        }
-							        
-							        selectedTasks = $rootScope.selectedTasks;
-							        selectTaskParam = new Array();
-							        for (i in selectedTasks){
-							        	selectTaskParam[i] = selectedTasks[i].id;
-									}
-							        data.selectedTasks = selectTaskParam;
-							       
-							        selectedTasksCount = $rootScope.selectedTasksCount;
-							        data.selectedTasksCount = selectedTasksCount;
-							        
-							        selectedCalendars = $scope.selCalendar.selectedCalendar;
-									if ($scope.local.locSelCalendar == 1 && selectedCalendars[0].id ==-1) {
-										selectedCalendarsParam = "";
-									} else {
-										selectedCalendarsParam = new Array();
-										for (i in selectedCalendars){
-											selectedCalendarsParam[i] = selectedCalendars[i].id;
-										}
-									}
-							        data.selectedCalendars = selectedCalendarsParam;
-							      
-							        if (selectedTasks[0].numLines) {
-							          data.numLines = selectedTasks[0].numLines;
-							          data.numPallets = selectedTasks[0].numPallets;
-							        }
-							        
-							        if ($scope.isCelebration){
-							        	data.celebrationDate = __Utils.dateToStringYearLast($scope.client.celebrationDate);
-							        }
-							        
-									promiseSave = httpService.POST($rootScope.urlEventNew, data);
-									
-									var thenSave = function(response) {
-										//console.log("thenSave");
-										$scope.errorSave = undefined;
-										if ($rootScope.adminOption) {
-											// message = findLangTextElement("label.notification.bookedApoAdmin.title")
-								        } else {
-								        	// message = findLangTextElement("label.notification.bookedApo.title")
-								            __FacadeCore.Storage_set(appName + "eveClient", null);
-								            __FacadeCore.Storage_set(appName + "eveClient", $scope.client);
-								        }
-										$rootScope.isViewLoading = false;
-											
-										$scope.tabsBook[3].disabled = false;
-										$scope.selectedTabIndex = 3;
-											
-										$scope.tabsBook[0].disabled = true;
-										$scope.tabsBook[1].disabled = true;
-										return $scope.tabsBook[2].disabled = true;
-									};
-
-									var errorSave = function(response) {
-										//console.log("errorSave");
-										$scope.errorSave = response.statusText;
-										$rootScope.isViewLoading = false;
-										$rootScope.openNotif(response.statusText, 5, null);
-										
-										$scope.tabsBook[3].disabled = false;
-										$scope.selectedTabIndex = 3;
-											
-										$scope.tabsBook[0].disabled = true;
-										$scope.tabsBook[1].disabled = true;
-										return $scope.tabsBook[2].disabled = true;
-
-									};
-								
-									promiseSave.then(thenSave, errorSave);
-							      
-							   //}
-							};							
-							
-							this.querySearch =  $scope.querySearch;
-							this.selectedItemChange = $scope.selectedItemChange
-							this.actionNewClient = $scope.actionNewClient
-							this.isNewClient = $scope.isNewClient
-							this.textChange = $scope.textChange
-							
 							$scope.newCient = true;
 							
 							$scope.isNewClient = function() {
 								return $scope.newCient;
 							}
 							
-							$scope.actionNewClient = function() {
-								//console.log("actionNewClient")
+							$scope.actionNewClient = function(text) {
 								$scope.newCient = true;
+								$scope.client.name = text;
 								$scope.client.email = "";
-						    	$scope.client.telf = "";
+						    $scope.client.telf = "";
 							}
 
 							$scope.querySearch = function(query) {
-								//var results = $rootScope.clients;
-							    var results = query ? $rootScope.clients.filter($scope.createFilterFor(query)) : $rootScope.clients,
+								    var results = query ? $rootScope.clients.filter($scope.createFilterFor(query)) : $rootScope.clients,
 						          deferred;
 				       			return results;
 							    
@@ -972,27 +865,170 @@ app
 
 					
 							$scope.createFilterFor = function(query) {   	
-							      var lowercaseQuery = query.toLowerCase();
-							      return function filterFn(client) {
-							    	  var lowercaseClient = client.whoName.toLowerCase();
-									      return (lowercaseClient.indexOf(lowercaseQuery) !== -1);
-									  };
+									var lowercaseQuery = query.toLowerCase();
+									return function filterFn(client) {
+										var lowercaseClient = client.whoName.toLowerCase();
+											return (lowercaseClient.indexOf(lowercaseQuery) !== -1);
+									};
 							}
 
 							$scope.selectedItemChange = function(item) {    
-						      	if (item){
+									if (item){
 						    		//console.log('Item changed to ' + JSON.stringify(item));
-						    		$scope.client = {};
+										$scope.client = {};
+										$scope.client.id = item.id;
 						    		$scope.client.name = item.whoName;
 						    		$scope.client.email = item.whoEmail;
 						    		$scope.client.telf = item.whoTelf1;
 						    		$scope.newCient = false;
 						    	}
-						    }
+							}
 							
+							$scope.changeCliEmail = function() {    
+								//console.log('changeCliEmail ',$scope.client.email );
+								var clients = $scope.client.email ? $rootScope.clients.filter($scope.createFilterForEmail($scope.client.email)) : $rootScope.clients,
+										deferred;
+								if (clients.length==1){
+									// Asignamos el cliente
+								  $scope.childAuto.setSelItem(clients[0]);	
+								}
+							}
+							 
+							$scope.createFilterForEmail = function(email) {   	
+								var lowercaseQuery = email.toLowerCase();
+								return function filterFn(client) {
+									var lowercaseClient = client.whoEmail.toLowerCase();
+									if (lowercaseClient === lowercaseQuery){
+										return client;
+									}	
+								};
+						}
+
+							$scope.sendNewAppo = function() {
+								//console.log("sendNewAppo");
+																
+								var a, appointment, startTime, data, eveClient, selectedTasks, selectTaskParam, taskSel, selectedTasksCount, selectedCalendarsParam, selectedCalendars, calendarSel, promiseListLocal;
+								$rootScope.isViewLoading = true;
+							   
+								appointment = $scope.appo.appoSel;
+								startTime = appointment.apoStartTime;
+								/*if ($rootScope.adminOption) {
+									a = this.eveTime.val().split(':');
+									startTime = new Date(startTime);
+									startTime.setUTCHours(a[0]);
+									startTime.setUTCMinutes(a[1]);
+									startTime = startTime.getTime();
+									}
+								}*/
+								data = {
+									eveDescAlega: $scope.client.observ,
+									localId : $rootScope.local.id,
+									eveStartTime: startTime
+								};
+								if ($scope.newCient == false){
+									data.cliId = $scope.client.id;
+								}
+								data.cliName = $scope.client.name;
+								data.cliEmail = $scope.client.email;
+								data.cliTelf = $scope.client.telf;
+																		
+								selectedTasks = $rootScope.selectedTasks;
+								selectTaskParam = new Array();
+								for (i in selectedTasks){
+									selectTaskParam[i] = selectedTasks[i].id;
+								}
+								data.selectedTasks = selectTaskParam;
+								
+								selectedTasksCount = $rootScope.selectedTasksCount;
+								data.selectedTasksCount = selectedTasksCount;
+								
+								selectedCalendars = $scope.selCalendar.selectedCalendar;
+								if ($scope.local.locSelCalendar == 1 && selectedCalendars[0].id ==-1) {
+									selectedCalendarsParam = "";
+								} else {
+									selectedCalendarsParam = new Array();
+									for (i in selectedCalendars){
+										selectedCalendarsParam[i] = selectedCalendars[i].id;
+									}
+								}
+								data.selectedCalendars = selectedCalendarsParam;
+							
+								if (selectedTasks[0].numLines) {
+									data.numLines = selectedTasks[0].numLines;
+									data.numPallets = selectedTasks[0].numPallets;
+								}
+								
+								if ($scope.isCelebration){
+									data.celebrationDate = __Utils.dateToStringYearLast($scope.client.celebrationDate);
+								}
+								
+								promiseSave = httpService.POST($rootScope.urlEventNew, data);
+						
+								var thenSave = function(response) {
+									//console.log("thenSave");
+									$scope.errorSave = undefined;
+									if (!$rootScope.adminOption) {	
+										__FacadeCore.Storage_set(appName + "eveClient", null);
+										__FacadeCore.Storage_set(appName + "eveClient", $scope.client);
+									}
+									$rootScope.isViewLoading = false;
+									
+									$scope.tabsBook[3].disabled = false;
+									$scope.selectedTabIndex = 3;
+									
+									$scope.tabsBook[0].disabled = true;
+									$scope.tabsBook[1].disabled = true;
+									return $scope.tabsBook[2].disabled = true;
+								};
+
+								var errorSave = function(response) {
+									//console.log("errorSave");
+									$scope.errorSave = response.statusText;
+									$rootScope.isViewLoading = false;
+									$rootScope.openNotif(response.statusText, 5, null);
+									
+									$scope.tabsBook[3].disabled = false;
+									$scope.selectedTabIndex = 3;
+										
+									$scope.tabsBook[0].disabled = true;
+									$scope.tabsBook[1].disabled = true;
+									return $scope.tabsBook[2].disabled = true;
+								};
+					
+							  promiseSave.then(thenSave, errorSave);
+		
+							};	
+							
+						
 						} ]);
 
+						app
+						.controller(
+								"BookControllerAuto",
+								[
+										"$scope",
+										"$rootScope",
+										function($scope, $rootScope) {
 
+						var parentScope = $scope.$parent.$parent;
+						parentScope.childAuto = $scope;
+						
+						var self = this;
+						self.querySearch =  $scope.querySearch;
+						self.selectedItemChange = $scope.selectedItemChange;
+						self.actionNewClient = $scope.actionNewClient;
+						self.isNewClient = $scope.isNewClient;
+				
+						$scope.cleanSelItem = function() {
+							self.selectedItem = null;
+							self.searchText = "";
+						}
+
+						$scope.setSelItem = function(client) {
+							self.selectedItem = client;
+						}
+												
+					} ]);
 app.directive('showMonth', function() {
 	return {
 		templateUrl : 'views/tableMonthBooking.html',

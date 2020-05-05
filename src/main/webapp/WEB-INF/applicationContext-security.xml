@@ -12,7 +12,7 @@
 		<!--<intercept-url pattern="/register.do*" access="hasRole('NEW_USER')" />-->
 		<intercept-url pattern="/**/**admin**/**" access="hasRole('ADMIN')" />
 		<intercept-url pattern="/**/**manager**/**" access="hasAnyRole('ADMIN','MANAGER')" />
-		<!--<intercept-url pattern="/**/**operator**/**" access="hasAnyRole('ADMIN','OPERATOR','OPERATOR_READ')" />-->
+		<intercept-url pattern="/**/**operator**/**" access="hasAnyRole('ADMIN','OPERATOR','OPERATOR_READ')" />
 		<intercept-url pattern="/**/**report**/**" access="hasAnyRole('ADMIN','MANAGER')" />
 		<intercept-url pattern="/**/**booking**/**" access="hasAnyRole('ADMIN','USER')" />
 		<custom-filter position="PRE_AUTH_FILTER" ref="gwtFilter" />  

@@ -79,7 +79,7 @@
 		  			<p>{{findLangTextElement("label.notification.notavailable.text")}}</p>
 				</md-list-item>
 				<md-list-item ng-show="appo.nextDays.length>0" class="md-1-line">
-		  			<p ng-showS="!isSubViewLoading">{{findLangTextElement("localTask.notavailablesearchresult")}} {{formatDateSelected()}}</p>
+		  			<p ng-show="!isSubViewLoading">{{findLangTextElement("localTask.notavailablesearchresult")}} {{formatDateSelected()}}</p>
 				</md-list-item>
 			</md-list>
 		</div>
