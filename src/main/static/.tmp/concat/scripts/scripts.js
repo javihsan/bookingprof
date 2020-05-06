@@ -1988,7 +1988,7 @@ app
 							}
 							
 							$scope.changeCliEmail = function() {    
-								//console.log('changeCliEmail ',$scope.client.email );
+							 //console.log('changeCliEmail ',$scope.client.email );
 								var clients = $scope.client.email ? $rootScope.clients.filter($scope.createFilterForEmail($scope.client.email)) : $rootScope.clients,
 										deferred;
 								if (clients.length==1){
@@ -1998,13 +1998,18 @@ app
 							}
 							 
 							$scope.createFilterForEmail = function(email) {   	
-								var lowercaseQuery = email.toLowerCase();
-								return function filterFn(client) {
-									var lowercaseClient = client.whoEmail.toLowerCase();
-									if (lowercaseClient === lowercaseQuery){
-										return client;
-									}	
-								};
+								//console.log('createFilterForEmail ',email );
+								if (email){
+									var lowercaseQuery = email.toLowerCase();
+									return function filterFn(client) {
+										if (client.whoEmail){
+											var lowercaseClient = client.whoEmail.toLowerCase();
+											if (lowercaseClient === lowercaseQuery){
+												return client;
+											}
+										}			
+									};
+								}	
 						}
 
 							$scope.sendNewAppo = function() {
