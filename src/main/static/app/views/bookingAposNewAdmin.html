@@ -71,19 +71,16 @@
 				<md-icon md-font-library="material-icons" class="md-24">email</md-icon>
 				<label>{{findLangTextElement("client.email")}}</label> 
 				<input ng-disabled="!ctrl.isNewClient()" type="email" name="cliEmail" 
-						   ng-model="client.email" required ng-pattern="/^.+@.+\..+$/" 
+						   ng-model="client.email" ng-pattern="/^.+@.+\..+$/" 
 						   ng-change="changeCliEmail()"/>
 				<div ng-messages="apoNewAdminForm.cliEmail.$error">
-					<div ng-message-exp="['required', 'pattern']">{{findLangTextElement("label.requiredData")}} / {{findLangTextElement("label.typePatternData")}}</div>
+					<div ng-message-exp="['pattern']">{{findLangTextElement("label.requiredData")}} / {{findLangTextElement("label.typePatternData")}}</div>
 				</div>
 			</md-input-container> 
 			<md-input-container class="md-block" flex-gt-sm>
 				<md-icon md-font-library="material-icons" class="md-24">phone</md-icon>
 				<label>{{findLangTextElement("client.telf")}}</label> 
-				<input ng-disabled="!ctrl.isNewClient()" type="tel" name="cliTelf" ng-model="client.telf" required placeholder="9.. / 6.." />
-				<div ng-messages="apoNewAdminForm.cliTelf.$error">
-					<div ng-message="required">{{findLangTextElement("label.requiredData")}}</div>
-				</div>
+				<input ng-disabled="!ctrl.isNewClient()" type="tel" name="cliTelf" ng-model="client.telf" placeholder="9.. / 6.." />
 			</md-input-container>
 		</div>
 		
