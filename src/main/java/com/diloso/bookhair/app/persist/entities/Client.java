@@ -13,8 +13,8 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getClient", query = "SELECT t FROM Client t WHERE t.resFirId=:resFirId and t.enabled= 1 order by id desc"),
-	@NamedQuery(name="getClientEmail", query = "SELECT t FROM Client t WHERE t.resFirId=:resFirId and t.whoEmail = :whoEmail and t.enabled= 1 order by id desc")
+	@NamedQuery(name="getClient", query = "SELECT t FROM Client t WHERE t.resFirId=:resFirId and t.enabled= 1 order by t.id desc"),
+	@NamedQuery(name="getClientEmail", query = "SELECT t FROM Client t WHERE t.resFirId=:resFirId and t.whoEmail = :whoEmail and t.enabled= 1 order by t.id desc")
 })
 public class Client extends Who implements Serializable {
 	protected static final long serialVersionUID = 1L;

@@ -17,8 +17,8 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getAnnualDiaryLocal", query = "SELECT t FROM AnnualDiary t WHERE t.anuLocalId = :anuLocalId and t.anuDate = :anuDate and t.enabled =1 order by id desc"),
-	@NamedQuery(name="getAnnualDiaryCalendar", query = "SELECT t FROM AnnualDiary t WHERE t.anuCalendarId = :anuCalendarId and t.anuDate = :anuDate and t.enabled =1 order by id desc")
+	@NamedQuery(name="getAnnualDiaryLocal", query = "SELECT t FROM AnnualDiary t WHERE t.anuLocalId = :anuLocalId and t.anuDate = :anuDate and t.enabled =1 order by t.id desc"),
+	@NamedQuery(name="getAnnualDiaryCalendar", query = "SELECT t FROM AnnualDiary t WHERE t.anuCalendarId = :anuCalendarId and t.anuDate = :anuDate and t.enabled =1 order by t.id desc")
 })
 public class AnnualDiary implements Serializable {
 	

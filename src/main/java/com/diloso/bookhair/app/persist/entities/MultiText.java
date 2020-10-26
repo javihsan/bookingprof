@@ -15,10 +15,10 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getMultiText", query = "SELECT t FROM MultiText t WHEREt.enabled =1 order by id asc"),
-	@NamedQuery(name="getMultiLangCode", query = "SELECT t FROM MultiText t WHERE t.mulLanCode=:mulLanCode and t.enabled =1 order by id asc"),
-	@NamedQuery(name="getMultiKey", query = "SELECT t FROM MultiText t WHERE t.mulKey=:mulKey and t.enabled =1 order by id asc"),
-	@NamedQuery(name="getByLanCodeAndKey", query = "SELECT t FROM MultiText t WHERE t.mulLanCode=:mulLanCode and t.mulKey=:mulKey and t.enabled =1 order by id asc")
+	@NamedQuery(name="getMultiText", query = "SELECT t FROM MultiText t WHERE t.enabled =1 order by t.id asc"),
+	@NamedQuery(name="getMultiLangCode", query = "SELECT t FROM MultiText t WHERE t.mulLanCode=:mulLanCode and t.enabled =1 order by t.id asc"),
+	@NamedQuery(name="getMultiKey", query = "SELECT t FROM MultiText t WHERE t.mulKey=:mulKey and t.enabled =1 order by t.id asc"),
+	@NamedQuery(name="getByLanCodeAndKey", query = "SELECT t FROM MultiText t WHERE t.mulLanCode=:mulLanCode and t.mulKey=:mulKey and t.enabled =1 order by t.id asc")
 })
 public class MultiText implements Serializable {
 

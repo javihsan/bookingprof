@@ -17,7 +17,7 @@ npm install bower -g  (archivo .bowerrc para proxy)
 npm install grunt -g
 instalar ruby en windows (scoop ruby)
 SET HTTP_PROXY=http://proxy.santander.corp:8080
-gem install campass
+gem install compass
 npm install coffee-script@1.12.7 -g
 
 

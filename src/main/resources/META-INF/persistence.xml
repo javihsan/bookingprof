@@ -3,11 +3,39 @@
 
     <persistence-unit name="transactions-optional">
         <provider>org.datanucleus.api.jpa.PersistenceProviderImpl</provider>
+        <class>com.diloso.bookhair.app.persist.entities.AnnualDiary</class>
+        <class>com.diloso.bookhair.app.persist.entities.Billed</class>
+        <class>com.diloso.bookhair.app.persist.entities.Calendar</class>
+        <class>com.diloso.bookhair.app.persist.entities.Client</class>
+        <class>com.diloso.bookhair.app.persist.entities.Diary</class>
+        <class>com.diloso.bookhair.app.persist.entities.Event</class>
+        <class>com.diloso.bookhair.app.persist.entities.Firm</class>
+        <class>com.diloso.bookhair.app.persist.entities.Invoice</class>
+        <class>com.diloso.bookhair.app.persist.entities.Lang</class>
+        <class>com.diloso.bookhair.app.persist.entities.Local</class>
+        <class>com.diloso.bookhair.app.persist.entities.LocalTask</class>
+        <class>com.diloso.bookhair.app.persist.entities.MultiText</class>
+        <class>com.diloso.bookhair.app.persist.entities.Product</class>
+        <class>com.diloso.bookhair.app.persist.entities.ProductClass</class>
+        <class>com.diloso.bookhair.app.persist.entities.Professional</class>
+        <class>com.diloso.bookhair.app.persist.entities.Repeat</class>
+        <class>com.diloso.bookhair.app.persist.entities.RepeatClient</class>
+        <class>com.diloso.bookhair.app.persist.entities.Resource</class>
+        <class>com.diloso.bookhair.app.persist.entities.SemanalDiary</class>
+        <class>com.diloso.bookhair.app.persist.entities.Sincro</class>
+        <class>com.diloso.bookhair.app.persist.entities.Task</class>
+        <class>com.diloso.bookhair.app.persist.entities.TaskClass</class>
+        <class>com.diloso.bookhair.app.persist.entities.Where</class>
+        <class>com.diloso.bookhair.app.persist.entities.Who</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        
         <properties>
             <property name="datanucleus.NontransactionalRead" value="true"/>
             <property name="datanucleus.NontransactionalWrite" value="true"/>
             <property name="datanucleus.ConnectionURL" value="appengine"/>
+            <property name="datanucleus.singletonEMFForName" value="true"/>
         </properties>
+
     </persistence-unit>
 
 </persistence>

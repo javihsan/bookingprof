@@ -16,11 +16,11 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "getFirm", query = "SELECT t FROM Firm t WHERE t.enabled =1 order by id desc"),
-		@NamedQuery(name = "getFirmAdmin", query = "SELECT t FROM Firm t order by id desc"),
-		@NamedQuery(name = "getFirmDomain", query = "SELECT t FROM Firm t WHERE t.firDomain=:firDomain and t.enabled =1 order by id desc"),
-		@NamedQuery(name = "getFirmDomainAdmin", query = "SELECT t FROM Firm t WHERE t.firDomain=:firDomain order by id desc"),
-		@NamedQuery(name = "getDomainServer", query = "SELECT t FROM Firm t WHERE t.firServer=:firServer and t.enabled =1 order by id desc")
+		@NamedQuery(name = "getFirm", query = "SELECT t FROM Firm t WHERE t.enabled =1 order by t.id desc"),
+		@NamedQuery(name = "getFirmAdmin", query = "SELECT t FROM Firm t order by t.id desc"),
+		@NamedQuery(name = "getFirmDomain", query = "SELECT t FROM Firm t WHERE t.firDomain=:firDomain and t.enabled =1 order by t.id desc"),
+		@NamedQuery(name = "getFirmDomainAdmin", query = "SELECT t FROM Firm t WHERE t.firDomain=:firDomain order by t.id desc"),
+		@NamedQuery(name = "getDomainServer", query = "SELECT t FROM Firm t WHERE t.firServer=:firServer and t.enabled =1 order by t.id desc")
 })
 public class Firm implements Serializable {
 	protected static final long serialVersionUID = 1L;

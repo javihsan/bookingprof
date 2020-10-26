@@ -15,7 +15,7 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getLang", query = "SELECT t FROM Lang t WHERE t.enabled =1 order by lanName asc"),
+	@NamedQuery(name="getLang", query = "SELECT t FROM Lang t WHERE t.enabled =1 order by t.lanName asc"),
 	@NamedQuery(name="getLangName", query = "SELECT t FROM Lang t WHERE t.lanName=:lanName and t.enabled =1"),
 	@NamedQuery(name="getLangCode", query = "SELECT t FROM Lang t WHERE t.lanCode=:lanCode and t.enabled =1")
 })

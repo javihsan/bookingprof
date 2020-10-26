@@ -14,8 +14,8 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getCalendar", query = "SELECT t FROM Calendar t WHERE t.calLocalId = :calLocalId and t.enabled =1 order by calName asc"),
-	@NamedQuery(name="getCalendarAdmin", query = "SELECT t FROM Calendar t WHERE t.calLocalId = :calLocalId order by calName asc")
+	@NamedQuery(name="getCalendar", query = "SELECT t FROM Calendar t WHERE t.calLocalId = :calLocalId and t.enabled =1 order by t.calName asc"),
+	@NamedQuery(name="getCalendarAdmin", query = "SELECT t FROM Calendar t WHERE t.calLocalId = :calLocalId order by t.calName asc")
 })
 public class Calendar extends Resource implements Serializable {
 	protected static final long serialVersionUID = 1L;

@@ -13,9 +13,9 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-		@NamedQuery(name = "getLocal", query = "SELECT t FROM Local t WHERE t.resFirId = :resFirId and t.enabled =1 order by id desc"),
-		@NamedQuery(name = "getLocalClient", query = "SELECT t FROM Local t WHERE t.resFirId = :resFirId and locBookingClient =1 and t.enabled =1 order by id desc"),
-		@NamedQuery(name = "getLocalAdmin", query = "SELECT t FROM Local t WHERE t.resFirId = :resFirId order by id desc")
+		@NamedQuery(name = "getLocal", query = "SELECT t FROM Local t WHERE t.resFirId = :resFirId and t.enabled =1 order by t.id desc"),
+		@NamedQuery(name = "getLocalClient", query = "SELECT t FROM Local t WHERE t.resFirId = :resFirId and t.locBookingClient =1 and t.enabled =1 order by t.id desc"),
+		@NamedQuery(name = "getLocalAdmin", query = "SELECT t FROM Local t WHERE t.resFirId = :resFirId order by t.id desc")
 })
 public class Local extends Resource implements Serializable {
 	protected static final long serialVersionUID = 1L;

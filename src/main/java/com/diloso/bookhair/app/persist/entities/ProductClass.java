@@ -15,7 +15,7 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getProductClass", query = "SELECT t FROM ProductClass t WHERE t.enabled =1 order by id asc")
+	@NamedQuery(name="getProductClass", query = "SELECT t FROM ProductClass t WHERE t.enabled =1 order by t.id asc")
 })
 public class ProductClass implements Serializable {
 

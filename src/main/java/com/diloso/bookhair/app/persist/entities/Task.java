@@ -15,8 +15,8 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getTask", query = "SELECT t FROM Task t WHERE t.enabled =1 order by id asc"),
-	@NamedQuery(name="getTaskMultiKey", query = "SELECT t FROM Task t WHERE t.tasNameMulti=tasNameMulti and t.enabled =1 order by id asc")
+	@NamedQuery(name="getTask", query = "SELECT t FROM Task t WHERE t.enabled =1 order by t.id asc"),
+	@NamedQuery(name="getTaskMultiKey", query = "SELECT t FROM Task t WHERE t.tasNameMulti=:tasNameMulti and t.enabled =1 order by t.id asc")
 })
 public class Task implements Serializable {
 

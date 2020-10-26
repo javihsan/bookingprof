@@ -12,8 +12,8 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getProfessional", query = "SELECT t FROM Professional t WHERE t.resFirId=:resFirId and t.enabled =1 order by id desc"),
-	@NamedQuery(name="getProfessionalEmail", query = "SELECT t FROM Professional t WHERE t.resFirId=:resFirId and t.whoEmail =:whoEmail and t.enabled =1 order by id desc")
+	@NamedQuery(name="getProfessional", query = "SELECT t FROM Professional t WHERE t.resFirId=:resFirId and t.enabled =1 order by t.id desc"),
+	@NamedQuery(name="getProfessionalEmail", query = "SELECT t FROM Professional t WHERE t.resFirId=:resFirId and t.whoEmail =:whoEmail and t.enabled =1 order by t.id desc")
 })
 public class Professional extends Who implements Serializable {
 	protected static final long serialVersionUID = 1L;

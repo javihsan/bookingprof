@@ -16,10 +16,10 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-	@NamedQuery(name="getLocalTask", query = "SELECT t FROM LocalTask t WHERE t.lotLocalId=lotLocalId and t.enabled =1 order by id asc"),
-	@NamedQuery(name="getLocalTaskVisible", query = "SELECT t FROM LocalTask t WHERE t.lotLocalId=lotLocalId and t.lotVisible=1 and t.enabled =1 order by id asc"),
-	@NamedQuery(name="getLocalTaskMultiKey", query = "SELECT t FROM LocalTask t WHERE t.lotNameMulti=lotNameMulti and t.enabled =1 order by id asc"),
-	@NamedQuery(name="getLocalTaskAdmin", query = "SELECT t FROM LocalTask t WHERE t.lotLocalId=lotLocalId order by id asc")
+	@NamedQuery(name="getLocalTask", query = "SELECT t FROM LocalTask t WHERE t.lotLocalId=:lotLocalId and t.enabled =1 order by t.id asc"),
+	@NamedQuery(name="getLocalTaskVisible", query = "SELECT t FROM LocalTask t WHERE t.lotLocalId=:lotLocalId and t.lotVisible=1 and t.enabled =1 order by t.id asc"),
+	@NamedQuery(name="getLocalTaskMultiKey", query = "SELECT t FROM LocalTask t WHERE t.lotNameMulti=:lotNameMulti and t.enabled =1 order by t.id asc"),
+	@NamedQuery(name="getLocalTaskAdmin", query = "SELECT t FROM LocalTask t WHERE t.lotLocalId=:lotLocalId order by t.id asc")
 })
 public class LocalTask implements Serializable {
 

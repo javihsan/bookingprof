@@ -1,7 +1,5 @@
 package com.diloso.bookhair.app.negocio.dao;
 
-import java.util.List;
-
 import com.diloso.bookhair.app.negocio.dto.WhereDTO;
 
 public interface WhereDAO {
@@ -14,6 +12,4 @@ public interface WhereDAO {
 
 	WhereDTO getById(long id);
 	
-	List<WhereDTO> getWhere(long resFirId);
-
 }

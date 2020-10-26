@@ -1,10 +1,6 @@
 package com.diloso.bookhair.app.persist.manager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,47 +110,6 @@ public class WhereManager extends Manager implements WhereDAO {
 			em.close();
 		}
 		return whereTransformer.transformEntityToDTO(entityWhere);
-	}
-
-	public WhereDTO getByEmail(long resFirId, String email) {
-		EntityManager em = getEntityManager();
-		List<Where> resultQuery = null;
-		WhereDTO where = null;
-		try {
-			Query query = em.createNamedQuery("getWhereEmail");
-			query.setParameter("resFirId", resFirId);
-			query.setParameter("whoEmail", email);
-			resultQuery = (List<Where>) query.getResultList();
-			if (resultQuery.size() == 1) {
-				where = whereTransformer.transformEntityToDTO(
-						resultQuery.get(0));
-			}
-		} finally {
-			em.close();
-		}
-		return where;
-	}
-
-	public List<WhereDTO> getWhere(long resFirId) {
-		EntityManager em = getEntityManager();
-		List<WhereDTO> result = new ArrayList<WhereDTO>();
-		List<Where> resultQuery = null;
-		WhereDTO where = null;
-		try {
-
-			javax.persistence.Query query = em.createNamedQuery("getWhere");
-			query.setParameter("resFirId", resFirId);
-			resultQuery = (List<Where>) query.getResultList();
-			for (Where entityWhere : resultQuery) {
-				where = whereTransformer.transformEntityToDTO(
-						entityWhere);
-				result.add(where);
-			}
-
-		} finally {
-			em.close();
-		}
-		return result;
 	}
 
 }

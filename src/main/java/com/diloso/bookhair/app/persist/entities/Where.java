@@ -3,17 +3,12 @@ package com.diloso.bookhair.app.persist.entities;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 
 /**
  * The persistent class for the Where entity
  * 
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name="getWhere", query = "SELECT t FROM Where t WHERE t.resFirId=:resFirId and t.enabled =1 order by id desc")
-})
 public class Where extends Resource implements Serializable {
 	protected static final long serialVersionUID = 1L;
 
