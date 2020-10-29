@@ -3,7 +3,6 @@ package com.diloso.bookhair.app.persist.manager;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 @Scope(value = "singleton")
 public class DiaryManager extends Manager implements DiaryDAO {
 
-	@Autowired
+	//@Autowired
 	protected DiaryTransformer diaryTransformer;
 	
 	public DiaryManager() {
@@ -113,4 +112,10 @@ public class DiaryManager extends Manager implements DiaryDAO {
 		return diaryTransformer.transformEntityToDTO(entityDiary);
 	}
 
+	public void setDiaryTransformer(DiaryTransformer diaryTransformer) {
+		this.diaryTransformer = diaryTransformer;
+	}
+
+	
+	
 }

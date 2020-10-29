@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -58,37 +57,37 @@ public class RepeatController {
 
 	protected static final String REP_NAME_PARAM = "repName";
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	@Autowired
+	//@Autowired
 	protected Generator generatorVelocity;
 	
-	@Autowired
+	//@Autowired
 	protected LocalDAO localDAO;
 	
-	@Autowired
+	//@Autowired
 	protected CalendarDAO calendarDAO;
 	
-	@Autowired
+	//@Autowired
 	protected RepeatDAO repeatDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalTaskDAO localTaskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 
-	@Autowired
+	//@Autowired
 	protected CalendarController calController;
 	
-	@Autowired
+	//@Autowired
 	protected AnnualDiaryDAO annualDiaryDAO;
 	
-	@Autowired
+	//@Autowired
 	protected DiaryDAO diaryDAO;
 	
-	@Autowired
+	//@Autowired
 	protected SemanalDiaryDAO semanalDiaryDAO;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
@@ -630,6 +629,50 @@ public class RepeatController {
 			}
 		}
 	}
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setGeneratorVelocity(Generator generatorVelocity) {
+		this.generatorVelocity = generatorVelocity;
+	}
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+	public void setCalendarDAO(CalendarDAO calendarDAO) {
+		this.calendarDAO = calendarDAO;
+	}
+
+	public void setRepeatDAO(RepeatDAO repeatDAO) {
+		this.repeatDAO = repeatDAO;
+	}
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setCalController(CalendarController calController) {
+		this.calController = calController;
+	}
+
+	public void setAnnualDiaryDAO(AnnualDiaryDAO annualDiaryDAO) {
+		this.annualDiaryDAO = annualDiaryDAO;
+	}
+
+	public void setDiaryDAO(DiaryDAO diaryDAO) {
+		this.diaryDAO = diaryDAO;
+	}
+
+	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
+		this.semanalDiaryDAO = semanalDiaryDAO;
+	}
 	
 	/*
 	@RequestMapping(method = RequestMethod.PUT, value = "/operator/consume")
@@ -651,5 +694,6 @@ public class RepeatController {
 		}
 		return putConsumed;
 	}*/
+	
 	
 }

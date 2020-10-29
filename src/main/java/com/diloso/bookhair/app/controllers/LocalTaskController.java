@@ -10,8 +10,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -44,28 +42,28 @@ public class LocalTaskController {
 	
 	protected static final String LOT_NAME_PARAM = "lotName";
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 		
-	@Autowired
+	//@Autowired
 	protected LocalDAO localDAO;
 	
-	@Autowired
+	//@Autowired
 	protected CalendarDAO calendarDAO;
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LangDAO langDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalTaskDAO localTaskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected DiaryDAO diaryDAO;
 	
-	@Autowired
+	//@Autowired
 	protected SemanalDiaryDAO semanalDiaryDAO;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
@@ -413,6 +411,39 @@ public class LocalTaskController {
 					
 		return localTask;
 	}
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+	public void setCalendarDAO(CalendarDAO calendarDAO) {
+		this.calendarDAO = calendarDAO;
+	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setLangDAO(LangDAO langDAO) {
+		this.langDAO = langDAO;
+	}
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+	public void setDiaryDAO(DiaryDAO diaryDAO) {
+		this.diaryDAO = diaryDAO;
+	}
+
+	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
+		this.semanalDiaryDAO = semanalDiaryDAO;
+	}
+	
 	
 	
 }

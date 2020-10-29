@@ -4,7 +4,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +18,12 @@ import com.google.appengine.api.datastore.Entity;
 @Scope(value = "singleton")
 public class InvoiceTransformer {
 	
+	
 	public InvoiceTransformer() {
 
 	}	
 	
-	@Autowired
+	//@Autowired
 	protected ClientDAO clientDAO;
 	
 	public Invoice transformDTOToEntity(InvoiceDTO invoice){
@@ -98,6 +98,8 @@ public class InvoiceTransformer {
 		return invoice;
 	}
 	
-	
+	public void setClientDAO(ClientDAO clientDAO) {
+		this.clientDAO = clientDAO;
+	}
 	
 }

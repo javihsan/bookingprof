@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -31,10 +30,10 @@ public class TaskManager extends Manager implements TaskDAO {
 	public static final String FIELD_MULTI_TASK_NAME = "tasNameMulti";
 	public static final String FIELD_MULTI_TASK_ENTITY_NAME = FIELD_MULTI_TASK_NAME + "Id";
 
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected TaskTransformer taskTransformer;
 	
 	public TaskManager() {
@@ -192,4 +191,13 @@ public class TaskManager extends Manager implements TaskDAO {
 		return result;
 	}
 
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setTaskTransformer(TaskTransformer taskTransformer) {
+		this.taskTransformer = taskTransformer;
+	}
+
+	
 }

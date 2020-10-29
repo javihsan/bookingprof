@@ -1,7 +1,6 @@
 package com.diloso.bookhair.app.persist.transformer;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -14,8 +13,8 @@ import com.diloso.bookhair.app.persist.entities.Professional;
 @Component
 @Scope(value = "singleton")
 public class ProfessionalTransformer {
-	
-	@Autowired
+		
+	//@Autowired
 	protected WhereDAO whereDAO;
 	
 	public ProfessionalTransformer() {
@@ -57,5 +56,9 @@ public class ProfessionalTransformer {
 		return professional;
 	}
 
+	public void setWhereDAO(WhereDAO whereDAO) {
+		this.whereDAO = whereDAO;
+	}
 	
+
 }

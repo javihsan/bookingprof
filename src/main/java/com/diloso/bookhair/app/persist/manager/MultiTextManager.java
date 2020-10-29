@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +22,7 @@ public class MultiTextManager extends Manager implements MultiTextDAO {
 
 	public static final String KEY_MULTI_SYSTEM = "System_";
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextTransformer multiTextTransformer;
 	
 	public MultiTextManager() {
@@ -209,5 +208,10 @@ public class MultiTextManager extends Manager implements MultiTextDAO {
 		}
 		return result;
 	}
+
+	public void setMultiTextTransformer(MultiTextTransformer multiTextTransformer) {
+		this.multiTextTransformer = multiTextTransformer;
+	}
+	
 	
 }

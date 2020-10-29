@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,7 @@ import com.diloso.bookhair.app.persist.transformer.LocalTransformer;
 @Scope(value = "singleton")
 public class LocalManager extends Manager implements LocalDAO {
 
-	@Autowired
+	//@Autowired
 	protected LocalTransformer localTransformer;
 	
 	public LocalManager() {
@@ -206,6 +205,11 @@ public class LocalManager extends Manager implements LocalDAO {
 		}
 		return result;
 	}
+
+	public void setLocalTransformer(LocalTransformer localTransformer) {
+		this.localTransformer = localTransformer;
+	}
+	
 	
 	
 }

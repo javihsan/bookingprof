@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -25,10 +24,10 @@ public class ProductManager extends Manager implements ProductDAO {
 
 	public static final String KEY_MULTI_RATE_NAME = "product_name_";
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ProductTransformer productTransformer;
 	
 	public ProductManager() {
@@ -197,4 +196,13 @@ public class ProductManager extends Manager implements ProductDAO {
 		return result;
 	}
 
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setProductTransformer(ProductTransformer productTransformer) {
+		this.productTransformer = productTransformer;
+	}
+
+	
 }

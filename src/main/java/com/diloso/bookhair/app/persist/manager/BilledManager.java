@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -45,19 +44,19 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 public class BilledManager extends Manager implements BilledDAO {
 
 
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected TaskDAO taskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalTaskDAO localTaskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ProductDAO productDAO;
 	
-	@Autowired
+	//@Autowired
 	protected BilledTransformer billedTransformer;
 
 	
@@ -432,5 +431,27 @@ public class BilledManager extends Manager implements BilledDAO {
 		}
 		return result;
 	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setTaskDAO(TaskDAO taskDAO) {
+		this.taskDAO = taskDAO;
+	}
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+	public void setProductDAO(ProductDAO productDAO) {
+		this.productDAO = productDAO;
+	}
+
+	public void setBilledTransformer(BilledTransformer billedTransformer) {
+		this.billedTransformer = billedTransformer;
+	}
+	
+	
 
 }

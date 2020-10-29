@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +42,7 @@ public class RepeatManager extends Manager implements RepeatDAO {
 	public static final String FIELD_MULTI_REPEAT_ENTITY_NAME = KEY_MULTI_REPEAT_NAME
 			+ "Id";
 
-	@Autowired
+	//@Autowired
 	protected RepeatTransformer repeatTransformer;
 
 	public RepeatManager() {
@@ -533,4 +532,10 @@ public class RepeatManager extends Manager implements RepeatDAO {
 	 * } catch (Exception ex) { } return result; }
 	 */
 
+	public void setRepeatTransformer(RepeatTransformer repeatTransformer) {
+		this.repeatTransformer = repeatTransformer;
+	}
+
+	
+	
 }

@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -93,55 +92,55 @@ public class LoadingController {
 	protected static final Logger log = Logger
 			.getLogger(LoadingController.class.getName());
 
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 
-	@Autowired
+	//@Autowired
 	protected Generator generatorVelocity;
 
-	@Autowired
+	//@Autowired
 	protected LocalDAO localDAO;
 
-	@Autowired
+	//@Autowired
 	protected CalendarDAO calendarDAO;
 
-	@Autowired
+	//@Autowired
 	protected FirmDAO firmDAO;
 
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 
-	@Autowired
+	//@Autowired
 	protected ProfessionalDAO professionalDAO;
 
-	@Autowired
+	//@Autowired
 	protected LangDAO langDAO;
 
-	@Autowired
+	//@Autowired
 	protected WhereDAO whereDAO;
 
-	@Autowired
+	//@Autowired
 	protected TaskDAO taskDAO;
 
-	@Autowired
+	//@Autowired
 	protected TaskClassDAO taskClassDAO;
 
-	@Autowired
+	//@Autowired
 	protected DiaryDAO diaryDAO;
 
-	@Autowired
+	//@Autowired
 	protected SemanalDiaryDAO semanalDiaryDAO;
 
-	@Autowired
+	//@Autowired
 	protected LocalTaskDAO localTaskDAO;
 
-	@Autowired
+	//@Autowired
 	protected SincroDAO sincroDAO;
 
-	@Autowired
+	//@Autowired
 	protected EventDAO eventDAO;
 
-	@Autowired
+	//@Autowired
 	protected ClientDAO clientDAO;
 
 	protected UserRegistry userRegistry = new DatastoreUserRegistry();
@@ -6044,5 +6043,59 @@ public class LoadingController {
 			firm = firmDAO.update(firm);
 			
 		}
-	}	
+	}
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setGeneratorVelocity(Generator generatorVelocity) {
+		this.generatorVelocity = generatorVelocity;
+	}
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setProfessionalDAO(ProfessionalDAO professionalDAO) {
+		this.professionalDAO = professionalDAO;
+	}
+
+	public void setLangDAO(LangDAO langDAO) {
+		this.langDAO = langDAO;
+	}
+
+	public void setWhereDAO(WhereDAO whereDAO) {
+		this.whereDAO = whereDAO;
+	}
+
+	public void setTaskDAO(TaskDAO taskDAO) {
+		this.taskDAO = taskDAO;
+	}
+
+	public void setTaskClassDAO(TaskClassDAO taskClassDAO) {
+		this.taskClassDAO = taskClassDAO;
+	}
+
+	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
+		this.semanalDiaryDAO = semanalDiaryDAO;
+	}
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+	public void setSincroDAO(SincroDAO sincroDAO) {
+		this.sincroDAO = sincroDAO;
+	}
+
+	public void setUserRegistry(UserRegistry userRegistry) {
+		this.userRegistry = userRegistry;
+	}
+	
+	
 }

@@ -5,7 +5,6 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,19 +21,19 @@ import com.diloso.bookhair.app.negocio.dto.TaskDTO;
 @RequestMapping(value={"/*/task", "/task"})
 public class TaskController {
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	/*@Autowired
+	/*//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LangDAO langDAO;*/
 	
-	@Autowired
+	//@Autowired
 	protected TaskDAO taskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected FirmDAO firmDAO;
 	
 	/*
@@ -88,6 +87,22 @@ public class TaskController {
 					
 		return task;
 	}
+
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+
+	public void setTaskDAO(TaskDAO taskDAO) {
+		this.taskDAO = taskDAO;
+	}
+
+
+	public void setFirmDAO(FirmDAO firmDAO) {
+		this.firmDAO = firmDAO;
+	}
+	
 	
 
 }

@@ -4,7 +4,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -27,13 +26,13 @@ public class BilledTransformer {
 
 	}	
 	
-	@Autowired
+	//@Autowired
 	protected ClientDAO clientDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalTaskDAO localTaskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ProductDAO productDAO;
 	
 	public Billed transformDTOToEntity(BilledDTO billed){
@@ -147,6 +146,18 @@ public class BilledTransformer {
 
 		
 		return billed;
+	}
+
+	public void setClientDAO(ClientDAO clientDAO) {
+		this.clientDAO = clientDAO;
+	}
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+	public void setProductDAO(ProductDAO productDAO) {
+		this.productDAO = productDAO;
 	}
 	
 	

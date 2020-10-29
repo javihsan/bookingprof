@@ -9,7 +9,6 @@ import javax.mail.SendFailedException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -43,28 +42,28 @@ public class ReportController {
 	protected String TYPE_STRING = "string";
 	protected String TYPE_NUMBER = "number";
 	
-	@Autowired
+	////@Autowired
 	protected MessageSource messageSourceApp;
 	
-	@Autowired
+	////@Autowired
 	protected LocalDAO localDAO;
 	
-	@Autowired
+	////@Autowired
 	protected CalendarDAO calendarDAO;
 	
-	@Autowired
+	////@Autowired
 	protected FirmDAO firmDAO;
 	
-	@Autowired
+	////@Autowired
 	protected EventDAO eventDAO;
 	
-	@Autowired
+	////@Autowired
 	protected BilledDAO billedDAO;
 	
-	@Autowired
+	////@Autowired
 	protected LocalTaskDAO localTaskDAO;
 	
-	@Autowired
+	////@Autowired
 	protected ProductDAO productDAO;
 	
 	@RequestMapping("")
@@ -420,6 +419,47 @@ public class ReportController {
 		
 		return reportDTO;
 	}
+
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+
+	public void setCalendarDAO(CalendarDAO calendarDAO) {
+		this.calendarDAO = calendarDAO;
+	}
+
+
+	public void setFirmDAO(FirmDAO firmDAO) {
+		this.firmDAO = firmDAO;
+	}
+
+
+	public void setEventDAO(EventDAO eventDAO) {
+		this.eventDAO = eventDAO;
+	}
+
+
+	public void setBilledDAO(BilledDAO billedDAO) {
+		this.billedDAO = billedDAO;
+	}
+
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+
+	public void setProductDAO(ProductDAO productDAO) {
+		this.productDAO = productDAO;
+	}
+	
 	
 }
 

@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,7 @@ import com.diloso.bookhair.app.persist.transformer.LangTransformer;
 @Scope(value = "singleton")
 public class LangManager extends Manager implements LangDAO {
 	
-	@Autowired
+	//@Autowired
 	protected LangTransformer langTransformer;
 	
 	public LangManager() {
@@ -171,4 +170,9 @@ public class LangManager extends Manager implements LangDAO {
 		return result;
 	}
 
+	public void setLangTransformer(LangTransformer langTransformer) {
+		this.langTransformer = langTransformer;
+	}
+	
+	
 }

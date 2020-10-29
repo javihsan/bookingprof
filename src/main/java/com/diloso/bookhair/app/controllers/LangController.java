@@ -6,7 +6,6 @@ import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +24,10 @@ import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 @RequestMapping(value={"/*/lang", "/lang"})
 public class LangController {
 	
-	@Autowired
+	//@Autowired
 	protected LangDAO langDAO;
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
 	@RequestMapping("/list")
@@ -79,8 +78,18 @@ public class LangController {
 			}
 		}
 
-
 	}
+
+
+	public void setLangDAO(LangDAO langDAO) {
+		this.langDAO = langDAO;
+	}
+
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+	
 	
 
 }

@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -36,16 +35,16 @@ public class ProductController {
 	
 	protected static final String PRO_NAME_PARAM = "proName";
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	@Autowired
+	//@Autowired
 	protected ProductDAO productDAO;
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LangDAO langDAO;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
@@ -195,6 +194,22 @@ public class ProductController {
 		ProductDTO product = productDAO.getById(id);	
 					
 		return product;
+	}
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setProductDAO(ProductDAO productDAO) {
+		this.productDAO = productDAO;
+	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setLangDAO(LangDAO langDAO) {
+		this.langDAO = langDAO;
 	}
 	
 

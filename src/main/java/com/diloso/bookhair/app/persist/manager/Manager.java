@@ -2,11 +2,9 @@ package com.diloso.bookhair.app.persist.manager;
 
 import javax.persistence.EntityManager;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 public class Manager {
 	
-	@Autowired
+	//@Autowired
 	protected IEMF beanEMF;
 	
 	public Manager() {

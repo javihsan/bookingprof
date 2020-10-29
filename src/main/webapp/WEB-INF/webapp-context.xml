@@ -10,9 +10,6 @@
 			http://www.springframework.org/schema/context/spring-context-3.0.xsd"
 		default-lazy-init="false">
 
-	<context:component-scan base-package="com.diloso.bookhair.app.controllers, com.diloso.bookhair.app.negocio.utils.templates, com.diloso.bookhair.app.persist.manager, com.diloso.bookhair.app.persist.transformer"/>
-	
-	
 	<bean id="applicationContextProvider" class="com.diloso.bookhair.app.negocio.utils.ApplicationContextProvider" />
 	
 	<!-- responsible for converting from the HTTP request message to an object and converting from an object to the HTTP response body. -->
@@ -76,7 +73,89 @@
 		    </list>
 		</property>
 	</bean>
-		
+	
 	<bean id="beanEMF" class="com.diloso.bookhair.app.persist.manager.EMF" />
+	 
+	<bean id="generatorVelocity" class="com.diloso.bookhair.app.negocio.utils.templates.GeneratorVelocityImpl" />	
 		
+	<bean id="homeController" class="com.diloso.bookhair.web.controllers.HomeController" />
+	<bean id="adminController" class="com.diloso.bookhair.web.controllers.AdminController" />
+	
+	<bean id="webMailController" class="com.diloso.bookhair.web.controllers.WebMailController" autowire="byType" />
+	
+	<bean id="initController" class="com.diloso.bookhair.app.controllers.InitController" />	
+	<bean id="bookingController" class="com.diloso.bookhair.app.controllers.BookingController" />	
+	<bean id="operatorController" class="com.diloso.bookhair.app.controllers.OperatorController" />
+	<bean id="operatorNewController" class="com.diloso.bookhair.app.controllers.OperatorNewController" />
+	<bean id="managerController" class="com.diloso.bookhair.app.controllers.ManagerController" />
+	
+	<bean id="mailController" class="com.diloso.bookhair.app.controllers.MailController" autowire="byType" />
+	<bean id="reportController" class="com.diloso.bookhair.app.controllers.ReportController" autowire="byType" />
+	
+    <bean id="annualController" class="com.diloso.bookhair.app.controllers.AnnualController" autowire="byType" />
+    <bean id="billedController" class="com.diloso.bookhair.app.controllers.BilledController" autowire="byType" />
+    <bean id="calendarController" class="com.diloso.bookhair.app.controllers.CalendarController" autowire="byType" />
+    <bean id="clientController" class="com.diloso.bookhair.app.controllers.ClientController" autowire="byType" />
+    <bean id="diaryController" class="com.diloso.bookhair.app.controllers.DiaryController" autowire="byType" />
+    <bean id="eventController" class="com.diloso.bookhair.app.controllers.EventController" autowire="byType" />
+    <bean id="firmController" class="com.diloso.bookhair.app.controllers.FirmController" autowire="byType" />
+    <bean id="invoiceController" class="com.diloso.bookhair.app.controllers.InvoiceController" autowire="byType" />
+    <bean id="langController" class="com.diloso.bookhair.app.controllers.LangController" autowire="byType" />
+    <bean id="loadingController" class="com.diloso.bookhair.app.controllers.LoadingController" autowire="byType" />
+    <bean id="localController" class="com.diloso.bookhair.app.controllers.LocalController" autowire="byType" />
+    <bean id="localTaskController" class="com.diloso.bookhair.app.controllers.LocalTaskController" autowire="byType" />
+    <bean id="multiTextController" class="com.diloso.bookhair.app.controllers.MultiTextController" autowire="byType" />
+    <bean id="productController" class="com.diloso.bookhair.app.controllers.ProductController" autowire="byType" />
+    <bean id="productClassController" class="com.diloso.bookhair.app.controllers.ProductClassController" autowire="byType" />
+    <bean id="repeatController" class="com.diloso.bookhair.app.controllers.RepeatController" autowire="byType" />
+    <bean id="repeatClientController" class="com.diloso.bookhair.app.controllers.RepeatClientController" autowire="byType" />
+    <bean id="taskController" class="com.diloso.bookhair.app.controllers.TaskController" autowire="byType" />
+    <bean id="taskClassController" class="com.diloso.bookhair.app.controllers.TaskClassController" autowire="byType" />   
+
+    <bean class="com.diloso.bookhair.app.persist.manager.AnnualDiaryManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.BilledManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.CalendarManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.ClientManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.DiaryManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.EventManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.FirmManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.InvoiceManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.LangManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.LocalManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.LocalTaskManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.MultiTextManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.ProductManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.ProductClassManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.ProfessionalManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.RepeatManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.RepeatClientManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.SemanalDiaryManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.SincroManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.TaskManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.TaskClassManager" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.manager.WhereManager" autowire="byType" />
+    		
+    <bean class="com.diloso.bookhair.app.persist.transformer.AnnualDiaryTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.BilledTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.CalendarTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.ClientTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.DiaryTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.EventTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.FirmTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.InvoiceTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.LangTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.LocalTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.LocalTaskTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.MultiTextTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.ProductTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.ProductClassTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.ProfessionalTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.RepeatTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.RepeatClientTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.SemanalDiaryTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.SincroTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.TaskTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.TaskClassTransformer" autowire="byType" />
+    <bean class="com.diloso.bookhair.app.persist.transformer.WhereTransformer" autowire="byType" />	
+    		
 </beans>

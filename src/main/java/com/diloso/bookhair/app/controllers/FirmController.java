@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,13 +39,13 @@ public class FirmController implements AuthenticationApp {
 	
 	protected static final Logger log = Logger.getLogger(FirmController.class.getName());
 	
-	@Autowired
+	//@Autowired
 	protected FirmDAO firmDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ProfessionalDAO professionalDAO;
 	
-	@Autowired
+	//@Autowired
 	protected WhereDAO whereDAO;
 	
 	protected UserRegistry userRegistry = new DatastoreUserRegistry();
@@ -314,5 +313,17 @@ public class FirmController implements AuthenticationApp {
 		
 		return firmDAO.isRestrictedNivelUser(domain);
 	}
+
+	public void setFirmDAO(FirmDAO firmDAO) {
+		this.firmDAO = firmDAO;
+	}
+
+	public void setProfessionalDAO(ProfessionalDAO professionalDAO) {
+		this.professionalDAO = professionalDAO;
+	}
+
+	public void setWhereDAO(WhereDAO whereDAO) {
+		this.whereDAO = whereDAO;
+	}	
 	
 }

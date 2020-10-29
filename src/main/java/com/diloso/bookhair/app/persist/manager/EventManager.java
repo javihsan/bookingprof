@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -39,7 +38,7 @@ public class EventManager extends Manager implements EventDAO {
 
 	protected static final Logger log = Logger.getLogger(EventManager.class.getName());
 
-	@Autowired
+	//@Autowired
 	protected EventTransformer eventTransformer;
 	
 	public EventManager() {
@@ -621,5 +620,9 @@ public class EventManager extends Manager implements EventDAO {
 		}
 		return result;
 	}
+
+	public void setEventTransformer(EventTransformer eventTransformer) {
+		this.eventTransformer = eventTransformer;
+	}	
 
 }

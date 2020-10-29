@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -23,10 +22,9 @@ public class TaskTransformer {
 	
 	public TaskTransformer() {
 
-	}
+	}	
 	
-
-	@Autowired
+	//@Autowired
 	protected TaskClassDAO taskClassDAO;
 	
 
@@ -109,6 +107,9 @@ public class TaskTransformer {
 		return task;
 	}
 	
-	
+	public void setTaskClassDAO(TaskClassDAO taskClassDAO) {
+		this.taskClassDAO = taskClassDAO;
+	}
+
 	
 }

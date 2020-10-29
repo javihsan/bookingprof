@@ -3,7 +3,6 @@ package com.diloso.bookhair.app.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,7 @@ import com.diloso.bookhair.app.negocio.dto.DiaryDTO;
 @RequestMapping(value={"/*/diary", "/diary"})
 public class DiaryController {
 	
-	@Autowired
+	//@Autowired
 	protected DiaryDAO diaryDAO;
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/manager/update")
@@ -38,6 +37,10 @@ public class DiaryController {
 			diary.setDiaTimes(diaTimes);
 			diaryDAO.update(diary);
 		} 
+	}
+
+	public void setDiaryDAO(DiaryDAO diaryDAO) {
+		this.diaryDAO = diaryDAO;
 	}
 	
 		

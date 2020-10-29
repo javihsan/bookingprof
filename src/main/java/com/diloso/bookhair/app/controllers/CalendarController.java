@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -62,46 +61,46 @@ public class CalendarController {
 
 	//protected static final Logger log = Logger.getLogger(CalendarController.class);
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	@Autowired
+	//@Autowired
 	protected AnnualDiaryDAO annualDiaryDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalDAO localDAO;
 	
-	@Autowired
+	//@Autowired
 	protected CalendarDAO calendarDAO;
 	
-	@Autowired
+	//@Autowired
 	protected EventDAO eventDAO;
 
-	@Autowired
+	//@Autowired
 	protected RepeatDAO repeatDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalTaskDAO localTaskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected TaskDAO taskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected DiaryDAO diaryDAO;
 	
-	@Autowired
+	//@Autowired
 	protected SemanalDiaryDAO semanalDiaryDAO;
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected FirmDAO firmDAO;
 	
-	/*@Autowired
+	/*//@Autowired
 	protected ProfessionalDAO professionalDAO;*/
 	
-	@Autowired
+	//@Autowired
 	protected RepeatController repeatController;
 	
 	public static final String CHAR_SEP_DATE = "-";
@@ -1654,6 +1653,59 @@ public class CalendarController {
 		public int compare(Object obj1, Object obj2) {
 			return (((Date) obj1)).compareTo(((Date) obj2));
 		}
+	}
+	
+	
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setAnnualDiaryDAO(AnnualDiaryDAO annualDiaryDAO) {
+		this.annualDiaryDAO = annualDiaryDAO;
+	}
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+	public void setCalendarDAO(CalendarDAO calendarDAO) {
+		this.calendarDAO = calendarDAO;
+	}
+
+	public void setEventDAO(EventDAO eventDAO) {
+		this.eventDAO = eventDAO;
+	}
+
+	public void setRepeatDAO(RepeatDAO repeatDAO) {
+		this.repeatDAO = repeatDAO;
+	}
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+	public void setTaskDAO(TaskDAO taskDAO) {
+		this.taskDAO = taskDAO;
+	}
+
+	public void setDiaryDAO(DiaryDAO diaryDAO) {
+		this.diaryDAO = diaryDAO;
+	}
+
+	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
+		this.semanalDiaryDAO = semanalDiaryDAO;
+	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setFirmDAO(FirmDAO firmDAO) {
+		this.firmDAO = firmDAO;
+	}
+
+	public void setRepeatController(RepeatController repeatController) {
+		this.repeatController = repeatController;
 	}
 	
 	

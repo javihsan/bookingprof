@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -61,43 +60,43 @@ public class EventController {
 	
 	public static final String CHAR_TAG_BR = "<br>";
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	@Autowired
+	//@Autowired
 	protected Generator generatorVelocity;
 	
-	@Autowired
+	//@Autowired
 	protected LocalDAO localDAO;
 	
-	@Autowired
+	//@Autowired
 	protected CalendarDAO calendarDAO;
 	
-	@Autowired
+	//@Autowired
 	protected EventDAO eventDAO;
 	
-	@Autowired
+	//@Autowired
 	protected RepeatDAO repeatDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalTaskDAO localTaskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ClientDAO clientDAO;
 	
-	@Autowired
+	//@Autowired
 	protected FirmDAO firmDAO;
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected EventDAOGoogle eventDAOGoogle;
 	
-	@Autowired
+	//@Autowired
 	protected CalendarController calController;
 	
-	@Autowired
+	//@Autowired
 	protected RepeatController repeatController;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
@@ -820,4 +819,58 @@ public class EventController {
 		}
 		return putConsumed;
 	}
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setGeneratorVelocity(Generator generatorVelocity) {
+		this.generatorVelocity = generatorVelocity;
+	}
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+	public void setCalendarDAO(CalendarDAO calendarDAO) {
+		this.calendarDAO = calendarDAO;
+	}
+
+	public void setEventDAO(EventDAO eventDAO) {
+		this.eventDAO = eventDAO;
+	}
+
+	public void setRepeatDAO(RepeatDAO repeatDAO) {
+		this.repeatDAO = repeatDAO;
+	}
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+	public void setClientDAO(ClientDAO clientDAO) {
+		this.clientDAO = clientDAO;
+	}
+
+	public void setFirmDAO(FirmDAO firmDAO) {
+		this.firmDAO = firmDAO;
+	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setEventDAOGoogle(EventDAOGoogle eventDAOGoogle) {
+		this.eventDAOGoogle = eventDAOGoogle;
+	}
+
+	public void setCalController(CalendarController calController) {
+		this.calController = calController;
+	}
+
+	public void setRepeatController(RepeatController repeatController) {
+		this.repeatController = repeatController;
+	}
+	
+	
 }

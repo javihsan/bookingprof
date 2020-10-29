@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -49,34 +48,34 @@ public class RepeatClientController {
 	
 	protected static final Logger log = Logger.getLogger(RepeatClientController.class.getName());
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	@Autowired
+	//@Autowired
 	protected Generator generatorVelocity;
 	
-	@Autowired
+	//@Autowired
 	protected LocalDAO localDAO;
 	
-	@Autowired
+	//@Autowired
 	protected CalendarDAO calendarDAO;
 	
-	@Autowired
+	//@Autowired
 	protected RepeatClientDAO repeatClientDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalTaskDAO localTaskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ClientDAO clientDAO;
 	
-	@Autowired
+	//@Autowired
 	protected FirmDAO firmDAO;
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 
-	@Autowired
+	//@Autowired
 	protected CalendarController calController;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
@@ -464,8 +463,45 @@ public class RepeatClientController {
 			}
 		}
 	}
-	
-	
-	
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setGeneratorVelocity(Generator generatorVelocity) {
+		this.generatorVelocity = generatorVelocity;
+	}
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+	public void setCalendarDAO(CalendarDAO calendarDAO) {
+		this.calendarDAO = calendarDAO;
+	}
+
+	public void setRepeatClientDAO(RepeatClientDAO repeatClientDAO) {
+		this.repeatClientDAO = repeatClientDAO;
+	}
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+	public void setClientDAO(ClientDAO clientDAO) {
+		this.clientDAO = clientDAO;
+	}
+
+	public void setFirmDAO(FirmDAO firmDAO) {
+		this.firmDAO = firmDAO;
+	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setCalController(CalendarController calController) {
+		this.calController = calController;
+	}	
 	
 }

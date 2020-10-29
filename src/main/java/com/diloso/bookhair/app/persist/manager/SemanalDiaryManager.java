@@ -3,7 +3,6 @@ package com.diloso.bookhair.app.persist.manager;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,7 @@ import com.diloso.bookhair.app.persist.transformer.SemanalDiaryTransformer;
 @Scope(value = "singleton")
 public class SemanalDiaryManager extends Manager implements SemanalDiaryDAO {
 
-	@Autowired
+	//@Autowired
 	protected SemanalDiaryTransformer semanalDiaryTransformer;
 	
 	public SemanalDiaryManager() {
@@ -117,5 +116,11 @@ public class SemanalDiaryManager extends Manager implements SemanalDiaryDAO {
 		return semanalDiaryTransformer.transformEntityToDTO(
 				entitySemanalDiary);
 	}
+
+	public void setSemanalDiaryTransformer(SemanalDiaryTransformer semanalDiaryTransformer) {
+		this.semanalDiaryTransformer = semanalDiaryTransformer;
+	}
+	
+	
 
 }

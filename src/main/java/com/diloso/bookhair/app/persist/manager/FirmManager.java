@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +22,7 @@ import com.diloso.bookhair.app.persist.transformer.FirmTransformer;
 @Scope(value = "singleton")
 public class FirmManager extends Manager implements FirmDAO {
 
-	@Autowired
+	//@Autowired
 	protected FirmTransformer firmTransformer;
 	
 	public FirmManager() {
@@ -263,4 +262,8 @@ public class FirmManager extends Manager implements FirmDAO {
 		return result;
 	}
 
+	public void setFirmTransformer(FirmTransformer firmTransformer) {
+		this.firmTransformer = firmTransformer;
+	}
+	
 }

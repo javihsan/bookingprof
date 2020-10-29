@@ -1,7 +1,6 @@
 package com.diloso.bookhair.app.persist.transformer;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +20,10 @@ public class CalendarTransformer {
 
 	}
 	
-	@Autowired
+	//@Autowired
 	protected ProfessionalDAO professionalDAO;
 	
-	@Autowired
+	//@Autowired
 	protected SemanalDiaryDAO semanalDiaryDAO;
 
 	public Calendar transformDTOToEntity(CalendarDTO calendar){
@@ -71,6 +70,15 @@ public class CalendarTransformer {
 		}
 		return calendar;
 	}
+
+	public void setProfessionalDAO(ProfessionalDAO professionalDAO) {
+		this.professionalDAO = professionalDAO;
+	}
+
+	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
+		this.semanalDiaryDAO = semanalDiaryDAO;
+	}
 	
 		
+	
 }

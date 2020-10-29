@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -35,7 +34,7 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 @Scope(value = "singleton")
 public class AnnualDiaryManager extends Manager implements AnnualDiaryDAO {
 
-	@Autowired
+	//@Autowired
 	protected AnnualDiaryTransformer annualDiaryTransformer;
 	
 	public AnnualDiaryManager() {
@@ -472,5 +471,11 @@ public class AnnualDiaryManager extends Manager implements AnnualDiaryDAO {
 			
 		return annualDiary;
 	}
+
+	public void setAnnualDiaryTransformer(AnnualDiaryTransformer annualDiaryTransformer) {
+		this.annualDiaryTransformer = annualDiaryTransformer;
+	}
+	
+	
 
  }

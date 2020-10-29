@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -36,16 +35,16 @@ public class ProductClassController {
 	
 	protected static final String TCL_NAME_PARAM = "pclName";
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	@Autowired
+	//@Autowired
 	protected ProductClassDAO productClassDAO;
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LangDAO langDAO;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
@@ -180,6 +179,22 @@ public class ProductClassController {
 		ProductClassDTO productClass = productClassDAO.getById(id);	
 					
 		return productClass;
+	}
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setProductClassDAO(ProductClassDAO productClassDAO) {
+		this.productClassDAO = productClassDAO;
+	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setLangDAO(LangDAO langDAO) {
+		this.langDAO = langDAO;
 	}
 	
 

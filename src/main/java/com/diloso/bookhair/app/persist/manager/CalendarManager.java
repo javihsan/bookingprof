@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +21,7 @@ import com.diloso.bookhair.app.persist.transformer.CalendarTransformer;
 public class CalendarManager extends Manager implements CalendarDAO {
 
 	
-	@Autowired
+	//@Autowired
 	protected CalendarTransformer calendarTransformer;
 	
 	public CalendarManager() {
@@ -171,4 +170,10 @@ public class CalendarManager extends Manager implements CalendarDAO {
 		}
 		return resultQuery.size();
 	}
+
+	public void setCalendarTransformer(CalendarTransformer calendarTransformer) {
+		this.calendarTransformer = calendarTransformer;
+	}
+	
+	
 }

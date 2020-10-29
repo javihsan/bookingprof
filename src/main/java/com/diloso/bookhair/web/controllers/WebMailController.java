@@ -16,7 +16,6 @@ import javax.mail.internet.MimeMultipart;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.stereotype.Controller;
@@ -34,10 +33,10 @@ public class WebMailController {
 
 	protected static final Logger log = Logger.getLogger(WebMailController.class.getName());
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	@Autowired
+	//@Autowired
 	protected Generator generatorVelocity;
 		
 	protected void sendMail(HttpServletRequest arg0, HttpServletResponse arg1, 
@@ -150,5 +149,14 @@ public class WebMailController {
 	
 	}
 
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setGeneratorVelocity(Generator generatorVelocity) {
+		this.generatorVelocity = generatorVelocity;
+	}
+
+	
 	
 }

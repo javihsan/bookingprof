@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -33,13 +32,13 @@ public class LocalTaskManager extends Manager implements LocalTaskDAO {
 	public static final String FIELD_MULTI_LOCAL_TASK_NAME = "lotNameMulti";
 	public static final String FIELD_MULTI_LOCAL_TASK_ENTITY_NAME = FIELD_MULTI_LOCAL_TASK_NAME + "Id";
 
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected TaskDAO taskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalTaskTransformer localTaskTransformer;
 	
 	public LocalTaskManager() {
@@ -428,5 +427,19 @@ public class LocalTaskManager extends Manager implements LocalTaskDAO {
 		}
 		return result;
 	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setTaskDAO(TaskDAO taskDAO) {
+		this.taskDAO = taskDAO;
+	}
+
+	public void setLocalTaskTransformer(LocalTaskTransformer localTaskTransformer) {
+		this.localTaskTransformer = localTaskTransformer;
+	}
+	
+	
 	
 }

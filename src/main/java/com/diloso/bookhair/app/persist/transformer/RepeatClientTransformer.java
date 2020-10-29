@@ -1,7 +1,6 @@
 package com.diloso.bookhair.app.persist.transformer;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +20,10 @@ public class RepeatClientTransformer {
 
 	}
 	
-	@Autowired
+	//@Autowired
 	protected RepeatDAO repeatDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ClientDAO clientDAO;
 
 	public RepeatClient transformDTOToEntity(RepeatClientDTO repeatClient){
@@ -71,6 +70,15 @@ public class RepeatClientTransformer {
 		}
 		return repeatClient;
 	}
+
+	public void setRepeatDAO(RepeatDAO repeatDAO) {
+		this.repeatDAO = repeatDAO;
+	}
+
+	public void setClientDAO(ClientDAO clientDAO) {
+		this.clientDAO = clientDAO;
+	}
+	
 	
 		
 }

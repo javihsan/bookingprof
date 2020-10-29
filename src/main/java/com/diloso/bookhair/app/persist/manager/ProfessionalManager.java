@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,7 @@ import com.diloso.bookhair.app.persist.transformer.ProfessionalTransformer;
 @Scope(value = "singleton")
 public class ProfessionalManager extends Manager implements ProfessionalDAO {
 
-	@Autowired
+	//@Autowired
 	protected ProfessionalTransformer professionalTransformer;
 	
 	public ProfessionalManager() {
@@ -163,4 +162,10 @@ public class ProfessionalManager extends Manager implements ProfessionalDAO {
 		return result;
 	}
 
+	public void setProfessionalTransformer(ProfessionalTransformer professionalTransformer) {
+		this.professionalTransformer = professionalTransformer;
+	}
+
+	
+	
 }

@@ -1,7 +1,6 @@
 package com.diloso.bookhair.app.persist.transformer;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,7 @@ public class MultiTextTransformer {
 
 	}
 	
-	@Autowired
+	//@Autowired
 	protected LangDAO langDAO;
 	
 	public MultiText transformDTOToEntity(MultiTextDTO multiText){
@@ -46,6 +45,11 @@ public class MultiTextTransformer {
 		}
 		return multiText;
 	}
+
+	public void setLangDAO(LangDAO langDAO) {
+		this.langDAO = langDAO;
+	}
+	
 	
 	
 }

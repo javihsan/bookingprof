@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -29,19 +28,19 @@ public class LocalTransformer {
 
 	}
 
-	@Autowired
+	//@Autowired
 	protected WhereDAO whereDAO;
 	
-	@Autowired
+	//@Autowired
 	protected SemanalDiaryDAO semanalDiaryDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LangDAO langDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ProfessionalDAO professionalDAO;	
 
-	@Autowired
+	//@Autowired
 	protected SincroDAO sincroDAO;	
 	
 	public Local transformDTOToEntity(LocalDTO local) {
@@ -142,4 +141,26 @@ public class LocalTransformer {
 		return local;
 	}
 
+	public void setWhereDAO(WhereDAO whereDAO) {
+		this.whereDAO = whereDAO;
+	}
+
+	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
+		this.semanalDiaryDAO = semanalDiaryDAO;
+	}
+
+	public void setLangDAO(LangDAO langDAO) {
+		this.langDAO = langDAO;
+	}
+
+	public void setProfessionalDAO(ProfessionalDAO professionalDAO) {
+		this.professionalDAO = professionalDAO;
+	}
+
+	public void setSincroDAO(SincroDAO sincroDAO) {
+		this.sincroDAO = sincroDAO;
+	}
+
+	
+	
 }

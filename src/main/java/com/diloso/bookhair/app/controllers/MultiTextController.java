@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,10 +36,10 @@ public class MultiTextController {
 	public static final String WEB_PROP = "web.";
 	public static final String WEB_CONFIG = "config.";
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected FirmDAO firmDAO;
 	
 	@RequestMapping("/get")
@@ -130,6 +129,16 @@ public class MultiTextController {
 	    }	
 		return listMultiText;
 	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setFirmDAO(FirmDAO firmDAO) {
+		this.firmDAO = firmDAO;
+	}
+	
+	
 
 }
 

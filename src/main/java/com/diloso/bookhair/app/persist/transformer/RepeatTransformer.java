@@ -4,7 +4,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -26,13 +25,13 @@ public class RepeatTransformer {
 
 	}
 
-	@Autowired
+	//@Autowired
 	protected ProfessionalDAO professionalDAO;
 
-	@Autowired
+	//@Autowired
 	protected SemanalDiaryDAO semanalDiaryDAO;
 
-	@Autowired
+	//@Autowired
 	protected LocalTaskDAO localTaskDAO;
 	
 	public Repeat transformDTOToEntity(RepeatDTO repeat) {
@@ -143,4 +142,18 @@ public class RepeatTransformer {
 
 	}
 
+	public void setProfessionalDAO(ProfessionalDAO professionalDAO) {
+		this.professionalDAO = professionalDAO;
+	}
+
+	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
+		this.semanalDiaryDAO = semanalDiaryDAO;
+	}
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+	
+	
 }

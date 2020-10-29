@@ -3,7 +3,6 @@ package com.diloso.bookhair.app.persist.manager;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +20,7 @@ import com.google.appengine.api.datastore.KeyFactory;
 @Scope(value = "singleton")
 public class SincroManager extends Manager implements SincroDAO {
 
-	@Autowired
+	//@Autowired
 	protected SincroTransformer sincroTransformer;
 	
 	public SincroManager() {
@@ -112,5 +111,10 @@ public class SincroManager extends Manager implements SincroDAO {
 		}
 		return sincroTransformer.transformEntityToDTO(entitySincro);
 	}
+
+	public void setSincroTransformer(SincroTransformer sincroTransformer) {
+		this.sincroTransformer = sincroTransformer;
+	}	
+	
 
 }

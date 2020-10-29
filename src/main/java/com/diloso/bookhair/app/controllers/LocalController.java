@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -42,31 +41,31 @@ public class LocalController {
 	
 	protected static final Logger log = Logger.getLogger(LocalController.class.getName());
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 		
-	@Autowired
+	//@Autowired
 	protected LocalDAO localDAO;
 	
-	@Autowired
+	//@Autowired
 	protected FirmDAO firmDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ProfessionalDAO professionalDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LangDAO langDAO;
 	
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected WhereDAO whereDAO;
 	
-	@Autowired
+	//@Autowired
 	protected DiaryDAO diaryDAO;
 	
-	@Autowired
+	//@Autowired
 	protected SemanalDiaryDAO semanalDiaryDAO;
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/admin/new")
@@ -470,5 +469,42 @@ public class LocalController {
 			localDAO.update(local);
 		}
 	}
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+	public void setFirmDAO(FirmDAO firmDAO) {
+		this.firmDAO = firmDAO;
+	}
+
+	public void setProfessionalDAO(ProfessionalDAO professionalDAO) {
+		this.professionalDAO = professionalDAO;
+	}
+
+	public void setLangDAO(LangDAO langDAO) {
+		this.langDAO = langDAO;
+	}
+
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setWhereDAO(WhereDAO whereDAO) {
+		this.whereDAO = whereDAO;
+	}
+
+	public void setDiaryDAO(DiaryDAO diaryDAO) {
+		this.diaryDAO = diaryDAO;
+	}
+
+	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
+		this.semanalDiaryDAO = semanalDiaryDAO;
+	}
+		
 	
 }

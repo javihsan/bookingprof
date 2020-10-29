@@ -12,7 +12,6 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -45,31 +44,31 @@ import com.diloso.bookhair.app.negocio.dto.ProductDTO;
 @RequestMapping(value={"/*/invoice", "/invoice"})
 public class InvoiceController {
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 		
-	@Autowired
+	//@Autowired
 	protected LocalDAO localDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ClientDAO clientDAO;
 	
-	@Autowired
+	//@Autowired
 	protected InvoiceDAO invoiceDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalTaskDAO localTaskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ProductDAO productDAO;
 	
-	@Autowired
+	//@Autowired
 	protected EventDAO eventDAO;
 	
-	@Autowired
+	//@Autowired
 	protected BilledDAO billedDAO;
 	
-	@Autowired
+	//@Autowired
 	protected CalendarDAO calendarDAO;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
@@ -322,6 +321,42 @@ public class InvoiceController {
 		}
 
 		return listInvoice;
+	}
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+	public void setClientDAO(ClientDAO clientDAO) {
+		this.clientDAO = clientDAO;
+	}
+
+	public void setInvoiceDAO(InvoiceDAO invoiceDAO) {
+		this.invoiceDAO = invoiceDAO;
+	}
+
+	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
+		this.localTaskDAO = localTaskDAO;
+	}
+
+	public void setProductDAO(ProductDAO productDAO) {
+		this.productDAO = productDAO;
+	}
+
+	public void setEventDAO(EventDAO eventDAO) {
+		this.eventDAO = eventDAO;
+	}
+
+	public void setBilledDAO(BilledDAO billedDAO) {
+		this.billedDAO = billedDAO;
+	}
+
+	public void setCalendarDAO(CalendarDAO calendarDAO) {
+		this.calendarDAO = calendarDAO;
 	}
 	
 	

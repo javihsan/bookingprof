@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -44,16 +43,16 @@ public class ClientController {
 	
 	public static final String KEY_CACHE_CLIENTS = "CLIENTS";
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	@Autowired
+	//@Autowired
 	protected FirmDAO firmDAO;
 	
-	@Autowired
+	//@Autowired
 	protected ClientDAO clientDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalDAO localDAO;
 	
 	protected UserRegistry userRegistry = new DatastoreUserRegistry();
@@ -204,4 +203,26 @@ public class ClientController {
 							
 		return user;
 	}
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setFirmDAO(FirmDAO firmDAO) {
+		this.firmDAO = firmDAO;
+	}
+
+	public void setClientDAO(ClientDAO clientDAO) {
+		this.clientDAO = clientDAO;
+	}
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+	public void setUserRegistry(UserRegistry userRegistry) {
+		this.userRegistry = userRegistry;
+	}
+	
+	
 }

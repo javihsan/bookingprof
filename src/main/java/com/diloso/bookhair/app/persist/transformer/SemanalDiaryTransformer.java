@@ -1,7 +1,6 @@
 package com.diloso.bookhair.app.persist.transformer;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +18,7 @@ public class SemanalDiaryTransformer {
 
 	}
 	
-	@Autowired
+	//@Autowired
 	protected DiaryDAO diaryDAO;
 	
 	
@@ -104,6 +103,8 @@ public class SemanalDiaryTransformer {
 		return semanalDiary;
 	}
 	
-	
+	public void setDiaryDAO(DiaryDAO diaryDAO) {
+		this.diaryDAO = diaryDAO;
+	}
 	
 }

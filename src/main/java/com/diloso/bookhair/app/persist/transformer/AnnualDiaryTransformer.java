@@ -4,7 +4,6 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +23,7 @@ public class AnnualDiaryTransformer {
 	}
 	
 	
-	@Autowired
+	//@Autowired
 	protected DiaryDAO diaryDAO;
 
 	
@@ -96,5 +95,11 @@ public class AnnualDiaryTransformer {
 
 		return annualDiary;
 	}
+
+	public void setDiaryDAO(DiaryDAO diaryDAO) {
+		this.diaryDAO = diaryDAO;
+	}
+	
+	
 	
 }

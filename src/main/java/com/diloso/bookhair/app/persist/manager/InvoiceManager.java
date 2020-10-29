@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -42,13 +41,13 @@ public class InvoiceManager extends Manager implements InvoiceDAO {
 	public static final String FIELD_MULTI_LOCAL_TASK_NAME = "invNameMulti";
 	public static final String FIELD_MULTI_LOCAL_TASK_ENTITY_NAME = FIELD_MULTI_LOCAL_TASK_NAME + "Id";
 
-	@Autowired
+	//@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	@Autowired
+	//@Autowired
 	protected TaskDAO taskDAO;
 	
-	@Autowired
+	//@Autowired
 	protected InvoiceTransformer invoiceTransformer;
 	
 	public InvoiceManager() {
@@ -298,4 +297,18 @@ public class InvoiceManager extends Manager implements InvoiceDAO {
 
 	}
 
+	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
+		this.multiTextDAO = multiTextDAO;
+	}
+
+	public void setTaskDAO(TaskDAO taskDAO) {
+		this.taskDAO = taskDAO;
+	}
+
+	public void setInvoiceTransformer(InvoiceTransformer invoiceTransformer) {
+		this.invoiceTransformer = invoiceTransformer;
+	}
+
+	
+	
 }

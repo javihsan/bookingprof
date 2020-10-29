@@ -3,7 +3,6 @@ package com.diloso.bookhair.app.persist.manager;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,7 @@ import com.diloso.bookhair.app.persist.transformer.WhereTransformer;
 @Scope(value = "singleton")
 public class WhereManager extends Manager implements WhereDAO {
 
-	@Autowired
+	//@Autowired
 	protected WhereTransformer whereTransformer;
 	
 	public WhereManager() {
@@ -112,4 +111,8 @@ public class WhereManager extends Manager implements WhereDAO {
 		return whereTransformer.transformEntityToDTO(entityWhere);
 	}
 
+	public void setWhereTransformer(WhereTransformer whereTransformer) {
+		this.whereTransformer = whereTransformer;
+	}
+	
 }

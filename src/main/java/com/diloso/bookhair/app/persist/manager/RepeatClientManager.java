@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +21,7 @@ import com.diloso.bookhair.app.persist.transformer.RepeatClientTransformer;
 public class RepeatClientManager extends Manager implements RepeatClientDAO {
 
 	
-	@Autowired
+	//@Autowired
 	protected RepeatClientTransformer repeatClientTransformer;
 	
 	public RepeatClientManager() {
@@ -146,6 +145,11 @@ public class RepeatClientManager extends Manager implements RepeatClientDAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void setRepeatClientTransformer(RepeatClientTransformer repeatClientTransformer) {
+		this.repeatClientTransformer = repeatClientTransformer;
+	}
+	
 	
 
 }

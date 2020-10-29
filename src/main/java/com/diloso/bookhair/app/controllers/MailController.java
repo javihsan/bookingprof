@@ -19,7 +19,6 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,10 +38,10 @@ public class MailController {
 	
 	protected static final String DEMO = "Demo Beauty";
 	
-	@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	@Autowired
+	//@Autowired
 	protected Generator generatorVelocity;
 		
 	protected void sendMail(HttpServletRequest arg0, HttpServletResponse arg1, 
@@ -129,6 +128,14 @@ public class MailController {
 		
 		sendMail ( arg0, arg1, modelNot, "mail.report");
 			
+	}
+
+	public void setMessageSourceApp(MessageSource messageSourceApp) {
+		this.messageSourceApp = messageSourceApp;
+	}
+
+	public void setGeneratorVelocity(Generator generatorVelocity) {
+		this.generatorVelocity = generatorVelocity;
 	}
 	
 	

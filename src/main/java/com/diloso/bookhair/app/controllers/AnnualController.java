@@ -7,7 +7,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,22 +31,22 @@ import com.google.api.services.calendar.model.Event;
 @RequestMapping(value={"/*/annual", "/annual"})
 public class AnnualController {
 	
-	@Autowired
+	//@Autowired
 	protected AnnualDiaryDAO annualDiaryDAO;
 	
-	@Autowired
+	//@Autowired
 	protected LocalDAO localDAO;
 	
-	@Autowired
+	//@Autowired
 	protected CalendarDAO calendarDAO;
 	
-	@Autowired
+	//@Autowired
 	protected DiaryDAO diaryDAO;
 
-	@Autowired
+	//@Autowired
 	protected EventDAOGoogle eventDAOGoogle;
 		
-	@Autowired
+	//@Autowired
 	protected CalendarController calController;
 	
 	@RequestMapping("/listByMonth")
@@ -378,6 +377,31 @@ public class AnnualController {
 		
 		return annualDiary;
 	}
+
+	public void setAnnualDiaryDAO(AnnualDiaryDAO annualDiaryDAO) {
+		this.annualDiaryDAO = annualDiaryDAO;
+	}
+
+	public void setLocalDAO(LocalDAO localDAO) {
+		this.localDAO = localDAO;
+	}
+
+	public void setCalendarDAO(CalendarDAO calendarDAO) {
+		this.calendarDAO = calendarDAO;
+	}
+
+	public void setDiaryDAO(DiaryDAO diaryDAO) {
+		this.diaryDAO = diaryDAO;
+	}
+
+	public void setEventDAOGoogle(EventDAOGoogle eventDAOGoogle) {
+		this.eventDAOGoogle = eventDAOGoogle;
+	}
+
+	public void setCalController(CalendarController calController) {
+		this.calController = calController;
+	}
+	
 	
 }
 
