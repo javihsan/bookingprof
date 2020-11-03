@@ -1,8 +1,1 @@
-<li>
-	{{#tasMultiple}}<div class="right tag accept">{{texts.changePush}}</div>{{/tasMultiple}}
-	<label>{{texts.jobForPerson}} {{tasSelName}}: </label></br>
-	{{#tasMultiple}}<font id="task_{{tasSelId}}"></font>{{/tasMultiple}}
-	{{^tasMultiple}}<label class="select">
-    	<select data-numPerson="{{tasSelId}}" id="task_{{tasSelId}}" data-id="taskSelect" class="custom"></select>
-  	</label>{{/tasMultiple}}
-</li>
+<li> 	{{#tasMultiple}}<div class="right tag accept">{{texts.changePush}}</div>{{/tasMultiple}} 	<label>{{texts.jobForPerson}} {{tasSelName}}: </label></br> 	{{#tasMultiple}}<font id="task_{{tasSelId}}"></font>{{/tasMultiple}} 	{{^tasMultiple}}<label class="select">     	<select data-numPerson="{{tasSelId}}" id="task_{{tasSelId}}" data-id="taskSelect" class="custom"></select>   	</label>{{/tasMultiple}} </li>
