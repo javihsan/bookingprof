@@ -67,9 +67,11 @@
        </article>
     </aside>
     
-    <!-- Google Dependencies -->
-    <script src="http://www.google.com/jsapi?autoload={'modules':[{'name':'visualization',
-       'version':'1.1','packages':['corechart','table','timeline','controls']}]}"></script>
+  
+	<script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+       google.charts.load('current', {packages: ['corechart','table','timeline','controls']});
+    </script>
     
     <!-- App - Dependencies -->
     <script src="/app/model/localModel.js"></script>
@@ -97,7 +99,7 @@
 			
 			__FacadeCore.Service_Settings_async(asyn);
 			
-			if (listLocal.length>1){ // Hay más de un local
+			if (listLocal.length>1){ // Hay mï¿½s de un local
 				localId = __FacadeCore.Storage_get (appName+"localId");
 				if (!localId){
 					__FacadeCore.Router_article("booking","list-local");
