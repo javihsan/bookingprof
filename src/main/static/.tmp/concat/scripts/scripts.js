@@ -299,7 +299,7 @@ var App = {
 			
 			$rootScope.openNotif = function (titleContent, timeHideDelay, funPos) {
 				var toast = $mdToast.simple()
-		          .content(titleContent)
+		          .textContent(titleContent)
 		          //.action('OK')
 		          .hideDelay(timeHideDelay*1000)
 		          //.highlightAction(false)
