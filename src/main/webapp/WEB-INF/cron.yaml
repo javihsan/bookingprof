@@ -1,0 +1,4 @@
+cron:
+- description: "Clean up sessions"
+  url: /_ah/sessioncleanup
+  schedule: every 1 hours
