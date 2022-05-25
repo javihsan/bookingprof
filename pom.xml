@@ -36,7 +36,7 @@
 		<!-- Dependencies versions -->
 		<appengine.target.version>1.9.60</appengine.target.version>
 		<servlet.api.version>2.5</servlet.api.version>
-		<spring.version>3.0.3.RELEASE</spring.version>
+		<spring.version>5.2.22.RELEASE</spring.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
 		<datanucleus.jpa.version>3.1.3</datanucleus.jpa.version>
