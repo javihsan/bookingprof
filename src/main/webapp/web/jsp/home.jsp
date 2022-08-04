@@ -100,7 +100,7 @@ alert("<spring:message code="web.bkprof-contact.textResponse"/>");
 		<div class="content">
 	    	<div id="bkprof-contact-contact" class="cuadro_contenido">
 				<h2><span class="strong"><spring:message code="web.bkprof-contact.telf"/></span> +34 687 901 502</h2>
-				<h2><span class="strong"><spring:message code="web.bkprof-contact.email"/></span> <a href="mailto:info@bookingprof.com">info@bookingprof.com</a></h2>
+				<h2><span class="strong"><spring:message code="web.bkprof-contact.email"/></span> <a href="mailto:info@diloso.com">info@diloso.com</a></h2>
 				<h1>*<spring:message code="web.bkprof-contact.notePrice"/></h1>
 				<h1>**<spring:message code="web.bkprof-contact.notesWindows"/></h1>
 			</div>
