@@ -3,10 +3,6 @@ package com.diloso.bookhair.web.server;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -14,6 +10,10 @@ import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.Transform;
+
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class ImageServe extends HttpServlet {
 
@@ -50,7 +50,7 @@ public class ImageServe extends HttpServlet {
 				}
 			}
 			else {
-				blobstoreService.serve(blobKey, res);
+				//blobstoreService.serve(blobKey, res);
 			}
 		} catch (Exception e) {
 		}

@@ -19,12 +19,10 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.collections.BidiMap;
 import org.apache.commons.collections.bidimap.DualHashBidiMap;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -33,21 +31,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.CalendarDAO;
-import com.diloso.bookhair.app.negocio.dao.ClientDAO;
-import com.diloso.bookhair.app.negocio.dao.DiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.EventDAO;
-import com.diloso.bookhair.app.negocio.dao.FirmDAO;
-import com.diloso.bookhair.app.negocio.dao.LangDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalTaskDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
-import com.diloso.bookhair.app.negocio.dao.ProfessionalDAO;
-import com.diloso.bookhair.app.negocio.dao.SemanalDiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.SincroDAO;
-import com.diloso.bookhair.app.negocio.dao.TaskClassDAO;
-import com.diloso.bookhair.app.negocio.dao.TaskDAO;
-import com.diloso.bookhair.app.negocio.dao.WhereDAO;
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.ClientDTO;
 import com.diloso.bookhair.app.negocio.dto.DiaryDTO;
@@ -64,13 +47,28 @@ import com.diloso.bookhair.app.negocio.dto.SincroDTO;
 import com.diloso.bookhair.app.negocio.dto.TaskClassDTO;
 import com.diloso.bookhair.app.negocio.dto.TaskDTO;
 import com.diloso.bookhair.app.negocio.dto.WhereDTO;
+import com.diloso.bookhair.app.negocio.manager.ICalendarManager;
+import com.diloso.bookhair.app.negocio.manager.IClientManager;
+import com.diloso.bookhair.app.negocio.manager.IDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.IEventManager;
+import com.diloso.bookhair.app.negocio.manager.IFirmManager;
+import com.diloso.bookhair.app.negocio.manager.ILangManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.IProfessionalManager;
+import com.diloso.bookhair.app.negocio.manager.ISemanalDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.ISincroManager;
+import com.diloso.bookhair.app.negocio.manager.ITaskClassManager;
+import com.diloso.bookhair.app.negocio.manager.ITaskManager;
+import com.diloso.bookhair.app.negocio.manager.IWhereManager;
+import com.diloso.bookhair.app.negocio.manager.LocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.MultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.TaskClassManager;
+import com.diloso.bookhair.app.negocio.manager.TaskManager;
 import com.diloso.bookhair.app.negocio.utils.ApplicationContextProvider;
 import com.diloso.bookhair.app.negocio.utils.ExtendMessageSource;
 import com.diloso.bookhair.app.negocio.utils.templates.Generator;
-import com.diloso.bookhair.app.persist.manager.LocalTaskManager;
-import com.diloso.bookhair.app.persist.manager.MultiTextManager;
-import com.diloso.bookhair.app.persist.manager.TaskClassManager;
-import com.diloso.bookhair.app.persist.manager.TaskManager;
 import com.diloso.weblogin.aut.AppRole;
 import com.diloso.weblogin.aut.AppUser;
 import com.diloso.weblogin.aut.DatastoreUserRegistry;
@@ -85,6 +83,9 @@ import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @Controller
 @RequestMapping("/loading")
 public class LoadingController {
@@ -92,56 +93,56 @@ public class LoadingController {
 	protected static final Logger log = Logger
 			.getLogger(LoadingController.class.getName());
 
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 
-	//@Autowired
+	@Autowired
 	protected Generator generatorVelocity;
 
-	//@Autowired
-	protected LocalDAO localDAO;
+	@Autowired
+	protected ILocalManager localManager;
 
-	//@Autowired
-	protected CalendarDAO calendarDAO;
+	@Autowired
+	protected ICalendarManager calendarManager;
 
-	//@Autowired
-	protected FirmDAO firmDAO;
+	@Autowired
+	protected IFirmManager firmManager;
 
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager multiTextManager;
 
-	//@Autowired
-	protected ProfessionalDAO professionalDAO;
+	@Autowired
+	protected IProfessionalManager professionalManager;
 
-	//@Autowired
-	protected LangDAO langDAO;
+	@Autowired
+	protected ILangManager langManager;
 
-	//@Autowired
-	protected WhereDAO whereDAO;
+	@Autowired
+	protected IWhereManager whereManager;
 
-	//@Autowired
-	protected TaskDAO taskDAO;
+	@Autowired
+	protected ITaskManager taskManager;
 
-	//@Autowired
-	protected TaskClassDAO taskClassDAO;
+	@Autowired
+	protected ITaskClassManager taskClassManager;
 
-	//@Autowired
-	protected DiaryDAO diaryDAO;
+	@Autowired
+	protected IDiaryManager diaryManager;
 
-	//@Autowired
-	protected SemanalDiaryDAO semanalDiaryDAO;
+	@Autowired
+	protected ISemanalDiaryManager semanalDiaryManager;
 
-	//@Autowired
-	protected LocalTaskDAO localTaskDAO;
+	@Autowired
+	protected ILocalTaskManager localTaskManager;
 
-	//@Autowired
-	protected SincroDAO sincroDAO;
+	@Autowired
+	protected ISincroManager sincroManager;
 
-	//@Autowired
-	protected EventDAO eventDAO;
+	@Autowired
+	protected IEventManager eventManager;
 
-	//@Autowired
-	protected ClientDAO clientDAO;
+	@Autowired
+	protected IClientManager clientManager;
 
 	protected UserRegistry userRegistry = new DatastoreUserRegistry();
 
@@ -162,31 +163,31 @@ public class LoadingController {
 		lang.setEnabled(1);
 		lang.setLanCode("es");
 		lang.setLanName("Español");
-		lang = langDAO.create(lang);
+		lang = langManager.create(lang);
 		
 		lang = new LangDTO();
 		lang.setEnabled(1);
 		lang.setLanCode("en");
 		lang.setLanName("English");
-		lang = langDAO.create(lang);
+		lang = langManager.create(lang);
 		
 		lang = new LangDTO();
 		lang.setEnabled(1);
 		lang.setLanCode("pt");
 		lang.setLanName("Portugues");
-		lang = langDAO.create(lang);
+		lang = langManager.create(lang);
 		
 		lang = new LangDTO();
 		lang.setEnabled(1);
 		lang.setLanCode("fr");
 		lang.setLanName("Français");
-		lang = langDAO.create(lang);
+		lang = langManager.create(lang);
 
 		lang = new LangDTO();
 		lang.setEnabled(1);
 		lang.setLanCode("eu");
 		lang.setLanName("Euskera");
-		lang = langDAO.create(lang);
+		lang = langManager.create(lang);
 
 		// lang = new LangDTO();
 		// lang.setEnabled(1);
@@ -209,38 +210,38 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Peluquería");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Hairdresser");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Cabeleireiro");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Coiffure");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Ileapaindegia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		taskClassHair.setTclNameMulti(nameKey);
-		taskClassHair = taskClassDAO.create(taskClassHair);
+		taskClassHair = taskClassManager.create(taskClassHair);
 
 		
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -254,39 +255,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Belleza");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Beauty");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 	
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Beleza");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Beauté");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Edertasuna");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		taskClassBeauty.setTclNameMulti(nameKey);
 
-		taskClassBeauty = taskClassDAO.create(taskClassBeauty);
+		taskClassBeauty = taskClassManager.create(taskClassBeauty);
 
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskClassManager.KEY_MULTI_TASKCLASS_NAME + "celebration";
@@ -299,39 +300,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Celebración");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Celebration");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Celebrações");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Célébrations");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Ospakizunak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		taskClassCelebration.setTclNameMulti(nameKey);
 
-		taskClassCelebration = taskClassDAO.create(taskClassCelebration);
+		taskClassCelebration = taskClassManager.create(taskClassCelebration);
 
 		// Task
 
@@ -349,39 +350,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Corte de pelo caballero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Haircut gentleman");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Corte de cabelo cabellero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Coupe de cheveux homme");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Gizonentzat ile mozketa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Peinado caballero
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -397,39 +398,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Peinado caballero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Hairstyle gentleman");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Penteado cabellero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Coiffure homme");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Gizonentzat orrazkera");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Tinte caballero
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -443,39 +444,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Tinte caballero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Dye gentleman");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Corante cabellero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Colorant homme");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Gizonentzat tindatzea");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Mechas caballero
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -490,39 +491,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Mechas caballero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Wicks gentleman");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Mechas cabellero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Wicks homme");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Gizonentzat metxak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Barba
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -536,39 +537,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Barba");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Beard");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Barba");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Barbe");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Bizarra");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Corte de pelo señora
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -582,39 +583,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Corte de pelo señora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Haircut lady");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Corte de cabelo senhora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Coupe de cheveux femmes");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Emakumeen ile mozketa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Peinado señora
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -629,39 +630,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Peinado señora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Hairstyle lady");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Penteado senhora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Coiffure femmes");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Emakumeen orrazkera");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Tinte señora
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -675,39 +676,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Tinte señora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Dye lady");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Corante senhora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Colorant femmes");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Emakumeen tindatzea");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Mechas señora
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -721,39 +722,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Mechas señora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Wicks lady");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Mechas senhora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Wicks femmes");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Emakumeen metxak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Decapar pelo
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -767,39 +768,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Decapar pelo");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Scrape");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Raspar o cabelo");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Grattez les cheveux");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Ilea Desugertu");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Extensiones
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -813,39 +814,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Extensiones");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Extensions");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Extensões");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Extensions");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Luzapenak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Lavar pelo
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -859,39 +860,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Lavar pelo");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Wash hair");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Lavar o cabelo");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Laver les cheveux");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Ilea garbitu");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Corte de pelo niño
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -905,39 +906,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Corte de pelo niño");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Haircut baby");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Corte de cabelo criança");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Coupe de cheveux enfant");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Umearen ile mozketa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Peinado niño
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -952,39 +953,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Peinado niño");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Hairstyle baby");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Penteado criança");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Coiffure enfant");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Umearen orrazkera");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Manicura
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -998,39 +999,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Manicura");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Manicure");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Manicure");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Manucure");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Manikura");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Pedicura
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1044,39 +1045,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Pedicura");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Pedicure");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Pedicure");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Pédicure");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Pedikuro");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Depilación señora
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1090,39 +1091,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Depilación señora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Depilation lady");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Depilação senhora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Epilation femmes");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Emakumeen depilazioa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Depilación caballero
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1137,39 +1138,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Depilación caballero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Depilation gentleman");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Depilação cabellero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Epilation homme");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Gizonentzat depilazioa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Cutis
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1183,39 +1184,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Cutis");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Skin");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Pele");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Complexion");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Aurpegiko larruazala");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Cejas o labio
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1229,39 +1230,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Cejas o labio");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Eyebrows or lip");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Sobrancelhas ou lábio");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Sourcils ou lèvre");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Bekain edo ezpain");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Maquillaje
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1275,39 +1276,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Maquillaje");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Makeup");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Maquiagem");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Maquillage");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Makillajea");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Ingles o axilas
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1321,38 +1322,38 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Ingles o axilas");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Crotches or armpits");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Virilha ou axilas");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Anglais ou aisselles");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Izterondoak edo besapeak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Pestañas
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1366,39 +1367,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Pestañas");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Eyelashes");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 		
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Pestanas");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Cils");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Betileal");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 		
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Novia
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1413,39 +1414,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Novia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Bride");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Noiva");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Jeune mariée");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Emaztegaia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Novio
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1460,39 +1461,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Novio");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Bridegroom");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Noivo");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Jeune marié");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Senargaia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Madrina
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1507,39 +1508,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Madrina");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Godmother");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Madrinha");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Marraine");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Amabitxia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Padrino
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1554,39 +1555,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Padrino");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Godfather");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Padrinho");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Parrain");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Aitabitxia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Invitada
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1601,39 +1602,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Invitada");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Invited lady");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Convidado senhora");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Invité femmes");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Gonbidatua emakumea");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Invitado
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1649,39 +1650,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Invitado");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Invited gentleman");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Convidado cabellero");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Invité homme");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Gonbidatua gizona");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Comunión
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1696,39 +1697,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Comunión");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Communion");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Comunhão");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Communion");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Jaunartzea");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Accesorios
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -1743,39 +1744,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Accesorios");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Accessories");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Acessórios");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Accessoires");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Osagarriak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 	}
 
@@ -1810,7 +1811,7 @@ public class LoadingController {
 		respon.setWhoEmail(firResponEmail);
 		respon.setWhoTelf1(firResponTelf1);
 
-		respon = professionalDAO.create(respon);
+		respon = professionalManager.create(respon);
 		firm.setFirRespon(respon);
 
 		WhereDTO where = new WhereDTO();
@@ -1822,7 +1823,7 @@ public class LoadingController {
 		where.setWheCP(firCP);
 		where.setWheCountry(firCountry);
 
-		where = whereDAO.create(where);
+		where = whereManager.create(where);
 		firm.setFirWhere(where);
 
 		List<String> firGwtUsers = new ArrayList<String>();
@@ -1848,7 +1849,7 @@ public class LoadingController {
 	
 		firm.setFirGwtUsers(firGwtUsers);
 
-		List<TaskClassDTO> firClassTasks = taskClassDAO.getTaskClass();
+		List<TaskClassDTO> firClassTasks = taskClassManager.getTaskClass();
 		List<Long> firClassTasksId = new ArrayList<Long>();
 		for (TaskClassDTO taskClass : firClassTasks) {
 			firClassTasksId.add(taskClass.getId());
@@ -1860,13 +1861,13 @@ public class LoadingController {
 		firm.setFirName(firName);
 		firm.setFirDomain(firDomain);
 
-		firm = firmDAO.create(firm);
+		firm = firmManager.create(firm);
 
 		where.setResFirId(firm.getId());
-		whereDAO.update(where);
+		whereManager.update(where);
 
 		respon.setResFirId(firm.getId());
-		professionalDAO.update(respon);
+		professionalManager.update(respon);
 
 		Set<AppRole> roles = EnumSet.noneOf(AppRole.class);
 		roles.add(AppRole.MANAGER);
@@ -1945,7 +1946,7 @@ public class LoadingController {
 		where.setWheGoogleHoliday(locGoogleHoliday);
 		where.setWheCurrency(locCurrency);
 
-		where = whereDAO.create(where);
+		where = whereManager.create(where);
 
 		local.setLocWhere(where);
 
@@ -1965,11 +1966,11 @@ public class LoadingController {
 
 		diary.setDiaTimes(diaTimes);
 
-		DiaryDTO diaryCreatedMon = diaryDAO.create(diary);
-		DiaryDTO diaryCreatedTue = diaryDAO.create(diary);
-		DiaryDTO diaryCreatedWed = diaryDAO.create(diary);
-		DiaryDTO diaryCreatedThu = diaryDAO.create(diary);
-		DiaryDTO diaryCreatedFri = diaryDAO.create(diary);
+		DiaryDTO diaryCreatedMon = diaryManager.create(diary);
+		DiaryDTO diaryCreatedTue = diaryManager.create(diary);
+		DiaryDTO diaryCreatedWed = diaryManager.create(diary);
+		DiaryDTO diaryCreatedThu = diaryManager.create(diary);
+		DiaryDTO diaryCreatedFri = diaryManager.create(diary);
 
 		SemanalDiaryDTO semanalDiary = new SemanalDiaryDTO();
 		semanalDiary.setEnabled(1);
@@ -1988,24 +1989,24 @@ public class LoadingController {
 
 		diary.setDiaTimes(diaTimes);
 
-		DiaryDTO diaryCreatedSat = diaryDAO.create(diary);
+		DiaryDTO diaryCreatedSat = diaryManager.create(diary);
 		semanalDiary.setSemSatDiary(diaryCreatedSat);
 
 		diaTimes = new ArrayList<String>();
 		diary.setDiaTimes(diaTimes);
-		DiaryDTO diaryCreatedSun = diaryDAO.create(diary);
+		DiaryDTO diaryCreatedSun = diaryManager.create(diary);
 		semanalDiary.setSemSunDiary(diaryCreatedSun);
 
-		semanalDiary = semanalDiaryDAO.create(semanalDiary);
+		semanalDiary = semanalDiaryManager.create(semanalDiary);
 
 		local.setLocSemanalDiary(semanalDiary);
 
 		List<LangDTO> locLangs = new ArrayList<LangDTO>();
-		locLangs.add(langDAO.getByCode("es"));
-		locLangs.add(langDAO.getByCode("en"));
-		locLangs.add(langDAO.getByCode("pt"));
-		locLangs.add(langDAO.getByCode("fr"));
-		locLangs.add(langDAO.getByCode("eu"));
+		locLangs.add(langManager.getByCode("es"));
+		locLangs.add(langManager.getByCode("en"));
+		locLangs.add(langManager.getByCode("pt"));
+		locLangs.add(langManager.getByCode("fr"));
+		locLangs.add(langManager.getByCode("eu"));
 
 		local.setEnabled(1);
 		local.setLocBookingClient(1);
@@ -2032,10 +2033,10 @@ public class LoadingController {
 		respon.setWhoEmail(firResponEmail);
 		respon.setWhoTelf1(firResponTelf1);
 
-		respon = professionalDAO.create(respon);
+		respon = professionalManager.create(respon);
 		local.setLocRespon(respon);
 		
-		local = localDAO.create(local);
+		local = localManager.create(local);
 
 		// Calendar
 		String calName = "Puesto1 Caballeros";// arg0.getParameter("calName");
@@ -2064,11 +2065,11 @@ public class LoadingController {
 		diaTimes.add(strTime);
 		diary.setDiaTimes(diaTimes);
 
-		diaryCreatedMon = diaryDAO.create(diary);
-		diaryCreatedTue = diaryDAO.create(diary);
-		diaryCreatedWed = diaryDAO.create(diary);
-		diaryCreatedThu = diaryDAO.create(diary);
-		diaryCreatedFri = diaryDAO.create(diary);
+		diaryCreatedMon = diaryManager.create(diary);
+		diaryCreatedTue = diaryManager.create(diary);
+		diaryCreatedWed = diaryManager.create(diary);
+		diaryCreatedThu = diaryManager.create(diary);
+		diaryCreatedFri = diaryManager.create(diary);
 
 		semanalDiary = new SemanalDiaryDTO();
 		semanalDiary.setEnabled(1);
@@ -2084,15 +2085,15 @@ public class LoadingController {
 		strTime = "13:45";
 		diaTimes.add(strTime);
 		diary.setDiaTimes(diaTimes);
-		diaryCreatedSat = diaryDAO.create(diary);
+		diaryCreatedSat = diaryManager.create(diary);
 		semanalDiary.setSemSatDiary(diaryCreatedSat);
 
 		diaTimes = new ArrayList<String>();
 		diary.setDiaTimes(diaTimes);
-		diaryCreatedSun = diaryDAO.create(diary);
+		diaryCreatedSun = diaryManager.create(diary);
 		semanalDiary.setSemSunDiary(diaryCreatedSun);
 
-		semanalDiary = semanalDiaryDAO.create(semanalDiary);
+		semanalDiary = semanalDiaryManager.create(semanalDiary);
 
 		CalendarDTO calendar = new CalendarDTO();
 		calendar.setEnabled(1);
@@ -2103,7 +2104,7 @@ public class LoadingController {
 		calendar.setCalLocalTasksId(new ArrayList<Long>());
 		calendar.setCalSemanalDiary(semanalDiary);
 
-		calendarDAO.create(calendar);
+		calendarManager.create(calendar);
 
 		calName = "Puesto2 Caballeros";// arg0.getParameter("calName");
 		calDesc = "Puesto2 para Caballeros";// arg0.getParameter("calDesc");
@@ -2140,11 +2141,11 @@ public class LoadingController {
 		diaTimes.add(strTime);
 		diary.setDiaTimes(diaTimes);
 
-		diaryCreatedMon = diaryDAO.create(diary);
-		diaryCreatedTue = diaryDAO.create(diary);
-		diaryCreatedWed = diaryDAO.create(diary);
-		diaryCreatedThu = diaryDAO.create(diary);
-		diaryCreatedFri = diaryDAO.create(diary);
+		diaryCreatedMon = diaryManager.create(diary);
+		diaryCreatedTue = diaryManager.create(diary);
+		diaryCreatedWed = diaryManager.create(diary);
+		diaryCreatedThu = diaryManager.create(diary);
+		diaryCreatedFri = diaryManager.create(diary);
 
 		semanalDiary = new SemanalDiaryDTO();
 		semanalDiary.setEnabled(1);
@@ -2160,19 +2161,19 @@ public class LoadingController {
 		strTime = "13:45";
 		diaTimes.add(strTime);
 		diary.setDiaTimes(diaTimes);
-		diaryCreatedSat = diaryDAO.create(diary);
+		diaryCreatedSat = diaryManager.create(diary);
 		semanalDiary.setSemSatDiary(diaryCreatedSat);
 
 		diaTimes = new ArrayList<String>();
 		diary.setDiaTimes(diaTimes);
-		diaryCreatedSun = diaryDAO.create(diary);
+		diaryCreatedSun = diaryManager.create(diary);
 		semanalDiary.setSemSunDiary(diaryCreatedSun);
 
-		semanalDiary = semanalDiaryDAO.create(semanalDiary);
+		semanalDiary = semanalDiaryManager.create(semanalDiary);
 
 		calendar.setCalSemanalDiary(semanalDiary);
 
-		calendarDAO.create(calendar);
+		calendarManager.create(calendar);
 
 		// Local2
 
@@ -2197,7 +2198,7 @@ public class LoadingController {
 		where.setWheGoogleHoliday(locGoogleHoliday);
 		where.setWheCurrency(locCurrency);
 
-		where = whereDAO.create(where);
+		where = whereManager.create(where);
 
 		local.setLocWhere(where);
 
@@ -2216,11 +2217,11 @@ public class LoadingController {
 		diaTimes.add(strTime);
 		diary.setDiaTimes(diaTimes);
 
-		diaryCreatedMon = diaryDAO.create(diary);
-		diaryCreatedTue = diaryDAO.create(diary);
-		diaryCreatedWed = diaryDAO.create(diary);
-		diaryCreatedThu = diaryDAO.create(diary);
-		diaryCreatedFri = diaryDAO.create(diary);
+		diaryCreatedMon = diaryManager.create(diary);
+		diaryCreatedTue = diaryManager.create(diary);
+		diaryCreatedWed = diaryManager.create(diary);
+		diaryCreatedThu = diaryManager.create(diary);
+		diaryCreatedFri = diaryManager.create(diary);
 
 		semanalDiary = new SemanalDiaryDTO();
 		semanalDiary.setEnabled(1);
@@ -2236,15 +2237,15 @@ public class LoadingController {
 		strTime = "13:45";
 		diaTimes.add(strTime);
 		diary.setDiaTimes(diaTimes);
-		diaryCreatedSat = diaryDAO.create(diary);
+		diaryCreatedSat = diaryManager.create(diary);
 		semanalDiary.setSemSatDiary(diaryCreatedSat);
 
 		diaTimes = new ArrayList<String>();
 		diary.setDiaTimes(diaTimes);
-		diaryCreatedSun = diaryDAO.create(diary);
+		diaryCreatedSun = diaryManager.create(diary);
 		semanalDiary.setSemSunDiary(diaryCreatedSun);
 
-		semanalDiary = semanalDiaryDAO.create(semanalDiary);
+		semanalDiary = semanalDiaryManager.create(semanalDiary);
 
 		local.setLocSemanalDiary(semanalDiary);
 
@@ -2273,10 +2274,10 @@ public class LoadingController {
 		respon.setWhoEmail(firResponEmail);
 		respon.setWhoTelf1(firResponTelf1);
 
-		respon = professionalDAO.create(respon);
+		respon = professionalManager.create(respon);
 		local.setLocRespon(respon);
 		
-		local = localDAO.create(local);
+		local = localManager.create(local);
 
 		// Calendar
 		calName = "Puesto1 Señoras";// arg0.getParameter("calName");
@@ -2305,11 +2306,11 @@ public class LoadingController {
 		diaTimes.add(strTime);
 		diary.setDiaTimes(diaTimes);
 
-		diaryCreatedMon = diaryDAO.create(diary);
-		diaryCreatedTue = diaryDAO.create(diary);
-		diaryCreatedWed = diaryDAO.create(diary);
-		diaryCreatedThu = diaryDAO.create(diary);
-		diaryCreatedFri = diaryDAO.create(diary);
+		diaryCreatedMon = diaryManager.create(diary);
+		diaryCreatedTue = diaryManager.create(diary);
+		diaryCreatedWed = diaryManager.create(diary);
+		diaryCreatedThu = diaryManager.create(diary);
+		diaryCreatedFri = diaryManager.create(diary);
 
 		semanalDiary = new SemanalDiaryDTO();
 		semanalDiary.setEnabled(1);
@@ -2325,15 +2326,15 @@ public class LoadingController {
 		strTime = "13:45";
 		diaTimes.add(strTime);
 		diary.setDiaTimes(diaTimes);
-		diaryCreatedSat = diaryDAO.create(diary);
+		diaryCreatedSat = diaryManager.create(diary);
 		semanalDiary.setSemSatDiary(diaryCreatedSat);
 
 		diaTimes = new ArrayList<String>();
 		diary.setDiaTimes(diaTimes);
-		diaryCreatedSun = diaryDAO.create(diary);
+		diaryCreatedSun = diaryManager.create(diary);
 		semanalDiary.setSemSunDiary(diaryCreatedSun);
 
-		semanalDiary = semanalDiaryDAO.create(semanalDiary);
+		semanalDiary = semanalDiaryManager.create(semanalDiary);
 
 		calendar.setEnabled(1);
 		calendar.setResFirId(firm.getId());
@@ -2344,7 +2345,7 @@ public class LoadingController {
 
 		calendar.setCalSemanalDiary(semanalDiary);
 
-		calendarDAO.create(calendar);
+		calendarManager.create(calendar);
 
 		calName = "Puesto2 Señoras";// arg0.getParameter("calName");
 		calDesc = "Puesto2 para Señoras";// arg0.getParameter("calDesc");
@@ -2381,11 +2382,11 @@ public class LoadingController {
 		diaTimes.add(strTime);
 		diary.setDiaTimes(diaTimes);
 
-		diaryCreatedMon = diaryDAO.create(diary);
-		diaryCreatedTue = diaryDAO.create(diary);
-		diaryCreatedWed = diaryDAO.create(diary);
-		diaryCreatedThu = diaryDAO.create(diary);
-		diaryCreatedFri = diaryDAO.create(diary);
+		diaryCreatedMon = diaryManager.create(diary);
+		diaryCreatedTue = diaryManager.create(diary);
+		diaryCreatedWed = diaryManager.create(diary);
+		diaryCreatedThu = diaryManager.create(diary);
+		diaryCreatedFri = diaryManager.create(diary);
 
 		semanalDiary = new SemanalDiaryDTO();
 		semanalDiary.setEnabled(1);
@@ -2401,19 +2402,19 @@ public class LoadingController {
 		strTime = "13:45";
 		diaTimes.add(strTime);
 		diary.setDiaTimes(diaTimes);
-		diaryCreatedSat = diaryDAO.create(diary);
+		diaryCreatedSat = diaryManager.create(diary);
 		semanalDiary.setSemSatDiary(diaryCreatedSat);
 
 		diaTimes = new ArrayList<String>();
 		diary.setDiaTimes(diaTimes);
-		diaryCreatedSun = diaryDAO.create(diary);
+		diaryCreatedSun = diaryManager.create(diary);
 		semanalDiary.setSemSunDiary(diaryCreatedSun);
 
-		semanalDiary = semanalDiaryDAO.create(semanalDiary);
+		semanalDiary = semanalDiaryManager.create(semanalDiary);
 
 		calendar.setCalSemanalDiary(semanalDiary);
 
-		calendarDAO.create(calendar);
+		calendarManager.create(calendar);
 
 	}
 	
@@ -2424,7 +2425,7 @@ public class LoadingController {
 
 		LocalTaskDTO localTask = new LocalTaskDTO();
 
-		LocalDTO local = localDAO.getById(localId);
+		LocalDTO local = localManager.getById(localId);
 
 		Integer lotTaskDuration = new Integer(strLotTaskDuration);
 		Integer lotTaskPost = new Integer(strLotTaskPost);
@@ -2441,7 +2442,7 @@ public class LoadingController {
 			nameMulti.setMulKey(keyNameMulti);
 			nameMulti.setMulLanCode(codeLangMap);
 			nameMulti.setMulText(nameValue);
-			multiTextDAO.create(nameMulti);
+			multiTextManager.create(nameMulti);
 		}
 
 		localTask.setEnabled(1);
@@ -2453,7 +2454,7 @@ public class LoadingController {
 		localTask.setLotTaskRate(lotTaskRate);
 		localTask.setLotVisible(1);
 		
-		localTask = localTaskDAO.create(localTask);
+		localTask = localTaskManager.create(localTask);
 
 		// localTask.setEnabled(1);
 		// localTask.setLotLocalId(localId);
@@ -2461,12 +2462,12 @@ public class LoadingController {
 		List<Integer> lotTaskCombiRes = new ArrayList<Integer>();
 		localTask.setLotTaskCombiId(lotTaskCombiId);
 		localTask.setLotTaskCombiRes(lotTaskCombiRes);
-		localTask = localTaskDAO.create(localTask);
+		localTask = localTaskManager.create(localTask);
 
 		if (setLocalDefault) {
 			localTask.setLotDefault(1);
 			local.setLocTaskDefaultId(localTask.getId());
-			localDAO.update(local);
+			localManager.update(local);
 		}
 
 	}
@@ -2477,19 +2478,19 @@ public class LoadingController {
 
 		LocalTaskDTO localTask = new LocalTaskDTO();
 
-		LocalDTO local = localDAO.getById(localId);
+		LocalDTO local = localManager.getById(localId);
 
 		localTask.setEnabled(1);
 		localTask.setLotLocalId(localId);
 		localTask.setLotTaskCombiId(lotTaskCombiId);
 		localTask.setLotTaskCombiRes(lotTaskCombiRes);
 		localTask.setLotVisible(1);
-		localTask = localTaskDAO.create(localTask);
+		localTask = localTaskManager.create(localTask);
 
 		if (setLocalDefault) {
 			localTask.setLotDefault(1);
 			local.setLocTaskDefaultId(localTask.getId());
-			localDAO.update(local);
+			localManager.update(local);
 		}
 
 	}
@@ -2510,7 +2511,7 @@ public class LoadingController {
 		String taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME
 				+ "hairdresser_haircut_gentleman";
-		Long lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		Long lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		Map<String, String> hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Corte pelo caballero");
@@ -2531,7 +2532,7 @@ public class LoadingController {
 		// Corte de pelo señora
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "hairdresser_haircut_lady";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Corte de pelo señora");
@@ -2557,7 +2558,7 @@ public class LoadingController {
 		// Corte de pelo niño
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "hairdresser_haircut_baby";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Corte de pelo niño (hasta 8 años)");
@@ -2577,7 +2578,7 @@ public class LoadingController {
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME
 				+ "hairdresser_hairstyle_lady";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Peinado señora");
@@ -2728,7 +2729,7 @@ public class LoadingController {
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME
 				+ "hairdresser_hairstyle_baby";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Peinado comunión");
@@ -2740,7 +2741,7 @@ public class LoadingController {
 		// Tinte señora
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "hairdresser_dye_lady";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Tinte señora");
@@ -2808,7 +2809,7 @@ public class LoadingController {
 		// Mechas señora
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "hairdresser_wicks_lady";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Mechas señora");
@@ -2870,7 +2871,7 @@ public class LoadingController {
 		// Decapar pelo
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "hairdresser_scrape";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Decapar pelo");
@@ -2896,7 +2897,7 @@ public class LoadingController {
 		// Extensiones
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "hairdresser_extensions";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Extensiones");
@@ -2915,7 +2916,7 @@ public class LoadingController {
 		// Lavar pelo
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "hairdresser_wash";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Lavar pelo");
@@ -2927,7 +2928,7 @@ public class LoadingController {
 		// Manicura
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "beauty_manicure";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Manicura");
@@ -2953,7 +2954,7 @@ public class LoadingController {
 		// Pedicura
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "beauty_pedicure";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Pedicura");
@@ -2979,7 +2980,7 @@ public class LoadingController {
 		// Depilación señora
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "beauty_depilation_lady";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Depilación señora");
@@ -3027,7 +3028,7 @@ public class LoadingController {
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME
 				+ "beauty_depilation_gentleman";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Depilación caballero");
@@ -3061,7 +3062,7 @@ public class LoadingController {
 		// Cutis
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "beauty_skin";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Cutis limpieza");
@@ -3080,7 +3081,7 @@ public class LoadingController {
 		// Cejas o labio
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "beauty_eyebrows_lip";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Cejas");
@@ -3113,7 +3114,7 @@ public class LoadingController {
 		// Maquillaje
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "beauty_makeup";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Maquillaje");
@@ -3139,7 +3140,7 @@ public class LoadingController {
 		// Ingles o axilas
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "beauty_crotches_armpits";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Ingles");
@@ -3172,7 +3173,7 @@ public class LoadingController {
 		// Pestañas
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "beauty_eyelashes";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Pestañas");
@@ -3199,10 +3200,10 @@ public class LoadingController {
 
 		List<Long> lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "hairdresser_dye_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_haircut_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		List<Integer> lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(20);
@@ -3210,13 +3211,13 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "hairdresser_dye_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_haircut_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_hairstyle_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(20);
@@ -3225,10 +3226,10 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "hairdresser_dye_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_hairstyle_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(20);
@@ -3236,10 +3237,10 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "hairdresser_wicks_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_haircut_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(60);
@@ -3247,13 +3248,13 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "hairdresser_wicks_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_haircut_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_hairstyle_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(60);
@@ -3262,10 +3263,10 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "hairdresser_wicks_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_hairstyle_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(60);
@@ -3273,10 +3274,10 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "hairdresser_haircut_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_hairstyle_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(0);
@@ -3284,10 +3285,10 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "hairdresser_haircut_lady";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_hairstyle_lady_molded";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(0);
@@ -3295,10 +3296,10 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "beauty_eyebrows";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "beauty_lip";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(0);
@@ -3306,10 +3307,10 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "beauty_manicure";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "beauty_pedicure";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(0);
@@ -3317,10 +3318,10 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "beauty_crotches";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "beauty_armpits";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(0);
@@ -3344,7 +3345,7 @@ public class LoadingController {
 		String taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME
 				+ "hairdresser_haircut_gentleman";
-		Long lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		Long lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		Map<String, String> hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Corte pelo caballero");
@@ -3357,7 +3358,7 @@ public class LoadingController {
 		// Corte de pelo niño
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "hairdresser_haircut_baby";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Corte de pelo niño (hasta 8 años)");
@@ -3369,7 +3370,7 @@ public class LoadingController {
 		// Tinte caballero
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "hairdresser_dye_gentleman";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Tinte caballero");
@@ -3382,7 +3383,7 @@ public class LoadingController {
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME
 				+ "hairdresser_wicks_gentleman";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Mechas caballero");
@@ -3394,7 +3395,7 @@ public class LoadingController {
 		// Barba
 		taskMulti = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskManager.KEY_MULTI_TASK_NAME + "hairdresser_beard";
-		lotTaskId = (taskDAO.getByName(taskMulti)).getId();
+		lotTaskId = (taskManager.getByName(taskMulti)).getId();
 
 		hashNamesParam = new HashMap<String, String>();
 		hashNamesParam.put("es", "Barba");
@@ -3407,10 +3408,10 @@ public class LoadingController {
 
 		List<Long> lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "hairdresser_dye_gentleman";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_haircut_gentleman";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		List<Integer> lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(20);
@@ -3418,10 +3419,10 @@ public class LoadingController {
 
 		lotTaskCombiId = new ArrayList<Long>();
 		keyNameMulti = keyNameMultiBase + "hairdresser_wicks_gentleman";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		keyNameMulti = keyNameMultiBase + "hairdresser_haircut_gentleman";
-		lotTaskId = (localTaskDAO.getByName(keyNameMulti)).getId();
+		lotTaskId = (localTaskManager.getByName(keyNameMulti)).getId();
 		lotTaskCombiId.add(lotTaskId);
 		lotTaskCombiRes = new ArrayList<Integer>();
 		lotTaskCombiRes.add(40);
@@ -3436,7 +3437,7 @@ public class LoadingController {
 
 		Long localId = new Long(arg0.getParameter("localId"));
 
-		List<LocalTaskDTO> localTaskList = localTaskDAO.getLocalTaskSimpleInv(
+		List<LocalTaskDTO> localTaskList = localTaskManager.getLocalTaskSimpleInv(
 				localId, "es");
 		Collections.sort(localTaskList, new SortByTask());
 		for (LocalTaskDTO localTaskDTO : localTaskList) {
@@ -3561,7 +3562,7 @@ public class LoadingController {
 
 		String calId = arg0.getParameter("id");
 
-		CalendarDTO calendar = calendarDAO.getById(new Long(calId));
+		CalendarDTO calendar = calendarManager.getById(new Long(calId));
 
 		DiaryDTO diary = new DiaryDTO();
 		diary.setEnabled(1);
@@ -3609,8 +3610,8 @@ public class LoadingController {
 		String domain = arg0.getParameter("domain");
 
 		if (domain != null) {
-			FirmDTO firm = firmDAO.getFirmDomainAdmin(domain);
-			List<LocalDTO> localList = localDAO.getLocalAdmin(firm.getId());
+			FirmDTO firm = firmManager.getFirmDomainAdmin(domain);
+			List<LocalDTO> localList = localManager.getLocalAdmin(firm.getId());
 			for (LocalDTO local : localList) {
 
 				SincroDTO sincroGCal = new SincroDTO();
@@ -3627,7 +3628,7 @@ public class LoadingController {
 			}
 		} else {
 			Long localId = new Long(arg0.getParameter("localId"));
-			LocalDTO local = localDAO.getById(localId);
+			LocalDTO local = localManager.getById(localId);
 
 			SincroDTO sincroGCal = new SincroDTO();
 			sincroGCal.setEnabled(1);
@@ -3651,16 +3652,16 @@ public class LoadingController {
 
 		List<LocalDTO> listLocal = null;
 		List<LocalTaskDTO> list = null;
-		List<FirmDTO> firms = firmDAO.getFirmAdmin();
+		List<FirmDTO> firms = firmManager.getFirmAdmin();
 		for (FirmDTO firm : firms) {
-			listLocal = localDAO.getLocalAdmin(firm.getId());
+			listLocal = localManager.getLocalAdmin(firm.getId());
 			for (LocalDTO local : listLocal) {
-				list = localTaskDAO.getLocalTaskAdmin(local.getId(),
+				list = localTaskManager.getLocalTaskAdmin(local.getId(),
 						locale.getLanguage());
 				for (LocalTaskDTO localTask : list) {
 					if (localTask.getLotVisible() == null) {
 						localTask.setLotVisible(1);
-						localTaskDAO.update(localTask);
+						localTaskManager.update(localTask);
 					}
 				}
 			}
@@ -3676,11 +3677,11 @@ public class LoadingController {
 
 		List<LocalDTO> listLocal = null;
 		List<LocalTaskDTO> list = null;
-		List<FirmDTO> firms = firmDAO.getFirmAdmin();
+		List<FirmDTO> firms = firmManager.getFirmAdmin();
 		for (FirmDTO firm : firms) {
-			listLocal = localDAO.getLocalAdmin(firm.getId());
+			listLocal = localManager.getLocalAdmin(firm.getId());
 			for (LocalDTO local : listLocal) {
-				list = localTaskDAO.getLocalTaskAdmin(local.getId(), locale.getLanguage());
+				list = localTaskManager.getLocalTaskAdmin(local.getId(), locale.getLanguage());
 				for (LocalTaskDTO localTaskSearch : list) {
 					List<Long> combi = localTaskSearch.getLotTaskCombiId();
 					if (combi!=null && combi.size()>0){
@@ -3689,11 +3690,11 @@ public class LoadingController {
 						int taskPost = 0;
 						for (Long localTaskComId : combi) {
 							if (indx<combiRes.size()){
-								LocalTaskDTO localTask = localTaskDAO.getById(localTaskComId);
+								LocalTaskDTO localTask = localTaskManager.getById(localTaskComId);
 								if (localTask.getLotTaskPost() == null && combiRes.get(indx)>0) {
 									taskPost = combiRes.get(indx);
 									localTask.setLotTaskPost(taskPost);
-									localTaskDAO.update(localTask);
+									localTaskManager.update(localTask);
 								}
 								indx ++;
 							}
@@ -3712,13 +3713,13 @@ public class LoadingController {
 		List<LocalDTO> listLocal = null;
 		List<CalendarDTO> listCalendar = null;
 		List<EventDTO> list = null;
-		List<FirmDTO> firms = firmDAO.getFirmAdmin();
+		List<FirmDTO> firms = firmManager.getFirmAdmin();
 		for (FirmDTO firm : firms) {
-			listLocal = localDAO.getLocalAdmin(firm.getId());
+			listLocal = localManager.getLocalAdmin(firm.getId());
 			for (LocalDTO local : listLocal) {
-				listCalendar = calendarDAO.getCalendarAdmin(local.getId());
+				listCalendar = calendarManager.getCalendarAdmin(local.getId());
 				for (CalendarDTO calendar : listCalendar) {
-					list = eventDAO.getEventAdmin(calendar);
+					list = eventManager.getEventAdmin(calendar);
 					for (EventDTO event : list) {
 						if (event.getEveEndTime() == null) {
 							LocalTaskDTO localTask = event.getEveLocalTask();
@@ -3727,7 +3728,7 @@ public class LoadingController {
 							calendarGreg.add(Calendar.MINUTE,
 									localTask.getLotTaskDuration());
 							event.setEveEndTime(calendarGreg.getTime());
-							eventDAO.update(event);
+							eventManager.update(event);
 						}
 					}
 				}
@@ -3886,7 +3887,7 @@ public class LoadingController {
 		} else if (idPere.longValue() == 72005) { // Desrizado
 			id = new Long("5156048109305856");
 		}
-		return localTaskDAO.getById(id);
+		return localTaskManager.getById(id);
 	}
 
 	private Long getClientId(long idClient) {
@@ -3942,39 +3943,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Deporte");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Sport");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Esporte");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Sport");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Kirola");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		taskClassSport.setTclNameMulti(nameKey);
 
-		taskClassSport = taskClassDAO.create(taskClassSport);
+		taskClassSport = taskClassManager.create(taskClassSport);
 
 		// Fisio
 
@@ -3989,39 +3990,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Fisio");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Physio");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Fisio");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Physio");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Fisio");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		taskClassPhysio.setTclNameMulti(nameKey);
 
-		taskClassPhysio = taskClassDAO.create(taskClassPhysio);
+		taskClassPhysio = taskClassManager.create(taskClassPhysio);
 
 		// Psicologia
 
@@ -4036,39 +4037,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Psicologia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Psychology");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Psicologia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Psychologie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Psikologia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		taskClassPsychology.setTclNameMulti(nameKey);
 
-		taskClassPsychology = taskClassDAO.create(taskClassPsychology);
+		taskClassPsychology = taskClassManager.create(taskClassPsychology);
 
 		// Pelu canina
 
@@ -4083,39 +4084,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Canina");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Canine");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Canino");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Canin");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Txakurrena");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		taskClassCanine.setTclNameMulti(nameKey);
 
-		taskClassCanine = taskClassDAO.create(taskClassCanine);
+		taskClassCanine = taskClassManager.create(taskClassCanine);
 
 		// Podologia
 
@@ -4130,39 +4131,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Podologia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Chiropody");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Quiropodia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Podologie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Podologia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		taskClassChiropody.setTclNameMulti(nameKey);
 
-		taskClassChiropody = taskClassDAO.create(taskClassChiropody);
+		taskClassChiropody = taskClassManager.create(taskClassChiropody);
 
 		// Dentista
 
@@ -4177,39 +4178,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Dentista");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Dentist");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Dentista");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Dentiste");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Dentista");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		taskClassDentist.setTclNameMulti(nameKey);
 
-		taskClassDentist = taskClassDAO.create(taskClassDentist);
+		taskClassDentist = taskClassManager.create(taskClassDentist);
 
 		// Task
 
@@ -4226,39 +4227,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Tenis");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Tennis");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Tênis");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Tennis");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Tenisa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Padel
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -4273,39 +4274,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Pádel");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Padel");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Padel");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Padel");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Padela");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Fisioterapia
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -4320,39 +4321,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Fisioterapia - Osteopatía");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Physiotherapy - Osteopathy");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Fisioterapia - Osteopatia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Physiothérapie - Ostéopathie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Fisioterapia - Osteopatía");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Crioterapia
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -4367,39 +4368,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Crioterapia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Cryotherapy");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Crioterapia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Cryothérapie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Crioterapia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Psicoterapia
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -4414,39 +4415,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Psicoterapia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Psychotherapy");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Psicoterapia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Psychothérapie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Psikoterapia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Coaching
 
@@ -4462,39 +4463,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Coaching");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Coaching");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Coaching");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Coaching");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Coaching");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Corte perro
 
@@ -4510,39 +4511,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Corte perro");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Dog haircut");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Corte de cabelo cão");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Coupe de cheveux chien");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Txakurreko Ile mozketa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Corte gato
 
@@ -4558,39 +4559,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Corte gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Cat haircut");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Corte de cabelo gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Coupe de cheveux chat");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Katuko Ile mozketa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Lavado perro
 
@@ -4606,39 +4607,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Lavado perro");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Dog wash");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Lavagem do cão");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Lavage de chien");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Txakur-garbiketa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Lavado gato
 
@@ -4654,39 +4655,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Lavado gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Cat wash");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Lavagem do gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Lavage de chat");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Katu-garbiketa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Deslanado perro
 
@@ -4702,39 +4703,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Cepillado - Deslanado perro");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Dog brushing");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Escovação do cão");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Brossage de chien");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Txakur-eskuilatzea");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Deslanado gato
 
@@ -4750,39 +4751,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Cepillado - Deslanado gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Cat brushing");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Escovação do gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Brossage de chat");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Katu-eskuilatzea");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Desparasitacion perro
 
@@ -4798,39 +4799,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Desparasitación perro");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Dog deworming");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Desparasitação do cão");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Déparasitage de chien");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Txakur-desparasitación-a");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Desparasitacion gato
 
@@ -4846,39 +4847,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Desparasitación gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Cat deworming");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Desparasitação do gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Déparasitage de chat");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Katu-desparasitación-a");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Tratamientos perro
 
@@ -4894,39 +4895,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Tratamientos perro");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Dog treatments");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Tratamentos do cão");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Traitements de chien");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Txakur-tratamenduak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Tratamientos gato
 
@@ -4942,39 +4943,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Tratamientos gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Cat treatments");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Tratamentos do gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Traitements de chat");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Katu-tratamenduak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Stripping perro
 
@@ -4990,39 +4991,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Stripping perro");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Dog stripping");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Stripping do cão");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Stripping de chien");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Txakur-stripping");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Stripping gato
 
@@ -5038,39 +5039,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Stripping gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Cat stripping");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Stripping do gato");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Stripping de chat");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Katu-stripping");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Biomecánica
 
@@ -5086,39 +5087,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Biomecánica");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Biomechanics");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Biomecânica");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Biomécanique");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Biomekanika");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Plantillas
 
@@ -5134,39 +5135,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Plantillas");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Templates");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Templates");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Modèles");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Txantiloiak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Patología del pie
 
@@ -5182,39 +5183,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Patología del pie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Foot pathology");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Patologia do pé");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Pathologie de pied");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Oinaren patologia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Cirugía del pie
 
@@ -5230,39 +5231,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Cirugía del pie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Foot surgery");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Cirurgia do pé");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Chirurgie de pied");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Oinaren kirurgia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Estética del pie
 
@@ -5278,39 +5279,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Estética del pie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Foot aesthetics");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Estética do pé");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Esthétique de pied");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Oinaren estetika");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 		
 		// Consulta
 		
@@ -5326,39 +5327,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Consulta");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Consultation");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Consulta");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Consultation");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Kontsulta");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Limpieza de boca
 		
@@ -5374,39 +5375,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Limpieza de boca");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Oral cleaning");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Limpeza bucal");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Nettoyage buccal");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Aho-garbiketa");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Empaste
 		
@@ -5422,39 +5423,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Empaste");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Filling");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Enchimento");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Remplissage");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Enpastea");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Endodoncia
 		
@@ -5470,39 +5471,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Endodoncia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Endodontics");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Endodontia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Endodontie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Endodontzia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Cirugía
 		
@@ -5518,39 +5519,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Cirugía");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Surgery");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Cirurgia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Chirurgie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Kirurgia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Periodoncia
 		
@@ -5566,39 +5567,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Periodoncia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Periodontics");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Periodontia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Parodontie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Periodoncia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Ortodoncia
 		
@@ -5614,39 +5615,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Ortodoncia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Orthodontics");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Ortodontia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Orthodontie");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Ortodontzia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Blanqueamiento
 		
@@ -5662,39 +5663,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Blanqueamiento");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Whitening");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Branqueamento");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Blanchiment");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Blanqueamiento-a");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Implantes
 		
@@ -5710,39 +5711,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Implantes");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Implants");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Implantes");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Implants");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Inplanteak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		// Prótesis o fundas
 		
@@ -5758,39 +5759,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Prótesis o fundas");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Prosthesis or sleeves");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Prótese ou mangas");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Prothèse ou manches");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Protesia edo zorroak");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 
 		
 	}
@@ -5817,39 +5818,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Mercancía");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Goods");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Mercadorias");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Marchandises");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Salgaia");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		taskClassGoods.setTclNameMulti(nameKey);
 
-		taskClassGoods = taskClassDAO.create(taskClassGoods);
+		taskClassGoods = taskClassManager.create(taskClassGoods);
 
 
 		// Task
@@ -5867,39 +5868,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Descarga de mercancía");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Unloading goods");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Descarga de mercadorias");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Marchandises de déchargement");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Salgai-deskarga");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 		
 		// Carga de mercancia
 		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
@@ -5914,39 +5915,39 @@ public class LoadingController {
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("es");
 		nameMulti.setMulText("Carga de mercancía");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("en");
 		nameMulti.setMulText("Loading goods");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("pt");
 		nameMulti.setMulText("Carga de mercadorias");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("fr");
 		nameMulti.setMulText("Marchandises de chargement");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		nameMulti = new MultiTextDTO();
 		nameMulti.setEnabled(1);
 		nameMulti.setMulKey(nameKey);
 		nameMulti.setMulLanCode("eu");
 		nameMulti.setMulText("Salgai-karga");
-		multiTextDAO.create(nameMulti);
+		multiTextManager.create(nameMulti);
 
 		task.setTasNameMulti(nameKey);
 
-		taskDAO.create(task);
+		taskManager.create(task);
 		
 	}
 	
@@ -5957,7 +5958,7 @@ public class LoadingController {
 
 		//String domain = arg0.getParameter("adveo");
 		String domain = "adveo";
-		FirmDTO firm = firmDAO.getFirmDomainAdmin(domain);
+		FirmDTO firm = firmManager.getFirmDomainAdmin(domain);
 		
 		if (firm != null) {
 			
@@ -5983,7 +5984,7 @@ public class LoadingController {
 			client.setWhoTelf1(cliTelf1);
 			client.setCliCreationTime(bookingTime);
 			client.setResFirId(firm.getId());
-			clientDAO.create(client);
+			clientManager.create(client);
 
 			Set<AppRole> roles = EnumSet.noneOf(AppRole.class);
 			roles.add(AppRole.USER);
@@ -6004,7 +6005,7 @@ public class LoadingController {
 			client.setWhoTelf1(cliTelf1);
 			client.setCliCreationTime(bookingTime);
 			client.setResFirId(firm.getId());
-			clientDAO.create(client);
+			clientManager.create(client);
 			
 			if(userRegistry.findUser(cliEmail, firm.getId())==null){
 				user = new AppUser(cliEmail, roles, true, firm.getId());
@@ -6023,7 +6024,7 @@ public class LoadingController {
 			client.setWhoTelf1(cliTelf1);
 			client.setCliCreationTime(bookingTime);
 			client.setResFirId(firm.getId());
-			clientDAO.create(client);
+			clientManager.create(client);
 			
 			if(userRegistry.findUser(cliEmail, firm.getId())==null){
 				user = new AppUser(cliEmail, roles, true, firm.getId());
@@ -6040,7 +6041,7 @@ public class LoadingController {
 				userRegistry.registerUser(user);
 			}
 
-			firm = firmDAO.update(firm);
+			firm = firmManager.update(firm);
 			
 		}
 	}
@@ -6053,44 +6054,44 @@ public class LoadingController {
 		this.generatorVelocity = generatorVelocity;
 	}
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.localManager = iLocalManager;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.multiTextManager = iMultiTextManager;
 	}
 
-	public void setProfessionalDAO(ProfessionalDAO professionalDAO) {
-		this.professionalDAO = professionalDAO;
+	public void setProfessionalDAO(IProfessionalManager iProfessionalManager) {
+		this.professionalManager = iProfessionalManager;
 	}
 
-	public void setLangDAO(LangDAO langDAO) {
-		this.langDAO = langDAO;
+	public void setLangDAO(ILangManager iLangManager) {
+		this.langManager = iLangManager;
 	}
 
-	public void setWhereDAO(WhereDAO whereDAO) {
-		this.whereDAO = whereDAO;
+	public void setWhereDAO(IWhereManager iWhereManager) {
+		this.whereManager = iWhereManager;
 	}
 
-	public void setTaskDAO(TaskDAO taskDAO) {
-		this.taskDAO = taskDAO;
+	public void setTaskDAO(ITaskManager iTaskManager) {
+		this.taskManager = iTaskManager;
 	}
 
-	public void setTaskClassDAO(TaskClassDAO taskClassDAO) {
-		this.taskClassDAO = taskClassDAO;
+	public void setTaskClassDAO(ITaskClassManager iTaskClassManager) {
+		this.taskClassManager = iTaskClassManager;
 	}
 
-	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
-		this.semanalDiaryDAO = semanalDiaryDAO;
+	public void setSemanalDiaryDAO(ISemanalDiaryManager iSemanalDiaryManager) {
+		this.semanalDiaryManager = iSemanalDiaryManager;
 	}
 
-	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
-		this.localTaskDAO = localTaskDAO;
+	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
+		this.localTaskManager = iLocalTaskManager;
 	}
 
-	public void setSincroDAO(SincroDAO sincroDAO) {
-		this.sincroDAO = sincroDAO;
+	public void setSincroDAO(ISincroManager iSincroManager) {
+		this.sincroManager = iSincroManager;
 	}
 
 	public void setUserRegistry(UserRegistry userRegistry) {

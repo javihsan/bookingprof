@@ -16,9 +16,8 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +26,9 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import com.diloso.bookhair.app.negocio.dto.generator.NotifCalendarDTO;
 import com.diloso.bookhair.app.negocio.utils.ApplicationContextProvider;
 import com.diloso.bookhair.app.negocio.utils.templates.Generator;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/mail", "/mail"})
@@ -38,10 +40,10 @@ public class MailController {
 	
 	protected static final String DEMO = "Demo Beauty";
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	//@Autowired
+	@Autowired
 	protected Generator generatorVelocity;
 		
 	protected void sendMail(HttpServletRequest arg0, HttpServletResponse arg1, 
@@ -90,6 +92,7 @@ public class MailController {
 			    String content = generatorVelocity.generate(modelNot, templatePath).toString();
 				DataSource src = new ByteArrayDataSource(content, encode);
 				messageBodyPart.setDataHandler(new DataHandler(src));
+				//messageBodyPart.attachFile(new File("path/to/file"));
 				multipart.addBodyPart(messageBodyPart);
 			    
 			    msg.setContent(multipart);

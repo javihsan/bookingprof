@@ -13,8 +13,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
@@ -26,6 +24,9 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import com.diloso.bookhair.app.negocio.dto.generator.NotifCalendarDTO;
 import com.diloso.bookhair.app.negocio.utils.ApplicationContextProvider;
 import com.diloso.bookhair.app.negocio.utils.templates.Generator;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/webmail")

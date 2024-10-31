@@ -1,22 +1,18 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
 
 /**
  * The persistent class for the RepeatClient entity
  * 
  */
 @Entity
-/*@NamedQueries({
-	@NamedQuery(name="getRepeatClientRep", query = "SELECT t FROM RepeatClient t WHERE t.recRepeatId = :recRepeatId and t.enabled =1 order by recBookingTime desc"),
-	@NamedQuery(name="getRepeatClientCli", query = "SELECT t FROM RepeatClient t WHERE t.recClientId = :recClientId and t.enabled =1 order by recBookingTime desc")
-})*/
-public class RepeatClient extends Resource implements Serializable {
-	protected static final long serialVersionUID = 1L;
-
+@Cache
+public class RepeatClient extends Resource { 
+	
 	protected Long recRepeatId;
 
 	protected Long recClientId;

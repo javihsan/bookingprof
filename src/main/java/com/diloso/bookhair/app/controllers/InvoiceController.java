@@ -9,9 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -24,14 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.BilledDAO;
-import com.diloso.bookhair.app.negocio.dao.CalendarDAO;
-import com.diloso.bookhair.app.negocio.dao.ClientDAO;
-import com.diloso.bookhair.app.negocio.dao.EventDAO;
-import com.diloso.bookhair.app.negocio.dao.InvoiceDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalTaskDAO;
-import com.diloso.bookhair.app.negocio.dao.ProductDAO;
 import com.diloso.bookhair.app.negocio.dto.BilledDTO;
 import com.diloso.bookhair.app.negocio.dto.ClientDTO;
 import com.diloso.bookhair.app.negocio.dto.EventDTO;
@@ -39,37 +29,48 @@ import com.diloso.bookhair.app.negocio.dto.InvoiceDTO;
 import com.diloso.bookhair.app.negocio.dto.LocalDTO;
 import com.diloso.bookhair.app.negocio.dto.LocalTaskDTO;
 import com.diloso.bookhair.app.negocio.dto.ProductDTO;
+import com.diloso.bookhair.app.negocio.manager.IBilledManager;
+import com.diloso.bookhair.app.negocio.manager.ICalendarManager;
+import com.diloso.bookhair.app.negocio.manager.IClientManager;
+import com.diloso.bookhair.app.negocio.manager.IEventManager;
+import com.diloso.bookhair.app.negocio.manager.IInvoiceManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.IProductManager;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/invoice", "/invoice"})
 public class InvoiceController {
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 		
-	//@Autowired
-	protected LocalDAO localDAO;
+	@Autowired
+	protected ILocalManager localManager;
 	
-	//@Autowired
-	protected ClientDAO clientDAO;
+	@Autowired
+	protected IClientManager clientManager;
 	
-	//@Autowired
-	protected InvoiceDAO invoiceDAO;
+	@Autowired
+	protected IInvoiceManager invoiceManager;
 	
-	//@Autowired
-	protected LocalTaskDAO localTaskDAO;
+	@Autowired
+	protected ILocalTaskManager localTaskManager;
 	
-	//@Autowired
-	protected ProductDAO productDAO;
+	@Autowired
+	protected IProductManager productManager;
 	
-	//@Autowired
-	protected EventDAO eventDAO;
+	@Autowired
+	protected IEventManager eventManager;
 	
-	//@Autowired
-	protected BilledDAO billedDAO;
+	@Autowired
+	protected IBilledManager billedManager;
 	
-	//@Autowired
-	protected CalendarDAO calendarDAO;
+	@Autowired
+	protected ICalendarManager calendarManager;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
 	@ResponseStatus(value=HttpStatus.CONFLICT,reason="")
@@ -157,7 +158,7 @@ public class InvoiceController {
 		if (validateNew(arg0, isNew, strInvClientId, cliName, invTime, strInvTask, strInvRate)){
 			
 			Long localId = new Long(arg0.getParameter("localId"));
-			LocalDTO local = localDAO.getById(localId);
+			LocalDTO local = localManager.getById(localId);
 						
 			TimeZone calendarTimeZone = TimeZone.getTimeZone(local.getLocWhere().getWheTimeZone());
 			calendarGreg = new GregorianCalendar();
@@ -170,7 +171,7 @@ public class InvoiceController {
 			
 			ClientDTO invClient = null;
 			if (!isNew){ // Si no es nuevo, buscamos por el id
-				invClient = clientDAO.getById(new Long(strInvClientId));	
+				invClient = clientManager.getById(new Long(strInvClientId));	
 			} else {
 				invClient = new ClientDTO();
 				invClient.setEnabled(1);
@@ -181,7 +182,7 @@ public class InvoiceController {
 				invClient.setWhoName(cliName);
 				invClient.setWhoSurname(cliSurname);
 				invClient.setCliCreationTime(invIssueTime);
-				invClient = clientDAO.create(invClient);
+				invClient = clientManager.create(invClient);
 			}
 			
 			// Rates
@@ -201,14 +202,14 @@ public class InvoiceController {
 			invoice.setInvRate(invRate);
 			invoice.setInvTime(invTime);
 			
-			invoice = invoiceDAO.create(invoice);
+			invoice = invoiceManager.create(invoice);
 			
 			String ICS = arg0.getParameter("ICS");
 			if (ICS !=null){
-				List<EventDTO> listEventLocal = eventDAO.getEventByICS(ICS);
+				List<EventDTO> listEventLocal = eventManager.getEventByICS(ICS);
 				for (EventDTO event : listEventLocal) {
 					event.setEveConsumed(1);
-					eventDAO.update(event);
+					eventManager.update(event);
 				}
 			}	
 			
@@ -240,9 +241,9 @@ public class InvoiceController {
 		ProductDTO bilProduct = null;
 
 		if (bilType==0){
-			bilTask = localTaskDAO.getById(bilTaskId);
+			bilTask = localTaskManager.getById(bilTaskId);
 		} else {
-			bilProduct = productDAO.getById(bilTaskId);
+			bilProduct = productManager.getById(bilTaskId);
 		}
 		
 		BilledDTO billed = new BilledDTO();
@@ -256,7 +257,7 @@ public class InvoiceController {
 		billed.setBilRate(bilRate);
 		billed.setBilTime(bilInvoice.getInvTime());
 				
-		billed = billedDAO.create(billed);
+		billed = billedManager.create(billed);
 	
 	}
 
@@ -264,7 +265,7 @@ public class InvoiceController {
 	protected @ResponseBody
 	InvoiceDTO get(@RequestParam("id") Long id) throws Exception {
 
-		InvoiceDTO invoice = invoiceDAO.getById(id);	
+		InvoiceDTO invoice = invoiceManager.getById(id);	
 					
 		return invoice;
 	}
@@ -275,10 +276,10 @@ public class InvoiceController {
 
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		List<InvoiceDTO> listInvoice = invoiceDAO.getInvoiceByWeek(localId, selectedDate);
+		List<InvoiceDTO> listInvoice = invoiceManager.getInvoiceByWeek(localId, selectedDate);
 		
 		for (InvoiceDTO invoice : listInvoice) {
-			List<BilledDTO> listBilled = billedDAO.getBilledByInvoice(invoice.getId(), locale.getLanguage());
+			List<BilledDTO> listBilled = billedManager.getBilledByInvoice(invoice.getId(), locale.getLanguage());
 			String strBilleds = "";
 			for (BilledDTO billed : listBilled) {
 				if (strBilleds!=""){
@@ -302,10 +303,10 @@ public class InvoiceController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		List<InvoiceDTO> listInvoice = invoiceDAO.getInvoiceByClientAgo(localId,id);
+		List<InvoiceDTO> listInvoice = invoiceManager.getInvoiceByClientAgo(localId,id);
 
 		for (InvoiceDTO invoice : listInvoice) {
-			List<BilledDTO> listBilled = billedDAO.getBilledByInvoice(invoice.getId(), locale.getLanguage());
+			List<BilledDTO> listBilled = billedManager.getBilledByInvoice(invoice.getId(), locale.getLanguage());
 			String strBilleds = "";
 			for (BilledDTO billed : listBilled) {
 				if (strBilleds!=""){
@@ -327,36 +328,36 @@ public class InvoiceController {
 		this.messageSourceApp = messageSourceApp;
 	}
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.localManager = iLocalManager;
 	}
 
-	public void setClientDAO(ClientDAO clientDAO) {
-		this.clientDAO = clientDAO;
+	public void setClientDAO(IClientManager iClientManager) {
+		this.clientManager = iClientManager;
 	}
 
-	public void setInvoiceDAO(InvoiceDAO invoiceDAO) {
-		this.invoiceDAO = invoiceDAO;
+	public void setInvoiceDAO(IInvoiceManager iInvoiceManager) {
+		this.invoiceManager = iInvoiceManager;
 	}
 
-	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
-		this.localTaskDAO = localTaskDAO;
+	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
+		this.localTaskManager = iLocalTaskManager;
 	}
 
-	public void setProductDAO(ProductDAO productDAO) {
-		this.productDAO = productDAO;
+	public void setProductDAO(IProductManager iProductManager) {
+		this.productManager = iProductManager;
 	}
 
-	public void setEventDAO(EventDAO eventDAO) {
-		this.eventDAO = eventDAO;
+	public void setEventDAO(IEventManager iEventManager) {
+		this.eventManager = iEventManager;
 	}
 
-	public void setBilledDAO(BilledDAO billedDAO) {
-		this.billedDAO = billedDAO;
+	public void setBilledDAO(IBilledManager iBilledManager) {
+		this.billedManager = iBilledManager;
 	}
 
-	public void setCalendarDAO(CalendarDAO calendarDAO) {
-		this.calendarDAO = calendarDAO;
+	public void setCalendarDAO(ICalendarManager iCalendarManager) {
+		this.calendarManager = iCalendarManager;
 	}
 	
 	

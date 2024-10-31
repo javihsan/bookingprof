@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,15 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.diloso.bookhair.app.negocio.dao.AnnualDiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.CalendarDAO;
-import com.diloso.bookhair.app.negocio.dao.DiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.EventDAOGoogle;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
 import com.diloso.bookhair.app.negocio.dto.AnnualDiaryDTO;
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.DiaryDTO;
 import com.diloso.bookhair.app.negocio.dto.LocalDTO;
+import com.diloso.bookhair.app.negocio.manager.IAnnualDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.ICalendarManager;
+import com.diloso.bookhair.app.negocio.manager.IDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.IEventManagerGoogle;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.Event;
 
@@ -31,29 +32,29 @@ import com.google.api.services.calendar.model.Event;
 @RequestMapping(value={"/*/annual", "/annual"})
 public class AnnualController {
 	
-	//@Autowired
-	protected AnnualDiaryDAO annualDiaryDAO;
+	@Autowired
+	protected IAnnualDiaryManager annualDiaryManager;
 	
-	//@Autowired
-	protected LocalDAO localDAO;
+	@Autowired
+	protected ILocalManager localManager;
 	
-	//@Autowired
-	protected CalendarDAO calendarDAO;
+	@Autowired
+	protected ICalendarManager calendarManager;
 	
-	//@Autowired
-	protected DiaryDAO diaryDAO;
+	@Autowired
+	protected IDiaryManager diaryManager;
 
-	//@Autowired
-	protected EventDAOGoogle eventDAOGoogle;
+	@Autowired
+	protected IEventManagerGoogle eventManagerGoogle;
 		
-	//@Autowired
+	@Autowired
 	protected CalendarController calController;
 	
 	@RequestMapping("/listByMonth")
 	protected @ResponseBody
 	List<AnnualDiaryDTO> listByMonth(@RequestParam("localId") Long localId, @RequestParam("selectedDate") String selectedDate) throws Exception {
 
-		List<AnnualDiaryDTO> listAnnual = annualDiaryDAO.getAnnualDiaryByMonth(localId, selectedDate);
+		List<AnnualDiaryDTO> listAnnual = annualDiaryManager.getAnnualDiaryByMonth(localId, selectedDate);
 	
 		return listAnnual;
 	}
@@ -62,7 +63,7 @@ public class AnnualController {
 	protected @ResponseBody
 	List<AnnualDiaryDTO> listCalendarByMonth(@RequestParam("id") Long id, @RequestParam("selectedDate") String selectedDate) throws Exception {
 
-		List<AnnualDiaryDTO> listAnnual = annualDiaryDAO.getAnnualDiaryCalendarByMonth(id, selectedDate);
+		List<AnnualDiaryDTO> listAnnual = annualDiaryManager.getAnnualDiaryCalendarByMonth(id, selectedDate);
 	
 		return listAnnual;
 	}
@@ -71,9 +72,9 @@ public class AnnualController {
 	protected @ResponseBody
 	List<AnnualDiaryDTO> getAnnualDiaryByDate(@RequestParam("localId") Long localId, @RequestParam("selectedDate") String selectedDate) throws Exception {
 		
-		LocalDTO local = localDAO.getById(localId);
+		LocalDTO local = localManager.getById(localId);
 		
-		List<AnnualDiaryDTO> listAnnual = annualDiaryDAO.getAnnualDiaryByDate(localId, selectedDate, local.getLocOpenDays());
+		List<AnnualDiaryDTO> listAnnual = annualDiaryManager.getAnnualDiaryByDate(localId, selectedDate, local.getLocOpenDays());
 	
 		return listAnnual;
 	}
@@ -82,9 +83,9 @@ public class AnnualController {
 	protected @ResponseBody
 	List<AnnualDiaryDTO> getAnnualDiaryCalendarByDate(@RequestParam("id") Long id, @RequestParam("localId") Long localId, @RequestParam("selectedDate") String selectedDate) throws Exception {
 		
-		LocalDTO local = localDAO.getById(localId);
+		LocalDTO local = localManager.getById(localId);
 		
-		List<AnnualDiaryDTO> listAnnual = annualDiaryDAO.getAnnualDiaryCalendarByDate(id, selectedDate, local.getLocOpenDays());
+		List<AnnualDiaryDTO> listAnnual = annualDiaryManager.getAnnualDiaryCalendarByDate(id, selectedDate, local.getLocOpenDays());
 	
 		return listAnnual;
 	}
@@ -93,12 +94,12 @@ public class AnnualController {
 	protected @ResponseBody
 	DiaryDTO listByDay(@RequestParam("localId") Long localId, @RequestParam("selectedDate") String selectedDate) throws Exception {
 		
-		LocalDTO local = localDAO.getById(localId);
+		LocalDTO local = localManager.getById(localId);
 		
 		DiaryDTO diaryDTO = null;
 		
 		// Comprobamos si esta fecha esta señalada en la agenda anual del local
-		AnnualDiaryDTO annualDiaryDTO = annualDiaryDAO.getAnnualDiaryByDay(new Long(localId), selectedDate);
+		AnnualDiaryDTO annualDiaryDTO = annualDiaryManager.getAnnualDiaryByDay(new Long(localId), selectedDate);
 		if (annualDiaryDTO!=null){ // Esta fecha esta señalada en la agenda anual del local
 			if (annualDiaryDTO.getAnuClosed()==0 && annualDiaryDTO.getAnuDayDiary()!=null){
 				diaryDTO = annualDiaryDTO.getAnuDayDiary(); // asignamos la agenda de la fecha anual del local
@@ -118,12 +119,12 @@ public class AnnualController {
 	DiaryDTO listCalendarByDay(@RequestParam("id") Long id, @RequestParam("selectedDate") String selectedDate) throws Exception {
 
 		// Propiedades de calendar
-		CalendarDTO calendar = calendarDAO.getById(id);
+		CalendarDTO calendar = calendarManager.getById(id);
 		
 		DiaryDTO diaryDTO = null;
 		
 		// Comprobamos si esta fecha esta señalada en la agenda anual del puesto
-		AnnualDiaryDTO annualDiaryDTO = annualDiaryDAO.getAnnualDiaryCalendarByDay(id, selectedDate);
+		AnnualDiaryDTO annualDiaryDTO = annualDiaryManager.getAnnualDiaryCalendarByDay(id, selectedDate);
 		if (annualDiaryDTO!=null){ // Esta fecha esta señalada en la agenda anual del puesto
 			if (annualDiaryDTO.getAnuClosed()==0 && annualDiaryDTO.getAnuDayDiary()!=null){
 				diaryDTO = annualDiaryDTO.getAnuDayDiary(); // asignamos la agenda de la fecha anual del puesto
@@ -143,7 +144,7 @@ public class AnnualController {
 			throws Exception {
 
 		// Propiedades de local
-		LocalDTO local = localDAO.getById(id);
+		LocalDTO local = localManager.getById(id);
 		
 		Calendar calendarGreg = new GregorianCalendar();
 		calendarGreg.set(Calendar.MILLISECOND, 0);
@@ -156,7 +157,7 @@ public class AnnualController {
 		DateTime startTime = new DateTime(eveStartTime, calendarTimeZone);
 		DateTime endTime = new DateTime(eveEndTime, calendarTimeZone);
 		
-		List<Event> datesGoogle = eventDAOGoogle.getEvent(local,startTime,endTime);
+		List<Event> datesGoogle = eventManagerGoogle.getEvent(local,startTime,endTime);
 		
 		for (Event dateGoogle : datesGoogle) {
 			startTime = dateGoogle.getStart().getDate();
@@ -176,9 +177,9 @@ public class AnnualController {
 	protected void closeLocal(Long localId, String selectedDate, boolean closeIfClean) throws Exception {	
 		
 		// Propiedades de local
-		LocalDTO local = localDAO.getById(localId);
+		LocalDTO local = localManager.getById(localId);
 					
-		AnnualDiaryDTO annualDiary = annualDiaryDAO.getAnnualDiaryByDay(localId, selectedDate);
+		AnnualDiaryDTO annualDiary = annualDiaryManager.getAnnualDiaryByDay(localId, selectedDate);
 		int close = 1; // por defecto la vamos a cerrar
 		/* La creamos. Solo se puede crear para cerrar, porque abrir significa que estaba 
 		 * cerrada, con lo que existiría. 
@@ -198,7 +199,7 @@ public class AnnualController {
 			
 			annualDiary = getAnnualDiary(selectedDate,null,close);
 			annualDiary.setAnuLocalId(localId);
-			annualDiary= annualDiaryDAO.create(annualDiary);
+			annualDiary= annualDiaryManager.create(annualDiary);
 			
 		} else if (!closeIfClean){ // Si no es un "intento de cerrado si no existe", la actualizamos, cambiamos su actual estado
 			if (annualDiary.getAnuClosed()==1){
@@ -207,11 +208,11 @@ public class AnnualController {
 				close = 1;
 			}
 			annualDiary.setAnuClosed(close);
-			annualDiaryDAO.update(annualDiary);
+			annualDiaryManager.update(annualDiary);
 		}
 
 		// Hay que modificar (abrir/cerrar) todos los puestos del local
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendar(local.getId());
+		List<CalendarDTO> listCalendar = calendarManager.getCalendar(local.getId());
 		for (CalendarDTO calendar : listCalendar) {
 			closeCalendar(calendar.getId(),selectedDate,close);
 		}
@@ -229,9 +230,9 @@ public class AnnualController {
 	protected void closeCalendar(Long id, String selectedDate, Integer close) throws Exception {
 		
 		// Propiedades de calendar
-		CalendarDTO calendar = calendarDAO.getById(id);
+		CalendarDTO calendar = calendarManager.getById(id);
 				
-		AnnualDiaryDTO annualDiary = annualDiaryDAO.getAnnualDiaryCalendarByDay(id, selectedDate);
+		AnnualDiaryDTO annualDiary = annualDiaryManager.getAnnualDiaryCalendarByDay(id, selectedDate);
 		/* La creamos. Solo se puede crear para cerrar, porque abrir significa que estaba 
 		 * cerrada, con lo que existiría. 
 		 * A no ser que fuera un cerrado por dia semanal, entonces solo se puede crear para abrir, 
@@ -251,7 +252,7 @@ public class AnnualController {
 			}
 			annualDiary = getAnnualDiary(selectedDate,null,close);
 			annualDiary.setAnuCalendarId(id);
-			annualDiaryDAO.create(annualDiary);
+			annualDiaryManager.create(annualDiary);
 		} else {
 			if (close==null){
 				if (annualDiary.getAnuClosed()==1){
@@ -261,7 +262,7 @@ public class AnnualController {
 				}
 			}
 			annualDiary.setAnuClosed(close);
-			annualDiaryDAO.update(annualDiary);
+			annualDiaryManager.update(annualDiary);
 		}
 	}
 
@@ -271,11 +272,11 @@ public class AnnualController {
 	protected void hoursLocal(@RequestParam("localId") Long localId, @RequestParam("selectedDate") String selectedDate, @RequestParam("selectedTimes") String selectedTimes)
 			throws Exception {
 					
-		AnnualDiaryDTO annualDiary = annualDiaryDAO.getAnnualDiaryByDay(localId, selectedDate);
+		AnnualDiaryDTO annualDiary = annualDiaryManager.getAnnualDiaryByDay(localId, selectedDate);
 		if (annualDiary==null){ // La creamos
 			annualDiary = getAnnualDiary(selectedDate,selectedTimes,-1);
 			annualDiary.setAnuLocalId(localId);
-			annualDiaryDAO.create(annualDiary);
+			annualDiaryManager.create(annualDiary);
 		} else if (annualDiary.getAnuClosed()==0){ // Si está abierta, la modificamos
 			String[] a = selectedTimes.split(",");
 			List<String> diaTimes = new ArrayList<String>();
@@ -287,17 +288,17 @@ public class AnnualController {
 			if (annualDiary.getAnuDayDiary()!=null){ // Si ya tiene horario especial lo modificamos
 				diary = annualDiary.getAnuDayDiary();
 				diary.setDiaTimes(diaTimes);
-				diaryDAO.update(diary);
+				diaryManager.update(diary);
 			} else { // Si no tiene horario especial lo creamos
 				diary.setDiaTimes(diaTimes);
 				diary.setEnabled(1);
-				diary = diaryDAO.create(diary);
+				diary = diaryManager.create(diary);
 			}
 			annualDiary.setAnuDayDiary(diary);
-			annualDiaryDAO.update(annualDiary);
+			annualDiaryManager.update(annualDiary);
 		}
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendar(localId);
+		List<CalendarDTO> listCalendar = calendarManager.getCalendar(localId);
 		for (CalendarDTO calendar : listCalendar) {
 			hoursCalendar(calendar.getId(), selectedDate, selectedTimes);
 		}
@@ -309,11 +310,11 @@ public class AnnualController {
 	protected void hoursCalendar(@RequestParam("id") Long id, @RequestParam("selectedDate") String selectedDate, @RequestParam("selectedTimes") String selectedTimes)
 			throws Exception {
 		
-		AnnualDiaryDTO annualDiary = annualDiaryDAO.getAnnualDiaryCalendarByDay(id, selectedDate);
+		AnnualDiaryDTO annualDiary = annualDiaryManager.getAnnualDiaryCalendarByDay(id, selectedDate);
 		if (annualDiary==null){ // La creamos
 			annualDiary = getAnnualDiary(selectedDate,selectedTimes,-1);
 			annualDiary.setAnuCalendarId(id);
-			annualDiaryDAO.create(annualDiary);
+			annualDiaryManager.create(annualDiary);
 		} else if (annualDiary.getAnuClosed()==0){ // Si está abierta, la modificamos
 			String[] a = selectedTimes.split(",");
 			List<String> diaTimes = new ArrayList<String>();
@@ -325,14 +326,14 @@ public class AnnualController {
 			if (annualDiary.getAnuDayDiary()!=null){ // Si ya tiene horario especial lo modificamos
 				diary = annualDiary.getAnuDayDiary();
 				diary.setDiaTimes(diaTimes);
-				diaryDAO.update(diary);
+				diaryManager.update(diary);
 			} else { // Si no tiene horario especial lo creamos
 				diary.setDiaTimes(diaTimes);
 				diary.setEnabled(1);
-				diary = diaryDAO.create(diary);
+				diary = diaryManager.create(diary);
 			}
 			annualDiary.setAnuDayDiary(diary);
-			annualDiaryDAO.update(annualDiary);
+			annualDiaryManager.update(annualDiary);
 		}
 				
 	}
@@ -371,31 +372,31 @@ public class AnnualController {
 				diaTimes.add(strTime);
 			}
 			diary.setDiaTimes(diaTimes);
-			diary = diaryDAO.create(diary);
+			diary = diaryManager.create(diary);
 			annualDiary.setAnuDayDiary(diary);
 		}
 		
 		return annualDiary;
 	}
 
-	public void setAnnualDiaryDAO(AnnualDiaryDAO annualDiaryDAO) {
-		this.annualDiaryDAO = annualDiaryDAO;
+	public void setAnnualDiaryDAO(IAnnualDiaryManager iAnnualDiaryManager) {
+		this.annualDiaryManager = iAnnualDiaryManager;
 	}
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.localManager = iLocalManager;
 	}
 
-	public void setCalendarDAO(CalendarDAO calendarDAO) {
-		this.calendarDAO = calendarDAO;
+	public void setCalendarDAO(ICalendarManager iCalendarManager) {
+		this.calendarManager = iCalendarManager;
 	}
 
-	public void setDiaryDAO(DiaryDAO diaryDAO) {
-		this.diaryDAO = diaryDAO;
+	public void setDiaryDAO(IDiaryManager iDiaryManager) {
+		this.diaryManager = iDiaryManager;
 	}
 
-	public void setEventDAOGoogle(EventDAOGoogle eventDAOGoogle) {
-		this.eventDAOGoogle = eventDAOGoogle;
+	public void setEventDAOGoogle(IEventManagerGoogle iEventManagerGoogle) {
+		this.eventManagerGoogle = iEventManagerGoogle;
 	}
 
 	public void setCalController(CalendarController calController) {

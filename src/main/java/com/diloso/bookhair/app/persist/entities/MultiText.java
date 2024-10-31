@@ -1,33 +1,23 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import com.diloso.bookhair.app.datastore.data.StorableWithModificationTimestamp;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * The persistent class for the MultiText entity
  * 
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name="getMultiText", query = "SELECT t FROM MultiText t WHERE t.enabled =1 order by t.id asc"),
-	@NamedQuery(name="getMultiLangCode", query = "SELECT t FROM MultiText t WHERE t.mulLanCode=:mulLanCode and t.enabled =1 order by t.id asc"),
-	@NamedQuery(name="getMultiKey", query = "SELECT t FROM MultiText t WHERE t.mulKey=:mulKey and t.enabled =1 order by t.id asc"),
-	@NamedQuery(name="getByLanCodeAndKey", query = "SELECT t FROM MultiText t WHERE t.mulLanCode=:mulLanCode and t.mulKey=:mulKey and t.enabled =1 order by t.id asc")
-})
-public class MultiText implements Serializable {
-
-	protected static final long serialVersionUID = 1L;
+@Cache
+public class MultiText extends StorableWithModificationTimestamp<Long> { 
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Long id;
 	
+	@Index
 	protected Integer enabled;
 	
 	protected String mulKey;

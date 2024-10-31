@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,13 +19,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.LangDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
-import com.diloso.bookhair.app.negocio.dao.TaskClassDAO;
 import com.diloso.bookhair.app.negocio.dto.LangDTO;
 import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 import com.diloso.bookhair.app.negocio.dto.TaskClassDTO;
-import com.diloso.bookhair.app.persist.manager.TaskClassManager;
+import com.diloso.bookhair.app.negocio.manager.ILangManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.ITaskClassManager;
+import com.diloso.bookhair.app.negocio.manager.TaskClassManager;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/taskClass", "/taskClass"})
@@ -35,17 +36,17 @@ public class TaskClassController {
 	
 	protected static final String TCL_NAME_PARAM = "tclName";
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	//@Autowired
-	protected TaskClassDAO taskClassDAO;
+	@Autowired
+	protected ITaskClassManager taskClassManager;
 	
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager multiTextManager;
 	
-	//@Autowired
-	protected LangDAO langDAO;
+	@Autowired
+	protected ILangManager langManager;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
 	@ResponseStatus(value=HttpStatus.CONFLICT,reason="")
@@ -90,14 +91,14 @@ public class TaskClassController {
 			TaskClassDTO taskClass = new TaskClassDTO();
 			
 			if (tclId!=null){ // Existe
-				taskClass = taskClassDAO.getById(new Long(tclId));
+				taskClass = taskClassManager.getById(new Long(tclId));
 			}
 			
 			String nameValue = "";
 			String keyNameMulti = TaskClassManager.KEY_MULTI_TASKCLASS_NAME+localId+"_"+defaultNameValue.toLowerCase();
 			Map<String,String> hashNamesParam = new HashMap<String,String>();
 
-			List<LangDTO> listLang = langDAO.getLang();	
+			List<LangDTO> listLang = langManager.getLang();	
 			for (LangDTO lang : listLang) {
 				nameValue = arg0.getParameter(TCL_NAME_PARAM+"_"+lang.getLanCode());
 				if (nameValue == null || nameValue.length()==0){
@@ -107,15 +108,15 @@ public class TaskClassController {
 			}
 
 			if (tclId!=null){ // Existe
-				List<MultiTextDTO> listMulti = multiTextDAO.getMultiTextByKey(taskClass.getTclNameMulti());
+				List<MultiTextDTO> listMulti = multiTextManager.getMultiTextByKey(taskClass.getTclNameMulti());
 				for (MultiTextDTO nameMulti: listMulti){
 					nameValue = hashNamesParam.get(nameMulti.getMulLanCode());
 					nameMulti.setMulText(nameValue);
-					multiTextDAO.update(nameMulti);
+					multiTextManager.update(nameMulti);
 				}
 			} else {
 				int indx = 0;
-				while (multiTextDAO.getByLanCodeAndKey(locale.getLanguage(), keyNameMulti)!=null){
+				while (multiTextManager.getByLanCodeAndKey(locale.getLanguage(), keyNameMulti)!=null){
 					keyNameMulti = TaskClassManager.KEY_MULTI_TASKCLASS_NAME+localId+"_"+defaultNameValue.toLowerCase()+"_"+indx;
 					indx ++;
 				}
@@ -128,16 +129,16 @@ public class TaskClassController {
 					nameMulti.setMulKey(keyNameMulti);
 					nameMulti.setMulLanCode(codeLangMap);
 					nameMulti.setMulText(nameValue);
-					multiTextDAO.create(nameMulti);
+					multiTextManager.create(nameMulti);
 				}
 			}
 					
 			if (tclId!=null){ // Existe
-				taskClass = taskClassDAO.update(taskClass);
+				taskClass = taskClassManager.update(taskClass);
 			} else { // Es nuevo
 				taskClass.setEnabled(1);
 				taskClass.setTclNameMulti(keyNameMulti);
-				taskClass = taskClassDAO.create(taskClass);
+				taskClass = taskClassManager.create(taskClass);
 			}
 			return taskClass;
 		}
@@ -151,13 +152,13 @@ public class TaskClassController {
 			throws Exception {
 			
 		if (id!=null){ // Existe
-			TaskClassDTO taskClass = taskClassDAO.getById(id);
+			TaskClassDTO taskClass = taskClassManager.getById(id);
 			
-			List<MultiTextDTO> listMulti = multiTextDAO.getMultiTextByKey(taskClass.getTclNameMulti());
+			List<MultiTextDTO> listMulti = multiTextManager.getMultiTextByKey(taskClass.getTclNameMulti());
 			for (MultiTextDTO nameMulti: listMulti){
-				multiTextDAO.remove(nameMulti.getId());
+				multiTextManager.remove(nameMulti.getId());
 			}
-			taskClassDAO.remove(id);
+			taskClassManager.remove(id);
 		}
 	}
 	
@@ -167,7 +168,7 @@ public class TaskClassController {
 
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		List<TaskClassDTO> listTaskClass = taskClassDAO.getTaskClassByLang(locale.getLanguage());	
+		List<TaskClassDTO> listTaskClass = taskClassManager.getTaskClassByLang(locale.getLanguage());	
 					
 		return listTaskClass;
 	}
@@ -176,7 +177,7 @@ public class TaskClassController {
 	protected @ResponseBody
 	TaskClassDTO get(@RequestParam("id") Long id) throws Exception {
 
-		TaskClassDTO taskClass = taskClassDAO.getById(id);	
+		TaskClassDTO taskClass = taskClassManager.getById(id);	
 					
 		return taskClass;
 	}
@@ -185,16 +186,16 @@ public class TaskClassController {
 		this.messageSourceApp = messageSourceApp;
 	}
 
-	public void setTaskClassDAO(TaskClassDAO taskClassDAO) {
-		this.taskClassDAO = taskClassDAO;
+	public void setTaskClassDAO(ITaskClassManager iTaskClassManager) {
+		this.taskClassManager = iTaskClassManager;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.multiTextManager = iMultiTextManager;
 	}
 
-	public void setLangDAO(LangDAO langDAO) {
-		this.langDAO = langDAO;
+	public void setLangDAO(ILangManager iLangManager) {
+		this.langManager = iLangManager;
 	}
 	
 

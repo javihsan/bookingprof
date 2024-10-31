@@ -1,27 +1,25 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import com.diloso.bookhair.app.datastore.data.StorableWithModificationTimestamp;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 /**
  * The persistent class for the Resource entity
  * 
  */
 @Entity
-@MappedSuperclass
-public class Resource implements Serializable {
-	protected static final long serialVersionUID = 1L;
-
+@Cache
+public class Resource extends StorableWithModificationTimestamp<Long> { 
+	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Long id;
 	
+	@Index
 	protected Integer enabled;
 
+	@Index
 	protected Long resFirId;
 	
 	public Resource() {

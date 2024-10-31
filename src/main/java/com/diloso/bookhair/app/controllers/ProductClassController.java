@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,13 +19,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.LangDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
-import com.diloso.bookhair.app.negocio.dao.ProductClassDAO;
 import com.diloso.bookhair.app.negocio.dto.LangDTO;
 import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 import com.diloso.bookhair.app.negocio.dto.ProductClassDTO;
-import com.diloso.bookhair.app.persist.manager.ProductClassManager;
+import com.diloso.bookhair.app.negocio.manager.ILangManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.IProductClassManager;
+import com.diloso.bookhair.app.negocio.manager.ProductClassManager;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/productClass", "/productClass"})
@@ -35,17 +36,17 @@ public class ProductClassController {
 	
 	protected static final String TCL_NAME_PARAM = "pclName";
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	//@Autowired
-	protected ProductClassDAO productClassDAO;
+	@Autowired
+	protected IProductClassManager productClassManager;
 	
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager multiTextManager;
 	
-	//@Autowired
-	protected LangDAO langDAO;
+	@Autowired
+	protected ILangManager langManager;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
 	@ResponseStatus(value=HttpStatus.CONFLICT,reason="")
@@ -90,14 +91,14 @@ public class ProductClassController {
 			ProductClassDTO productClass = new ProductClassDTO();
 			
 			if (pclId!=null){ // Existe
-				productClass = productClassDAO.getById(new Long(pclId));
+				productClass = productClassManager.getById(new Long(pclId));
 			}
 			
 			String nameValue = "";
 			String keyNameMulti = ProductClassManager.KEY_MULTI_TASKCLASS_NAME+localId+"_"+defaultNameValue.toLowerCase();
 			Map<String,String> hashNamesParam = new HashMap<String,String>();
 
-			List<LangDTO> listLang = langDAO.getLang();	
+			List<LangDTO> listLang = langManager.getLang();	
 			for (LangDTO lang : listLang) {
 				nameValue = arg0.getParameter(TCL_NAME_PARAM+"_"+lang.getLanCode());
 				if (nameValue == null || nameValue.length()==0){
@@ -107,15 +108,15 @@ public class ProductClassController {
 			}
 
 			if (pclId!=null){ // Existe
-				List<MultiTextDTO> listMulti = multiTextDAO.getMultiTextByKey(productClass.getPclNameMulti());
+				List<MultiTextDTO> listMulti = multiTextManager.getMultiTextByKey(productClass.getPclNameMulti());
 				for (MultiTextDTO nameMulti: listMulti){
 					nameValue = hashNamesParam.get(nameMulti.getMulLanCode());
 					nameMulti.setMulText(nameValue);
-					multiTextDAO.update(nameMulti);
+					multiTextManager.update(nameMulti);
 				}
 			} else {
 				int indx = 0;
-				while (multiTextDAO.getByLanCodeAndKey(locale.getLanguage(), keyNameMulti)!=null){
+				while (multiTextManager.getByLanCodeAndKey(locale.getLanguage(), keyNameMulti)!=null){
 					keyNameMulti = ProductClassManager.KEY_MULTI_TASKCLASS_NAME+localId+"_"+defaultNameValue.toLowerCase()+"_"+indx;
 					indx ++;
 				}
@@ -128,16 +129,16 @@ public class ProductClassController {
 					nameMulti.setMulKey(keyNameMulti);
 					nameMulti.setMulLanCode(codeLangMap);
 					nameMulti.setMulText(nameValue);
-					multiTextDAO.create(nameMulti);
+					multiTextManager.create(nameMulti);
 				}
 			}
 					
 			if (pclId!=null){ // Existe
-				productClass = productClassDAO.update(productClass);
+				productClass = productClassManager.update(productClass);
 			} else { // Es nuevo
 				productClass.setEnabled(1);
 				productClass.setPclNameMulti(keyNameMulti);
-				productClass = productClassDAO.create(productClass);
+				productClass = productClassManager.create(productClass);
 			}
 			return productClass;
 		}
@@ -151,13 +152,13 @@ public class ProductClassController {
 			throws Exception {
 			
 		if (id!=null){ // Existe
-			ProductClassDTO productClass = productClassDAO.getById(id);
+			ProductClassDTO productClass = productClassManager.getById(id);
 			
-			List<MultiTextDTO> listMulti = multiTextDAO.getMultiTextByKey(productClass.getPclNameMulti());
+			List<MultiTextDTO> listMulti = multiTextManager.getMultiTextByKey(productClass.getPclNameMulti());
 			for (MultiTextDTO nameMulti: listMulti){
-				multiTextDAO.remove(nameMulti.getId());
+				multiTextManager.remove(nameMulti.getId());
 			}
-			productClassDAO.remove(id);
+			productClassManager.remove(id);
 		}
 	}
 	
@@ -167,7 +168,7 @@ public class ProductClassController {
 
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		List<ProductClassDTO> listProductClass = productClassDAO.getProductClassByLang(locale.getLanguage());	
+		List<ProductClassDTO> listProductClass = productClassManager.getProductClassByLang(locale.getLanguage());	
 					
 		return listProductClass;
 	}
@@ -176,7 +177,7 @@ public class ProductClassController {
 	protected @ResponseBody
 	ProductClassDTO get(@RequestParam("id") Long id) throws Exception {
 
-		ProductClassDTO productClass = productClassDAO.getById(id);	
+		ProductClassDTO productClass = productClassManager.getById(id);	
 					
 		return productClass;
 	}
@@ -185,16 +186,16 @@ public class ProductClassController {
 		this.messageSourceApp = messageSourceApp;
 	}
 
-	public void setProductClassDAO(ProductClassDAO productClassDAO) {
-		this.productClassDAO = productClassDAO;
+	public void setProductClassDAO(IProductClassManager iProductClassManager) {
+		this.productClassManager = iProductClassManager;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.multiTextManager = iMultiTextManager;
 	}
 
-	public void setLangDAO(LangDAO langDAO) {
-		this.langDAO = langDAO;
+	public void setLangDAO(ILangManager iLangManager) {
+		this.langManager = iLangManager;
 	}
 	
 

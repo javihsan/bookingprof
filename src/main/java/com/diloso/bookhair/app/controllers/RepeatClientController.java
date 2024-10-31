@@ -10,10 +10,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -25,13 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.CalendarDAO;
-import com.diloso.bookhair.app.negocio.dao.ClientDAO;
-import com.diloso.bookhair.app.negocio.dao.FirmDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalTaskDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
-import com.diloso.bookhair.app.negocio.dao.RepeatClientDAO;
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.ClientDTO;
 import com.diloso.bookhair.app.negocio.dto.FirmDTO;
@@ -40,7 +31,17 @@ import com.diloso.bookhair.app.negocio.dto.LocalTaskDTO;
 import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 import com.diloso.bookhair.app.negocio.dto.RepeatClientDTO;
 import com.diloso.bookhair.app.negocio.dto.generator.NotifCalendarDTO;
+import com.diloso.bookhair.app.negocio.manager.ICalendarManager;
+import com.diloso.bookhair.app.negocio.manager.IClientManager;
+import com.diloso.bookhair.app.negocio.manager.IFirmManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.IRepeatClientManager;
 import com.diloso.bookhair.app.negocio.utils.templates.Generator;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/repeatClient", "/repeatClient"})
@@ -48,34 +49,34 @@ public class RepeatClientController {
 	
 	protected static final Logger log = Logger.getLogger(RepeatClientController.class.getName());
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	//@Autowired
+	@Autowired
 	protected Generator generatorVelocity;
 	
-	//@Autowired
-	protected LocalDAO localDAO;
+	@Autowired
+	protected ILocalManager localManager;
 	
-	//@Autowired
-	protected CalendarDAO calendarDAO;
+	@Autowired
+	protected ICalendarManager calendarManager;
 	
-	//@Autowired
-	protected RepeatClientDAO repeatClientDAO;
+	@Autowired
+	protected IRepeatClientManager repeatClientManager;
 	
-	//@Autowired
-	protected LocalTaskDAO localTaskDAO;
+	@Autowired
+	protected ILocalTaskManager localTaskManager;
 	
-	//@Autowired
-	protected ClientDAO clientDAO;
+	@Autowired
+	protected IClientManager clientManager;
 	
-	//@Autowired
-	protected FirmDAO firmDAO;
+	@Autowired
+	protected IFirmManager firmManager;
 	
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager multiTextManager;
 
-	//@Autowired
+	@Autowired
 	protected CalendarController calController;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
@@ -117,7 +118,7 @@ public class RepeatClientController {
 		} else {
 			ClientDTO repClient = null;
 			if (!admin){ // Si no es admin, buscamos por el email, que es obligatorio
-				repClient = clientDAO.getByEmail(local.getResFirId(),cliEmail);
+				repClient = clientManager.getByEmail(local.getResFirId(),cliEmail);
 			} 
 			if (!isNew && !admin && (getRepeatClientByClientAgo(local.getId(), repClient.getId(), local.getLocNumUsuDays()).size()>0) ){
 				message = messageSourceApp.getMessage("form.error.client.bookingOne1", null, locale)+" "+local.getLocNumUsuDays()+" "+messageSourceApp.getMessage("form.error.client.bookingOne2", null, locale);
@@ -138,7 +139,7 @@ public class RepeatClientController {
 	
 	protected boolean existsEmail(Long resFirId, String cliEmail){
 		if (cliEmail != null && cliEmail.length()>0){
-			ClientDTO repClient = clientDAO.getByEmail(resFirId,cliEmail);
+			ClientDTO repClient = clientManager.getByEmail(resFirId,cliEmail);
 			if (repClient!=null){
 				return true;
 			}
@@ -173,7 +174,7 @@ public class RepeatClientController {
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
 		// Propiedades de local
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
 		Long lngRepStartTime = new Long(arg0.getParameter("repStartTime"));
 		Date repStartTime = new Date(lngRepStartTime);
@@ -221,10 +222,10 @@ public class RepeatClientController {
 			// Propiedades de cliente
 			ClientDTO repClient = null;
 			if (!admin){ // Si no es admin, buscamos por el email, que es obligatorio
-				repClient = clientDAO.getByEmail(local.getResFirId(),cliEmail);
+				repClient = clientManager.getByEmail(local.getResFirId(),cliEmail);
 			} else { // Es admin
 				if (!isNew){ // Si no es nuevo, buscamos por el id
-					repClient = clientDAO.getById(new Long(strCliId));
+					repClient = clientManager.getById(new Long(strCliId));
 				}
 			}
 			if (isNew) {// Es nuevo
@@ -241,7 +242,7 @@ public class RepeatClientController {
 					repClient.setWhoTelf2(cliTelf);	
 				}
 				repClient.setCliCreationTime(repBookingTime);
-				repClient = clientDAO.create(repClient);
+				repClient = clientManager.create(repClient);
 			
 			} else if (!admin){
 				// Puede que hayan puesto un nombre y telf distinto del guardado en la BBDD
@@ -251,7 +252,7 @@ public class RepeatClientController {
 				} else {
 					repClient.setWhoTelf2(cliTelf);	
 				}
-				repClient = clientDAO.update(repClient);
+				repClient = clientManager.update(repClient);
 			}
 			
 			// Propiedades de booking
@@ -294,14 +295,14 @@ public class RepeatClientController {
 //						modelNot.setNocUID(repeatAux.getRepMartix()+"_"+repBookingTime.getTime()+ "@"+ nameApp);
 //					}	
 				} 
-				multiTextKey = multiTextDAO.getByLanCodeAndKey(locale.getLanguage(),
+				multiTextKey = multiTextManager.getByLanCodeAndKey(locale.getLanguage(),
 						repeatClientAux.getRecRepeat().getEveLocalTask().getLotNameMulti());
 				tasksMail += " 1 " + multiTextKey.getMulText();
 				
 				RepeatClientDTO repeatClient = new RepeatClientDTO();
 				PropertyUtils.copyProperties(repeatClient, repeatClientOrig);
 				
-				repeatClient = repeatClientDAO.create(repeatClient);
+				repeatClient = repeatClientManager.create(repeatClient);
 				
 				indx ++;
 				
@@ -319,7 +320,7 @@ public class RepeatClientController {
 			    modelNot.setNocDtStamp(repBookingTime);
 			    modelNot.setNocTasks(tasksMail);
 		
-				FirmDTO firm = firmDAO.getById(local.getResFirId());
+				FirmDTO firm = firmManager.getById(local.getResFirId());
 				String title = messageSourceApp.getMessage("mail.invite.title", null, locale);
 				title += " " + firm.getFirName();
 
@@ -344,19 +345,19 @@ public class RepeatClientController {
 					
 	protected List<RepeatClientDTO> getRepeatClientByClientAgo(Long localId, Long clientId, int numDays ) {
 
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendar(localId);
+		List<CalendarDTO> listCalendar = calendarManager.getCalendar(localId);
 		List<RepeatClientDTO> listRepeatClientAux = null;
 		List<RepeatClientDTO> listRepeatClientLocal = new ArrayList<RepeatClientDTO>();
 		for (CalendarDTO calendar : listCalendar) {
 			if (numDays!=-1){
 				// Calculamos el desplazamiento de la zona horaria desde UTC
-				LocalDTO local = localDAO.getById(new Long(localId));
+				LocalDTO local = localManager.getById(new Long(localId));
 				TimeZone calendarTimeZone = TimeZone.getTimeZone(local.getLocWhere().getWheTimeZone());
 				Date minDate =  new Date();
 				minDate =  new Date(minDate.getTime() + calendarTimeZone.getOffset(minDate.getTime()));
-				listRepeatClientAux = repeatClientDAO.getRepeatClientByClientAgo(calendar, clientId, minDate, numDays);
+				listRepeatClientAux = repeatClientManager.getRepeatClientByClientAgo(calendar, clientId, minDate, numDays);
 			} else {
-				listRepeatClientAux = repeatClientDAO.getRepeatClientByClientAgo(calendar, clientId, null, -1);
+				listRepeatClientAux = repeatClientManager.getRepeatClientByClientAgo(calendar, clientId, null, -1);
 			}
 			// Añadimos los repeatClientss de este puesto a los del local
 			for (RepeatClientDTO repeatClient : listRepeatClientAux) {
@@ -409,12 +410,12 @@ public class RepeatClientController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
-		RepeatClientDTO repeatClient = repeatClientDAO.getById(id);
+		RepeatClientDTO repeatClient = repeatClientManager.getById(id);
 		if (repeatClient!=null){
 			repeatClient.setEnabled(0);
-			repeatClientDAO.update(repeatClient);
+			repeatClientManager.update(repeatClient);
 			
 			log.info("RepeatClient cancelado : "+repeatClient.getId());
 			
@@ -472,32 +473,32 @@ public class RepeatClientController {
 		this.generatorVelocity = generatorVelocity;
 	}
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.localManager = iLocalManager;
 	}
 
-	public void setCalendarDAO(CalendarDAO calendarDAO) {
-		this.calendarDAO = calendarDAO;
+	public void setCalendarDAO(ICalendarManager iCalendarManager) {
+		this.calendarManager = iCalendarManager;
 	}
 
-	public void setRepeatClientDAO(RepeatClientDAO repeatClientDAO) {
-		this.repeatClientDAO = repeatClientDAO;
+	public void setRepeatClientDAO(IRepeatClientManager iRepeatClientManager) {
+		this.repeatClientManager = iRepeatClientManager;
 	}
 
-	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
-		this.localTaskDAO = localTaskDAO;
+	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
+		this.localTaskManager = iLocalTaskManager;
 	}
 
-	public void setClientDAO(ClientDAO clientDAO) {
-		this.clientDAO = clientDAO;
+	public void setClientDAO(IClientManager iClientManager) {
+		this.clientManager = iClientManager;
 	}
 
-	public void setFirmDAO(FirmDAO firmDAO) {
-		this.firmDAO = firmDAO;
+	public void setFirmDAO(IFirmManager iFirmManager) {
+		this.firmManager = iFirmManager;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.multiTextManager = iMultiTextManager;
 	}
 
 	public void setCalController(CalendarController calController) {

@@ -1,22 +1,31 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-
 <!-- - Sample namespace-based configuration - -->
-
 <beans:beans xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-6.3.xsd">
 
-    <http use-expressions="true" entry-point-ref="gwtEntryPoint">
+    <!--<http use-expressions="true" entry-point-ref="gwtEntryPoint" create-session="ifRequired">-->
+	<http use-expressions="true" entry-point-ref="gwtEntryPoint">
         <access-denied-handler ref="gwtAccessDeniedHandler"/>
-		<!--<intercept-url pattern="/register.do*" access="hasRole('NEW_USER')" />-->
-		<intercept-url pattern="/**/**admin**/**" access="hasRole('ADMIN')" />
-		<intercept-url pattern="/**/**manager**/**" access="hasAnyRole('ADMIN','MANAGER')" />
-		<intercept-url pattern="/**/**operator**/**" access="hasAnyRole('ADMIN','OPERATOR','OPERATOR_READ')" />
-		<intercept-url pattern="/**/**report**/**" access="hasAnyRole('ADMIN','MANAGER')" />
-		<intercept-url pattern="/**/**booking**/**" access="hasAnyRole('ADMIN','USER')" />
-		<custom-filter position="PRE_AUTH_FILTER" ref="gwtFilter" />  
+		<!--<intercept-url pattern="/register.do*" access="hasAuthority('NEW_USER')" />-->
+		<intercept-url pattern="/**/**admin**/**" access="hasAuthority('ADMIN')" />
+		<intercept-url pattern="/**/**manager**/**" access="hasAnyAuthority('ADMIN','MANAGER')" />
+		<intercept-url pattern="/**/**operator**/**" access="hasAnyAuthority('ADMIN','OPERATOR','OPERATOR_READ')" />
+		<intercept-url pattern="/**/**report**/**" access="hasAnyAuthority('ADMIN','MANAGER')" />
+		<intercept-url pattern="/**/**booking**/**" access="hasAnyAuthority('ADMIN','USER')" />
+		<intercept-url pattern="/**" access="permitAll()" />
+		<custom-filter position="PRE_AUTH_FILTER" ref="gwtFilter" />
+		<csrf disabled="true"/>
 	</http>
+	
+	<http-firewall ref="allowSemicolonHttpFirewall" />
+		
+	<beans:bean id="allowSemicolonHttpFirewall" class="org.springframework.security.web.firewall.StrictHttpFirewall"> 
+        <beans:property name="allowSemicolon" value="true"/> 
+	</beans:bean>
+	
+	<beans:bean id="mvcHandlerMappingIntrospector" class="org.springframework.web.servlet.handler.HandlerMappingIntrospector" />
 	
 	<beans:bean id="gwtEntryPoint" class="com.diloso.weblogin.aut.AccountsAuthenticationEntryPoint">
 		<!-- <beans:property name="redirectUrl" value="/operator" />-->
@@ -30,9 +39,16 @@
 		<beans:property name="authenticationApp" ref="gwtAuthenticationApp" />
 		<beans:property name="authenticationManager" ref="gwtAuthenticationManager" />
 		<beans:property name="deniedHandler" ref="gwtAccessDeniedHandler" />
+		<beans:property name="securityContextRepository" ref="gwtSecurityContextRepository" />
 	</beans:bean>
 	
-	<beans:bean id="gwtAuthenticationApp" class="com.diloso.bookhair.app.controllers.FirmController" />
+	<beans:bean id="gwtSecurityContextRepository" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository" />
+	
+	<beans:bean id="gwtAuthenticationApp" class="com.diloso.weblogin.aut.FirmSecurity" >
+		<beans:property name="firmSecurityManager" ref="gwtFirmSecurityManager" />
+	</beans:bean>
+	
+	<beans:bean id="gwtFirmSecurityManager" class="com.diloso.bookhair.app.negocio.manager.FirmSecurityManager" />
 	
 	<authentication-manager alias="gwtAuthenticationManager">
 		<authentication-provider
@@ -40,7 +56,7 @@
 	</authentication-manager>
 
 
-	<beans:bean id="gwtAuthenticationProvider" 	class="com.diloso.weblogin.aut.AccountsAuthenticationProvider">
+	<beans:bean id="gwtAuthenticationProvider" class="com.diloso.weblogin.aut.AccountsAuthenticationProvider">
 		<beans:property name="userRegistry" ref="gwtUserRegistry" />
 		<beans:property name="usersAuthenticatedAdmin">
 			<beans:list>

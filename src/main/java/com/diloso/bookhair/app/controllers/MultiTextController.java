@@ -6,9 +6,7 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Level;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.LocaleEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,15 +16,18 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.diloso.bookhair.app.negocio.config.impl.ConfigFirm;
-import com.diloso.bookhair.app.negocio.dao.FirmDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
 import com.diloso.bookhair.app.negocio.dto.FirmDTO;
 import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
+import com.diloso.bookhair.app.negocio.manager.IFirmManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
 import com.diloso.bookhair.app.negocio.utils.ApplicationContextProvider;
 import com.diloso.bookhair.app.negocio.utils.ExtendMessageSource;
 import com.google.appengine.api.memcache.ErrorHandlers;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @Controller
@@ -36,17 +37,17 @@ public class MultiTextController {
 	public static final String WEB_PROP = "web.";
 	public static final String WEB_CONFIG = "config.";
 	
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager multiTextManager;
 	
-	//@Autowired
-	protected FirmDAO firmDAO;
+	@Autowired
+	protected IFirmManager firmManager;
 	
 	@RequestMapping("/get")
 	protected @ResponseBody
 	MultiTextDTO get(@RequestParam("id") Long id) throws Exception {
 
-		MultiTextDTO multiText = multiTextDAO.getById(id);	
+		MultiTextDTO multiText = multiTextManager.getById(id);	
 					
 		return multiText;
 	}
@@ -56,7 +57,7 @@ public class MultiTextController {
 	protected @ResponseBody
 	List<MultiTextDTO> list() throws Exception {
 
-		List<MultiTextDTO> listMultiText = multiTextDAO.getMultiText();	
+		List<MultiTextDTO> listMultiText = multiTextManager.getMultiText();	
 					
 		return listMultiText;
 	}
@@ -66,7 +67,7 @@ public class MultiTextController {
 	protected @ResponseBody
 	List<MultiTextDTO> listByKey(@RequestParam("key") String key) throws Exception {
 
-		List<MultiTextDTO> listMultiText = multiTextDAO.getMultiTextByKey(key);
+		List<MultiTextDTO> listMultiText = multiTextManager.getMultiTextByKey(key);
 			
 		return listMultiText;
 	}
@@ -92,7 +93,7 @@ public class MultiTextController {
 	    List<MultiTextDTO> listMultiText = (List<MultiTextDTO>) syncCache.get(keyMem); // read from cache
 	    if (listMultiText == null) {
 		    
-			FirmDTO firm = firmDAO.getFirmDomain(domain);
+			FirmDTO firm = firmManager.getFirmDomain(domain);
 			ConfigFirm configFirm = firm.getFirConfig();
 			
 			listMultiText = new ArrayList<MultiTextDTO>();
@@ -130,12 +131,12 @@ public class MultiTextController {
 		return listMultiText;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.multiTextManager = iMultiTextManager;
 	}
 
-	public void setFirmDAO(FirmDAO firmDAO) {
-		this.firmDAO = firmDAO;
+	public void setFirmDAO(IFirmManager iFirmManager) {
+		this.firmManager = iFirmManager;
 	}
 	
 	

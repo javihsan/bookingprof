@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,35 +16,34 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.diloso.bookhair.app.negocio.config.impl.ConfigFirm;
-import com.diloso.bookhair.app.negocio.dao.FirmDAO;
-import com.diloso.bookhair.app.negocio.dao.ProfessionalDAO;
-import com.diloso.bookhair.app.negocio.dao.WhereDAO;
 import com.diloso.bookhair.app.negocio.dto.FirmDTO;
 import com.diloso.bookhair.app.negocio.dto.ProfessionalDTO;
 import com.diloso.bookhair.app.negocio.dto.WhereDTO;
-import com.diloso.bookhair.app.negocio.utils.ApplicationContextProvider;
-import com.diloso.bookhair.app.persist.manager.FirmManager;
-import com.diloso.bookhair.app.persist.manager.IEMF;
+import com.diloso.bookhair.app.negocio.manager.IFirmManager;
+import com.diloso.bookhair.app.negocio.manager.IProfessionalManager;
+import com.diloso.bookhair.app.negocio.manager.IWhereManager;
 import com.diloso.weblogin.aut.AppRole;
 import com.diloso.weblogin.aut.AppUser;
-import com.diloso.weblogin.aut.AuthenticationApp;
 import com.diloso.weblogin.aut.DatastoreUserRegistry;
 import com.diloso.weblogin.aut.UserRegistry;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @Controller
 @RequestMapping(value={"/*/firm", "/firm"})
-public class FirmController implements AuthenticationApp {
+public class FirmController /*implements AuthenticationApp*/ {
 	
 	protected static final Logger log = Logger.getLogger(FirmController.class.getName());
 	
-	//@Autowired
-	protected FirmDAO firmDAO;
+	@Autowired
+	protected IFirmManager firmManager;
 	
-	//@Autowired
-	protected ProfessionalDAO professionalDAO;
+	@Autowired
+	protected IProfessionalManager professionalManager;
 	
-	//@Autowired
-	protected WhereDAO whereDAO;
+	@Autowired
+	protected IWhereManager whereManager;
 	
 	protected UserRegistry userRegistry = new DatastoreUserRegistry();
 	
@@ -81,7 +78,7 @@ public class FirmController implements AuthenticationApp {
 		
 		FirmDTO firm = new FirmDTO();
 		if (firId!=null){ // Existe
-			firm = firmDAO.getById(new Long(firId));
+			firm = firmManager.getById(new Long(firId));
 		}
 		
 		ProfessionalDTO respon = new ProfessionalDTO();
@@ -92,7 +89,7 @@ public class FirmController implements AuthenticationApp {
 			respon.setWhoEmail(firResponEmail);
 			respon.setWhoTelf1(firResponTelf1);
 			
-			respon = professionalDAO.update(respon);
+			respon = professionalManager.update(respon);
 
 		} else {
 		
@@ -102,7 +99,7 @@ public class FirmController implements AuthenticationApp {
 			respon.setWhoEmail(firResponEmail);
 			respon.setWhoTelf1(firResponTelf1);
 		
-			respon = professionalDAO.create(respon);
+			respon = professionalManager.create(respon);
 		}
 		firm.setFirRespon(respon);
 		
@@ -116,7 +113,7 @@ public class FirmController implements AuthenticationApp {
 			where.setWheCP(firCP);
 			where.setWheCountry(firCountry);
 			
-			where = whereDAO.update(where);
+			where = whereManager.update(where);
 		} else {
 			where.setEnabled(1);
 			where.setWheAddress(firAddress);
@@ -125,7 +122,7 @@ public class FirmController implements AuthenticationApp {
 			where.setWheCP(firCP);
 			where.setWheCountry(firCountry);
 			
-			where = whereDAO.create(where);
+			where = whereManager.create(where);
 		}
 		firm.setFirWhere(where);
 		firm.setFirName(firName);
@@ -177,17 +174,17 @@ public class FirmController implements AuthenticationApp {
 		
 		if (firId!=null){ // Existe
 
-			firm = firmDAO.update(firm);
+			firm = firmManager.update(firm);
 		} else {
 			
 			firm.setEnabled(0);
-			firm = firmDAO.create(firm);
+			firm = firmManager.create(firm);
 			
 			where.setResFirId(firm.getId());
-			whereDAO.update(where);
+			whereManager.update(where);
 			
 			respon.setResFirId(firm.getId());
-			professionalDAO.update(respon);
+			professionalManager.update(respon);
 		}
 		
 		
@@ -197,7 +194,7 @@ public class FirmController implements AuthenticationApp {
 	@ResponseStatus(HttpStatus.OK)
 	public void enabled(@RequestParam("id") Long id)
 			throws Exception {
-		FirmDTO firm = firmDAO.getById(id);
+		FirmDTO firm = firmManager.getById(id);
 
 		if (firm!=null){
 			if (firm.getEnabled()==1){
@@ -207,7 +204,7 @@ public class FirmController implements AuthenticationApp {
 				firm.setEnabled(1);
 				log.info("Firma habilitada : "+firm.getFirDomain());
 			}
-			firmDAO.update(firm);
+			firmManager.update(firm);
 		}	
 	}
 	
@@ -215,7 +212,7 @@ public class FirmController implements AuthenticationApp {
 	protected @ResponseBody
 	List<FirmDTO> list() throws Exception {
 
-		List<FirmDTO> firmLocal = firmDAO.getFirmAdmin();
+		List<FirmDTO> firmLocal = firmManager.getFirmAdmin();
 		
 		List<String> firGwtUsers = new ArrayList<String>();
 		// Filtramos solo los MANAGER y OPERATOR, 
@@ -240,7 +237,7 @@ public class FirmController implements AuthenticationApp {
 	protected @ResponseBody
 	FirmDTO getDomain(@RequestParam("domain") String domain) throws Exception {
 	
-		FirmDTO firm = firmDAO.getFirmDomain(domain);
+		FirmDTO firm = firmManager.getFirmDomain(domain);
 		
 		return firm;
 	}	
@@ -250,7 +247,7 @@ public class FirmController implements AuthenticationApp {
 	protected @ResponseBody
 	FirmDTO getDomainAdmin(@RequestParam("domain") String domain) throws Exception {
 	
-		FirmDTO firm = firmDAO.getFirmDomainAdmin(domain);
+		FirmDTO firm = firmManager.getFirmDomainAdmin(domain);
 		
 		return firm;
 	}
@@ -260,16 +257,13 @@ public class FirmController implements AuthenticationApp {
 	protected @ResponseBody
 	String getServerAdmin(@RequestParam("server") String server) throws Exception {
 	
-		return firmDAO.getDomainServer(server);
+		return firmManager.getDomainServer(server);
 	}
-	
+	/*
 	public Long findFirm(HttpServletRequest arg0, HttpServletResponse arg1){
 		
-		if (firmDAO==null){
-			firmDAO = new FirmManager();
-			IEMF beanEMF = (IEMF) ApplicationContextProvider
-					.getApplicationContext().getBean("beanEMF");
-			((FirmManager)firmDAO).setBeanEMF(beanEMF);
+		if (firmManager==null){
+			firmManager = new FirmManager();
 		}
 		
 		String serverName = arg0.getServerName();
@@ -282,20 +276,18 @@ public class FirmController implements AuthenticationApp {
 				domain = a[1];
 			}
 		} else {
-			domain = firmDAO.getDomainServer(serverName);
+			domain = firmManager.getDomainServer(serverName);
 		}
 
-		return  firmDAO.findId(domain);
+		return firmManager.findId(domain);
 		
 	}
 	
+
 	public boolean isRestrictedNivelUser(HttpServletRequest arg0, HttpServletResponse arg1){
 		
-		if (firmDAO==null){
-			firmDAO = new FirmManager();
-			IEMF beanEMF = (IEMF) ApplicationContextProvider
-					.getApplicationContext().getBean("beanEMF");
-			((FirmManager)firmDAO).setBeanEMF(beanEMF);
+		if (firmManager==null){
+			firmManager = new FirmManager();
 		}
 		
 		String serverName = arg0.getServerName();
@@ -308,22 +300,10 @@ public class FirmController implements AuthenticationApp {
 				domain = a[1];
 			}
 		} else {
-			domain = firmDAO.getDomainServer(serverName);
+			domain = firmManager.getDomainServer(serverName);
 		}
 		
-		return firmDAO.isRestrictedNivelUser(domain);
-	}
-
-	public void setFirmDAO(FirmDAO firmDAO) {
-		this.firmDAO = firmDAO;
-	}
-
-	public void setProfessionalDAO(ProfessionalDAO professionalDAO) {
-		this.professionalDAO = professionalDAO;
-	}
-
-	public void setWhereDAO(WhereDAO whereDAO) {
-		this.whereDAO = whereDAO;
-	}	
+		return firmManager.isRestrictedNivelUser(domain);
+	}*/
 	
 }

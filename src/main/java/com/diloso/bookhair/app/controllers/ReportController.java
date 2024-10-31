@@ -6,8 +6,6 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import javax.mail.SendFailedException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -20,13 +18,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.BilledDAO;
-import com.diloso.bookhair.app.negocio.dao.CalendarDAO;
-import com.diloso.bookhair.app.negocio.dao.EventDAO;
-import com.diloso.bookhair.app.negocio.dao.FirmDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalTaskDAO;
-import com.diloso.bookhair.app.negocio.dao.ProductDAO;
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.FirmDTO;
 import com.diloso.bookhair.app.negocio.dto.LocalDTO;
@@ -34,6 +25,16 @@ import com.diloso.bookhair.app.negocio.dto.LocalTaskDTO;
 import com.diloso.bookhair.app.negocio.dto.ProductDTO;
 import com.diloso.bookhair.app.negocio.dto.generator.NotifCalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.report.ReportDTO;
+import com.diloso.bookhair.app.negocio.manager.IBilledManager;
+import com.diloso.bookhair.app.negocio.manager.ICalendarManager;
+import com.diloso.bookhair.app.negocio.manager.IEventManager;
+import com.diloso.bookhair.app.negocio.manager.IFirmManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.IProductManager;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/report", "/report"})
@@ -42,29 +43,29 @@ public class ReportController {
 	protected String TYPE_STRING = "string";
 	protected String TYPE_NUMBER = "number";
 	
-	////@Autowired
+	//@Autowired
 	protected MessageSource messageSourceApp;
 	
-	////@Autowired
-	protected LocalDAO localDAO;
+	//@Autowired
+	protected ILocalManager localManager;
 	
-	////@Autowired
-	protected CalendarDAO calendarDAO;
+	//@Autowired
+	protected ICalendarManager calendarManager;
 	
-	////@Autowired
-	protected FirmDAO firmDAO;
+	//@Autowired
+	protected IFirmManager firmManager;
 	
-	////@Autowired
-	protected EventDAO eventDAO;
+	//@Autowired
+	protected IEventManager eventManager;
 	
-	////@Autowired
-	protected BilledDAO billedDAO;
+	//@Autowired
+	protected IBilledManager billedManager;
 	
-	////@Autowired
-	protected LocalTaskDAO localTaskDAO;
+	//@Autowired
+	protected ILocalTaskManager localTaskManager;
 	
-	////@Autowired
-	protected ProductDAO productDAO;
+	//@Autowired
+	protected IProductManager productManager;
 	
 	@RequestMapping("")
 	public ModelAndView init(HttpServletRequest arg0,
@@ -85,9 +86,9 @@ public class ReportController {
 		Long localId = new Long(arg0.getParameter("localId"));
 		
 		// Propiedades de local
-		LocalDTO local = localDAO.getById(localId);
+		LocalDTO local = localManager.getById(localId);
 		
-		FirmDTO firm = firmDAO.getById(local.getResFirId());
+		FirmDTO firm = firmManager.getById(local.getResFirId());
 		
 		String selectedDateStart = arg0.getParameter("selectedDateStart");
 		String selectedDateEnd = arg0.getParameter("selectedDateEnd");
@@ -129,9 +130,9 @@ public class ReportController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 	
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(local.getId());
+		List<CalendarDTO> listCalendar = calendarManager.getCalendarAdmin(local.getId());
 
 		float salesFin = 0;
 		float salesTask = 0;
@@ -139,9 +140,9 @@ public class ReportController {
 				
 		for (CalendarDTO calendar : listCalendar) {
 			
-			salesFin += billedDAO.getBilledSales(calendar,selectedDateStart,selectedDateEnd);
-			salesTask += billedDAO.getBilledSalesTask(calendar,selectedDateStart,selectedDateEnd,null);
-			salesProduct += billedDAO.getBilledSalesProduct(calendar,selectedDateStart,selectedDateEnd,null);
+			salesFin += billedManager.getBilledSales(calendar,selectedDateStart,selectedDateEnd);
+			salesTask += billedManager.getBilledSalesTask(calendar,selectedDateStart,selectedDateEnd,null);
+			salesProduct += billedManager.getBilledSalesProduct(calendar,selectedDateStart,selectedDateEnd,null);
 		}	
 		
 		ReportDTO reportDTO = new ReportDTO();
@@ -176,9 +177,9 @@ public class ReportController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(local.getId());
+		List<CalendarDTO> listCalendar = calendarManager.getCalendarAdmin(local.getId());
 		
 		ReportDTO reportDTO = new ReportDTO();
 		reportDTO.addColumn(messageSourceApp.getMessage("report.sales.task", null, locale), TYPE_STRING, messageSourceApp.getMessage("report.sales.task", null, locale));
@@ -187,7 +188,7 @@ public class ReportController {
 		float sales = 0;
 		
 		for (CalendarDTO calendar : listCalendar) {
-			sales += billedDAO.getBilledSalesTask(calendar,selectedDateStart,selectedDateEnd,null);
+			sales += billedManager.getBilledSalesTask(calendar,selectedDateStart,selectedDateEnd,null);
 		}	
 		
 		List<Object> listColumnValues = new ArrayList<Object>();
@@ -195,12 +196,12 @@ public class ReportController {
 		listColumnValues.add(sales);
 		reportDTO.addRow(listColumnValues);
 		
-		List<LocalTaskDTO> listLocalTask = localTaskDAO.getLocalTaskSimpleAdmin(new Long(localId), locale.getLanguage());	
+		List<LocalTaskDTO> listLocalTask = localTaskManager.getLocalTaskSimpleAdmin(new Long(localId), locale.getLanguage());	
 		for (LocalTaskDTO localTask: listLocalTask) {
 			if (localTask.getLotTaskRate()>0){
 				sales = 0;
 				for (CalendarDTO calendar : listCalendar) {
-					sales += billedDAO.getBilledSalesTask(calendar,selectedDateStart,selectedDateEnd,localTask.getId());
+					sales += billedManager.getBilledSalesTask(calendar,selectedDateStart,selectedDateEnd,localTask.getId());
 				}
 				if (localTask.getEnabled()==0){
 					if (sales==0){
@@ -230,9 +231,9 @@ public class ReportController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(local.getId());
+		List<CalendarDTO> listCalendar = calendarManager.getCalendarAdmin(local.getId());
 		
 		ReportDTO reportDTO = new ReportDTO();
 		reportDTO.addColumn(messageSourceApp.getMessage("report.sales.product", null, locale), TYPE_STRING, messageSourceApp.getMessage("report.sales.product", null, locale));
@@ -241,7 +242,7 @@ public class ReportController {
 		float sales = 0;
 		
 		for (CalendarDTO calendar : listCalendar) {
-			sales += billedDAO.getBilledSalesProduct(calendar,selectedDateStart,selectedDateEnd,null);
+			sales += billedManager.getBilledSalesProduct(calendar,selectedDateStart,selectedDateEnd,null);
 		}	
 		
 		List<Object> listColumnValues = new ArrayList<Object>();
@@ -249,11 +250,11 @@ public class ReportController {
 		listColumnValues.add(sales);
 		reportDTO.addRow(listColumnValues);
 		
-		List<ProductDTO> listProduct = productDAO.getProductAdminByLang(new Long(localId), locale.getLanguage());	
+		List<ProductDTO> listProduct = productManager.getProductAdminByLang(new Long(localId), locale.getLanguage());	
 		for (ProductDTO product: listProduct) {
 			sales = 0;
 			for (CalendarDTO calendar : listCalendar) {
-				sales += billedDAO.getBilledSalesProduct(calendar,selectedDateStart,selectedDateEnd,product.getId());
+				sales += billedManager.getBilledSalesProduct(calendar,selectedDateStart,selectedDateEnd,product.getId());
 			}
 			if (product.getEnabled()==0){
 				if (sales==0){
@@ -282,9 +283,9 @@ public class ReportController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 	
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(local.getId());
+		List<CalendarDTO> listCalendar = calendarManager.getCalendarAdmin(local.getId());
 		
 		int numEventsFin = 0;
 		//int numEventsReject = 0;
@@ -292,10 +293,10 @@ public class ReportController {
 		int numEventsTotal = 0;
 		
 		for (CalendarDTO calendar : listCalendar) {
-			numEventsFin += eventDAO.getEventNumber(calendar,selectedDateStart,selectedDateEnd,true);
+			numEventsFin += eventManager.getEventNumber(calendar,selectedDateStart,selectedDateEnd,true);
 			//numEventsReject += eventDAO.getEventNumber(calendar,selectedDateStart,selectedDateEnd,true);
-			numEventsUnfin += eventDAO.getEventNumber(calendar,selectedDateStart,selectedDateEnd,false);
-			numEventsTotal += eventDAO.getEventNumber(calendar,selectedDateStart,selectedDateEnd,null);
+			numEventsUnfin += eventManager.getEventNumber(calendar,selectedDateStart,selectedDateEnd,false);
+			numEventsTotal += eventManager.getEventNumber(calendar,selectedDateStart,selectedDateEnd,null);
 		}	
 		
 		
@@ -328,18 +329,18 @@ public class ReportController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 	
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(local.getId());
+		List<CalendarDTO> listCalendar = calendarManager.getCalendarAdmin(local.getId());
 		
 		int numEventsClient = 0;
 		int numEventsProf = 0;
 		int numEventsTotal = 0;
 		
 		for (CalendarDTO calendar : listCalendar) {
-			numEventsClient += eventDAO.getEventNumberBooking(calendar,selectedDateStart,selectedDateEnd,0);
-			numEventsProf += eventDAO.getEventNumberBooking(calendar,selectedDateStart,selectedDateEnd,1);
-			numEventsTotal += eventDAO.getEventNumberBooking(calendar,selectedDateStart,selectedDateEnd,null);
+			numEventsClient += eventManager.getEventNumberBooking(calendar,selectedDateStart,selectedDateEnd,0);
+			numEventsProf += eventManager.getEventNumberBooking(calendar,selectedDateStart,selectedDateEnd,1);
+			numEventsTotal += eventManager.getEventNumberBooking(calendar,selectedDateStart,selectedDateEnd,null);
 		}	
 		
 		
@@ -374,9 +375,9 @@ public class ReportController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(local.getId());
+		List<CalendarDTO> listCalendar = calendarManager.getCalendarAdmin(local.getId());
 		
 		ReportDTO reportDTO = new ReportDTO();
 		reportDTO.addColumn(messageSourceApp.getMessage("report.sales.tasks", null, locale), TYPE_STRING, messageSourceApp.getMessage("report.sales.tasks", null, locale));
@@ -385,7 +386,7 @@ public class ReportController {
 		int numEvents = 0;	
 		
 		for (CalendarDTO calendar : listCalendar) {
-			numEvents += eventDAO.getEventNumberTask(calendar,selectedDateStart,selectedDateEnd,null,true);		
+			numEvents += eventManager.getEventNumberTask(calendar,selectedDateStart,selectedDateEnd,null,true);		
 		}	
 		
 		List<Object> listColumnValues = new ArrayList<Object>();
@@ -393,12 +394,12 @@ public class ReportController {
 		listColumnValues.add(numEvents);
 		reportDTO.addRow(listColumnValues);
 		
-		List<LocalTaskDTO> listLocalTask = localTaskDAO.getLocalTaskSimpleAdmin(new Long(localId), locale.getLanguage());	
+		List<LocalTaskDTO> listLocalTask = localTaskManager.getLocalTaskSimpleAdmin(new Long(localId), locale.getLanguage());	
 		for (LocalTaskDTO localTask: listLocalTask) {
 			if (localTask.getLotTaskDuration()>0){
 				numEvents = 0;	
 				for (CalendarDTO calendar : listCalendar) {
-					numEvents += eventDAO.getEventNumberTask(calendar,selectedDateStart,selectedDateEnd,localTask.getId(),true);		
+					numEvents += eventManager.getEventNumberTask(calendar,selectedDateStart,selectedDateEnd,localTask.getId(),true);		
 				}
 				if (localTask.getEnabled()==0){
 					if (numEvents==0){
@@ -426,38 +427,38 @@ public class ReportController {
 	}
 
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.localManager = iLocalManager;
 	}
 
 
-	public void setCalendarDAO(CalendarDAO calendarDAO) {
-		this.calendarDAO = calendarDAO;
+	public void setCalendarDAO(ICalendarManager iCalendarManager) {
+		this.calendarManager = iCalendarManager;
 	}
 
 
-	public void setFirmDAO(FirmDAO firmDAO) {
-		this.firmDAO = firmDAO;
+	public void setFirmDAO(IFirmManager iFirmManager) {
+		this.firmManager = iFirmManager;
 	}
 
 
-	public void setEventDAO(EventDAO eventDAO) {
-		this.eventDAO = eventDAO;
+	public void setEventDAO(IEventManager iEventManager) {
+		this.eventManager = iEventManager;
 	}
 
 
-	public void setBilledDAO(BilledDAO billedDAO) {
-		this.billedDAO = billedDAO;
+	public void setBilledDAO(IBilledManager iBilledManager) {
+		this.billedManager = iBilledManager;
 	}
 
 
-	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
-		this.localTaskDAO = localTaskDAO;
+	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
+		this.localTaskManager = iLocalTaskManager;
 	}
 
 
-	public void setProductDAO(ProductDAO productDAO) {
-		this.productDAO = productDAO;
+	public void setProductDAO(IProductManager iProductManager) {
+		this.productManager = iProductManager;
 	}
 	
 	

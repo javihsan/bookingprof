@@ -13,10 +13,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import javax.mail.SendFailedException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -30,15 +29,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.diloso.bookhair.app.negocio.config.impl.ConfigClientField;
-import com.diloso.bookhair.app.negocio.dao.CalendarDAO;
-import com.diloso.bookhair.app.negocio.dao.ClientDAO;
-import com.diloso.bookhair.app.negocio.dao.EventDAO;
-import com.diloso.bookhair.app.negocio.dao.EventDAOGoogle;
-import com.diloso.bookhair.app.negocio.dao.FirmDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalTaskDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
-import com.diloso.bookhair.app.negocio.dao.RepeatDAO;
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.ClientDTO;
 import com.diloso.bookhair.app.negocio.dto.EventDTO;
@@ -48,8 +38,20 @@ import com.diloso.bookhair.app.negocio.dto.LocalTaskDTO;
 import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 import com.diloso.bookhair.app.negocio.dto.RepeatDTO;
 import com.diloso.bookhair.app.negocio.dto.generator.NotifCalendarDTO;
+import com.diloso.bookhair.app.negocio.manager.ICalendarManager;
+import com.diloso.bookhair.app.negocio.manager.IClientManager;
+import com.diloso.bookhair.app.negocio.manager.IEventManager;
+import com.diloso.bookhair.app.negocio.manager.IEventManagerGoogle;
+import com.diloso.bookhair.app.negocio.manager.IFirmManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.IRepeatManager;
 import com.diloso.bookhair.app.negocio.utils.Utils;
 import com.diloso.bookhair.app.negocio.utils.templates.Generator;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 
 @Controller
@@ -60,43 +62,43 @@ public class EventController {
 	
 	public static final String CHAR_TAG_BR = "<br>";
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	//@Autowired
+	@Autowired
 	protected Generator generatorVelocity;
 	
-	//@Autowired
-	protected LocalDAO localDAO;
+	@Autowired
+	protected ILocalManager localManager;
 	
-	//@Autowired
-	protected CalendarDAO calendarDAO;
+	@Autowired
+	protected ICalendarManager calendarManager;
 	
-	//@Autowired
-	protected EventDAO eventDAO;
+	@Autowired
+	protected IEventManager eventManager;
 	
-	//@Autowired
-	protected RepeatDAO repeatDAO;
+	@Autowired
+	protected IRepeatManager repeatManager;
 	
-	//@Autowired
-	protected LocalTaskDAO localTaskDAO;
+	@Autowired
+	protected ILocalTaskManager localTaskManager;
 	
-	//@Autowired
-	protected ClientDAO clientDAO;
+	@Autowired
+	protected IClientManager clientManager;
 	
-	//@Autowired
-	protected FirmDAO firmDAO;
+	@Autowired
+	protected IFirmManager firmManager;
 	
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager multiTextManager;
 	
-	//@Autowired
-	protected EventDAOGoogle eventDAOGoogle;
+	@Autowired
+	protected IEventManagerGoogle eventManagerGoogle;
 	
-	//@Autowired
+	@Autowired
 	protected CalendarController calController;
 	
-	//@Autowired
+	@Autowired
 	protected RepeatController repeatController;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
@@ -138,7 +140,7 @@ public class EventController {
 		} else {
 			ClientDTO eveClient = null;
 			if (!admin){ // Si no es admin, buscamos por el email, que es obligatorio
-				eveClient = clientDAO.getByEmail(local.getResFirId(),cliEmail);
+				eveClient = clientManager.getByEmail(local.getResFirId(),cliEmail);
 			} 
 			if (!isNew && !admin && (getEventByClientAgo(local.getId(), eveClient.getId(), local.getLocNumUsuDays()).size()>0) ){
 				message = messageSourceApp.getMessage("form.error.client.bookingOne1", null, locale)+" "+local.getLocNumUsuDays()+" "+messageSourceApp.getMessage("form.error.client.bookingOne2", null, locale);
@@ -170,7 +172,7 @@ public class EventController {
 	
 	protected boolean existsEmail(Long resFirId, String cliEmail){
 		if (cliEmail != null && cliEmail.length()>0){
-			ClientDTO eveClient = clientDAO.getByEmail(resFirId,cliEmail);
+			ClientDTO eveClient = clientManager.getByEmail(resFirId,cliEmail);
 			if (eveClient!=null){
 				return true;
 			}
@@ -185,7 +187,7 @@ public class EventController {
 		List<Long> listCalendarCandidate = calController.getCalendarsId(selectedCalendars);
 		String selectedTasks = arg0.getParameter("selectedTasks");
 		String selectedTasksCount = arg0.getParameter("selectedTasksCount");
-		List<LocalTaskDTO> listLocalTaskCombi = localTaskDAO.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
+		List<LocalTaskDTO> listLocalTaskCombi = localTaskManager.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
 		List<List<LocalTaskDTO>> listLocalTasks = calController.getListLocalTasks(selectedTasks,selectedTasksCount,listLocalTaskCombi);
 		newObject (arg0,arg1,localId,listLocalTasks,listCalendarCandidate,true, false);
 	}
@@ -198,7 +200,7 @@ public class EventController {
 		List<Long> listCalendarCandidate = calController.getCalendarsId(selectedCalendars);
 		String selectedTasks = arg0.getParameter("selectedTasks");
 		String selectedTasksCount = arg0.getParameter("selectedTasksCount");
-		List<LocalTaskDTO> listLocalTaskCombi = localTaskDAO.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
+		List<LocalTaskDTO> listLocalTaskCombi = localTaskManager.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
 		List<List<LocalTaskDTO>> listLocalTasks = calController.getListLocalTasks(selectedTasks,selectedTasksCount,listLocalTaskCombi);
 		newObject (arg0,arg1,localId,listLocalTasks,listCalendarCandidate,false, false);
 	}
@@ -247,10 +249,10 @@ public class EventController {
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
 		// Propiedades de local
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
 		// Propiedades de firma
-		FirmDTO firm = firmDAO.getById(local.getResFirId());
+		FirmDTO firm = firmManager.getById(local.getResFirId());
 		
 		Long lngEveStartTime = new Long(arg0.getParameter("eveStartTime"));
 		Date eveStartTime = new Date(lngEveStartTime);
@@ -269,7 +271,7 @@ public class EventController {
 		List<Map<String,Object>> listCalendarOpen = calController.getListCalendarOpen(local, selectedDate, listCalendarCandidate);
 		List<EventDTO> listEvents = null;
 		for (Map<String,Object> calendarOpen : listCalendarOpen) {
-			listEvents = eventDAO.getEventByDay((CalendarDTO)calendarOpen.get(CalendarController.CAL), selectedDate);
+			listEvents = eventManager.getEventByDay((CalendarDTO)calendarOpen.get(CalendarController.CAL), selectedDate);
 			if (firm.getFirConfig().getConfigLocal().getConfigLocRepeat()==1){
 				List<RepeatDTO> listRepeatLocal = repeatController.listCalendarByDay(((CalendarDTO)calendarOpen.get(CalendarController.CAL)).getId(), selectedDate);
 				listEvents.addAll(listRepeatLocal);
@@ -313,11 +315,11 @@ public class EventController {
 			ClientDTO eveClient = null;
 			if (!admin){ // Si no es admin 
 				if (!isNew){ // Si no es nuevo, buscamos por el email, que es obligatorio
-					eveClient = clientDAO.getByEmail(local.getResFirId(),cliEmail);
+					eveClient = clientManager.getByEmail(local.getResFirId(),cliEmail);
 				}	
 			} else { // Es admin
 				if (!isNew){ // Si no es nuevo, buscamos por el id
-					eveClient = clientDAO.getById(new Long(strCliId));
+					eveClient = clientManager.getById(new Long(strCliId));
 				}
 			}
 			if (isNew) {// Es nuevo
@@ -334,7 +336,7 @@ public class EventController {
 					eveClient.setWhoTelf2(cliTelf);	
 				}
 				eveClient.setCliCreationTime(eveBookingTime);
-				eveClient = clientDAO.create(eveClient);
+				eveClient = clientManager.create(eveClient);
 			
 			} else if (!admin){
 				// Puede que hayan puesto un nombre y telf distinto del guardado en la BBDD
@@ -344,7 +346,7 @@ public class EventController {
 				} else {
 					eveClient.setWhoTelf2(cliTelf);	
 				}
-				eveClient = clientDAO.update(eveClient);
+				eveClient = clientManager.update(eveClient);
 			}
 			
 			// Propiedades de booking
@@ -408,7 +410,7 @@ public class EventController {
 					if (local.getLocMulServices() == 1){
 						tasksMail += " 1 ";
 					}
-					multiTextKey = multiTextDAO.getByLanCodeAndKey(locale.getLanguage(), eventAux.getEveLocalTask().getLotNameMulti());
+					multiTextKey = multiTextManager.getByLanCodeAndKey(locale.getLanguage(), eventAux.getEveLocalTask().getLotNameMulti());
 					tasksMail += multiTextKey.getMulText();
 				}	
 				if (listCalendarCandidate!=null && listCalendarCandidate.size()>0){
@@ -442,16 +444,16 @@ public class EventController {
 					}					
 				}
 				
-				event = eventDAO.create(event);
+				event = eventManager.create(event);
 			
 				// Sincronizacion con GCalendar
 				if (local.getLocSinGCalendar()!=null){
 					// Estas propiedades no persisten en BBDD
 					event.getEveLocalTask().setLotName(multiTextKey.getMulText());
 					event.setEveLocale(locale);
-					String eveIDGCalendar = eventDAOGoogle.insertEvent(local,event);
+					String eveIDGCalendar = eventManagerGoogle.insertEvent(local,event);
 					event.setEveIDGCalendar(eveIDGCalendar);
-					event = eventDAO.update(event);
+					event = eventManager.update(event);
 				}
 				
 				indx ++;
@@ -528,15 +530,15 @@ public class EventController {
  
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(new Long(localId));
+		List<CalendarDTO> listCalendar = calendarManager.getCalendarAdmin(new Long(localId));
 
 		List<EventDTO> listEventLocal = new ArrayList<EventDTO>();
 		MultiTextDTO multiTextKey = null;
 		for (CalendarDTO calendar : listCalendar) {
-			List<EventDTO> listEventAux = eventDAO.getEventByWeek(calendar,selectedDate);
+			List<EventDTO> listEventAux = eventManager.getEventByWeek(calendar,selectedDate);
 			// Añadimos los eventos de este puesto a los del local
 			for (EventDTO event : listEventAux) {
-				multiTextKey = multiTextDAO.getByLanCodeAndKey(locale.getLanguage(),event.getEveLocalTask().getLotNameMulti());
+				multiTextKey = multiTextManager.getByLanCodeAndKey(locale.getLanguage(),event.getEveLocalTask().getLotNameMulti());
 				event.getEveLocalTask().setLotName(multiTextKey.getMulText());
 				event.setEveCalendarName(calendar.getCalName());
 				listEventLocal.add(event);
@@ -563,11 +565,11 @@ public class EventController {
 	protected @ResponseBody
 	List<EventDTO> listByDay(@RequestParam("localId") Long localId, @RequestParam("selectedDate") String selectedDate) throws Exception {
 
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(localId);
+		List<CalendarDTO> listCalendar = calendarManager.getCalendarAdmin(localId);
 
 		List<EventDTO> listEventLocal = new ArrayList<EventDTO>();
 		for (CalendarDTO calendar : listCalendar) {
-			List<EventDTO> listEventAux = eventDAO.getEventByDay(calendar,selectedDate);
+			List<EventDTO> listEventAux = eventManager.getEventByDay(calendar,selectedDate);
 			// Añadimos los eventos de este puesto a los del local
 			for (EventDTO event : listEventAux) {
 				listEventLocal.add(event);
@@ -593,8 +595,8 @@ public class EventController {
 	protected @ResponseBody
 	List<EventDTO> listCalendarByDay(@RequestParam("id") Long id, @RequestParam("selectedDate") String selectedDate) throws Exception {
 
-		CalendarDTO calendar = calendarDAO.getById(id);
-		List<EventDTO> listEvent = eventDAO.getEventByDay(calendar,selectedDate);
+		CalendarDTO calendar = calendarManager.getById(id);
+		List<EventDTO> listEvent = eventManager.getEventByDay(calendar,selectedDate);
 
 		return listEvent;
 	}
@@ -606,10 +608,10 @@ public class EventController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 
-		List<EventDTO> listEventLocal = eventDAO.getEventByICS(ICS);
+		List<EventDTO> listEventLocal = eventManager.getEventByICS(ICS);
 		MultiTextDTO multiTextKey = null;
 		for (EventDTO event : listEventLocal) {
-			multiTextKey = multiTextDAO.getByLanCodeAndKey(locale.getLanguage(),event.getEveLocalTask().getLotNameMulti());
+			multiTextKey = multiTextManager.getByLanCodeAndKey(locale.getLanguage(),event.getEveLocalTask().getLotNameMulti());
 			event.getEveLocalTask().setLotName(multiTextKey.getMulText());
 		}
 		
@@ -618,19 +620,19 @@ public class EventController {
 	
 	protected List<EventDTO> getEventByClientAgo(Long localId, Long clientId, int numDays ) {
 
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendar(localId);
+		List<CalendarDTO> listCalendar = calendarManager.getCalendar(localId);
 		List<EventDTO> listEventAux = null;
 		List<EventDTO> listEventLocal = new ArrayList<EventDTO>();
 		for (CalendarDTO calendar : listCalendar) {
 			if (numDays!=-1){
 				// Calculamos el desplazamiento de la zona horaria desde UTC
-				LocalDTO local = localDAO.getById(new Long(localId));
+				LocalDTO local = localManager.getById(new Long(localId));
 				TimeZone calendarTimeZone = TimeZone.getTimeZone(local.getLocWhere().getWheTimeZone());
 				Date minDate =  new Date();
 				minDate =  new Date(minDate.getTime() + calendarTimeZone.getOffset(minDate.getTime()));
-				listEventAux = eventDAO.getEventByClientAgo(calendar, clientId,minDate, numDays);
+				listEventAux = eventManager.getEventByClientAgo(calendar, clientId,minDate, numDays);
 			} else {
-				listEventAux = eventDAO.getEventByClientAgo(calendar, clientId, null, -1);
+				listEventAux = eventManager.getEventByClientAgo(calendar, clientId, null, -1);
 			}
 			// Añadimos los eventos de este puesto a los del local
 			for (EventDTO event : listEventAux) {
@@ -658,7 +660,7 @@ public class EventController {
 				listEventClient.add(eventCandidate);
 				strTasks = "";
 			}
-			multiTextKey = multiTextDAO.getByLanCodeAndKey(locale.getLanguage(),event.getEveLocalTask().getLotNameMulti());
+			multiTextKey = multiTextManager.getByLanCodeAndKey(locale.getLanguage(),event.getEveLocalTask().getLotNameMulti());
 			if (strTasks!=""){
 				strTasks += " , " + multiTextKey.getMulText();
 			} else {
@@ -681,14 +683,14 @@ public class EventController {
 	protected int notify(@RequestParam("id") Long id)
 			throws Exception {
 		
-		EventDTO event = eventDAO.getById(id);
+		EventDTO event = eventManager.getById(id);
 		if (event!=null){
 			if (event.getEveNotified()==1){
 				event.setEveNotified(0);
 			} else {
 				event.setEveNotified(1);
 			}
-			eventDAO.update(event);
+			eventManager.update(event);
 		}
 		return event.getEveNotified();
 	}
@@ -700,16 +702,16 @@ public class EventController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
-		EventDTO event = eventDAO.getById(id);
+		EventDTO event = eventManager.getById(id);
 		if (event!=null){
 			event.setEnabled(0);
-			eventDAO.update(event);
+			eventManager.update(event);
 			
 			// Sincronizacion con GCalendar
 			if (local.getLocSinGCalendar()!=null){
-				eventDAOGoogle.removeEvent(local,event);
+				eventManagerGoogle.removeEvent(local,event);
 			}
 			
 			log.info("Evento cancelado : "+event.getId());
@@ -780,7 +782,7 @@ public class EventController {
 	@ResponseBody
 	private int consume(@RequestParam("ICS") String ICS) throws Exception {
 		Integer putConsumed = null;
-		List<EventDTO> listEventLocal = eventDAO.getEventByICS(ICS);
+		List<EventDTO> listEventLocal = eventManager.getEventByICS(ICS);
 		for (EventDTO event : listEventLocal) {
 			if (putConsumed==null){ // Solo lo hacemos en el primer evento de la reserva
 				if (event.getEveConsumed()>0){
@@ -790,7 +792,7 @@ public class EventController {
 				}
 			}
 			event.setEveConsumed(putConsumed);
-			eventDAO.update(event);
+			eventManager.update(event);
 		}
 		return putConsumed;
 	}
@@ -801,7 +803,7 @@ public class EventController {
 	@ResponseBody
 	private int consumeComent(@RequestParam("ICS") String ICS, @RequestParam("sel") int sel, @RequestParam("text") String text) throws Exception {
 		Integer putConsumed = null;
-		List<EventDTO> listEventLocal = eventDAO.getEventByICS(ICS);
+		List<EventDTO> listEventLocal = eventManager.getEventByICS(ICS);
 		for (EventDTO event : listEventLocal) {
 			if (putConsumed==null){ // Solo lo hacemos en el primer evento de la reserva
 				if (event.getEveConsumed()>0){
@@ -815,7 +817,7 @@ public class EventController {
 				text = event.getEveDesc() + text;
 				event.setEveDesc(text);
 			}	
-			eventDAO.update(event);
+			eventManager.update(event);
 		}
 		return putConsumed;
 	}
@@ -828,40 +830,40 @@ public class EventController {
 		this.generatorVelocity = generatorVelocity;
 	}
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.localManager = iLocalManager;
 	}
 
-	public void setCalendarDAO(CalendarDAO calendarDAO) {
-		this.calendarDAO = calendarDAO;
+	public void setCalendarDAO(ICalendarManager iCalendarManager) {
+		this.calendarManager = iCalendarManager;
 	}
 
-	public void setEventDAO(EventDAO eventDAO) {
-		this.eventDAO = eventDAO;
+	public void setEventDAO(IEventManager iEventManager) {
+		this.eventManager = iEventManager;
 	}
 
-	public void setRepeatDAO(RepeatDAO repeatDAO) {
-		this.repeatDAO = repeatDAO;
+	public void setRepeatDAO(IRepeatManager iRepeatManager) {
+		this.repeatManager = iRepeatManager;
 	}
 
-	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
-		this.localTaskDAO = localTaskDAO;
+	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
+		this.localTaskManager = iLocalTaskManager;
 	}
 
-	public void setClientDAO(ClientDAO clientDAO) {
-		this.clientDAO = clientDAO;
+	public void setClientDAO(IClientManager iClientManager) {
+		this.clientManager = iClientManager;
 	}
 
-	public void setFirmDAO(FirmDAO firmDAO) {
-		this.firmDAO = firmDAO;
+	public void setFirmDAO(IFirmManager iFirmManager) {
+		this.firmManager = iFirmManager;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.multiTextManager = iMultiTextManager;
 	}
 
-	public void setEventDAOGoogle(EventDAOGoogle eventDAOGoogle) {
-		this.eventDAOGoogle = eventDAOGoogle;
+	public void setEventDAOGoogle(IEventManagerGoogle iEventManagerGoogle) {
+		this.eventManagerGoogle = iEventManagerGoogle;
 	}
 
 	public void setCalController(CalendarController calController) {

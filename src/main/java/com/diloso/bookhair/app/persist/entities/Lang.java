@@ -1,32 +1,23 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import com.diloso.bookhair.app.datastore.data.StorableWithModificationTimestamp;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * The persistent class for the Lang entity
  * 
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name="getLang", query = "SELECT t FROM Lang t WHERE t.enabled =1 order by t.lanName asc"),
-	@NamedQuery(name="getLangName", query = "SELECT t FROM Lang t WHERE t.lanName=:lanName and t.enabled =1"),
-	@NamedQuery(name="getLangCode", query = "SELECT t FROM Lang t WHERE t.lanCode=:lanCode and t.enabled =1")
-})
-public class Lang implements Serializable {
-
-	protected static final long serialVersionUID = 1L;
+@Cache
+public class Lang extends StorableWithModificationTimestamp<Long> { 
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Long id;
 	
+	@Index
 	protected Integer enabled;
 	
 	protected String lanName;

@@ -2,16 +2,16 @@ package com.diloso.bookhair.web.server;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
+
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class FileServe extends HttpServlet {
 	protected final static BlobstoreService blobstoreService = BlobstoreServiceFactory
@@ -30,7 +30,7 @@ public class FileServe extends HttpServlet {
 			res.setHeader("content-type", blobInfo.getContentType());
 			res.setHeader("content-disposition", "attachment; filename="
 					+ blobInfo.getFilename());
-			blobstoreService.serve(blobKey, res);
+			//blobstoreService.serve(blobKey, res);
 		} catch (Exception e) {
 		}
 

@@ -1,24 +1,18 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
 
 /**
  * The persistent class for the Client entity
  * 
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name="getClient", query = "SELECT t FROM Client t WHERE t.resFirId=:resFirId and t.enabled= 1 order by t.id desc"),
-	@NamedQuery(name="getClientEmail", query = "SELECT t FROM Client t WHERE t.resFirId=:resFirId and t.whoEmail = :whoEmail and t.enabled= 1 order by t.id desc")
-})
-public class Client extends Who implements Serializable {
-	protected static final long serialVersionUID = 1L;
-
+@Cache
+public class Client extends Who { 
+	
 	public Client() {
     }
 

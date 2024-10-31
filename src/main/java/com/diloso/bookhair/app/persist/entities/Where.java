@@ -1,17 +1,16 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
 
 /**
  * The persistent class for the Where entity
  * 
  */
 @Entity
-public class Where extends Resource implements Serializable {
-	protected static final long serialVersionUID = 1L;
-
+@Cache
+public class Where extends Resource { 
+	
 	protected String wheAddress;
 	
 	protected String wheCity;

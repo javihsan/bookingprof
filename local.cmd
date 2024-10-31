@@ -1,1 +1,1 @@
-mvn clean appengine:devserver -P debug 
+mvn package appengine:run -P debug

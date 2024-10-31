@@ -1,14 +1,12 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import com.diloso.bookhair.app.datastore.data.StorableWithModificationTimestamp;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 
 /**
@@ -16,18 +14,13 @@ import javax.persistence.NamedQuery;
  * 
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name="getAnnualDiaryLocal", query = "SELECT t FROM AnnualDiary t WHERE t.anuLocalId = :anuLocalId and t.anuDate = :anuDate and t.enabled =1 order by t.id desc"),
-	@NamedQuery(name="getAnnualDiaryCalendar", query = "SELECT t FROM AnnualDiary t WHERE t.anuCalendarId = :anuCalendarId and t.anuDate = :anuDate and t.enabled =1 order by t.id desc")
-})
-public class AnnualDiary implements Serializable {
-	
-	protected static final long serialVersionUID = 1L;
-
+@Cache
+public class AnnualDiary extends StorableWithModificationTimestamp<Long> {  
+		
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Long id;
 	
+	@Index
 	protected Integer enabled;
 	
 	protected Date anuDate;

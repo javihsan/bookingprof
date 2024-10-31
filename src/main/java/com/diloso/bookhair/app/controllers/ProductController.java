@@ -6,9 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -21,13 +19,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.LangDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
-import com.diloso.bookhair.app.negocio.dao.ProductDAO;
 import com.diloso.bookhair.app.negocio.dto.LangDTO;
 import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 import com.diloso.bookhair.app.negocio.dto.ProductDTO;
-import com.diloso.bookhair.app.persist.manager.ProductManager;
+import com.diloso.bookhair.app.negocio.manager.ILangManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.IProductManager;
+import com.diloso.bookhair.app.negocio.manager.ProductManager;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/product", "/product"})
@@ -35,17 +36,17 @@ public class ProductController {
 	
 	protected static final String PRO_NAME_PARAM = "proName";
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	//@Autowired
-	protected ProductDAO productDAO;
+	@Autowired
+	protected IProductManager productManager;
 	
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager multiTextManager;
 	
-	//@Autowired
-	protected LangDAO langDAO;
+	@Autowired
+	protected ILangManager langManager;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
 	@ResponseStatus(value=HttpStatus.CONFLICT,reason="")
@@ -104,14 +105,14 @@ public class ProductController {
 			ProductDTO product = new ProductDTO();
 			
 			if (proId!=null){ // Existe
-				product = productDAO.getById(new Long(proId));
+				product = productManager.getById(new Long(proId));
 			}
 			
 			String nameValue = "";
 			String keyNameMulti = ProductManager.KEY_MULTI_RATE_NAME+localId+"_"+defaultNameValue.toLowerCase();
 			Map<String,String> hashNamesParam = new HashMap<String,String>();
 
-			List<LangDTO> listLang = langDAO.getLang();	
+			List<LangDTO> listLang = langManager.getLang();	
 			for (LangDTO lang : listLang) {
 				nameValue = arg0.getParameter(PRO_NAME_PARAM+"_"+lang.getLanCode());
 				if (nameValue == null || nameValue.length()==0){
@@ -121,15 +122,15 @@ public class ProductController {
 			}
 
 			if (proId!=null){ // Existe
-				List<MultiTextDTO> listMulti = multiTextDAO.getMultiTextByKey(product.getProNameMulti());
+				List<MultiTextDTO> listMulti = multiTextManager.getMultiTextByKey(product.getProNameMulti());
 				for (MultiTextDTO nameMulti: listMulti){
 					nameValue = hashNamesParam.get(nameMulti.getMulLanCode());
 					nameMulti.setMulText(nameValue);
-					multiTextDAO.update(nameMulti);
+					multiTextManager.update(nameMulti);
 				}
 			} else {
 				int indx = 0;
-				while (multiTextDAO.getByLanCodeAndKey(locale.getLanguage(), keyNameMulti)!=null){
+				while (multiTextManager.getByLanCodeAndKey(locale.getLanguage(), keyNameMulti)!=null){
 					keyNameMulti = ProductManager.KEY_MULTI_RATE_NAME+localId+"_"+defaultNameValue.toLowerCase()+"_"+indx;
 					indx ++;
 				}
@@ -142,7 +143,7 @@ public class ProductController {
 					nameMulti.setMulKey(keyNameMulti);
 					nameMulti.setMulLanCode(codeLangMap);
 					nameMulti.setMulText(nameValue);
-					multiTextDAO.create(nameMulti);
+					multiTextManager.create(nameMulti);
 				}
 			}
 			strProRate = strProRate.replace(",", ".");
@@ -150,13 +151,13 @@ public class ProductController {
 			
 			if (proId!=null){ // Existe
 				product.setProRate(proRate);
-				product = productDAO.update(product);
+				product = productManager.update(product);
 			} else { // Es nuevo
 				product.setEnabled(1);
 				product.setProLocalId(localId);
 				product.setProNameMulti(keyNameMulti);
 				product.setProRate(proRate);
-				product = productDAO.create(product);
+				product = productManager.create(product);
 			}
 			return product;
 		}
@@ -170,9 +171,9 @@ public class ProductController {
 			throws Exception {
 
 		if (id!=null){ // Existe
-			ProductDTO product = productDAO.getById(id);
+			ProductDTO product = productManager.getById(id);
 			product.setEnabled(0);
-			productDAO.update(product);
+			productManager.update(product);
 		}
 	}
 	
@@ -182,7 +183,7 @@ public class ProductController {
 
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		List<ProductDTO> listProduct = productDAO.getProductByLang(new Long(localId), locale.getLanguage());	
+		List<ProductDTO> listProduct = productManager.getProductByLang(new Long(localId), locale.getLanguage());	
 					
 		return listProduct;
 	}
@@ -191,7 +192,7 @@ public class ProductController {
 	protected @ResponseBody
 	ProductDTO get(@RequestParam("id") Long id) throws Exception {
 
-		ProductDTO product = productDAO.getById(id);	
+		ProductDTO product = productManager.getById(id);	
 					
 		return product;
 	}
@@ -200,16 +201,16 @@ public class ProductController {
 		this.messageSourceApp = messageSourceApp;
 	}
 
-	public void setProductDAO(ProductDAO productDAO) {
-		this.productDAO = productDAO;
+	public void setProductDAO(IProductManager iProductManager) {
+		this.productManager = iProductManager;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.multiTextManager = iMultiTextManager;
 	}
 
-	public void setLangDAO(LangDAO langDAO) {
-		this.langDAO = langDAO;
+	public void setLangDAO(ILangManager iLangManager) {
+		this.langManager = iLangManager;
 	}
 	
 

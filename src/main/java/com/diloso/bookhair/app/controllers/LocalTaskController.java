@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -22,19 +20,22 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.CalendarDAO;
-import com.diloso.bookhair.app.negocio.dao.DiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.LangDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalTaskDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
-import com.diloso.bookhair.app.negocio.dao.SemanalDiaryDAO;
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.LangDTO;
 import com.diloso.bookhair.app.negocio.dto.LocalDTO;
 import com.diloso.bookhair.app.negocio.dto.LocalTaskDTO;
 import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
-import com.diloso.bookhair.app.persist.manager.LocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.ICalendarManager;
+import com.diloso.bookhair.app.negocio.manager.IDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.ILangManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.ISemanalDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.LocalTaskManager;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/localTask", "/localTask"})
@@ -42,29 +43,29 @@ public class LocalTaskController {
 	
 	protected static final String LOT_NAME_PARAM = "lotName";
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 		
-	//@Autowired
-	protected LocalDAO localDAO;
+	@Autowired
+	protected ILocalManager localManager;
 	
-	//@Autowired
-	protected CalendarDAO calendarDAO;
+	@Autowired
+	protected ICalendarManager calendarManager;
 	
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager multiTextManager;
 	
-	//@Autowired
-	protected LangDAO langDAO;
+	@Autowired
+	protected ILangManager langManager;
 	
-	//@Autowired
-	protected LocalTaskDAO localTaskDAO;
+	@Autowired
+	protected ILocalTaskManager localTaskManager;
 	
-	//@Autowired
-	protected DiaryDAO diaryDAO;
+	@Autowired
+	protected IDiaryManager diaryManager;
 	
-	//@Autowired
-	protected SemanalDiaryDAO semanalDiaryDAO;
+	@Autowired
+	protected ISemanalDiaryManager semanalDiaryManager;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
 	@ResponseStatus(value=HttpStatus.CONFLICT,reason="")
@@ -132,7 +133,7 @@ public class LocalTaskController {
 		if (validateNew(arg0, defaultNameValue, strLotTaskId, strLotTaskDuration, strLotTaskRate)){
 
 			Long localId = new Long(arg0.getParameter("localId"));
-			LocalDTO local = localDAO.getById(new Long(localId));
+			LocalDTO local = localManager.getById(new Long(localId));
 			
 			localTask = new LocalTaskDTO();
 			
@@ -142,12 +143,12 @@ public class LocalTaskController {
 			Float lotTaskRate = new Float(strLotTaskRate);
 			
 			boolean setLocalDefault = lotTaskDuration>0;
-			if (localTaskDAO.getLocalTaskSimple(localId,langDefault).size()>0){
+			if (localTaskManager.getLocalTaskSimple(localId,langDefault).size()>0){
 				setLocalDefault = false;
 			}
 			
 			if (lotId!=null){ // Existe
-				localTask = localTaskDAO.getById(new Long(lotId));
+				localTask = localTaskManager.getById(new Long(lotId));
 			}
 			
 			String nameValue = "";
@@ -164,15 +165,15 @@ public class LocalTaskController {
 			}
 
 			if (lotId!=null){ // Existe
-				List<MultiTextDTO> listMulti = multiTextDAO.getMultiTextByKey(localTask.getLotNameMulti());
+				List<MultiTextDTO> listMulti = multiTextManager.getMultiTextByKey(localTask.getLotNameMulti());
 				for (MultiTextDTO nameMulti: listMulti){
 					nameValue = hashNamesParam.get(nameMulti.getMulLanCode());
 					nameMulti.setMulText(nameValue);
-					multiTextDAO.update(nameMulti);
+					multiTextManager.update(nameMulti);
 				}
 			} else {
 				int indx = 0;
-				while (multiTextDAO.getByLanCodeAndKey(locale.getLanguage(), keyNameMulti)!=null){
+				while (multiTextManager.getByLanCodeAndKey(locale.getLanguage(), keyNameMulti)!=null){
 					keyNameMulti = LocalTaskManager.KEY_MULTI_LOCAL_TASK_NAME+localId+"_"+defaultNameValue.toLowerCase()+"_"+indx;
 					indx ++;
 				}
@@ -185,7 +186,7 @@ public class LocalTaskController {
 					nameMulti.setMulKey(keyNameMulti);
 					nameMulti.setMulLanCode(codeLangMap);
 					nameMulti.setMulText(nameValue);
-					multiTextDAO.create(nameMulti);
+					multiTextManager.create(nameMulti);
 				}
 			}
 			
@@ -198,7 +199,7 @@ public class LocalTaskController {
 				}
 				localTask.setLotTaskRate(lotTaskRate);
 				localTask.setLotVisible(new Integer(strLotVisible));
-				localTaskDAO.update(localTask);
+				localTaskManager.update(localTask);
 			} else { // Es nuevo
 				localTask.setEnabled(1);
 				localTask.setLotLocalId(localId);
@@ -211,12 +212,12 @@ public class LocalTaskController {
 				}
 				localTask.setLotTaskRate(lotTaskRate);
 				localTask.setLotVisible(new Integer(strLotVisible));
-				localTask = localTaskDAO.create(localTask);
+				localTask = localTaskManager.create(localTask);
 				
 				if (setLocalDefault){
 					localTask.setLotDefault(1);
 					local.setLocTaskDefaultId(localTask.getId());
-					localDAO.update(local);
+					localManager.update(local);
 				}
 			}
 		}
@@ -274,18 +275,18 @@ public class LocalTaskController {
 			LocalTaskDTO localTask = new LocalTaskDTO();
 			
 			if (lotId!=null){ // Existe
-				localTask = localTaskDAO.getById(new Long(lotId));
+				localTask = localTaskManager.getById(new Long(lotId));
 				localTask.setLotTaskCombiId(lotTaskCombiId);
 				localTask.setLotTaskCombiRes(lotTaskCombiRes);
 				localTask.setLotVisible(new Integer(strLotVisible));
-				localTaskDAO.update(localTask);
+				localTaskManager.update(localTask);
 			} else { // Es nuevo
 				localTask.setEnabled(1);
 				localTask.setLotLocalId(localId);
 				localTask.setLotTaskCombiId(lotTaskCombiId);
 				localTask.setLotTaskCombiRes(lotTaskCombiRes);
 				localTask.setLotVisible(new Integer(strLotVisible));
-				localTask = localTaskDAO.create(localTask);
+				localTask = localTaskManager.create(localTask);
 			}
 		}
 	}
@@ -300,7 +301,7 @@ public class LocalTaskController {
 			message = messageSourceApp.getMessage("form.error.localTask.taskReq", null, locale);
 			res = false;
 		} else{
-			List<LocalTaskDTO> listLocalTask = localTaskDAO.getLocalTaskCombi(new Long(localId), locale.getLanguage(), "");
+			List<LocalTaskDTO> listLocalTask = localTaskManager.getLocalTaskCombi(new Long(localId), locale.getLanguage(), "");
 			for (LocalTaskDTO localTaskDTO : listLocalTask) {
 				for (Long combiId : localTaskDTO.getLotTaskCombiId()) {
 					if (combiId.equals(id)){
@@ -324,12 +325,12 @@ public class LocalTaskController {
 			throws Exception {
 			
 		if (validateRemove(arg0, id, localId)){
-			LocalTaskDTO localTask = localTaskDAO.getById(id);
+			LocalTaskDTO localTask = localTaskManager.getById(id);
 			localTask.setEnabled(0);
-			localTaskDAO.update(localTask);
+			localTaskManager.update(localTask);
 			
 			// Se borra de todos los puestos del local
-			List<CalendarDTO> listCalendar = calendarDAO.getCalendar(new Long(localId));
+			List<CalendarDTO> listCalendar = calendarManager.getCalendar(new Long(localId));
 			for (CalendarDTO calendar : listCalendar) {
 				List<Long> listLocalTask = new ArrayList<Long>();
 				if (calendar.getCalLocalTasksId()!=null){
@@ -340,7 +341,7 @@ public class LocalTaskController {
 					}
 				}	
 				calendar.setCalLocalTasksId(listLocalTask);
-				calendarDAO.update(calendar);
+				calendarManager.update(calendar);
 			}
 			
 		}
@@ -353,7 +354,7 @@ public class LocalTaskController {
 		Locale locale = new Locale(lanCode);
 		String charAND =  messageSourceApp.getMessage("general.and", null, locale);
 		
-		return localTaskDAO.getLocalTaskAndCombiVisible(localId, locale.getLanguage(), charAND);	
+		return localTaskManager.getLocalTaskAndCombiVisible(localId, locale.getLanguage(), charAND);	
 					
 	}
 	
@@ -364,7 +365,7 @@ public class LocalTaskController {
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		String charAND =  messageSourceApp.getMessage("general.and", null, locale);
 		
-		return localTaskDAO.getLocalTaskAndCombi(localId, locale.getLanguage(), charAND);	
+		return localTaskManager.getLocalTaskAndCombi(localId, locale.getLanguage(), charAND);	
 					
 	}
 
@@ -376,7 +377,7 @@ public class LocalTaskController {
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		String charAND =  messageSourceApp.getMessage("general.and", null, locale);
 		
-		List<LocalTaskDTO> listTask = localTaskDAO.getLocalTask(localId, locale.getLanguage(), charAND);	
+		List<LocalTaskDTO> listTask = localTaskManager.getLocalTask(localId, locale.getLanguage(), charAND);	
 					
 		return listTask;
 	}
@@ -387,7 +388,7 @@ public class LocalTaskController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 				
-		List<LocalTaskDTO> listTask = localTaskDAO.getLocalTaskSimple(localId, locale.getLanguage());	
+		List<LocalTaskDTO> listTask = localTaskManager.getLocalTaskSimple(localId, locale.getLanguage());	
 					
 		return listTask;
 	}
@@ -398,7 +399,7 @@ public class LocalTaskController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 				
-		List<LocalTaskDTO> listTask = localTaskDAO.getLocalTaskSimpleInv(localId, locale.getLanguage());	
+		List<LocalTaskDTO> listTask = localTaskManager.getLocalTaskSimpleInv(localId, locale.getLanguage());	
 					
 		return listTask;
 	}
@@ -407,7 +408,7 @@ public class LocalTaskController {
 	protected @ResponseBody
 	LocalTaskDTO get(@RequestParam("id") Long id) throws Exception {
 
-		LocalTaskDTO localTask = localTaskDAO.getById(id);	
+		LocalTaskDTO localTask = localTaskManager.getById(id);	
 					
 		return localTask;
 	}
@@ -416,32 +417,32 @@ public class LocalTaskController {
 		this.messageSourceApp = messageSourceApp;
 	}
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.localManager = iLocalManager;
 	}
 
-	public void setCalendarDAO(CalendarDAO calendarDAO) {
-		this.calendarDAO = calendarDAO;
+	public void setCalendarDAO(ICalendarManager iCalendarManager) {
+		this.calendarManager = iCalendarManager;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.multiTextManager = iMultiTextManager;
 	}
 
-	public void setLangDAO(LangDAO langDAO) {
-		this.langDAO = langDAO;
+	public void setLangDAO(ILangManager iLangManager) {
+		this.langManager = iLangManager;
 	}
 
-	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
-		this.localTaskDAO = localTaskDAO;
+	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
+		this.localTaskManager = iLocalTaskManager;
 	}
 
-	public void setDiaryDAO(DiaryDAO diaryDAO) {
-		this.diaryDAO = diaryDAO;
+	public void setDiaryDAO(IDiaryManager iDiaryManager) {
+		this.diaryManager = iDiaryManager;
 	}
 
-	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
-		this.semanalDiaryDAO = semanalDiaryDAO;
+	public void setSemanalDiaryDAO(ISemanalDiaryManager iSemanalDiaryManager) {
+		this.semanalDiaryManager = iSemanalDiaryManager;
 	}
 	
 	

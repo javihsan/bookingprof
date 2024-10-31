@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	version="3.0"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+<web-app
+  xmlns="https://jakarta.ee/xml/ns/jakartaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+  metadata-complete="false"
+  version="6.0">
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -44,10 +47,24 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
+	<!-- REGISTRA TIPOS DE ENTIDADES EN OBJECTIFY CUANDO LEVANTA LA INSTANCIA -->
+    <listener>
+        <listener-class>com.diloso.bookhair.app.negocio.utils.ObjectifyLoader</listener-class>
+    </listener>
+    <!-- SINCRONIZA CACHES DE OBJECTIFY, NECESARIO O SE PUEDEN PRODUCIR INCONSISTENCIAS ENTRE PETICIONES -->
+    <filter>
+        <filter-name>ObjectifyFilter</filter-name>
+        <filter-class>com.diloso.bookhair.app.datastore.ObjectifyWebFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ObjectifyFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>default</servlet-name>
-		<servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
+		<servlet-class>org.eclipse.jetty.ee10.servlet.DefaultServlet</servlet-class>
 	</servlet>
 	 	
 	<servlet>

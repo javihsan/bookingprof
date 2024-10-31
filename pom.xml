@@ -7,7 +7,7 @@
 	<artifactId>dilosohairapp</artifactId>
 
 	<!-- VERSION -->
-	<version>r8-3-0</version>
+	<version>r21-0-0</version>
 
 	<packaging>war</packaging>
 	<name>${project.artifactId}</name>
@@ -34,18 +34,20 @@
 		<target.dist.temp.folder>${project.build.directory}/dist</target.dist.temp.folder>
 
 		<!-- Dependencies versions -->
-		<appengine.target.version>1.9.60</appengine.target.version>
-		<servlet.api.version>2.5</servlet.api.version>
-		<spring.version>3.0.3.RELEASE</spring.version>
+		<appengine.target.version>2.0.31</appengine.target.version>
+		<appengine.maven.plugin.version>2.8.1</appengine.maven.plugin.version>
+		<jetty.version>12.0.13</jetty.version>
+		<spring.version>6.1.14</spring.version>
+		<spring.security.version>6.3.4</spring.security.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
-		<datanucleus.jpa.version>3.1.3</datanucleus.jpa.version>
+		<datanucleus.jpa.version>6.0.1</datanucleus.jpa.version>
 
 		<!-- Plugins versions -->
 		<maven.minimum.version>3.3.0</maven.minimum.version>
 		<maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
 		<maven.replacer.plugin.version>1.5.3</maven.replacer.plugin.version>
-		<maven.war.plugin.version>2.6</maven.war.plugin.version>
+		<maven.war.plugin.version>3.4.0</maven.war.plugin.version>
 		<maven.resources.plugin.version>3.0.1</maven.resources.plugin.version>
 		<maven.exec.plugin.version>1.4.0</maven.exec.plugin.version>
 		<maven.builder.helper.plugin.version>1.10</maven.builder.helper.plugin.version>
@@ -53,10 +55,10 @@
 		<maven.antrun.plugin.version>1.8</maven.antrun.plugin.version>
 
 		<!-- Compiler configuration -->
-		<java.source>1.8</java.source>
-		<java.target>1.8</java.target>
-		<java.runtime>java8</java.runtime>
-		
+		<java.source>21</java.source>
+		<java.target>21</java.target>
+		<java.runtime>java21</java.runtime>
+
 		<module>default</module>
 		<module.package>com/${base.package}/**/*.java</module.package>
 
@@ -77,12 +79,20 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>com.google.appengine</groupId>
-						<artifactId>appengine-maven-plugin</artifactId>
-						<version>${appengine.target.version}</version>
-						<configuration>
-							<jvmFlags>
-								<jvmFlag>-Xdebug</jvmFlag>
+			            <groupId>com.google.cloud.tools</groupId>
+			            <artifactId>appengine-maven-plugin</artifactId>
+			            <version>${appengine.maven.plugin.version}</version>
+			            <configuration>
+			            	<!--<services>target/${project.artifactId}</services>-->
+			                <projectId>${appengine.app.name}</projectId>
+			                <version>${appengine.app.version}</version>
+			                <deploy.stopPreviousVersion>false</deploy.stopPreviousVersion>
+			                <host>0.0.0.0</host>
+			                <deploy.stopPreviousVersion>false</deploy.stopPreviousVersion>
+	                		<deploy.promote>false</deploy.promote>
+	                		<port>${local.port}</port>
+			                <jvmFlags>
+			                	<jvmFlag>-Xdebug</jvmFlag>
 								<jvmFlag>
 									-agentlib:jdwp=transport=dt_socket,address=8000,server=y,suspend=n
 								</jvmFlag>
@@ -92,17 +102,9 @@
 								<jvmFlag>
 									-DLocalSearchService.useDirectory=${project.basedir}
 								</jvmFlag>
-								<jvmFlag>
-									-XX:MaxPermSize=512m
-								</jvmFlag>
-								<jvmFlag>
-									-Duser.timezone=UTC
-								</jvmFlag>
 							</jvmFlags>
-							<disableUpdateCheck>true</disableUpdateCheck>
-							<fullScanSeconds>2</fullScanSeconds>
 						</configuration>
-					</plugin>
+			        </plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -127,7 +129,7 @@
 				<environment>prod</environment>
 				<module.instance.type>${default.prod.type}</module.instance.type>
 				<web.xml.filename>web.xml</web.xml.filename>
-				<module.scaling.type><![CDATA[<automatic-scaling/>]]></module.scaling.type>
+				<!--<module.scaling.type><![CDATA[<automatic-scaling/>]]></module.scaling.type>-->
 			</properties>
 			<build>
 				<plugins>
@@ -184,6 +186,19 @@
 			</build>	
 		</profile>
 	</profiles>
+
+	<dependencyManagement>
+  		<dependencies>
+		    <dependency>
+		      <groupId>com.google.cloud</groupId>
+		      <artifactId>libraries-bom</artifactId>
+		      <version>22.0.0</version>
+		      <type>pom</type>
+		      <scope>import</scope>
+		    </dependency>
+	  </dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 	
 		<!-- AppEngine -->
@@ -228,6 +243,19 @@
 		    <groupId>org.apache.velocity</groupId>
 		    <artifactId>velocity-tools</artifactId>
 		    <version>2.0</version>
+		    <exclusions>
+		      	<exclusion>
+		      	 	<groupId>javax.servlet</groupId>
+		     	 	<artifactId>servlet-api</artifactId>
+		 		</exclusion>
+	      </exclusions>
+		</dependency>
+		
+		<!-- Objectify -->
+		<dependency>
+		    <groupId>com.googlecode.objectify</groupId>
+		    <artifactId>objectify</artifactId>
+		    <version>5.1.4</version>
 		</dependency>
 		
 		<!-- commons -->
@@ -252,33 +280,38 @@
 		    <version>3.0</version>
 		</dependency>	
 
+	 	
+    	<dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.16.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.16.1</version>
+        </dependency>
+        
+        <dependency>
+		    <groupId>joda-time</groupId>
+		    <artifactId>joda-time</artifactId>
+		    <version>2.10.13</version>
+		</dependency>
+    	
+    	<!-- Jetty -->
+        <!-- https://mvnrepository.com/artifact/org.eclipse.jetty.ee10/jetty-ee10-servlets -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+		    <groupId>org.eclipse.jetty.ee10</groupId>
+		    <artifactId>jetty-ee10-servlets</artifactId>
+		    <version>${jetty.version}</version>
 		</dependency>
 
- 		
 		<dependency>
-		    <groupId>org.eclipse.persistence</groupId>
-		    <artifactId>javax.persistence</artifactId>
-		    <version>2.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-api-jpa</artifactId>
-			<version>${datanucleus.jpa.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.datanucleus</groupId>
-			<artifactId>datanucleus-core</artifactId>
-			<version>${datanucleus.jpa.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.appengine.orm</groupId>
-			<artifactId>datanucleus-appengine</artifactId>
-			<version>2.1.2</version>
-		</dependency>
+	      <groupId>org.eclipse.jetty.ee10</groupId>
+	      <artifactId>jetty-ee10-annotations</artifactId>
+	      <version>${jetty.version}</version>
+	    </dependency>
 
 		<!-- Spring -->
 		<dependency>
@@ -299,18 +332,32 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-			<version>${spring.version}</version>
+			<version>${spring.security.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>3.1.1.RELEASE</version>
+		</dependency>
+		
+		<!-- Mail -->
+		<!-- https://mvnrepository.com/artifact/javax.activation/activation -->
+		<dependency>
+		    <groupId>javax.activation</groupId>
+		    <artifactId>activation</artifactId>
+		    <version>1.1</version>
+		</dependency>
+				
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -402,29 +449,6 @@
 				</executions>
 			</plugin>
 
-			<!-- Replaces the web.xml file with the currently defined one for the 
-				module -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>${maven.antrun.plugin.version}</version>
-				<executions>
-					<execution>
-						<phase>prepare-package</phase>
-						<configuration>
-							<target>
-								<copy file="${target.dist.temp.folder}/WEB-INF/${web.xml.filename}"
-									tofile="${target.dist.temp.folder}/WEB-INF/web.xml" overwrite="true"
-									force="true" />
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<!-- WAR plugin -->
 			<!-- Make the package directory and war file only with content from "dist" 
 				directory filtering files to replace with properties values from pom.xml 
@@ -445,97 +469,30 @@
 				</configuration>
 			</plugin>
 
-
 			<!-- AppEngine plugin -->
 			<plugin>
-				<groupId>com.google.appengine</groupId>
-				<artifactId>appengine-maven-plugin</artifactId>
-				<version>${appengine.target.version}</version>
-				<configuration>
-					<address>0.0.0.0</address>
-					<port>${local.port}</port>
-					<oauth2>true</oauth2>
-					<disableUpdateCheck>true</disableUpdateCheck>
-					<noCookies>true</noCookies>
-					<jvmFlags>
-						<jvmFlag>
+	            <groupId>com.google.cloud.tools</groupId>
+	            <artifactId>appengine-maven-plugin</artifactId>
+	            <version>${appengine.maven.plugin.version}</version>
+	            <configuration>
+	            	<!--<services>target/${project.artifactId}</services>-->
+	                <projectId>${appengine.app.name}</projectId>
+	                <version>${appengine.app.version}</version>
+	                <deploy.stopPreviousVersion>false</deploy.stopPreviousVersion>
+	                <host>0.0.0.0</host>
+	                <deploy.stopPreviousVersion>false</deploy.stopPreviousVersion>
+               		<deploy.promote>false</deploy.promote>
+               		<port>${local.port}</port>
+	                <jvmFlags>
+	                	<jvmFlag>
 							-Ddatastore.backing_store=${project.basedir}/local_db.bin
 						</jvmFlag>
 						<jvmFlag>
 							-DLocalSearchService.useDirectory=${project.basedir}
 						</jvmFlag>
-						<jvmFlag>-XX:MaxPermSize=512m</jvmFlag>
 					</jvmFlags>
 				</configuration>
-			</plugin>
-		    <plugin>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>maven-datanucleus-plugin</artifactId>
-                <version>3.2.0-m1</version>
-
-                <configuration>
-                    <api>JPA</api>
-                    <mappingIncludes>**/entity/*.class</mappingIncludes>
-                    <verbose>true</verbose>
-                    <fork>false</fork>
-                </configuration>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>org.datanucleus</groupId>
-                        <artifactId>datanucleus-core</artifactId>
-                        <version>${datanucleus.jpa.version}</version>
-                    </dependency>
-                    <dependency>
-		    			<groupId>javax.jdo</groupId>
-		    			<artifactId>jdo-api</artifactId>
-		    			<version>3.1</version>
-					</dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>enhance</goal>
-                        </goals>
-                    </execution>
-                </executions>
-			</plugin>
+	        </plugin>
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.datanucleus
-										</groupId>
-										<artifactId>
-											maven-datanucleus-plugin
-										</artifactId>
-										<versionRange>
-											[3.2.0-m1,)
-										</versionRange>
-										<goals>
-											<goal>enhance</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
 </project>

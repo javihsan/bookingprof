@@ -3,8 +3,7 @@ package com.diloso.bookhair.app.controllers;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,29 +11,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.FirmDAO;
-import com.diloso.bookhair.app.negocio.dao.TaskDAO;
 import com.diloso.bookhair.app.negocio.dto.FirmDTO;
 import com.diloso.bookhair.app.negocio.dto.TaskDTO;
+import com.diloso.bookhair.app.negocio.manager.IFirmManager;
+import com.diloso.bookhair.app.negocio.manager.ITaskManager;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping(value={"/*/task", "/task"})
 public class TaskController {
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	/*//@Autowired
+	/*@Autowired
 	protected MultiTextDAO multiTextDAO;
 	
-	//@Autowired
+	@Autowired
 	protected LangDAO langDAO;*/
 	
-	//@Autowired
-	protected TaskDAO taskDAO;
+	@Autowired
+	protected ITaskManager taskManager;
 	
-	//@Autowired
-	protected FirmDAO firmDAO;
+	@Autowired
+	protected IFirmManager firmManager;
 	
 	/*
 	@RequestMapping(method = RequestMethod.POST, value = "/manager/new")
@@ -71,9 +72,9 @@ public class TaskController {
 
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		FirmDTO firm = firmDAO.getFirmDomain(domain);
+		FirmDTO firm = firmManager.getFirmDomain(domain);
 
-		List<TaskDTO> listTask = taskDAO.getTaskByLang(locale.getLanguage(), firm.getFirClassTasks());	
+		List<TaskDTO> listTask = taskManager.getTaskByLang(locale.getLanguage(), firm.getFirClassTasks());	
 					
 		return listTask;
 	}
@@ -83,7 +84,7 @@ public class TaskController {
 	protected @ResponseBody
 	TaskDTO get(@RequestParam("id") Long id) throws Exception {
 
-		TaskDTO task = taskDAO.getById(id);	
+		TaskDTO task = taskManager.getById(id);	
 					
 		return task;
 	}
@@ -94,13 +95,13 @@ public class TaskController {
 	}
 
 
-	public void setTaskDAO(TaskDAO taskDAO) {
-		this.taskDAO = taskDAO;
+	public void setTaskDAO(ITaskManager iTaskManager) {
+		this.taskManager = iTaskManager;
 	}
 
 
-	public void setFirmDAO(FirmDAO firmDAO) {
-		this.firmDAO = firmDAO;
+	public void setFirmDAO(IFirmManager iFirmManager) {
+		this.firmManager = iFirmManager;
 	}
 	
 	

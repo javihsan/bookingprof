@@ -1,31 +1,23 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import com.diloso.bookhair.app.datastore.data.StorableWithModificationTimestamp;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * The persistent class for the Product entity
  * 
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name="getProduct", query = "SELECT t FROM Product t WHERE t.proLocalId=:proLocalId and t.enabled =1 order by t.id asc"),
-	@NamedQuery(name="getProductAdmin", query = "SELECT t FROM Product t WHERE t.proLocalId=:proLocalId order by t.id asc")
-})
-public class Product implements Serializable {
+@Cache
+public class Product extends StorableWithModificationTimestamp<Long> { 
 
-	protected static final long serialVersionUID = 1L;
-	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Long id;
 	
+	@Index
 	protected Integer enabled;
 	
 	protected Long proLocalId;

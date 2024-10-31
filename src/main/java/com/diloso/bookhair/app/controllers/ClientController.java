@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -22,11 +20,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.ClientDAO;
-import com.diloso.bookhair.app.negocio.dao.FirmDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
 import com.diloso.bookhair.app.negocio.dto.ClientDTO;
 import com.diloso.bookhair.app.negocio.dto.FirmDTO;
+import com.diloso.bookhair.app.negocio.manager.IClientManager;
+import com.diloso.bookhair.app.negocio.manager.IFirmManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
 import com.diloso.bookhair.app.negocio.utils.Utils;
 import com.diloso.weblogin.aut.AppUser;
 import com.diloso.weblogin.aut.DatastoreUserRegistry;
@@ -34,6 +32,9 @@ import com.diloso.weblogin.aut.UserRegistry;
 import com.google.appengine.api.memcache.Expiration;
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/client", "/client"})
@@ -43,17 +44,17 @@ public class ClientController {
 	
 	public static final String KEY_CACHE_CLIENTS = "CLIENTS";
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	//@Autowired
-	protected FirmDAO firmDAO;
+	@Autowired
+	protected IFirmManager iFirmManager;
 	
-	//@Autowired
-	protected ClientDAO clientDAO;
+	@Autowired
+	protected IClientManager iClientManager;
 	
-	//@Autowired
-	protected LocalDAO localDAO;
+	@Autowired
+	protected ILocalManager iLocalManager;
 	
 	protected UserRegistry userRegistry = new DatastoreUserRegistry();
 	
@@ -133,7 +134,7 @@ public class ClientController {
 			firm.setFirGwtUsers(firGwtUsers);
 			firm = firmDAO.update(firm);
 			*/
-			clientDAO.update(client);
+			iClientManager.update(client);
 
 		}
 	}
@@ -143,10 +144,10 @@ public class ClientController {
 	public void remove(HttpServletRequest arg0, HttpServletResponse arg1, @RequestParam("id") Long id)
 			throws Exception {
 		
-		ClientDTO client = clientDAO.getById(id);
+		ClientDTO client = iClientManager.getById(id);
 		if (client!=null){
 			client.setEnabled(0);
-			clientDAO.update(client);
+			iClientManager.update(client);
 			log.info("Cliente borrado : "+client.getId());
 		}	
 	}
@@ -155,13 +156,13 @@ public class ClientController {
 	protected @ResponseBody
 	List<ClientDTO> list(@RequestParam("domain") String domain) throws Exception {
 
-		FirmDTO firm = firmDAO.getFirmDomain(domain);
+		FirmDTO firm = iFirmManager.getFirmDomain(domain);
 		
 		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 		String key = CalendarController.KEY_CACHE + domain + KEY_CACHE_CLIENTS;
 		List<ClientDTO> listClient = (List<ClientDTO>) syncCache.get(key);
 		if (listClient == null) {
-			listClient = clientDAO.getClient(firm.getId());
+			listClient = iClientManager.getClient(firm.getId());
 			syncCache.put (key, listClient, Expiration.byDeltaSeconds(18000)); // 5 horas 60*60*5 segundos en un día
 		}
 
@@ -174,9 +175,9 @@ public class ClientController {
 	protected @ResponseBody
 	ClientDTO listByEmail(@RequestParam("domain") String domain, @RequestParam("email") String email) throws Exception {
 		
-		FirmDTO firm = firmDAO.getFirmDomain(domain);
+		FirmDTO firm = iFirmManager.getFirmDomain(domain);
 		
-		ClientDTO client = clientDAO.getByEmail(firm.getId(), email);	
+		ClientDTO client = iClientManager.getByEmail(firm.getId(), email);	
 					
 		return client;
 	}
@@ -188,7 +189,7 @@ public class ClientController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		
-		ClientDTO client = clientDAO.getByEmail(new Long(firmId), email);	
+		ClientDTO client = iClientManager.getByEmail(new Long(firmId), email);	
 					
 		return client;
 	}
@@ -208,16 +209,16 @@ public class ClientController {
 		this.messageSourceApp = messageSourceApp;
 	}
 
-	public void setFirmDAO(FirmDAO firmDAO) {
-		this.firmDAO = firmDAO;
+	public void setFirmDAO(IFirmManager iFirmManager) {
+		this.iFirmManager = iFirmManager;
 	}
 
-	public void setClientDAO(ClientDAO clientDAO) {
-		this.clientDAO = clientDAO;
+	public void setClientDAO(IClientManager iClientManager) {
+		this.iClientManager = iClientManager;
 	}
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.iLocalManager = iLocalManager;
 	}
 
 	public void setUserRegistry(UserRegistry userRegistry) {

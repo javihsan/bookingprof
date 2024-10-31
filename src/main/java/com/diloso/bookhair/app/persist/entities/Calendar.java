@@ -1,11 +1,9 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
 
 
 /**
@@ -13,13 +11,9 @@ import javax.persistence.NamedQuery;
  * 
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name="getCalendar", query = "SELECT t FROM Calendar t WHERE t.calLocalId = :calLocalId and t.enabled =1 order by t.calName asc"),
-	@NamedQuery(name="getCalendarAdmin", query = "SELECT t FROM Calendar t WHERE t.calLocalId = :calLocalId order by t.calName asc")
-})
-public class Calendar extends Resource implements Serializable {
-	protected static final long serialVersionUID = 1L;
-
+@Cache
+public class Calendar extends Resource { 
+	
 	protected String calName;
 	
 	protected String calDesc;

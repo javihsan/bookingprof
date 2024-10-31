@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,14 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.DiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.FirmDAO;
-import com.diloso.bookhair.app.negocio.dao.LangDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
-import com.diloso.bookhair.app.negocio.dao.ProfessionalDAO;
-import com.diloso.bookhair.app.negocio.dao.SemanalDiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.WhereDAO;
 import com.diloso.bookhair.app.negocio.dto.DiaryDTO;
 import com.diloso.bookhair.app.negocio.dto.FirmDTO;
 import com.diloso.bookhair.app.negocio.dto.LangDTO;
@@ -34,6 +24,17 @@ import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 import com.diloso.bookhair.app.negocio.dto.ProfessionalDTO;
 import com.diloso.bookhair.app.negocio.dto.SemanalDiaryDTO;
 import com.diloso.bookhair.app.negocio.dto.WhereDTO;
+import com.diloso.bookhair.app.negocio.manager.IDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.IFirmManager;
+import com.diloso.bookhair.app.negocio.manager.ILangManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.IProfessionalManager;
+import com.diloso.bookhair.app.negocio.manager.ISemanalDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.IWhereManager;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/local", "/local"})
@@ -41,32 +42,32 @@ public class LocalController {
 	
 	protected static final Logger log = Logger.getLogger(LocalController.class.getName());
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 		
-	//@Autowired
-	protected LocalDAO localDAO;
+	@Autowired
+	protected ILocalManager localManager;
 	
-	//@Autowired
-	protected FirmDAO firmDAO;
+	@Autowired
+	protected IFirmManager firmManager;
 	
-	//@Autowired
-	protected ProfessionalDAO professionalDAO;
+	@Autowired
+	protected IProfessionalManager professionalManager;
 	
-	//@Autowired
-	protected LangDAO langDAO;
+	@Autowired
+	protected ILangManager langManager;
 	
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager multiTextManager;
 	
-	//@Autowired
-	protected WhereDAO whereDAO;
+	@Autowired
+	protected IWhereManager whereManager;
 	
-	//@Autowired
-	protected DiaryDAO diaryDAO;
+	@Autowired
+	protected IDiaryManager diaryManager;
 	
-	//@Autowired
-	protected SemanalDiaryDAO semanalDiaryDAO;
+	@Autowired
+	protected ISemanalDiaryManager semanalDiaryManager;
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/admin/new")
 	@ResponseStatus(HttpStatus.OK)
@@ -74,7 +75,7 @@ public class LocalController {
 			throws Exception {
 		
 		String domain = arg0.getParameter("domain");
-		FirmDTO firm = firmDAO.getFirmDomainAdmin(domain);
+		FirmDTO firm = firmManager.getFirmDomainAdmin(domain);
 		Long resFirId = firm.getId();
 		
 		String locName = arg0.getParameter("locName");
@@ -129,7 +130,7 @@ public class LocalController {
 		where.setWheGoogleHoliday(locGoogleHoliday);
 		where.setWheCurrency(locCurrency);
 
-		where = whereDAO.create(where);
+		where = whereManager.create(where);
 		
 		local.setLocWhere(where);
 
@@ -142,7 +143,7 @@ public class LocalController {
 		respon.setWhoEmail(locResponEmail);
 		respon.setWhoTelf1(locResponTelf1);
 	
-		respon = professionalDAO.create(respon);
+		respon = professionalManager.create(respon);
 		local.setLocRespon(respon);
 		
 		local.setLocMailBookign(0);
@@ -163,11 +164,11 @@ public class LocalController {
 		
 		diary.setDiaTimes(diaTimes);
 		
-		DiaryDTO diaryCreatedMon = diaryDAO.create(diary);
-		DiaryDTO diaryCreatedTue = diaryDAO.create(diary);
-		DiaryDTO diaryCreatedWed = diaryDAO.create(diary);
-		DiaryDTO diaryCreatedThu = diaryDAO.create(diary);
-		DiaryDTO diaryCreatedFri = diaryDAO.create(diary);
+		DiaryDTO diaryCreatedMon = diaryManager.create(diary);
+		DiaryDTO diaryCreatedTue = diaryManager.create(diary);
+		DiaryDTO diaryCreatedWed = diaryManager.create(diary);
+		DiaryDTO diaryCreatedThu = diaryManager.create(diary);
+		DiaryDTO diaryCreatedFri = diaryManager.create(diary);
 			
 		SemanalDiaryDTO semanalDiary = new SemanalDiaryDTO();
 		semanalDiary.setEnabled(1);
@@ -186,21 +187,21 @@ public class LocalController {
 		
 		diary.setDiaTimes(diaTimes);
 		
-		DiaryDTO diaryCreatedSat = diaryDAO.create(diary);
+		DiaryDTO diaryCreatedSat = diaryManager.create(diary);
 		semanalDiary.setSemSatDiary(diaryCreatedSat);
 	
 		diaTimes = new ArrayList<String>();
 		diary.setDiaTimes(diaTimes);
-		DiaryDTO diaryCreatedSun = diaryDAO.create(diary);
+		DiaryDTO diaryCreatedSun = diaryManager.create(diary);
 		semanalDiary.setSemSunDiary(diaryCreatedSun);
 
-		semanalDiary = semanalDiaryDAO.create(semanalDiary);
+		semanalDiary = semanalDiaryManager.create(semanalDiary);
 		
 		local.setLocSemanalDiary(semanalDiary);
 		
 		List<LangDTO> locLangs = new ArrayList<LangDTO>();
-		locLangs.add(langDAO.getByCode("es"));
-		locLangs.add(langDAO.getByCode("en"));
+		locLangs.add(langManager.getByCode("es"));
+		locLangs.add(langManager.getByCode("en"));
 		
 		local.setLocLangs(locLangs);
 		
@@ -220,7 +221,7 @@ public class LocalController {
 		//local.setLocSinGCalendar(null);
 		//local.setLocSinMChimp(null);
 		
-		localDAO.create(local);
+		localManager.create(local);
 		
 	}
 	
@@ -231,8 +232,8 @@ public class LocalController {
 			throws Exception {
 		
 		String localId = arg0.getParameter("localId");
-		LocalDTO local = localDAO.getById(new Long(localId));
-		FirmDTO firm = firmDAO.getById(local.getResFirId());
+		LocalDTO local = localManager.getById(new Long(localId));
+		FirmDTO firm = firmManager.getById(local.getResFirId());
 		
 		int locBookingClient = Integer.parseInt(arg0.getParameter("locBookingClient"));
 		
@@ -284,7 +285,7 @@ public class LocalController {
 		where.setWheGoogleHoliday(locGoogleHoliday);
 		where.setWheCurrency(locCurrency);*/
 		
-		where = whereDAO.update(where);
+		where = whereManager.update(where);
 		
 		ProfessionalDTO respon = local.getLocRespon();
 		
@@ -293,7 +294,7 @@ public class LocalController {
 		respon.setWhoEmail(locResponEmail);
 		respon.setWhoTelf1(locResponTelf1);
 		
-		respon = professionalDAO.update(respon);
+		respon = professionalManager.update(respon);
 		
 		local.setLocRespon(respon);
 		
@@ -310,7 +311,7 @@ public class LocalController {
 		local.setLocSelCalendar(locSelCalendar);
 		local.setLocNewClientDefault(locNewClientDefault);
 		
-		return localDAO.update(local);
+		return localManager.update(local);
 		
 	}
 	
@@ -322,7 +323,7 @@ public class LocalController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		List<String> langsCode = new ArrayList<String>();
 		for (LangDTO langActive : local.getLocLangs()) {
 			langsCode.add(langActive.getLanCode());	
@@ -332,20 +333,20 @@ public class LocalController {
 		List<LangDTO> locLangs = new ArrayList<LangDTO>();
 
 		// Obtenemos todos los multitext del local para idioma actual
-		List<MultiTextDTO> listMultiDefault = multiTextDAO.getMultiTextByLanCode(locale.getLanguage(), local.getId());
+		List<MultiTextDTO> listMultiDefault = multiTextManager.getMultiTextByLanCode(locale.getLanguage(), local.getId());
 		for (String lanCode : a) {
-			LangDTO lang = langDAO.getByCode(lanCode);
+			LangDTO lang = langManager.getByCode(lanCode);
 			// Si no estaba habilitado, actualizamos los textos del local para este idioma
 			if (!langsCode.contains(lanCode)){
 				for (MultiTextDTO multiTextDefault : listMultiDefault) {
-					MultiTextDTO multiTextKey = multiTextDAO.getByLanCodeAndKey(lang.getLanCode(),multiTextDefault.getMulKey());
+					MultiTextDTO multiTextKey = multiTextManager.getByLanCodeAndKey(lang.getLanCode(),multiTextDefault.getMulKey());
 					if (multiTextKey==null){ // Si no existe en el nuevo idioma, insertar con nuevo idioma y el texto del idioma actual
 						multiTextKey = new MultiTextDTO();
 						multiTextKey.setEnabled(1);
 						multiTextKey.setMulKey(multiTextDefault.getMulKey());
 						multiTextKey.setMulLanCode(lang.getLanCode());
 						multiTextKey.setMulText(multiTextDefault.getMulText());
-						multiTextDAO.create(multiTextKey);
+						multiTextManager.create(multiTextKey);
 					}
 				}
 			}
@@ -353,15 +354,14 @@ public class LocalController {
 		}
 		local.setLocLangs(locLangs);
 		
-		return localDAO.update(local);
+		return localManager.update(local);
 
 	}
 	
 	@RequestMapping("/get")
 	protected @ResponseBody
 	LocalDTO get(@RequestParam("id") String id) throws Exception {
-
-		LocalDTO local = localDAO.getById(new Long(id));
+		LocalDTO local = localManager.getById(new Long(id));
 		if (local.getEnabled()==1){
 			return local;
 		} else {
@@ -373,7 +373,7 @@ public class LocalController {
 	protected @ResponseBody
 	LocalDTO getClient(@RequestParam("id") String id) throws Exception {
 
-		LocalDTO local = localDAO.getById(new Long(id));
+		LocalDTO local = localManager.getById(new Long(id));
 		if (local.getEnabled()!=null && local.getEnabled()==1 && local.getLocBookingClient()==1){
 			return local;
 		} else {
@@ -385,9 +385,9 @@ public class LocalController {
 	protected @ResponseBody
 	List<Long> list(@RequestParam("domain") String domain) throws Exception {
 
-		FirmDTO firm = firmDAO.getFirmDomain(domain);
-		
-		return localDAO.getLocal(firm.getId());
+		FirmDTO firm = firmManager.getFirmDomain(domain);
+
+		return localManager.getLocal(firm.getId());
 
 	}
 
@@ -395,9 +395,9 @@ public class LocalController {
 	protected @ResponseBody
 	List<Long> listClient(@RequestParam("domain") String domain) throws Exception {
 
-		FirmDTO firm = firmDAO.getFirmDomain(domain);
+		FirmDTO firm = firmManager.getFirmDomain(domain);
 		
-		return localDAO.getLocalClient(firm.getId());
+		return localManager.getLocalClient(firm.getId());
 
 	}
 	
@@ -405,9 +405,9 @@ public class LocalController {
 	protected @ResponseBody
 	List<LocalDTO> listAll(@RequestParam("domain") String domain) throws Exception {
 
-		FirmDTO firm = firmDAO.getFirmDomain(domain);
+		FirmDTO firm = firmManager.getFirmDomain(domain);
 		
-		return localDAO.getLocalList(firm.getId());
+		return localManager.getLocalList(firm.getId());
 
 	}
 
@@ -415,9 +415,9 @@ public class LocalController {
 	protected @ResponseBody
 	List<LocalDTO> listAllClient(@RequestParam("domain") String domain) throws Exception {
 
-		FirmDTO firm = firmDAO.getFirmDomain(domain);
+		FirmDTO firm = firmManager.getFirmDomain(domain);
 		
-		return localDAO.getLocalListClient(firm.getId());
+		return localManager.getLocalListClient(firm.getId());
 
 	}
 	
@@ -425,9 +425,9 @@ public class LocalController {
 	protected @ResponseBody
 	List<LocalDTO> listAdmin(@RequestParam("domain") String domain) throws Exception {
 
-		FirmDTO firm = firmDAO.getFirmDomainAdmin(domain);
+		FirmDTO firm = firmManager.getFirmDomainAdmin(domain);
 		
-		List<LocalDTO> listLocal = localDAO.getLocalAdmin(firm.getId());
+		List<LocalDTO> listLocal = localManager.getLocalAdmin(firm.getId());
 		return listLocal;
 	}
 	
@@ -435,7 +435,7 @@ public class LocalController {
 	public @ResponseBody
 	List<LangDTO> listLangsLocal(@RequestParam("localId") String localId) throws Exception {
 
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		return local.getLocLangs();
 	}
 	
@@ -443,7 +443,7 @@ public class LocalController {
 	@ResponseStatus(HttpStatus.OK)
 	public void enabled(@RequestParam("id") Long id)
 			throws Exception {
-		LocalDTO local = localDAO.getById(id);
+		LocalDTO local = localManager.getById(id);
 
 		if (local!=null){
 			if (local.getEnabled()==1){
@@ -453,7 +453,7 @@ public class LocalController {
 				local.setEnabled(1);
 				log.info("Local habilitado : "+local.getLocName());
 			}
-			localDAO.update(local);
+			localManager.update(local);
 		}	
 	}
 	
@@ -463,10 +463,10 @@ public class LocalController {
 	protected void defaultLocalTask(@RequestParam("localId") Long localId, @RequestParam("idLocalTask") Long idLocalTask)
 			throws Exception {
 		
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		if (local!=null){
 			local.setLocTaskDefaultId(idLocalTask);
-			localDAO.update(local);
+			localManager.update(local);
 		}
 	}
 
@@ -474,36 +474,36 @@ public class LocalController {
 		this.messageSourceApp = messageSourceApp;
 	}
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.localManager = iLocalManager;
 	}
 
-	public void setFirmDAO(FirmDAO firmDAO) {
-		this.firmDAO = firmDAO;
+	public void setFirmDAO(IFirmManager iFirmManager) {
+		this.firmManager = iFirmManager;
 	}
 
-	public void setProfessionalDAO(ProfessionalDAO professionalDAO) {
-		this.professionalDAO = professionalDAO;
+	public void setProfessionalDAO(IProfessionalManager iProfessionalManager) {
+		this.professionalManager = iProfessionalManager;
 	}
 
-	public void setLangDAO(LangDAO langDAO) {
-		this.langDAO = langDAO;
+	public void setLangDAO(ILangManager iLangManager) {
+		this.langManager = iLangManager;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.multiTextManager = iMultiTextManager;
 	}
 
-	public void setWhereDAO(WhereDAO whereDAO) {
-		this.whereDAO = whereDAO;
+	public void setWhereDAO(IWhereManager iWhereManager) {
+		this.whereManager = iWhereManager;
 	}
 
-	public void setDiaryDAO(DiaryDAO diaryDAO) {
-		this.diaryDAO = diaryDAO;
+	public void setDiaryDAO(IDiaryManager iDiaryManager) {
+		this.diaryManager = iDiaryManager;
 	}
 
-	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
-		this.semanalDiaryDAO = semanalDiaryDAO;
+	public void setSemanalDiaryDAO(ISemanalDiaryManager iSemanalDiaryManager) {
+		this.semanalDiaryManager = iSemanalDiaryManager;
 	}
 		
 	

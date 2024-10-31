@@ -1,17 +1,16 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
-
-import javax.persistence.Entity;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
 
 /**
  * The persistent class for the Diary entity
  * 
  */
-@Entity 
-public class Sincro extends Resource implements Serializable {
-	protected static final long serialVersionUID = 1L;
-	
+@Entity
+@Cache
+public class Sincro extends Resource { 
+		
 	protected Integer sinType;
 
 	protected String sinApiKey;

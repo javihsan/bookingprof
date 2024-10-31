@@ -1,19 +1,17 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.MappedSuperclass;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
 /**
  * The persistent class for the Who entity
  * 
  */
 @Entity
-@MappedSuperclass
-public class Who extends Resource implements Serializable {
-	protected static final long serialVersionUID = 1L;
-
+@Cache
+public class Who extends Resource { 
+	
 	protected String whoName;
 	
 	protected String whoSurname;

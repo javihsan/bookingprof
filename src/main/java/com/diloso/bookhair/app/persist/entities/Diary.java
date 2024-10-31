@@ -1,23 +1,21 @@
 package com.diloso.bookhair.app.persist.entities;
 
-import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.diloso.bookhair.app.datastore.data.StorableWithModificationTimestamp;
+import com.googlecode.objectify.annotation.Cache;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
 /**
  * The persistent class for the Diary entity
  * 
  */
-@Entity 
-public class Diary implements Serializable {
-	protected static final long serialVersionUID = 1L;
-	
+@Entity
+@Cache
+public class Diary extends StorableWithModificationTimestamp<Long> { 
+		
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected Long id;
 	
 	protected Integer enabled;

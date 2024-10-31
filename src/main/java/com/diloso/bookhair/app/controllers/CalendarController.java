@@ -14,10 +14,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -30,17 +28,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.AnnualDiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.CalendarDAO;
-import com.diloso.bookhair.app.negocio.dao.DiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.EventDAO;
-import com.diloso.bookhair.app.negocio.dao.FirmDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalTaskDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
-import com.diloso.bookhair.app.negocio.dao.RepeatDAO;
-import com.diloso.bookhair.app.negocio.dao.SemanalDiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.TaskDAO;
 import com.diloso.bookhair.app.negocio.dto.AnnualDiaryDTO;
 import com.diloso.bookhair.app.negocio.dto.AppointmentDTO;
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
@@ -53,7 +40,21 @@ import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 import com.diloso.bookhair.app.negocio.dto.RepeatDTO;
 import com.diloso.bookhair.app.negocio.dto.SemanalDiaryDTO;
 import com.diloso.bookhair.app.negocio.dto.TaskDTO;
-import com.diloso.bookhair.app.persist.manager.LocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.IAnnualDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.ICalendarManager;
+import com.diloso.bookhair.app.negocio.manager.IDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.IEventManager;
+import com.diloso.bookhair.app.negocio.manager.IFirmManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.IRepeatManager;
+import com.diloso.bookhair.app.negocio.manager.ISemanalDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.ITaskManager;
+import com.diloso.bookhair.app.negocio.manager.LocalTaskManager;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping(value={"/*/calendar", "/calendar"})
@@ -61,46 +62,46 @@ public class CalendarController {
 
 	//protected static final Logger log = Logger.getLogger(CalendarController.class);
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	//@Autowired
-	protected AnnualDiaryDAO annualDiaryDAO;
+	@Autowired
+	protected IAnnualDiaryManager iAnnualDiaryManager;
 	
-	//@Autowired
-	protected LocalDAO localDAO;
+	@Autowired
+	protected ILocalManager iLocalManager;
 	
-	//@Autowired
-	protected CalendarDAO calendarDAO;
+	@Autowired
+	protected ICalendarManager iCalendarManager;
 	
-	//@Autowired
-	protected EventDAO eventDAO;
+	@Autowired
+	protected IEventManager iEventManager;
 
-	//@Autowired
-	protected RepeatDAO repeatDAO;
+	@Autowired
+	protected IRepeatManager iRepeatManager;
 	
-	//@Autowired
-	protected LocalTaskDAO localTaskDAO;
+	@Autowired
+	protected ILocalTaskManager iLocalTaskManager;
 	
-	//@Autowired
-	protected TaskDAO taskDAO;
+	@Autowired
+	protected ITaskManager iTaskManager;
 	
-	//@Autowired
-	protected DiaryDAO diaryDAO;
+	@Autowired
+	protected IDiaryManager iDiaryManager;
 	
-	//@Autowired
-	protected SemanalDiaryDAO semanalDiaryDAO;
+	@Autowired
+	protected ISemanalDiaryManager iSemanalDiaryManager;
 	
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager iMultiTextManager;
 	
-	//@Autowired
-	protected FirmDAO firmDAO;
+	@Autowired
+	protected IFirmManager iFirmManager;
 	
-	/*//@Autowired
+	/*@Autowired
 	protected ProfessionalDAO professionalDAO;*/
 	
-	//@Autowired
+	@Autowired
 	protected RepeatController repeatController;
 	
 	public static final String CHAR_SEP_DATE = "-";
@@ -130,7 +131,7 @@ public class CalendarController {
 		String message = "";
 		Locale locale = RequestContextUtils.getLocale(arg0);
 
-		AnnualDiaryDTO annualDiaryDTO = annualDiaryDAO.getAnnualDiaryByDay(local.getId(),selectedDate);
+		AnnualDiaryDTO annualDiaryDTO = iAnnualDiaryManager.getAnnualDiaryByDay(local.getId(),selectedDate);
 		if (annualDiaryDTO!=null){
 			if (annualDiaryDTO.getAnuClosed()==1){
 				message = messageSourceApp.getMessage("form.error.calendar.dateClosed", null, locale);
@@ -155,7 +156,7 @@ public class CalendarController {
 	@RequestMapping("/operator/listApoByDay")
 	protected @ResponseBody
 	List<AppointmentDTO> listApoByDayAdmin(HttpServletRequest arg0, @RequestParam("localId") String localId, @RequestParam("selectedDate") String selectedDate, @RequestParam("selectedTasks") String selectedTasks, @RequestParam("selectedTasksCount") String selectedTasksCount, @RequestParam("selectedCalendars") String selectedCalendars) throws Exception {
-		List<LocalTaskDTO> listLocalTaskCombi = localTaskDAO.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
+		List<LocalTaskDTO> listLocalTaskCombi = iLocalTaskManager.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
 		List<Long> listCalendarCandidate = getCalendarsId(selectedCalendars);
 		return listApoByDay (arg0, localId, selectedDate, getListLocalTasks(selectedTasks,selectedTasksCount,listLocalTaskCombi), listCalendarCandidate, true);
 	}
@@ -164,7 +165,7 @@ public class CalendarController {
 	@RequestMapping("/booking/listApoByDay")
 	protected @ResponseBody
 	List<AppointmentDTO> listApoByDay(HttpServletRequest arg0, @RequestParam("localId") String localId, @RequestParam("selectedDate") String selectedDate,  @RequestParam("selectedTasks") String selectedTasks, @RequestParam("selectedTasksCount") String selectedTasksCount, @RequestParam("selectedCalendars") String selectedCalendars) throws Exception {
-		List<LocalTaskDTO> listLocalTaskCombi = localTaskDAO.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
+		List<LocalTaskDTO> listLocalTaskCombi = iLocalTaskManager.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
 		List<Long> listCalendarCandidate = getCalendarsId(selectedCalendars);
 		return listApoByDay (arg0, localId, selectedDate, getListLocalTasks(selectedTasks,selectedTasksCount,listLocalTaskCombi), listCalendarCandidate, false);
 	}
@@ -200,7 +201,7 @@ public class CalendarController {
 	@RequestMapping("/booking/listNextDayWithApo")
 	protected @ResponseBody
 	List<String> listNextDayWithApo(HttpServletRequest arg0, @RequestParam("localId") String localId, @RequestParam("selectedDate") String selectedDate,  @RequestParam("selectedTasks") String selectedTasks, @RequestParam("selectedTasksCount") String selectedTasksCount, @RequestParam("selectedCalendars") String selectedCalendars) throws Exception {
-		List<LocalTaskDTO> listLocalTaskCombi = localTaskDAO.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
+		List<LocalTaskDTO> listLocalTaskCombi = iLocalTaskManager.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
 		List<Long> listCalendarCandidate = getCalendarsId(selectedCalendars);
 		List<String> result = new ArrayList<>();
 		List<AppointmentDTO> resultApo;
@@ -417,7 +418,7 @@ public class CalendarController {
 			for (int h=0;h<numTasksPer;h++){
 				String strTaskId = a[aux];
 				aux++;
-				localTaskAux = localTaskDAO.getById(new Long(strTaskId));
+				localTaskAux = iLocalTaskManager.getById(new Long(strTaskId));
 				listTasksMatchCombi.add(localTaskAux);
 			}	
 			// Detectamos grupos de tareas individuales que son tarea combinada, y las sustituimos por esta
@@ -433,7 +434,7 @@ public class CalendarController {
 					int indx = 0;
 					int res = 0;
 					for (Long localTaskComId : combi) {
-						localTask = localTaskDAO.getById(localTaskComId);
+						localTask = iLocalTaskManager.getById(localTaskComId);
 						if (indx>0){// la primera nunca es hueco
 							res = combiRes.get(indx-1);
 							if (res>0){ // Si hay espacio entre tareas
@@ -464,7 +465,7 @@ public class CalendarController {
 	public List<List<LocalTaskDTO>> getListLocalTasks(String selectedTasks){
 		List<List<LocalTaskDTO>> listResult = new ArrayList<List<LocalTaskDTO>>();
 		List<LocalTaskDTO> list = new ArrayList<LocalTaskDTO>();
-		LocalTaskDTO localTask = localTaskDAO.getById(new Long(selectedTasks));
+		LocalTaskDTO localTask = iLocalTaskManager.getById(new Long(selectedTasks));
 		//if (lotTaskDuration!=null){
 			//localTask.setLotTaskDuration(lotTaskDuration);
 		//}	
@@ -488,7 +489,7 @@ public class CalendarController {
 			nameKey = LocalTaskManager.KEY_MULTI_LOCAL_TASK_NAME+localId+"_hasta 1 tonelada";
 			valueTime = coefTime*numPallets;
 		}
-		LocalTaskDTO localTask = localTaskDAO.getByName(nameKey);
+		LocalTaskDTO localTask = iLocalTaskManager.getByName(nameKey);
 		localTask.setLotDefault(localTask.getLotTaskDuration()); // PROVISIONAL: se guarda el tiempo entre citas en lotDefault, que a su vez viene predeterminado por lotTaskDuration
 		localTask.setLotTaskDuration(round(valueTime,0)); // PROVISIONAL: se guarda la duración de la cita calculada en lotTaskDuration
 		String nameAux = messageSourceApp.getMessage("label.template.numLines", null, locale) +": "+numLines;
@@ -511,7 +512,7 @@ public class CalendarController {
 		List<Map<String,Object>> listCalendarOpen = new ArrayList<Map<String,Object>>();
 		Map<String,Object> calendarOpenMap = null;
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendar(local.getId());
+		List<CalendarDTO> listCalendar = iCalendarManager.getCalendar(local.getId());
 		DiaryDTO diaryCalDTO = null;
 
 		AnnualDiaryDTO annualDiaryDTO = null;
@@ -522,7 +523,7 @@ public class CalendarController {
 				diaryCalDTO = null;
 				open = true;
 				// Comprobamos si esta fecha esta señalada en la agenda anual del puesto
-				annualDiaryDTO = annualDiaryDAO.getAnnualDiaryCalendarByDay(calendar.getId(),selectedDate);
+				annualDiaryDTO = iAnnualDiaryManager.getAnnualDiaryCalendarByDay(calendar.getId(),selectedDate);
 				if (annualDiaryDTO!=null){ // Esta fecha esta señalada en la agenda anual del puesto
 					if (annualDiaryDTO.getAnuClosed()==1) { // Puesto cerrado esta fecha
 						open = false;
@@ -561,13 +562,13 @@ public class CalendarController {
 	protected List<AppointmentDTO> listApoByDay(HttpServletRequest arg0, String localId, String selectedDate, List<List<LocalTaskDTO>> listLocalTasks, List<Long> listCalendarCandidate, boolean admin, boolean SP, boolean exists) throws Exception {
 
 		// Propiedades de local
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = iLocalManager.getById(new Long(localId));
 		int dayWeek = getWeekDay(selectedDate);
 		
 		if (validateListApo(arg0, local, selectedDate, dayWeek, exists)){
 			
 			// Comprobamos si esta fecha esta señalada en la agenda anual del local
-			AnnualDiaryDTO annualDiaryDTO = annualDiaryDAO.getAnnualDiaryByDay(local.getId(),selectedDate);
+			AnnualDiaryDTO annualDiaryDTO = iAnnualDiaryManager.getAnnualDiaryByDay(local.getId(),selectedDate);
 			DiaryDTO diaryDTO = null;
 			if (annualDiaryDTO!=null){ // añadimos citas siguiendo la agenda de la fecha anual del local
 				diaryDTO = annualDiaryDTO.getAnuDayDiary();
@@ -610,7 +611,7 @@ public class CalendarController {
 		if (validateSelectedDate(selectedDay, local.getLocOpenDays(),admin)){
 			
 			// Propiedades de firma
-			FirmDTO firm = firmDAO.getById(local.getResFirId());
+			FirmDTO firm = iFirmManager.getById(local.getResFirId());
 			boolean selCalAfter = firm.getFirConfig().getConfigLocal().getConfigLocSelCalAfter()==1;
 			
 			AppointmentDTO apo = null;
@@ -627,7 +628,7 @@ public class CalendarController {
 			
 			List<EventDTO> listEvents = null;
 			for (Map<String,Object> calendarOpen : listCalendarOpen) {
-				listEvents = eventDAO.getEventByDay((CalendarDTO)calendarOpen.get(CAL), selectedDate);
+				listEvents = iEventManager.getEventByDay((CalendarDTO)calendarOpen.get(CAL), selectedDate);
 				if (firm.getFirConfig().getConfigLocal().getConfigLocRepeat()==1){
 					List<RepeatDTO> listRepeatLocal = repeatController.listCalendarByDay(((CalendarDTO)calendarOpen.get(CAL)).getId(), selectedDate);
 					listEvents.addAll(listRepeatLocal);
@@ -1339,12 +1340,12 @@ public class CalendarController {
 			CalendarDTO calendar = new CalendarDTO();
 			
 			if (calId!=null){ // Existe
-				calendar = calendarDAO.getById(new Long(calId));
+				calendar = iCalendarManager.getById(new Long(calId));
 			}
 		
 			// Propiedades de local
 			Long localId = new Long(arg0.getParameter("localId"));
-			LocalDTO local = localDAO.getById(localId);
+			LocalDTO local = iLocalManager.getById(localId);
 			
 		    /*	 
 		    //String calProfEmail = arg0.getParameter("calProf");
@@ -1364,12 +1365,12 @@ public class CalendarController {
 				
 				//calendar.setCalProf(calProf);
 
-				calendar = calendarDAO.update(calendar);
+				calendar = iCalendarManager.update(calendar);
 				
 			} else { // Es nuevo
 				
 				// Asignamos las tareas del local
-				List<LocalTaskDTO> listLocalTaskLocal = localTaskDAO.getLocalTaskSimple(localId, locale.getLanguage());
+				List<LocalTaskDTO> listLocalTaskLocal = iLocalTaskManager.getLocalTaskSimple(localId, locale.getLanguage());
 				List<Long> listLocalTask = new ArrayList<Long>();
 				for (LocalTaskDTO localTask : listLocalTaskLocal){
 					listLocalTask.add(localTask.getId());
@@ -1380,37 +1381,37 @@ public class CalendarController {
 				DiaryDTO diary = new DiaryDTO();
 				diary.setEnabled(1);
 				diary.setDiaTimes(local.getLocSemanalDiary().getSemMonDiary().getDiaTimes());
-				DiaryDTO diaryCreatedMon = diaryDAO.create(diary);
+				DiaryDTO diaryCreatedMon = iDiaryManager.create(diary);
 				
 				diary = new DiaryDTO();
 				diary.setEnabled(1);
 				diary.setDiaTimes(local.getLocSemanalDiary().getSemTueDiary().getDiaTimes());
-				DiaryDTO diaryCreatedTue = diaryDAO.create(diary);
+				DiaryDTO diaryCreatedTue = iDiaryManager.create(diary);
 				
 				diary = new DiaryDTO();
 				diary.setEnabled(1);
 				diary.setDiaTimes(local.getLocSemanalDiary().getSemWedDiary().getDiaTimes());
-				DiaryDTO diaryCreatedWed = diaryDAO.create(diary);
+				DiaryDTO diaryCreatedWed = iDiaryManager.create(diary);
 				
 				diary = new DiaryDTO();
 				diary.setEnabled(1);
 				diary.setDiaTimes(local.getLocSemanalDiary().getSemThuDiary().getDiaTimes());
-				DiaryDTO diaryCreatedThu = diaryDAO.create(diary);
+				DiaryDTO diaryCreatedThu = iDiaryManager.create(diary);
 				
 				diary = new DiaryDTO();
 				diary.setEnabled(1);
 				diary.setDiaTimes(local.getLocSemanalDiary().getSemFriDiary().getDiaTimes());
-				DiaryDTO diaryCreatedFri = diaryDAO.create(diary);
+				DiaryDTO diaryCreatedFri = iDiaryManager.create(diary);
 				
 				diary = new DiaryDTO();
 				diary.setEnabled(1);
 				diary.setDiaTimes(local.getLocSemanalDiary().getSemSatDiary().getDiaTimes());
-				DiaryDTO diaryCreatedSat = diaryDAO.create(diary);
+				DiaryDTO diaryCreatedSat = iDiaryManager.create(diary);
 				
 				diary = new DiaryDTO();
 				diary.setEnabled(1);
 				diary.setDiaTimes(local.getLocSemanalDiary().getSemSunDiary().getDiaTimes());
-				DiaryDTO diaryCreatedSun = diaryDAO.create(diary);
+				DiaryDTO diaryCreatedSun = iDiaryManager.create(diary);
 				
 					
 				SemanalDiaryDTO semanalDiary = new SemanalDiaryDTO();
@@ -1423,7 +1424,7 @@ public class CalendarController {
 				semanalDiary.setSemSatDiary(diaryCreatedSat);
 				semanalDiary.setSemSunDiary(diaryCreatedSun);
 				
-				semanalDiary = semanalDiaryDAO.create(semanalDiary);
+				semanalDiary = iSemanalDiaryManager.create(semanalDiary);
 				
 				calendar.setCalSemanalDiary(semanalDiary);
 				
@@ -1435,10 +1436,10 @@ public class CalendarController {
 		
 				//calendar.setCalProf(calProf);
 				
-				calendar = calendarDAO.create(calendar);
+				calendar = iCalendarManager.create(calendar);
 				
 				// Asignamos los horarios especiales y cerrados del local
-				List<AnnualDiaryDTO> ListAnnualDiary = annualDiaryDAO.getAnnualDiary(local.getId());
+				List<AnnualDiaryDTO> ListAnnualDiary = iAnnualDiaryManager.getAnnualDiary(local.getId());
 				AnnualDiaryDTO annualDiary = null;
 				for (AnnualDiaryDTO annualDiaryLocal : ListAnnualDiary) {
 					annualDiary = new AnnualDiaryDTO();
@@ -1452,7 +1453,7 @@ public class CalendarController {
 						diary.setDiaTimes(annualDiaryLocal.getAnuDayDiary().getDiaTimes());
 						annualDiary.setAnuDayDiary(diary);
 					}
-					annualDiaryDAO.create(annualDiary);
+					iAnnualDiaryManager.create(annualDiary);
 				}
 			}
 		}		
@@ -1464,9 +1465,9 @@ public class CalendarController {
 
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = iLocalManager.getById(new Long(localId));
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(local.getId());
+		List<CalendarDTO> listCalendar = iCalendarManager.getCalendarAdmin(local.getId());
 		String strCalLabelLocalTasks = null;
 
 		LocalTaskDTO localTask = null;
@@ -1479,8 +1480,8 @@ public class CalendarController {
 					if (strCalLabelLocalTasks.length()>0){
 						strCalLabelLocalTasks += " , ";
 					}
-					localTask = localTaskDAO.getById(taskId);
-					multiTextKey = multiTextDAO.getByLanCodeAndKey(locale.getLanguage(), localTask.getLotNameMulti());
+					localTask = iLocalTaskManager.getById(taskId);
+					multiTextKey = iMultiTextManager.getByLanCodeAndKey(locale.getLanguage(), localTask.getLotNameMulti());
 					strCalLabelLocalTasks +=  multiTextKey.getMulText();
 				}
 			}
@@ -1493,9 +1494,9 @@ public class CalendarController {
 	protected @ResponseBody
 	List<CalendarDTO> list(@RequestParam("localId") String localId) throws Exception {
 
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = iLocalManager.getById(new Long(localId));
 
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendar(local.getId());
+		List<CalendarDTO> listCalendar = iCalendarManager.getCalendar(local.getId());
 				
 		return listCalendar;
 	}
@@ -1504,9 +1505,9 @@ public class CalendarController {
 	protected @ResponseBody
 	List<CalendarDTO> listDiary(@RequestParam("localId") String localId) throws Exception {
 
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = iLocalManager.getById(new Long(localId));
 
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(local.getId());
+		List<CalendarDTO> listCalendar = iCalendarManager.getCalendarAdmin(local.getId());
 				
 		return listCalendar;
 	}
@@ -1515,7 +1516,7 @@ public class CalendarController {
 	protected @ResponseBody
 	Integer numCals(@RequestParam("localId") String localId) throws Exception {
 				
-		return calendarDAO.getNumCalendarAdmin(new Long(localId));
+		return iCalendarManager.getNumCalendarAdmin(new Long(localId));
 	}
 	
 	@RequestMapping("/listCandidate")
@@ -1526,8 +1527,8 @@ public class CalendarController {
 		
 		List<Long> listLocalTask = getListLocalTasksId(selectedTasks);
 	
-		LocalDTO local = localDAO.getById(new Long(localId));
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendar(local.getId());
+		LocalDTO local = iLocalManager.getById(new Long(localId));
+		List<CalendarDTO> listCalendar = iCalendarManager.getCalendar(local.getId());
 		boolean isValid = true;
 		for (CalendarDTO calendarDTO : listCalendar) {
 			isValid = true;
@@ -1550,7 +1551,7 @@ public class CalendarController {
 		LocalTaskDTO localTask = null;
 		List<Long> combiRes = null;
 		for (String strId : a) {
-			localTask = localTaskDAO.getById(new Long(strId));
+			localTask = iLocalTaskManager.getById(new Long(strId));
 			combiRes = localTask.getLotTaskCombiId();
 			if (combiRes==null){
 				if(!list.contains(localTask.getId())){
@@ -1572,14 +1573,14 @@ public class CalendarController {
 	@ResponseBody
 	protected void enabled(@RequestParam("id") Long id) throws Exception {
 		
-		CalendarDTO calendar = calendarDAO.getById(id);
+		CalendarDTO calendar = iCalendarManager.getById(id);
 		if (calendar!=null){
 			if (calendar.getEnabled()==1){
 				calendar.setEnabled(0);
 			} else {
 				calendar.setEnabled(1);
 			}
-			calendarDAO.update(calendar);
+			iCalendarManager.update(calendar);
 		}
 	}
 	
@@ -1588,7 +1589,7 @@ public class CalendarController {
 	@ResponseBody
 	protected void tasks(@RequestParam("id") Long id, @RequestParam("selectedTasks") String selectedTasks) throws Exception {
 		
-		CalendarDTO calendar = calendarDAO.getById(id);
+		CalendarDTO calendar = iCalendarManager.getById(id);
 		if (calendar!=null){
 			List<Long> listLocalTask = new ArrayList<Long>();
 			String[] a = selectedTasks.split(",");
@@ -1596,7 +1597,7 @@ public class CalendarController {
 				listLocalTask.add(new Long (strTaskId));
 			}
 			calendar.setCalLocalTasksId(listLocalTask);
-			calendarDAO.update(calendar);
+			iCalendarManager.update(calendar);
 		}
 	}
 	
@@ -1627,16 +1628,16 @@ public class CalendarController {
 				id1 = ((LocalTaskDTO)obj1).getLotTaskId();
 			} else { // Es combinada, cogemos la primera
 				id1 = (Long)((LocalTaskDTO)obj1).getLotTaskCombiId().get(0);
-				id1 = localTaskDAO.getById(id1).getLotTaskId();
+				id1 = iLocalTaskManager.getById(id1).getLotTaskId();
 			}
 			if (((LocalTaskDTO)obj2).getLotTaskId()!=null){// Es individual
 				id2 = ((LocalTaskDTO)obj2).getLotTaskId();
 			} else { // Es combinada, cogemos la primera
 				id2 = (Long)((LocalTaskDTO)obj2).getLotTaskCombiId().get(0);
-				id2 = localTaskDAO.getById(id2).getLotTaskId();
+				id2 = iLocalTaskManager.getById(id2).getLotTaskId();
 			}
-			task1 = taskDAO.getById(id1);
-			task2 = taskDAO.getById(id2);
+			task1 = iTaskManager.getById(id1);
+			task2 = iTaskManager.getById(id2);
 			return (task1.getTasClass().getId())
 					.compareTo((task2.getTasClass().getId()));
 		}
@@ -1660,48 +1661,48 @@ public class CalendarController {
 		this.messageSourceApp = messageSourceApp;
 	}
 
-	public void setAnnualDiaryDAO(AnnualDiaryDAO annualDiaryDAO) {
-		this.annualDiaryDAO = annualDiaryDAO;
+	public void setAnnualDiaryDAO(IAnnualDiaryManager iAnnualDiaryManager) {
+		this.iAnnualDiaryManager = iAnnualDiaryManager;
 	}
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.iLocalManager = iLocalManager;
 	}
 
-	public void setCalendarDAO(CalendarDAO calendarDAO) {
-		this.calendarDAO = calendarDAO;
+	public void setCalendarDAO(ICalendarManager iCalendarManager) {
+		this.iCalendarManager = iCalendarManager;
 	}
 
-	public void setEventDAO(EventDAO eventDAO) {
-		this.eventDAO = eventDAO;
+	public void setEventDAO(IEventManager iEventManager) {
+		this.iEventManager = iEventManager;
 	}
 
-	public void setRepeatDAO(RepeatDAO repeatDAO) {
-		this.repeatDAO = repeatDAO;
+	public void setRepeatDAO(IRepeatManager iRepeatManager) {
+		this.iRepeatManager = iRepeatManager;
 	}
 
-	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
-		this.localTaskDAO = localTaskDAO;
+	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
+		this.iLocalTaskManager = iLocalTaskManager;
 	}
 
-	public void setTaskDAO(TaskDAO taskDAO) {
-		this.taskDAO = taskDAO;
+	public void setTaskDAO(ITaskManager iTaskManager) {
+		this.iTaskManager = iTaskManager;
 	}
 
-	public void setDiaryDAO(DiaryDAO diaryDAO) {
-		this.diaryDAO = diaryDAO;
+	public void setDiaryDAO(IDiaryManager iDiaryManager) {
+		this.iDiaryManager = iDiaryManager;
 	}
 
-	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
-		this.semanalDiaryDAO = semanalDiaryDAO;
+	public void setSemanalDiaryDAO(ISemanalDiaryManager iSemanalDiaryManager) {
+		this.iSemanalDiaryManager = iSemanalDiaryManager;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.iMultiTextManager = iMultiTextManager;
 	}
 
-	public void setFirmDAO(FirmDAO firmDAO) {
-		this.firmDAO = firmDAO;
+	public void setFirmDAO(IFirmManager iFirmManager) {
+		this.iFirmManager = iFirmManager;
 	}
 
 	public void setRepeatController(RepeatController repeatController) {

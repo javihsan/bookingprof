@@ -12,10 +12,8 @@ import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Logger;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.beanutils.PropertyUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -28,14 +26,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
-import com.diloso.bookhair.app.negocio.dao.AnnualDiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.CalendarDAO;
-import com.diloso.bookhair.app.negocio.dao.DiaryDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalDAO;
-import com.diloso.bookhair.app.negocio.dao.LocalTaskDAO;
-import com.diloso.bookhair.app.negocio.dao.MultiTextDAO;
-import com.diloso.bookhair.app.negocio.dao.RepeatDAO;
-import com.diloso.bookhair.app.negocio.dao.SemanalDiaryDAO;
 import com.diloso.bookhair.app.negocio.dto.AnnualDiaryDTO;
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.DiaryDTO;
@@ -46,8 +36,19 @@ import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 import com.diloso.bookhair.app.negocio.dto.RepeatDTO;
 import com.diloso.bookhair.app.negocio.dto.SemanalDiaryDTO;
 import com.diloso.bookhair.app.negocio.dto.generator.NotifCalendarDTO;
+import com.diloso.bookhair.app.negocio.manager.IAnnualDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.ICalendarManager;
+import com.diloso.bookhair.app.negocio.manager.IDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalManager;
+import com.diloso.bookhair.app.negocio.manager.ILocalTaskManager;
+import com.diloso.bookhair.app.negocio.manager.IMultiTextManager;
+import com.diloso.bookhair.app.negocio.manager.IRepeatManager;
+import com.diloso.bookhair.app.negocio.manager.ISemanalDiaryManager;
+import com.diloso.bookhair.app.negocio.manager.RepeatManager;
 import com.diloso.bookhair.app.negocio.utils.templates.Generator;
-import com.diloso.bookhair.app.persist.manager.RepeatManager;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/repeat")
@@ -57,38 +58,38 @@ public class RepeatController {
 
 	protected static final String REP_NAME_PARAM = "repName";
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	//@Autowired
+	@Autowired
 	protected Generator generatorVelocity;
 	
-	//@Autowired
-	protected LocalDAO localDAO;
+	@Autowired
+	protected ILocalManager localManager;
 	
-	//@Autowired
-	protected CalendarDAO calendarDAO;
+	@Autowired
+	protected ICalendarManager calendarManager;
 	
-	//@Autowired
-	protected RepeatDAO repeatDAO;
+	@Autowired
+	protected IRepeatManager repeatManager;
 	
-	//@Autowired
-	protected LocalTaskDAO localTaskDAO;
+	@Autowired
+	protected ILocalTaskManager localTaskManager;
 	
-	//@Autowired
-	protected MultiTextDAO multiTextDAO;
+	@Autowired
+	protected IMultiTextManager multiTextManager;
 
-	//@Autowired
+	@Autowired
 	protected CalendarController calController;
 	
-	//@Autowired
-	protected AnnualDiaryDAO annualDiaryDAO;
+	@Autowired
+	protected IAnnualDiaryManager annualDiaryManager;
 	
-	//@Autowired
-	protected DiaryDAO diaryDAO;
+	@Autowired
+	protected IDiaryManager diaryManager;
 	
-	//@Autowired
-	protected SemanalDiaryDAO semanalDiaryDAO;
+	@Autowired
+	protected ISemanalDiaryManager semanalDiaryManager;
 	
 	@ExceptionHandler(UncategorizedDataAccessException.class)
 	@ResponseStatus(value=HttpStatus.CONFLICT)
@@ -176,7 +177,7 @@ public class RepeatController {
 		String defaultNameValue = "Clase de padel 8-10";//arg0.getParameter(REP_NAME_PARAM+"_"+langDefault);
 		//String defaultNameValue = "Clase de tenis 5-7";//arg0.getParameter(REP_NAME_PARAM+"_"+langDefault);
 		// Propiedades de local
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
 		//Long calendarId = new Long(arg0.getParameter("calendarId"));
 		Long calendarId = new Long("6468426906206208");//Pista 2 Padel  Pista 1 tenis 4792771185475584
@@ -184,7 +185,7 @@ public class RepeatController {
 		
 		//Long localTaskId = new Long(arg0.getParameter("localTaskId"));
 		Long localTaskId = new Long("5813117976051712");
-		LocalTaskDTO localTask = localTaskDAO.getById(new Long(localTaskId));
+		LocalTaskDTO localTask = localTaskManager.getById(new Long(localTaskId));
 		
 		//Long lngRepStartTime = new Long(arg0.getParameter("repStartTime"));
 		//Date repStartTime = new Date(lngRepStartTime);
@@ -222,7 +223,7 @@ public class RepeatController {
 				hashNamesParam.put(lang.getLanCode(), nameValue);
 			}
 			int indx = 0;
-			while (multiTextDAO.getByLanCodeAndKey(locale.getLanguage(), keyNameMulti)!=null){
+			while (multiTextManager.getByLanCodeAndKey(locale.getLanguage(), keyNameMulti)!=null){
 				keyNameMulti = RepeatManager.KEY_MULTI_REPEAT_NAME+localId+"_"+defaultNameValue.toLowerCase()+"_"+indx;
 				indx ++;
 			}
@@ -297,11 +298,11 @@ public class RepeatController {
 			semanalDiary.setSemSunDiary(diaryCreatedSun);
 			semanalDiary = semanalDiaryDAO.create(semanalDiary);*/
 			
-			SemanalDiaryDTO semanalDiary = semanalDiaryDAO.getById(new Long("5109430534275072"));
+			SemanalDiaryDTO semanalDiary = semanalDiaryManager.getById(new Long("5109430534275072"));
 						
 			repeat.setRepSemanalDiary(semanalDiary);
 			
-			repeatDAO.create(repeat);
+			repeatManager.create(repeat);
 			
 		}
 	}
@@ -312,7 +313,7 @@ public class RepeatController {
  
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(new Long(localId));
+		List<CalendarDTO> listCalendar = calendarManager.getCalendarAdmin(new Long(localId));
 
 		String[] dates = selectedDate
 				.split(CalendarController.CHAR_SEP_DATE);
@@ -329,10 +330,10 @@ public class RepeatController {
 		DiaryDTO diaryDTO = null;
 		RepeatDTO repeatAux = null;
 		for (CalendarDTO calendar : listCalendar) {
-			List<RepeatDTO> listRepeatAux = repeatDAO.getRepeatByWeek(calendar,selectedDate);
+			List<RepeatDTO> listRepeatAux = repeatManager.getRepeatByWeek(calendar,selectedDate);
 			// Añadimos los repeats de este puesto a los del local
 			for (RepeatDTO repeat : listRepeatAux) {
-				multiTextKey = multiTextDAO.getByLanCodeAndKey(locale.getLanguage(),repeat.getRepNameMulti());
+				multiTextKey = multiTextManager.getByLanCodeAndKey(locale.getLanguage(),repeat.getRepNameMulti());
 				repeat.setRepName(multiTextKey.getMulText());
 				repeat.setEveCalendarName(calendar.getCalName());
 				
@@ -382,7 +383,7 @@ public class RepeatController {
 	protected @ResponseBody
 	List<RepeatDTO> listByDay(@RequestParam("localId") Long localId, @RequestParam("selectedDate") String selectedDate) throws Exception {
 
-		List<CalendarDTO> listCalendar = calendarDAO.getCalendarAdmin(localId);
+		List<CalendarDTO> listCalendar = calendarManager.getCalendarAdmin(localId);
 
 		String[] dates = selectedDate
 				.split(CalendarController.CHAR_SEP_DATE);
@@ -398,7 +399,7 @@ public class RepeatController {
 		DiaryDTO diaryDTO = null;
 		RepeatDTO repeatAux = null;
 		for (CalendarDTO calendar : listCalendar) {
-			List<RepeatDTO> listRepeatAux = repeatDAO.getRepeatByDay(calendar,selectedDate);
+			List<RepeatDTO> listRepeatAux = repeatManager.getRepeatByDay(calendar,selectedDate);
 			// Añadimos los repeats de este puesto a los del local
 			for (RepeatDTO repeat : listRepeatAux) {
 				
@@ -451,7 +452,7 @@ public class RepeatController {
 	protected @ResponseBody
 	List<RepeatDTO> listCalendarByDay(@RequestParam("id") Long id, @RequestParam("selectedDate") String selectedDate) throws Exception {
 
-		CalendarDTO calendar = calendarDAO.getById(id);
+		CalendarDTO calendar = calendarManager.getById(id);
 		
 		String[] dates = selectedDate
 				.split(CalendarController.CHAR_SEP_DATE);
@@ -466,7 +467,7 @@ public class RepeatController {
 		AnnualDiaryDTO annualDiaryDTO = null; 
 		DiaryDTO diaryDTO = null;
 		RepeatDTO repeatAux = null;
-		List<RepeatDTO> listRepeatAux = repeatDAO.getRepeatByDay(calendar,selectedDate);
+		List<RepeatDTO> listRepeatAux = repeatManager.getRepeatByDay(calendar,selectedDate);
 		// Añadimos los repeats de este puesto a los del local
 		for (RepeatDTO repeat : listRepeatAux) {
 			
@@ -575,12 +576,12 @@ public class RepeatController {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 
-		LocalDTO local = localDAO.getById(new Long(localId));
+		LocalDTO local = localManager.getById(new Long(localId));
 		
-		RepeatDTO repeat = repeatDAO.getById(id);
+		RepeatDTO repeat = repeatManager.getById(id);
 		if (repeat!=null){
 			repeat.setEnabled(0);
-			repeatDAO.update(repeat);
+			repeatManager.update(repeat);
 			
 			log.info("Repeat cancelado : "+repeat.getId());
 			
@@ -638,40 +639,40 @@ public class RepeatController {
 		this.generatorVelocity = generatorVelocity;
 	}
 
-	public void setLocalDAO(LocalDAO localDAO) {
-		this.localDAO = localDAO;
+	public void setLocalDAO(ILocalManager iLocalManager) {
+		this.localManager = iLocalManager;
 	}
 
-	public void setCalendarDAO(CalendarDAO calendarDAO) {
-		this.calendarDAO = calendarDAO;
+	public void setCalendarDAO(ICalendarManager iCalendarManager) {
+		this.calendarManager = iCalendarManager;
 	}
 
-	public void setRepeatDAO(RepeatDAO repeatDAO) {
-		this.repeatDAO = repeatDAO;
+	public void setRepeatDAO(IRepeatManager iRepeatManager) {
+		this.repeatManager = iRepeatManager;
 	}
 
-	public void setLocalTaskDAO(LocalTaskDAO localTaskDAO) {
-		this.localTaskDAO = localTaskDAO;
+	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
+		this.localTaskManager = iLocalTaskManager;
 	}
 
-	public void setMultiTextDAO(MultiTextDAO multiTextDAO) {
-		this.multiTextDAO = multiTextDAO;
+	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+		this.multiTextManager = iMultiTextManager;
 	}
 
 	public void setCalController(CalendarController calController) {
 		this.calController = calController;
 	}
 
-	public void setAnnualDiaryDAO(AnnualDiaryDAO annualDiaryDAO) {
-		this.annualDiaryDAO = annualDiaryDAO;
+	public void setAnnualDiaryDAO(IAnnualDiaryManager iAnnualDiaryManager) {
+		this.annualDiaryManager = iAnnualDiaryManager;
 	}
 
-	public void setDiaryDAO(DiaryDAO diaryDAO) {
-		this.diaryDAO = diaryDAO;
+	public void setDiaryDAO(IDiaryManager iDiaryManager) {
+		this.diaryManager = iDiaryManager;
 	}
 
-	public void setSemanalDiaryDAO(SemanalDiaryDAO semanalDiaryDAO) {
-		this.semanalDiaryDAO = semanalDiaryDAO;
+	public void setSemanalDiaryDAO(ISemanalDiaryManager iSemanalDiaryManager) {
+		this.semanalDiaryManager = iSemanalDiaryManager;
 	}
 	
 	/*

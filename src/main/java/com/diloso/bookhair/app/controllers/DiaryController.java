@@ -3,6 +3,7 @@ package com.diloso.bookhair.app.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.diloso.bookhair.app.negocio.dao.DiaryDAO;
 import com.diloso.bookhair.app.negocio.dto.DiaryDTO;
+import com.diloso.bookhair.app.negocio.manager.IDiaryManager;
 
 @Controller
 @RequestMapping(value={"/*/diary", "/diary"})
 public class DiaryController {
 	
-	//@Autowired
-	protected DiaryDAO diaryDAO;
+	@Autowired
+	protected IDiaryManager diaryManager;
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/manager/update")
 	@ResponseStatus(HttpStatus.OK)
@@ -32,15 +33,15 @@ public class DiaryController {
 				diaTimes.add(strTime);
 			}
 		}	
-		DiaryDTO diary = diaryDAO.getById(id);
+		DiaryDTO diary = diaryManager.getById(id);
 		if (diary!=null){
 			diary.setDiaTimes(diaTimes);
-			diaryDAO.update(diary);
+			diaryManager.update(diary);
 		} 
 	}
 
-	public void setDiaryDAO(DiaryDAO diaryDAO) {
-		this.diaryDAO = diaryDAO;
+	public void setDiaryDAO(IDiaryManager iDiaryManager) {
+		this.diaryManager = iDiaryManager;
 	}
 	
 		
