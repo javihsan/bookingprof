@@ -18,7 +18,7 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name="getTask", query = "SELECT t FROM Task t WHERE t.enabled =1 order by t.id asc"),
 	@NamedQuery(name="getTaskMultiKey", query = "SELECT t FROM Task t WHERE t.tasNameMulti=:tasNameMulti and t.enabled =1 order by t.id asc")
 })
-public class Task2 extends StorableWithModificationTimestamp<Long> { 
+public class Task extends StorableWithModificationTimestamp<Long> { 
 
 	protected static final long serialVersionUID = 1L;
 

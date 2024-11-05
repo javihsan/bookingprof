@@ -3778,104 +3778,6 @@ public class LoadingController {
 		}
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/admin/migrateEvent_no")
-	@ResponseStatus(HttpStatus.OK)
-	protected void migrateEvent(HttpServletRequest arg0,
-			HttpServletResponse arg1) throws Exception {
-
-		List<Entity> resultQuery = null;
-
-		try {
-
-			/*
-			 * String[] dates =
-			 * selectedDate.split(CalendarController.CHAR_SEP_DATE); String year
-			 * = dates[0]; String month = dates[1]; String day = dates[2];
-			 * 
-			 * Calendar calendarGreg = new GregorianCalendar();
-			 * calendarGreg.set(Calendar.YEAR, new Integer(year));
-			 * calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			 * calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			 * calendarGreg.set(Calendar.HOUR_OF_DAY,0);
-			 * calendarGreg.set(Calendar.MINUTE,0);
-			 * calendarGreg.set(Calendar.SECOND,0);
-			 * calendarGreg.set(Calendar.MILLISECOND,0); Date startTime =
-			 * calendarGreg.getTime();
-			 * 
-			 * Filter fromFilter = new FilterPredicate("eveStartTime",
-			 * FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
-			 * 
-			 * com.google.appengine.api.datastore.Query query = new
-			 * com.google.appengine
-			 * .api.datastore.Query("Event").setFilter(fromFilter);
-			 */
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"EventPere");
-			query.addSort("eveBookingTime", SortDirection.ASCENDING);
-
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			resultQuery = pq.asList(FetchOptions.Builder.withLimit(1000));
-			int max = 1000;
-			int indx = 0;
-
-			LocalTaskDTO localTask = null;
-			Long clientId = null;
-			Long calendarId = new Long("6320998664110080");
-			String eveGoogleId = null;
-			String[] a = null;
-			for (Entity entity : resultQuery) {
-				if (indx < max) {
-					com.google.appengine.api.datastore.Entity newEntity = new Entity(
-							"Event");
-					newEntity.setPropertiesFrom(entity);
-
-					localTask = getLocalTask((Long) entity
-							.getProperty("eveTaskId"));
-					newEntity.setProperty("eveLocalTaskId", localTask.getId());
-					newEntity.removeProperty("eveTaskId");
-
-					Calendar calendarGreg = new GregorianCalendar();
-					calendarGreg.setTime((Date) entity
-							.getProperty("eveStartTime"));
-					calendarGreg.add(Calendar.MINUTE,
-							localTask.getLotTaskDuration());
-					newEntity.setProperty("eveEndTime", calendarGreg.getTime());
-
-					clientId = getClientId((Long) entity
-							.getProperty("eveClientId"));
-					newEntity.setProperty("eveClientId", clientId);
-
-					newEntity.setProperty("eveCalendarId", calendarId);
-
-					eveGoogleId = (String) entity.getProperty("eveGoogleId");
-					a = eveGoogleId.split("_");
-					eveGoogleId = a[1].replace("@Pere Peluqueros",
-							"@BookingProf");
-					newEntity.setProperty("eveICS", clientId + "_"
-							+ eveGoogleId);
-					newEntity.removeProperty("eveGoogleId");
-
-					newEntity.removeProperty("eveRate");
-
-					if (clientId != null) {
-						log.info("migrateEvent: Put newEvent: " + newEntity);
-						if (indx == 0) {
-							dataStore.put(newEntity);
-							log.info("migrateEventInsertttt: Put newEvent: "
-									+ newEntity);
-						}
-					}
-					indx++;
-				}
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
 	private LocalTaskDTO getLocalTask(Long idPere) {
 		Long id = null;
 		if (idPere.longValue() == 74007) { // Corte pelo caballero
@@ -6046,6 +5948,107 @@ public class LoadingController {
 		}
 	}
 
+	
+	/*
+	 	@RequestMapping(method = RequestMethod.GET, value = "/admin/migrateEvent_no")
+	@ResponseStatus(HttpStatus.OK)
+	protected void migrateEvent(HttpServletRequest arg0,
+			HttpServletResponse arg1) throws Exception {
+
+		List<Entity> resultQuery = null;
+
+		try {
+
+			/*
+			 * String[] dates =
+			 * selectedDate.split(CalendarController.CHAR_SEP_DATE); String year
+			 * = dates[0]; String month = dates[1]; String day = dates[2];
+			 * 
+			 * Calendar calendarGreg = new GregorianCalendar();
+			 * calendarGreg.set(Calendar.YEAR, new Integer(year));
+			 * calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
+			 * calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
+			 * calendarGreg.set(Calendar.HOUR_OF_DAY,0);
+			 * calendarGreg.set(Calendar.MINUTE,0);
+			 * calendarGreg.set(Calendar.SECOND,0);
+			 * calendarGreg.set(Calendar.MILLISECOND,0); Date startTime =
+			 * calendarGreg.getTime();
+			 * 
+			 * Filter fromFilter = new FilterPredicate("eveStartTime",
+			 * FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
+			 * 
+			 * com.google.appengine.api.datastore.Query query = new
+			 * com.google.appengine
+			 * .api.datastore.Query("Event").setFilter(fromFilter);
+			 */
+			/*com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
+					"EventPere");
+			query.addSort("eveBookingTime", SortDirection.ASCENDING);
+
+			DatastoreService dataStore = DatastoreServiceFactory
+					.getDatastoreService();
+			PreparedQuery pq = dataStore.prepare(query);
+			resultQuery = pq.asList(FetchOptions.Builder.withLimit(1000));
+			int max = 1000;
+			int indx = 0;
+
+			LocalTaskDTO localTask = null;
+			Long clientId = null;
+			Long calendarId = new Long("6320998664110080");
+			String eveGoogleId = null;
+			String[] a = null;
+			for (Entity entity : resultQuery) {
+				if (indx < max) {
+					com.google.appengine.api.datastore.Entity newEntity = new Entity(
+							"Event");
+					newEntity.setPropertiesFrom(entity);
+
+					localTask = getLocalTask((Long) entity
+							.getProperty("eveTaskId"));
+					newEntity.setProperty("eveLocalTaskId", localTask.getId());
+					newEntity.removeProperty("eveTaskId");
+
+					Calendar calendarGreg = new GregorianCalendar();
+					calendarGreg.setTime((Date) entity
+							.getProperty("eveStartTime"));
+					calendarGreg.add(Calendar.MINUTE,
+							localTask.getLotTaskDuration());
+					newEntity.setProperty("eveEndTime", calendarGreg.getTime());
+
+					clientId = getClientId((Long) entity
+							.getProperty("eveClientId"));
+					newEntity.setProperty("eveClientId", clientId);
+
+					newEntity.setProperty("eveCalendarId", calendarId);
+
+					eveGoogleId = (String) entity.getProperty("eveGoogleId");
+					a = eveGoogleId.split("_");
+					eveGoogleId = a[1].replace("@Pere Peluqueros",
+							"@BookingProf");
+					newEntity.setProperty("eveICS", clientId + "_"
+							+ eveGoogleId);
+					newEntity.removeProperty("eveGoogleId");
+
+					newEntity.removeProperty("eveRate");
+
+					if (clientId != null) {
+						log.info("migrateEvent: Put newEvent: " + newEntity);
+						if (indx == 0) {
+							dataStore.put(newEntity);
+							log.info("migrateEventInsertttt: Put newEvent: "
+									+ newEntity);
+						}
+					}
+					indx++;
+				}
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+*/
+	
 	public void setMessageSourceApp(MessageSource messageSourceApp) {
 		this.messageSourceApp = messageSourceApp;
 	}

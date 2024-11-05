@@ -16,7 +16,7 @@ public class SemanalDiaryManager implements ISemanalDiaryManager {
 	private SemanalDiaryDAO semanalDiaryDAO;
 		
 	@Autowired
-	protected SemanalDiaryMapper semanalDiaryMapper;
+	protected SemanalDiaryMapper mapper;
 	
 	public SemanalDiaryManager() {
 

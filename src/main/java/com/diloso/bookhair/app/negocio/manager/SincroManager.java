@@ -16,7 +16,7 @@ public class SincroManager implements ISincroManager {
 	private SincroDAO sincroDAO;
 	
 	@Autowired
-	protected SincroMapper sincroMapper;
+	protected SincroMapper mapper;
 	
 	public SincroManager() {
 

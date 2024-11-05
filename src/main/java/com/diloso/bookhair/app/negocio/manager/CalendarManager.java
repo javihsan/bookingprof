@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.CalendarDAO;
+import com.diloso.bookhair.app.persist.entities.Calendar;
 import com.diloso.bookhair.app.persist.mapper.CalendarMapper;
 
 @Component
@@ -18,34 +20,51 @@ public class CalendarManager implements ICalendarManager {
 	private CalendarDAO calendarDAO;
 	
 	@Autowired
-	protected CalendarMapper calendarMapper;
+	protected CalendarMapper mapper;
 	
 	public CalendarManager() {
 
 	}
 
 	@Override
-	public CalendarDTO create(CalendarDTO calendar) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public CalendarDTO create(CalendarDTO calendarDTO) throws Exception {
+		Calendar calendar = mapper.map(calendarDTO);
+		calendar = calendarDAO.create(calendar);
+		return mapper.map(calendar);
 	}
 
 	@Override
 	public CalendarDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Calendar calendar = calendarDAO.get(id);
+		calendarDAO.delete(id);
+		if (calendar == null) {
+			return null;
+		}
+		return mapper.map(calendar);
 	}
 
 	@Override
-	public CalendarDTO update(CalendarDTO calendar) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public CalendarDTO update(CalendarDTO calendarDTO) throws Exception {
+		Calendar calendar = mapper.map(calendarDTO);
+		Calendar oldCalendar = calendarDAO.get(calendarDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(calendar, oldCalendar);
+		} catch (Exception e) {
+		}
+		calendar = calendarDAO.update(calendar);
+		if (calendar == null) {
+			return null;
+		}
+		return mapper.map(calendar);
 	}
 
 	@Override
 	public CalendarDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Calendar calendar = calendarDAO.get(id);
+		if (calendar == null) {
+			return null;
+		}
+		return mapper.map(calendar);		
 	}
 
 	@Override

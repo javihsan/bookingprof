@@ -23,7 +23,7 @@ public class TaskClassManager implements ITaskClassManager {
 	protected IMultiTextManager multiTextManager;
 
 	@Autowired
-	protected TaskClassMapper taskClassMapper;
+	protected TaskClassMapper mapper;
 	
 	public TaskClassManager() {
 

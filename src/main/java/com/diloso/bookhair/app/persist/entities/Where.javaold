@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  * 
  */
 @Entity
-public class Where2 extends Resource extends StorableWithModificationTimestamp<Long> { 
+public class Where extends Resource extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 
 	protected String wheAddress;
@@ -28,7 +28,7 @@ public class Where2 extends Resource extends StorableWithModificationTimestamp<L
 	
 	protected String wheCurrency;
 	
-	public Where2() {
+	public Where() {
     }
 
 	public String getWheAddress() {

@@ -22,6 +22,7 @@ public class Task extends StorableWithModificationTimestamp<Long> {
 	
 	protected Long tasClassId;
 	
+	@Index
 	protected String tasNameMulti;
 	
 	public Long getId() {

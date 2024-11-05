@@ -8,7 +8,9 @@ import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.BilledDTO;
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.BilledDAO;
+import com.diloso.bookhair.app.persist.entities.Billed;
 import com.diloso.bookhair.app.persist.mapper.BilledMapper;
 
 @Component
@@ -31,12 +33,83 @@ public class BilledManager implements IBilledManager {
 	protected IProductManager productManager;
 	
 	@Autowired
-	protected BilledMapper billedMapper;
+	protected BilledMapper mapper;
 
 	
 	public BilledManager() {
 
 	}
+
+	@Override
+	public BilledDTO create(BilledDTO billedDTO) throws Exception {
+		Billed billed = mapper.map(billedDTO);
+		billed = billedDAO.create(billed);
+		return mapper.map(billed);
+	}
+
+	@Override
+	public BilledDTO remove(long id) throws Exception {
+		Billed billed = billedDAO.get(id);
+		billedDAO.delete(id);
+		if (billed == null) {
+			return null;
+		}
+		return mapper.map(billed);
+	}
+
+	@Override
+	public BilledDTO update(BilledDTO billedDTO) throws Exception {
+		Billed billed = mapper.map(billedDTO);
+		Billed oldBilled = billedDAO.get(billedDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(billed, oldBilled);
+		} catch (Exception e) {
+		}
+		billed = billedDAO.update(billed);
+		if (billed == null) {
+			return null;
+		}
+		return mapper.map(billed);
+	}
+
+	@Override
+	public BilledDTO getById(long id) {
+		Billed billed = billedDAO.get(id);
+		if (billed == null) {
+			return null;
+		}
+		return mapper.map(billed);		
+	}
+
+
+	@Override
+	public List<BilledDTO> getBilledByInvoice(long bilInvoiceId, String lang) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Float getBilledSales(CalendarDTO calendar, String startDate, String endDate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Float getBilledSalesTask(CalendarDTO calendar, String startDate, String endDate, Long localTaskId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Float getBilledSalesProduct(CalendarDTO calendar, String startDate, String endDate, Long productId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 /*
 	public BilledDTO create(BilledDTO billed) throws Exception {
 		EntityManager em = getEntityManager();
@@ -425,65 +498,7 @@ public class BilledManager implements IBilledManager {
 	public void setBilledTransformer(BilledMapper billedMapper) {
 		this.billedMapper = billedMapper;
 	}
-	*/
-
-
-	@Override
-	public BilledDTO create(BilledDTO task) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public BilledDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public BilledDTO update(BilledDTO task) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public BilledDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public List<BilledDTO> getBilledByInvoice(long bilInvoiceId, String lang) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Float getBilledSales(CalendarDTO calendar, String startDate, String endDate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Float getBilledSalesTask(CalendarDTO calendar, String startDate, String endDate, Long localTaskId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Float getBilledSalesProduct(CalendarDTO calendar, String startDate, String endDate, Long productId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
+*/
 	
 
 }

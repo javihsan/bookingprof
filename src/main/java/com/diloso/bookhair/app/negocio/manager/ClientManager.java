@@ -18,7 +18,7 @@ public class ClientManager implements IClientManager {
 	private ClientDAO clientDAO;
 	
 	@Autowired
-	protected ClientMapper clientMapper;
+	protected ClientMapper mapper;
 	
 	public ClientManager() {
 

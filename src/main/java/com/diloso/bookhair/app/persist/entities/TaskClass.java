@@ -20,6 +20,7 @@ public class TaskClass extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Integer enabled;
 	
+	@Index
 	protected String tclNameMulti;
 	
 	public Long getId() {

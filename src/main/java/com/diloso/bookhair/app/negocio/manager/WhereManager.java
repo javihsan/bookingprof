@@ -16,11 +16,11 @@ public class WhereManager implements IWhereManager {
 	private WhereDAO whereDAO;
 	
 	@Autowired
-	protected WhereMapper whereMapper;
+	protected WhereMapper mapper;
 	
 	public WhereManager() {
-		if (whereMapper==null){
-			whereMapper = new WhereMapper();
+		if (mapper==null){
+			mapper = new WhereMapper();
 		}
 	}
 

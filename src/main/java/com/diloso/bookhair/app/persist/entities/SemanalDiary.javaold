@@ -12,7 +12,7 @@ import javax.persistence.Id;
  * 
  */
 @Entity
-public class SemanalDiary2 extends StorableWithModificationTimestamp<Long> { 
+public class SemanalDiary extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 	
 	@Id

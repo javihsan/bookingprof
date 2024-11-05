@@ -24,8 +24,10 @@ public class Firm extends StorableWithModificationTimestamp<Long> {
 	
 	protected String firName;
 	
+	@Index
 	protected String firDomain;
 	
+	@Index
 	protected String firServer;
 	
 	protected List<String> firGwtUsers;

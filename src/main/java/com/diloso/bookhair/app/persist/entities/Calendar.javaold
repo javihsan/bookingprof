@@ -17,7 +17,7 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name="getCalendar", query = "SELECT t FROM Calendar t WHERE t.calLocalId = :calLocalId and t.enabled =1 order by t.calName asc"),
 	@NamedQuery(name="getCalendarAdmin", query = "SELECT t FROM Calendar t WHERE t.calLocalId = :calLocalId order by t.calName asc")
 })
-public class Calendar2 extends Resource extends StorableWithModificationTimestamp<Long> { 
+public class Calendar extends Resource extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 
 	protected String calName;
@@ -32,7 +32,7 @@ public class Calendar2 extends Resource extends StorableWithModificationTimestam
 	
 	protected List<Long> calLocalTasksId;
 
-    public Calendar2() {
+    public Calendar() {
     	
     }
 

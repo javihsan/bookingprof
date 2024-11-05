@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Index;
 
 
 /**
@@ -14,10 +15,12 @@ import com.googlecode.objectify.annotation.Entity;
 @Cache
 public class Calendar extends Resource { 
 	
+	@Index
 	protected String calName;
 	
 	protected String calDesc;
 	
+	@Index
 	protected Long calLocalId;
 	
 	protected Long calProfId;

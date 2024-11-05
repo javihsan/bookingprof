@@ -25,7 +25,7 @@ public class TaskManager implements ITaskManager {
 	protected IMultiTextManager multiTextManager;
 	
 	@Autowired
-	protected TaskMapper taskMapper;
+	protected TaskMapper mapper;
 	
 	public TaskManager() {
 

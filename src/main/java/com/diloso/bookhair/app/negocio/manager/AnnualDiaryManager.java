@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.AnnualDiaryDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.AnnualDiaryDAO;
 import com.diloso.bookhair.app.persist.entities.AnnualDiary;
+import com.diloso.bookhair.app.persist.entities.Local;
 import com.diloso.bookhair.app.persist.mapper.AnnualDiaryMapper;
 
 @Component
@@ -33,22 +35,38 @@ public class AnnualDiaryManager implements IAnnualDiaryManager {
 
 	@Override
 	public AnnualDiaryDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		AnnualDiary annualDiary = annualDiaryDAO.get(id);
+		annualDiaryDAO.delete(id);
+		if (annualDiary == null) {
+			return null;
+		}
+		return mapper.map(annualDiary);
 	}
 
 
 	@Override
-	public AnnualDiaryDTO update(AnnualDiaryDTO annualDiary) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public AnnualDiaryDTO update(AnnualDiaryDTO annualDiaryDTO) throws Exception {
+		AnnualDiary annualDiary = mapper.map(annualDiaryDTO);
+		AnnualDiary oldAnnualDiary = annualDiaryDAO.get(annualDiaryDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(annualDiary, oldAnnualDiary);
+		} catch (Exception e) {
+		}
+		annualDiary = annualDiaryDAO.update(annualDiary);
+		if (annualDiary == null) {
+			return null;
+		}
+		return mapper.map(annualDiary);
 	}
 
 
 	@Override
 	public AnnualDiaryDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		AnnualDiary annualDiary = annualDiaryDAO.get(id);
+		if (annualDiary == null) {
+			return null;
+		}
+		return mapper.map(annualDiary);		
 	}
 
 

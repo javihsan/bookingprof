@@ -20,6 +20,7 @@ public class Product extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Integer enabled;
 	
+	@Index
 	protected Long proLocalId;
 	
 	protected Long proClassId;

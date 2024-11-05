@@ -4,7 +4,16 @@ mvn clean package -P prod
 gcloud app deploy .\target\dilosohairapp\WEB-INF\appengine-web.xml --version=r11-0-0 --no-stop-previous-version --no-promote
 gcloud app deploy .\target\dilosohairapp\WEB-INF\cron.yaml
 
-new java17:
+new java21:
 gcloud config set project dilosohairapp
 mvn package appengine:deploy -P prod
+
+gcloud beta app migrate-config datastore-indexes-xml-to-yaml src\main\webapp\WEB-INF\datastore-indexes.xml
+
+Indexado?
+Task
+TaskClass
+RepeatClient
+ProductClass
+Product
 

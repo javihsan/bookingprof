@@ -25,22 +25,28 @@ public class Event extends StorableWithModificationTimestamp<Long> {
 
 	protected String eveDesc;
 	
+	@Index
 	protected Long eveCalendarId;
 	
 	protected Long eveClientId;
 	
+	@Index
 	protected Integer eveBooking;
 	
+	@Index
 	protected Date eveBookingTime;
 	
+	@Index
 	protected Date eveStartTime;
 
 	protected Date eveEndTime;
 	
+	@Index
 	protected Integer eveConsumed;
 
 	protected Integer eveNotified;
 	
+	@Index
 	protected Long eveLocalTaskId;
 	
 	protected String eveICS;

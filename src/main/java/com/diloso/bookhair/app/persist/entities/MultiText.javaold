@@ -20,7 +20,7 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name="getMultiKey", query = "SELECT t FROM MultiText t WHERE t.mulKey=:mulKey and t.enabled =1 order by t.id asc"),
 	@NamedQuery(name="getByLanCodeAndKey", query = "SELECT t FROM MultiText t WHERE t.mulLanCode=:mulLanCode and t.mulKey=:mulKey and t.enabled =1 order by t.id asc")
 })
-public class MultiText2 extends StorableWithModificationTimestamp<Long> { 
+public class MultiText extends StorableWithModificationTimestamp<Long> { 
 
 	protected static final long serialVersionUID = 1L;
 

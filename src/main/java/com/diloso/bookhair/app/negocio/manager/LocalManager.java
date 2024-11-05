@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.LocalDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.LocalDAO;
 import com.diloso.bookhair.app.persist.entities.Local;
 import com.diloso.bookhair.app.persist.mapper.LocalMapper;
@@ -41,14 +42,27 @@ public class LocalManager implements ILocalManager {
 
 	@Override
 	public LocalDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Local local = localDAO.get(id);
+		localDAO.delete(id);
+		if (local == null) {
+			return null;
+		}
+		return mapper.map(local);
 	}
 
 	@Override
-	public LocalDTO update(LocalDTO local) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public LocalDTO update(LocalDTO localDTO) throws Exception {
+		Local local = mapper.map(localDTO);
+		Local oldLocal = localDAO.get(localDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(local, oldLocal);
+		} catch (Exception e) {
+		}
+		local = localDAO.update(local);
+		if (local == null) {
+			return null;
+		}
+		return mapper.map(local);
 	}
 
 	@Override

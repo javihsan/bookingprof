@@ -23,7 +23,7 @@ public class EventManager implements IEventManager {
 	private EventDAO eventDAO;
 	
 	@Autowired
-	protected EventMapper eventMapper;
+	protected EventMapper mapper;
 	
 	public EventManager() {
 

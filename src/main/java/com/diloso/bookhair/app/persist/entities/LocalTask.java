@@ -22,6 +22,7 @@ public class LocalTask extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Integer enabled;
 		
+	@Index
 	protected Long lotLocalId;
 	
 	protected Long lotTaskId;

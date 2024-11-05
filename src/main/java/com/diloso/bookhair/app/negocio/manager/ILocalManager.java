@@ -10,7 +10,7 @@ public interface ILocalManager {
 
 	LocalDTO remove(long id) throws Exception;
 
-	LocalDTO update(LocalDTO locaDTOl) throws Exception;
+	LocalDTO update(LocalDTO localDTO) throws Exception;
 
 	LocalDTO getById(long id);
 

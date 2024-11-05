@@ -18,7 +18,7 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name="getProduct", query = "SELECT t FROM Product t WHERE t.proLocalId=:proLocalId and t.enabled =1 order by t.id asc"),
 	@NamedQuery(name="getProductAdmin", query = "SELECT t FROM Product t WHERE t.proLocalId=:proLocalId order by t.id asc")
 })
-public class Product2 extends StorableWithModificationTimestamp<Long> { 
+public class Product extends StorableWithModificationTimestamp<Long> { 
 
 	protected static final long serialVersionUID = 1L;
 	

@@ -14,7 +14,7 @@ import javax.persistence.Id;
  * 
  */
 @Entity
-public class Invoice2 extends StorableWithModificationTimestamp<Long> { 
+public class Invoice extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 
 	@Id
@@ -35,7 +35,7 @@ public class Invoice2 extends StorableWithModificationTimestamp<Long> {
 
 	protected Float invRate;
 	
-    public Invoice2() {
+    public Invoice() {
     }
 
 	public Long getId() {

@@ -14,7 +14,7 @@ import javax.persistence.Id;
  * 
  */
 @Entity
-public class Event2 extends StorableWithModificationTimestamp<Long> { 
+public class Event extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 
 	@Id
@@ -50,7 +50,7 @@ public class Event2 extends StorableWithModificationTimestamp<Long> {
 	/**** Campos extra ficha  **********/
 	protected Date eveCelebrationTime;
 	 	
-    public Event2() {
+    public Event() {
     	
     }
 

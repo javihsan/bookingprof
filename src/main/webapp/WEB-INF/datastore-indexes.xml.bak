@@ -111,14 +111,6 @@
         <property name="enabled" direction="desc"/>
         <property name="eveCalendarId" direction="desc"/>
         <property name="eveConsumed" direction="desc"/>
-        <property name="eveStartTime" direction="asc"/>
-        <property name="eveRate" direction="desc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Event" ancestor="false" source="manual">
-        <property name="enabled" direction="desc"/>
-        <property name="eveCalendarId" direction="desc"/>
-        <property name="eveConsumed" direction="desc"/>
          <property name="eveLocalTaskId" direction="desc"/>
         <property name="eveStartTime" direction="asc"/>
     </datastore-index>
@@ -232,12 +224,6 @@
         <property name="enabled" direction="desc"/>
         <property name="mulLanCode" direction="desc"/>
         <property name="mulKey" direction="desc"/>
-        <property name="__key__" direction="asc"/>
-    </datastore-index>
-    
-    <datastore-index kind="Rate" ancestor="false" source="manual">
-        <property name="enabled" direction="desc"/>
-        <property name="ratLocalId" direction="desc"/>
         <property name="__key__" direction="asc"/>
     </datastore-index>
     

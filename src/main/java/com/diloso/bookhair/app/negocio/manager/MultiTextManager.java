@@ -20,7 +20,7 @@ public class MultiTextManager implements IMultiTextManager {
 	private MultiTextDAO multiTextDAO;
 	
 	@Autowired
-	protected MultiTextMapper multiTextMapper;
+	protected MultiTextMapper mapper;
 	
 	public MultiTextManager() {
 		

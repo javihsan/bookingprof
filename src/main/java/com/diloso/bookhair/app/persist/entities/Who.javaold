@@ -11,7 +11,7 @@ import javax.persistence.MappedSuperclass;
  */
 @Entity
 @MappedSuperclass
-public class Who2 extends Resource extends StorableWithModificationTimestamp<Long> { 
+public class Who extends Resource extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 
 	protected String whoName;
@@ -22,7 +22,7 @@ public class Who2 extends Resource extends StorableWithModificationTimestamp<Lon
 	
 	protected String whoTelf1;
 	
-	protected String whoTelf2;
+	protected String whoTelf;
 	
 	protected String whoDesc;
 	
@@ -32,7 +32,7 @@ public class Who2 extends Resource extends StorableWithModificationTimestamp<Lon
 	
 	protected Long whoWhereId;
 	
-	public Who2() {
+	public Who() {
     }
 
 	public String getWhoName() {
@@ -67,12 +67,12 @@ public class Who2 extends Resource extends StorableWithModificationTimestamp<Lon
 		this.whoTelf1 = whoTelf1;
 	}
 
-	public String getWhoTelf2() {
-		return whoTelf2;
+	public String getWhoTelf() {
+		return whoTelf;
 	}
 
-	public void setWhoTelf2(String whoTelf2) {
-		this.whoTelf2 = whoTelf2;
+	public void setWhoTelf(String whoTelf) {
+		this.whoTelf = whoTelf;
 	}
 
 	public String getWhoDesc() {

@@ -23,12 +23,14 @@ public class Repeat extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Integer enabled;
 	
+	@Index
 	protected Long eveCalendarId;
 	
 	protected Date eveBookingTime;
 	
 	protected Date eveStartTime;
 
+	@Index
 	protected Date eveEndTime;
 	
 	protected Integer eveConsumed;

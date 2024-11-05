@@ -14,7 +14,7 @@ import javax.persistence.Id;
  * 
  */
 @Entity
-public class Billed2 extends StorableWithModificationTimestamp<Long> { 
+public class Billed extends StorableWithModificationTimestamp<Long> { 
 	
 	protected static final long serialVersionUID = 1L;
 

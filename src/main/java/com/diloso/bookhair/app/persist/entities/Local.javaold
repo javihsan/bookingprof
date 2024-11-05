@@ -17,7 +17,7 @@ import javax.persistence.NamedQuery;
 		@NamedQuery(name = "getLocalClient", query = "SELECT t FROM Local t WHERE t.resFirId = :resFirId and t.locBookingClient =1 and t.enabled =1 order by t.id desc"),
 		@NamedQuery(name = "getLocalAdmin", query = "SELECT t FROM Local t WHERE t.resFirId = :resFirId order by t.id desc")
 })
-public class Local2 extends Resource extends StorableWithModificationTimestamp<Long> { 
+public class Local extends Resource extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 
 	protected Integer locBookingClient;
@@ -58,7 +58,7 @@ public class Local2 extends Resource extends StorableWithModificationTimestamp<L
 
 	protected Long locSinMChimpId;
 	
-	public Local2() {
+	public Local() {
 
 	}
 

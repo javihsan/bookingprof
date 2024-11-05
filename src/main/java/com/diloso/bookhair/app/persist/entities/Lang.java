@@ -20,8 +20,10 @@ public class Lang extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Integer enabled;
 	
+	@Index
 	protected String lanName;
 	
+	@Index
 	protected String lanCode;
 
 	public Long getId() {

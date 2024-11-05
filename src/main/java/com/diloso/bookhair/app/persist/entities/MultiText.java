@@ -20,8 +20,10 @@ public class MultiText extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Integer enabled;
 	
+	@Index
 	protected String mulKey;
 	
+	@Index
 	protected String mulLanCode;
 	
 	protected String mulText;

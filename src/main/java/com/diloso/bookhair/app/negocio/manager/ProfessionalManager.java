@@ -18,11 +18,11 @@ public class ProfessionalManager implements IProfessionalManager {
 	private ProfessionalDAO professionalDAO;
 	
 	@Autowired
-	protected ProfessionalMapper professionalMapper;
+	protected ProfessionalMapper mapper;
 	
 	public ProfessionalManager() {
-		if (professionalMapper==null){
-			professionalMapper = new ProfessionalMapper();
+		if (mapper==null){
+			mapper = new ProfessionalMapper();
 		}
 	}
 

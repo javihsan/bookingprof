@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Index;
 /**
  * The persistent class for the Who entity
  * 
@@ -16,11 +17,12 @@ public class Who extends Resource {
 	
 	protected String whoSurname;
 
+	@Index
 	protected String whoEmail;
 	
 	protected String whoTelf1;
 	
-	protected String whoTelf2;
+	protected String whoTelf;
 	
 	protected String whoDesc;
 	
@@ -65,12 +67,12 @@ public class Who extends Resource {
 		this.whoTelf1 = whoTelf1;
 	}
 
-	public String getWhoTelf2() {
-		return whoTelf2;
+	public String getWhoTelf() {
+		return whoTelf;
 	}
 
-	public void setWhoTelf2(String whoTelf2) {
-		this.whoTelf2 = whoTelf2;
+	public void setWhoTelf(String whoTelf) {
+		this.whoTelf = whoTelf;
 	}
 
 	public String getWhoDesc() {

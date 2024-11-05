@@ -13,7 +13,7 @@ import javax.persistence.MappedSuperclass;
  */
 @Entity
 @MappedSuperclass
-public class Resource2 extends StorableWithModificationTimestamp<Long> { 
+public class Resource extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 
 	@Id
@@ -24,7 +24,7 @@ public class Resource2 extends StorableWithModificationTimestamp<Long> {
 
 	protected Long resFirId;
 	
-	public Resource2() {
+	public Resource() {
     }
 
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * The persistent class for the Local entity
@@ -12,7 +13,8 @@ import com.googlecode.objectify.annotation.Entity;
 @Entity
 @Cache
 public class Local extends Resource { 
-	
+    
+	@Index
 	protected Integer locBookingClient;
 	
 	protected String locName;

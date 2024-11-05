@@ -9,7 +9,7 @@ import javax.persistence.Entity;
  * 
  */
 @Entity 
-public class Sincro2 extends Resource extends StorableWithModificationTimestamp<Long> { 
+public class Sincro extends Resource extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 	
 	protected Integer sinType;
@@ -26,7 +26,7 @@ public class Sincro2 extends Resource extends StorableWithModificationTimestamp<
 
 	protected String sinConTelf;
 	
-	public Sincro2() {
+	public Sincro() {
     }
 	
 	public Integer getSinType() {

@@ -1,0 +1,327 @@
+indexes:
+- kind: Firm
+  properties:
+  - direction: desc
+    name: __key__
+- kind: Firm
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: __key__
+- kind: Firm
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: firDomain
+  - direction: desc
+    name: __key__
+- kind: Firm
+  properties:
+  - direction: desc
+    name: firDomain
+  - direction: desc
+    name: __key__
+- kind: Firm
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: firServer
+  - direction: desc
+    name: __key__
+- kind: Local
+  properties:
+  - direction: desc
+    name: __key__
+- kind: Local
+  properties:
+  - direction: desc
+    name: resFirId
+  - direction: desc
+    name: __key__
+- kind: Local
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: resFirId
+  - direction: desc
+    name: __key__
+- kind: Local
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: locBookingClient
+  - direction: desc
+    name: resFirId
+  - direction: desc
+    name: __key__
+- kind: Calendar
+  properties:
+  - direction: desc
+    name: __key__
+- kind: Calendar
+  properties:
+  - direction: desc
+    name: calLocalId
+  - direction: asc
+    name: calName
+- kind: Calendar
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: calLocalId
+  - direction: asc
+    name: calName
+- kind: Event
+  properties:
+  - direction: desc
+    name: __key__
+- kind: Event
+  properties:
+  - direction: desc
+    name: eveCalendarId
+  - direction: asc
+    name: eveStartTime
+- kind: Event
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: eveCalendarId
+  - direction: asc
+    name: eveStartTime
+- kind: Event
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: eveCalendarId
+  - direction: desc
+    name: eveBooking
+  - direction: asc
+    name: eveStartTime
+- kind: Event
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: eveClientId
+  - direction: desc
+    name: eveCalendarId
+  - direction: asc
+    name: eveBookingTime
+- kind: Event
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: eveClientId
+  - direction: desc
+    name: eveCalendarId
+- kind: Event
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: eveCalendarId
+  - direction: desc
+    name: eveConsumed
+  - direction: asc
+    name: eveStartTime
+- kind: Event
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: eveCalendarId
+  - direction: desc
+    name: eveConsumed
+  - direction: desc
+    name: eveLocalTaskId
+  - direction: asc
+    name: eveStartTime
+- kind: Event
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: eveCalendarId
+  - direction: desc
+    name: eveLocalTaskId
+  - direction: asc
+    name: eveStartTime
+- kind: Client
+  properties:
+  - direction: desc
+    name: __key__
+- kind: Client
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: resFirId
+  - direction: desc
+    name: whoEmail
+  - direction: desc
+    name: __key__
+- kind: Client
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: resFirId
+  - direction: desc
+    name: __key__
+- kind: Professional
+  properties:
+  - direction: desc
+    name: __key__
+- kind: Professional
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: resFirId
+  - direction: desc
+    name: whoEmail
+  - direction: desc
+    name: __key__
+- kind: Professional
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: resFirId
+  - direction: desc
+    name: __key__
+- kind: AnnualDiary
+  properties:
+  - direction: desc
+    name: __key__
+- kind: AnnualDiary
+  properties:
+  - direction: desc
+    name: anuLocalId
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: anuDate
+- kind: AnnualDiary
+  properties:
+  - direction: desc
+    name: anuLocalId
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: anuDate
+  - direction: desc
+    name: __key__
+- kind: AnnualDiary
+  properties:
+  - direction: desc
+    name: anuCalendarId
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: anuDate
+  - direction: desc
+    name: __key__
+- kind: Diary
+  properties:
+  - direction: desc
+    name: __key__
+- kind: SemanalDiary
+  properties:
+  - direction: desc
+    name: __key__
+- kind: Lang
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: asc
+    name: lanName
+- kind: Lang
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: lanName
+- kind: Lang
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: lanCode
+- kind: MultiText
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: asc
+    name: __key__
+- kind: MultiText
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: mulLanCode
+  - direction: asc
+    name: __key__
+- kind: MultiText
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: mulKey
+  - direction: asc
+    name: __key__
+- kind: MultiText
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: mulLanCode
+  - direction: desc
+    name: mulKey
+  - direction: asc
+    name: __key__
+- kind: Where
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: resFirId
+  - direction: desc
+    name: __key__
+- kind: LocalTask
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: lotLocalId
+  - direction: asc
+    name: __key__
+- kind: LocalTask
+  properties:
+  - direction: desc
+    name: lotLocalId
+  - direction: asc
+    name: __key__
+- kind: Task
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: asc
+    name: __key__
+- kind: Repeat
+  properties:
+  - direction: desc
+    name: enabled
+  - direction: desc
+    name: eveCalendarId
+  - direction: asc
+    name: eveEndTime

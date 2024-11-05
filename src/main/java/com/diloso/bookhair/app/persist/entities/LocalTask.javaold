@@ -21,7 +21,7 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name="getLocalTaskMultiKey", query = "SELECT t FROM LocalTask t WHERE t.lotNameMulti=:lotNameMulti and t.enabled =1 order by t.id asc"),
 	@NamedQuery(name="getLocalTaskAdmin", query = "SELECT t FROM LocalTask t WHERE t.lotLocalId=:lotLocalId order by t.id asc")
 })
-public class LocalTask2 extends StorableWithModificationTimestamp<Long> { 
+public class LocalTask extends StorableWithModificationTimestamp<Long> { 
 
 	protected static final long serialVersionUID = 1L;
 

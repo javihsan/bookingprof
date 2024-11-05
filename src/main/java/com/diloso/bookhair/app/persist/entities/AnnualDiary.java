@@ -23,10 +23,13 @@ public class AnnualDiary extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Integer enabled;
 	
+	@Index
 	protected Date anuDate;
 	
+	@Index
 	protected Long anuLocalId;
 	
+	@Index
 	protected Long anuCalendarId;
 	
 	protected Integer anuClosed;

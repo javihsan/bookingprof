@@ -14,7 +14,7 @@ import javax.persistence.Id;
  * 
  */
 @Entity
-public class Repeat2 extends StorableWithModificationTimestamp<Long> { 
+public class Repeat extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 
 	@Id
@@ -51,7 +51,7 @@ public class Repeat2 extends StorableWithModificationTimestamp<Long> {
 	
 	protected Long repSemanalDiaryId;
 	
-    public Repeat2() {
+    public Repeat() {
     }
 
     public Long getId() {

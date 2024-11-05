@@ -28,7 +28,7 @@ public class LocalTaskManager implements ILocalTaskManager {
 	protected ITaskManager taskManager;
 	
 	@Autowired
-	protected LocalTaskMapper localTaskMapper;
+	protected LocalTaskMapper mapper;
 	
 	public LocalTaskManager() {
 

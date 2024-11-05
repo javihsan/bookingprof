@@ -22,7 +22,7 @@ import javax.persistence.NamedQuery;
 		@NamedQuery(name = "getFirmDomainAdmin", query = "SELECT t FROM Firm t WHERE t.firDomain=:firDomain order by t.id desc"),
 		@NamedQuery(name = "getDomainServer", query = "SELECT t FROM Firm t WHERE t.firServer=:firServer and t.enabled =1 order by t.id desc")
 })
-public class Firm2 extends StorableWithModificationTimestamp<Long> { 
+public class Firm extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 
 	@Id
@@ -49,7 +49,7 @@ public class Firm2 extends StorableWithModificationTimestamp<Long> {
 	
 	protected List<Long> firClassTasks;
 		
-	public Firm2() {
+	public Firm() {
     }
 
 

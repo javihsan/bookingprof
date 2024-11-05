@@ -27,7 +27,7 @@ public class RepeatManager implements IRepeatManager {
 	private RepeatDAO repeatDAO;
 	
 	@Autowired
-	protected RepeatMapper repeatMapper;
+	protected RepeatMapper mapper;
 
 	public RepeatManager() {
 

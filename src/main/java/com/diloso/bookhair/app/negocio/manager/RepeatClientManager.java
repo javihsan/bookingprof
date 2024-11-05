@@ -20,7 +20,7 @@ public class RepeatClientManager implements IRepeatClientManager {
 	private RepeatClientDAO repeatClientDAO;
 	
 	@Autowired
-	protected RepeatClientMapper repeatClientMapper;
+	protected RepeatClientMapper mapper;
 	
 	public RepeatClientManager() {
 

@@ -4,6 +4,7 @@ import java.util.Date;
 
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Index;
 
 /**
  * The persistent class for the RepeatClient entity
@@ -13,10 +14,13 @@ import com.googlecode.objectify.annotation.Entity;
 @Cache
 public class RepeatClient extends Resource { 
 	
+	@Index
 	protected Long recRepeatId;
 
+	@Index
 	protected Long recClientId;
 
+	@Index
 	protected Date recBookingTime;
 	
 	protected Integer recBooking;

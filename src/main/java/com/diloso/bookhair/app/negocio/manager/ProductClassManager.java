@@ -23,7 +23,7 @@ public class ProductClassManager implements IProductClassManager {
 	protected IMultiTextManager multiTextManager;
 
 	@Autowired
-	protected ProductClassMapper productClassMapper;
+	protected ProductClassMapper mapper;
 	
 	public ProductClassManager() {
 

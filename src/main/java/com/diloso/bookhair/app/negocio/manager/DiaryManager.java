@@ -16,7 +16,7 @@ public class DiaryManager implements IDiaryManager {
 	private DiaryDAO diaryDAO;
 	
 	@Autowired
-	protected DiaryMapper diaryMapper;
+	protected DiaryMapper mapper;
 	
 	public DiaryManager() {
 

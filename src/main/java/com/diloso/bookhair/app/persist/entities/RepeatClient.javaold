@@ -14,7 +14,7 @@ import javax.persistence.Entity;
 	@NamedQuery(name="getRepeatClientRep", query = "SELECT t FROM RepeatClient t WHERE t.recRepeatId = :recRepeatId and t.enabled =1 order by recBookingTime desc"),
 	@NamedQuery(name="getRepeatClientCli", query = "SELECT t FROM RepeatClient t WHERE t.recClientId = :recClientId and t.enabled =1 order by recBookingTime desc")
 })*/
-public class RepeatClient2 extends Resource extends StorableWithModificationTimestamp<Long> { 
+public class RepeatClient extends Resource extends StorableWithModificationTimestamp<Long> { 
 	protected static final long serialVersionUID = 1L;
 
 	protected Long recRepeatId;
@@ -25,7 +25,7 @@ public class RepeatClient2 extends Resource extends StorableWithModificationTime
 	
 	protected Integer recBooking;
 	
-	public RepeatClient2() {
+	public RepeatClient() {
     }
 
 	public Long getRecRepeatId() {
