@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.FirmDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.FirmDAO;
 import com.diloso.bookhair.app.persist.entities.Firm;
 import com.diloso.bookhair.app.persist.mapper.FirmMapper;
@@ -40,14 +41,27 @@ public class FirmManager implements IFirmManager {
 
 	@Override
 	public FirmDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Firm firm = firmDAO.get(id);
+		firmDAO.delete(id);
+		if (firm == null) {
+			return null;
+		}
+		return mapper.map(firm);
 	}
 
 	@Override
-	public FirmDTO update(FirmDTO firm) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public FirmDTO update(FirmDTO firmDTO) throws Exception {
+		Firm firm = mapper.map(firmDTO);
+		Firm oldFirm = firmDAO.get(firmDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(firm, oldFirm);
+		} catch (Exception e) {
+		}
+		firm = firmDAO.update(firm);
+		if (firm == null) {
+			return null;
+		}
+		return mapper.map(firm);
 	}
 	
 	public FirmDTO getById(long id) {
@@ -63,12 +77,12 @@ public class FirmManager implements IFirmManager {
 		Map<String, Object> filters = new HashMap<String, Object>();
 		filters.put(FIR_DOMAIN, domain);
 		filters.put(ENABLED, 1);
-		List<Firm> listFirm = firmDAO.listFilter(filters);
+		List<Firm> resultQuery = firmDAO.listFilter(filters);
 		
 		FirmDTO firmDTO = null;
-		if (listFirm.size() == 1) {
+		if (resultQuery.size() == 1) {
 			firmDTO = mapper.map(
-					listFirm.get(0));
+					resultQuery.get(0));
 		}
 		return firmDTO;
 	}
@@ -77,12 +91,12 @@ public class FirmManager implements IFirmManager {
 	public FirmDTO getFirmDomainAdmin(String domain) {
 		Map<String, Object> filters = new HashMap<String, Object>();
 		filters.put(FIR_DOMAIN, domain);
-		List<Firm> listFirm = firmDAO.listFilter(filters);
+		List<Firm> resultQuery = firmDAO.listFilter(filters);
 		
 		FirmDTO firmDTO = null;
-		if (listFirm.size() == 1) {
+		if (resultQuery.size() == 1) {
 			firmDTO = mapper.map(
-					listFirm.get(0));
+					resultQuery.get(0));
 		}
 		return firmDTO;
 	}
@@ -91,10 +105,10 @@ public class FirmManager implements IFirmManager {
 		Map<String, Object> filters = new HashMap<String, Object>();
 		filters.put(FIR_SERVER, server);
 		filters.put(ENABLED, 1);
-		List<Firm> listFirm = firmDAO.listFilter(filters);
+		List<Firm> resultQuery = firmDAO.listFilter(filters);
 		String result = null;
-		if (listFirm.size() == 1) {
-			result = listFirm.get(0).getFirDomain();
+		if (resultQuery.size() == 1) {
+			result = resultQuery.get(0).getFirDomain();
 		}
 		return result;
 	}

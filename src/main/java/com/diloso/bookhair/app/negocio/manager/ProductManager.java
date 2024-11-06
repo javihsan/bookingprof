@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.ProductDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.ProductDAO;
+import com.diloso.bookhair.app.persist.entities.Product;
 import com.diloso.bookhair.app.persist.mapper.ProductMapper;
 
 @Component
@@ -30,27 +32,44 @@ public class ProductManager implements IProductManager {
 	}
 
 	@Override
-	public ProductDTO create(ProductDTO product) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public ProductDTO create(ProductDTO productDTO) throws Exception {
+		Product product = mapper.map(productDTO);
+		product = productDAO.create(product);
+		return mapper.map(product);
 	}
 
 	@Override
 	public ProductDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Product product = productDAO.get(id);
+		productDAO.delete(id);
+		if (product == null) {
+			return null;
+		}
+		return mapper.map(product);
 	}
 
 	@Override
-	public ProductDTO update(ProductDTO product) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public ProductDTO update(ProductDTO productDTO) throws Exception {
+		Product product = mapper.map(productDTO);
+		Product oldProduct = productDAO.get(productDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(product, oldProduct);
+		} catch (Exception e) {
+		}
+		product = productDAO.update(product);
+		if (product == null) {
+			return null;
+		}
+		return mapper.map(product);
 	}
 
 	@Override
 	public ProductDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Product product = productDAO.get(id);
+		if (product == null) {
+			return null;
+		}
+		return mapper.map(product);		
 	}
 
 	@Override

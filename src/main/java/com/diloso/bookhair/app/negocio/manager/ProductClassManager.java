@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.ProductClassDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.ProductClassDAO;
+import com.diloso.bookhair.app.persist.entities.ProductClass;
 import com.diloso.bookhair.app.persist.mapper.ProductClassMapper;
 
 @Component
@@ -30,27 +32,44 @@ public class ProductClassManager implements IProductClassManager {
 	}
 
 	@Override
-	public ProductClassDTO create(ProductClassDTO productClass) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public ProductClassDTO create(ProductClassDTO productClassDTO) throws Exception {
+		ProductClass productClass = mapper.map(productClassDTO);
+		productClass = productClassDAO.create(productClass);
+		return mapper.map(productClass);
 	}
 
 	@Override
 	public ProductClassDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ProductClass productClass = productClassDAO.get(id);
+		productClassDAO.delete(id);
+		if (productClass == null) {
+			return null;
+		}
+		return mapper.map(productClass);
 	}
 
 	@Override
-	public ProductClassDTO update(ProductClassDTO productClass) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public ProductClassDTO update(ProductClassDTO productClassDTO) throws Exception {
+		ProductClass productClass = mapper.map(productClassDTO);
+		ProductClass oldProductClass = productClassDAO.get(productClassDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(productClass, oldProductClass);
+		} catch (Exception e) {
+		}
+		productClass = productClassDAO.update(productClass);
+		if (productClass == null) {
+			return null;
+		}
+		return mapper.map(productClass);
 	}
 
 	@Override
 	public ProductClassDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		ProductClass productClass = productClassDAO.get(id);
+		if (productClass == null) {
+			return null;
+		}
+		return mapper.map(productClass);		
 	}
 
 	@Override

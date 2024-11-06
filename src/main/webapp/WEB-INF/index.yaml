@@ -2,16 +2,6 @@ indexes:
 - kind: Firm
   properties:
   - direction: desc
-    name: __key__
-- kind: Firm
-  properties:
-  - direction: desc
-    name: enabled
-  - direction: desc
-    name: __key__
-- kind: Firm
-  properties:
-  - direction: desc
     name: enabled
   - direction: desc
     name: firDomain
@@ -261,12 +251,6 @@ indexes:
   properties:
   - direction: desc
     name: enabled
-  - direction: asc
-    name: __key__
-- kind: MultiText
-  properties:
-  - direction: desc
-    name: enabled
   - direction: desc
     name: mulLanCode
   - direction: asc
@@ -303,18 +287,6 @@ indexes:
     name: enabled
   - direction: desc
     name: lotLocalId
-  - direction: asc
-    name: __key__
-- kind: LocalTask
-  properties:
-  - direction: desc
-    name: lotLocalId
-  - direction: asc
-    name: __key__
-- kind: Task
-  properties:
-  - direction: desc
-    name: enabled
   - direction: asc
     name: __key__
 - kind: Repeat

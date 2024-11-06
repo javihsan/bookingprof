@@ -21,7 +21,8 @@ public class LocalManager implements ILocalManager {
 
 	public static final String ENABLED = "enabled";
 	public static final String LOC_FIR_ID = "resFirId";
-	public static final String ORDER_KY_DESC = "-__key__";
+	public static final String LOC_BOOK_CLIENT = "locBookingClient";
+	public static final String ORDER_KEY_DESC = "-__key__";
 	
 	@Autowired
 	private LocalDAO localDAO;
@@ -80,12 +81,12 @@ public class LocalManager implements ILocalManager {
 		filters.put(LOC_FIR_ID, resFirId);
 		filters.put(ENABLED, 1);
 		List<String> orders = new ArrayList<String>();
-		orders.add(ORDER_KY_DESC);
-		List<Local> listLocal = localDAO.listOrderFilter(filters,orders);
+		orders.add(ORDER_KEY_DESC);
+		List<Local> resultQuery = localDAO.listOrderFilter(filters,orders);
 		List<Long> result = new ArrayList<Long>();
-		for (Local local : listLocal) {
-			result.add(local.getId());
-		}
+		resultQuery.stream().forEach(entity -> {
+			result.add(entity.getId());
+		});
 		/*
 		LocalDTO local = null;
 		if (listLocal.size() == 1) {
@@ -109,8 +110,18 @@ public class LocalManager implements ILocalManager {
 
 	@Override
 	public List<LocalDTO> getLocalListClient(long resFirId) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(LOC_FIR_ID, resFirId);
+		filters.put(LOC_BOOK_CLIENT, 1);
+		filters.put(ENABLED, 1);
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_KEY_DESC);
+		List<Local> resultQuery = localDAO.listOrderFilter(filters,orders);
+		List<LocalDTO> result = new ArrayList<LocalDTO>();
+		resultQuery.stream().forEach(entity -> {
+			result.add(mapper.map(entity));
+		});
+		return result;
 	}
 
 	@Override

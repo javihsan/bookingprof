@@ -88,8 +88,7 @@
 			                <version>${appengine.app.version}</version>
 			                <deploy.stopPreviousVersion>false</deploy.stopPreviousVersion>
 			                <host>0.0.0.0</host>
-			                <deploy.stopPreviousVersion>false</deploy.stopPreviousVersion>
-	                		<deploy.promote>false</deploy.promote>
+			               	<deploy.promote>false</deploy.promote>
 	                		<port>${local.port}</port>
 			                <jvmFlags>
 			                	<jvmFlag>-Xdebug</jvmFlag>
@@ -480,7 +479,6 @@
 	                <version>${appengine.app.version}</version>
 	                <deploy.stopPreviousVersion>false</deploy.stopPreviousVersion>
 	                <host>0.0.0.0</host>
-	                <deploy.stopPreviousVersion>false</deploy.stopPreviousVersion>
                		<deploy.promote>false</deploy.promote>
                		<port>${local.port}</port>
 	                <jvmFlags>

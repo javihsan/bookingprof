@@ -1,6 +1,9 @@
 package com.diloso.bookhair.app.negocio.manager;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,6 +19,10 @@ import com.diloso.bookhair.app.persist.mapper.CalendarMapper;
 @Scope(value = "singleton")
 public class CalendarManager implements ICalendarManager {
 
+	public static final String ENABLED = "enabled";
+	public static final String CAL_LOCAL_ID = "calLocalId";
+	public static final String ORDER_CAL_NAME_ASC = "calName";
+	
 	@Autowired
 	private CalendarDAO calendarDAO;
 	
@@ -69,8 +76,18 @@ public class CalendarManager implements ICalendarManager {
 
 	@Override
 	public List<CalendarDTO> getCalendar(long calLocalId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<CalendarDTO> result = new ArrayList<CalendarDTO>();
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(CAL_LOCAL_ID, calLocalId);
+		filters.put(ENABLED, 1);
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_CAL_NAME_ASC);
+		List<Calendar> resultQuery = calendarDAO.listOrderFilter(filters, orders);
+		resultQuery.stream().forEach(entity -> {
+			result.add(mapper.map(entity));
+		});
+
+		return result;
 	}
 
 	@Override
@@ -81,8 +98,10 @@ public class CalendarManager implements ICalendarManager {
 
 	@Override
 	public Integer getNumCalendarAdmin(long calLocalId) {
-		// TODO Auto-generated method stub
-		return null;
+
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(CAL_LOCAL_ID, calLocalId);
+		return calendarDAO.listFilter(filters).size();
 	}
 /*
 	public CalendarDTO create(CalendarDTO calendar) throws Exception {

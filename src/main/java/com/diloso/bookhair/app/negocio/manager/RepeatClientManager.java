@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.RepeatClientDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.RepeatClientDAO;
+import com.diloso.bookhair.app.persist.entities.RepeatClient;
 import com.diloso.bookhair.app.persist.mapper.RepeatClientMapper;
 
 @Component
@@ -27,35 +29,54 @@ public class RepeatClientManager implements IRepeatClientManager {
 	}
 
 	@Override
-	public RepeatClientDTO create(RepeatClientDTO event) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public RepeatClientDTO create(RepeatClientDTO repeatClientDTO) throws Exception {
+		RepeatClient repeatClient = mapper.map(repeatClientDTO);
+		repeatClient = repeatClientDAO.create(repeatClient);
+		return mapper.map(repeatClient);
 	}
 
 	@Override
 	public RepeatClientDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		RepeatClient repeatClient = repeatClientDAO.get(id);
+		repeatClientDAO.delete(id);
+		if (repeatClient == null) {
+			return null;
+		}
+		return mapper.map(repeatClient);
 	}
 
 	@Override
-	public RepeatClientDTO update(RepeatClientDTO event) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public RepeatClientDTO update(RepeatClientDTO repeatClientDTO) throws Exception {
+		RepeatClient repeatClient = mapper.map(repeatClientDTO);
+		RepeatClient oldRepeatClient = repeatClientDAO.get(repeatClientDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(repeatClient, oldRepeatClient);
+		} catch (Exception e) {
+		}
+		repeatClient = repeatClientDAO.update(repeatClient);
+		if (repeatClient == null) {
+			return null;
+		}
+		return mapper.map(repeatClient);
 	}
 
 	@Override
 	public RepeatClientDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		RepeatClient repeatClient = repeatClientDAO.get(id);
+		if (repeatClient == null) {
+			return null;
+		}
+		return mapper.map(repeatClient);		
 	}
 
 	@Override
-	public List<RepeatClientDTO> getRepeatClientByClientAgo(CalendarDTO calendar, Long clientId, Date selectedDate,
+	public List<RepeatClientDTO> getRepeatClientByClientAgo(CalendarDTO calendarDTO, Long clientId, Date selectedDate,
 			int numDays) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	
 
 	
 	/*
@@ -151,8 +172,8 @@ public class RepeatClientManager implements IRepeatClientManager {
 
 
 	@Override
-	public List<RepeatClientDTO> getRepeatClientByClientAgo(
-			CalendarDTO calendar, Long clientId, Date selectedDate, int numDays) {
+	public List<RepeatClientDTO> getRepeatClientByRepeatClientAgo(
+			CalendarDTO calendar, Long repeatClientId, Date selectedDate, int numDays) {
 		// TODO Auto-generated method stub
 		return null;
 	}

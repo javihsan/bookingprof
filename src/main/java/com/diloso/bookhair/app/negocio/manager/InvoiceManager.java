@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.InvoiceDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.InvoiceDAO;
+import com.diloso.bookhair.app.persist.entities.Invoice;
 import com.diloso.bookhair.app.persist.mapper.InvoiceMapper;
 
 @Component
@@ -28,34 +30,51 @@ public class InvoiceManager implements IInvoiceManager {
 	protected ITaskManager taskManager;
 	
 	@Autowired
-	protected InvoiceMapper invoiceMapper;
+	protected InvoiceMapper mapper;
 	
 	public InvoiceManager() {
 
 	}
 
 	@Override
-	public InvoiceDTO create(InvoiceDTO task) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public InvoiceDTO create(InvoiceDTO invoiceDTO) throws Exception {
+		Invoice invoice = mapper.map(invoiceDTO);
+		invoice = invoiceDAO.create(invoice);
+		return mapper.map(invoice);
 	}
 
 	@Override
 	public InvoiceDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Invoice invoice = invoiceDAO.get(id);
+		invoiceDAO.delete(id);
+		if (invoice == null) {
+			return null;
+		}
+		return mapper.map(invoice);
 	}
 
 	@Override
-	public InvoiceDTO update(InvoiceDTO task) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public InvoiceDTO update(InvoiceDTO invoiceDTO) throws Exception {
+		Invoice invoice = mapper.map(invoiceDTO);
+		Invoice oldInvoice = invoiceDAO.get(invoiceDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(invoice, oldInvoice);
+		} catch (Exception e) {
+		}
+		invoice = invoiceDAO.update(invoice);
+		if (invoice == null) {
+			return null;
+		}
+		return mapper.map(invoice);
 	}
 
 	@Override
 	public InvoiceDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Invoice invoice = invoiceDAO.get(id);
+		if (invoice == null) {
+			return null;
+		}
+		return mapper.map(invoice);		
 	}
 
 	@Override

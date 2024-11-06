@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.ProfessionalDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.ProfessionalDAO;
+import com.diloso.bookhair.app.persist.entities.Professional;
 import com.diloso.bookhair.app.persist.mapper.ProfessionalMapper;
 
 @Component
@@ -27,27 +29,44 @@ public class ProfessionalManager implements IProfessionalManager {
 	}
 
 	@Override
-	public ProfessionalDTO create(ProfessionalDTO professional) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public ProfessionalDTO create(ProfessionalDTO professionalDTO) throws Exception {
+		Professional professional = mapper.map(professionalDTO);
+		professional = professionalDAO.create(professional);
+		return mapper.map(professional);
 	}
 
 	@Override
 	public ProfessionalDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Professional professional = professionalDAO.get(id);
+		professionalDAO.delete(id);
+		if (professional == null) {
+			return null;
+		}
+		return mapper.map(professional);
 	}
 
 	@Override
-	public ProfessionalDTO update(ProfessionalDTO professional) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public ProfessionalDTO update(ProfessionalDTO professionalDTO) throws Exception {
+		Professional professional = mapper.map(professionalDTO);
+		Professional oldProfessional = professionalDAO.get(professionalDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(professional, oldProfessional);
+		} catch (Exception e) {
+		}
+		professional = professionalDAO.update(professional);
+		if (professional == null) {
+			return null;
+		}
+		return mapper.map(professional);
 	}
 
 	@Override
 	public ProfessionalDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Professional professional = professionalDAO.get(id);
+		if (professional == null) {
+			return null;
+		}
+		return mapper.map(professional);		
 	}
 
 	@Override

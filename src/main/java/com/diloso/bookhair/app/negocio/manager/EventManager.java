@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.EventDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.EventDAO;
+import com.diloso.bookhair.app.persist.entities.Event;
 import com.diloso.bookhair.app.persist.mapper.EventMapper;
 
 @Component
@@ -30,27 +32,44 @@ public class EventManager implements IEventManager {
 	}
 
 	@Override
-	public EventDTO create(EventDTO event) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public EventDTO create(EventDTO eventDTO) throws Exception {
+		Event event = mapper.map(eventDTO);
+		event = eventDAO.create(event);
+		return mapper.map(event);
 	}
 
 	@Override
 	public EventDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Event event = eventDAO.get(id);
+		eventDAO.delete(id);
+		if (event == null) {
+			return null;
+		}
+		return mapper.map(event);
 	}
 
 	@Override
-	public EventDTO update(EventDTO event) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public EventDTO update(EventDTO eventDTO) throws Exception {
+		Event event = mapper.map(eventDTO);
+		Event oldEvent = eventDAO.get(eventDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(event, oldEvent);
+		} catch (Exception e) {
+		}
+		event = eventDAO.update(event);
+		if (event == null) {
+			return null;
+		}
+		return mapper.map(event);
 	}
 
 	@Override
 	public EventDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Event event = eventDAO.get(id);
+		if (event == null) {
+			return null;
+		}
+		return mapper.map(event);		
 	}
 
 	@Override

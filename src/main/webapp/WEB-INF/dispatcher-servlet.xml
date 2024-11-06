@@ -11,7 +11,7 @@
 		default-lazy-init="false">
     
     
-    <context:component-scan base-package="com.diloso.bookhair.web.controllers, com.diloso.bookhair.app.controllers, com.diloso.bookhair.app.negocio.utils.templates, com.diloso.bookhair.app.negocio.manager, com.diloso.bookhair.app.persist.dao, com.diloso.bookhair.app.persist.mapper"/>
+    <context:component-scan base-package="com.diloso.bookhair.web.controllers, com.diloso.bookhair.app.controllers, com.diloso.bookhair.app.negocio.utils.templates, com.diloso.bookhair.app.negocio.manager, com.diloso.bookhair.app.persist.dao, com.diloso.bookhair.app.persist.mapper, com.diloso.bookhair.fly.controllers, com.diloso.bookhair.fly.services"/>
     
     	
     <import resource="webapp-context.xml" /> 

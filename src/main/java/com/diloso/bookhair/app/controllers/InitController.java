@@ -12,16 +12,21 @@ public class InitController {
 
 	public static final String URL_WEB = "www.bookingprof.com";
 	public static final String URL_APP = "app.bookingprof.com";
+	public static final String HEADER_APP = "host=app.bookingprof.com";
+	public static final String URL_FLY = "fly.bookingprof.com";
+	public static final String HEADER_FLY = "host=fly.bookingprof.com";
 	public static final String URL_APPSPOT = "dilosohairapp.appspot.com";
 	public static final String URL_LOCAL = "localhost";
 	public static final String URL_LOCAL2 = "127.0.0.1";
 	public static final String DEMO_APP = "demo";
+	public static final String PATH_HOME = "/home";
 	public static final String PATH_BOOKING = "/booking";
+	public static final String PATH_FLY = "/fly";
 	
 	public static final String[] PATHS_APP = {URL_WEB,URL_APP,URL_APPSPOT,URL_LOCAL,URL_LOCAL2};
 	public static final String[] PATHS_HOME = {URL_WEB,URL_APPSPOT,URL_LOCAL,URL_LOCAL2};
 	
-	@RequestMapping(value="*", headers="host=app.bookingprof.com")
+	@RequestMapping(value="*", headers=HEADER_APP)
 	protected ModelAndView initAppDemo(HttpServletRequest arg0,
 			HttpServletResponse arg1) throws Exception {
 				
@@ -38,16 +43,28 @@ public class InitController {
 
 	}
 	
+	@RequestMapping(value="*", headers=HEADER_FLY)
+	protected ModelAndView initAppFly(HttpServletRequest arg0,
+			HttpServletResponse arg1) throws Exception {
+				
+		arg1.sendRedirect(PATH_FLY);
+		return null;
+
+	}
+	
 	@RequestMapping("")
 	protected ModelAndView initDefault(HttpServletRequest arg0,
 			HttpServletResponse arg1) throws Exception {
 		
 		String serverName = arg0.getServerName();
 		if (isWebUrl(serverName)){
-			arg1.sendRedirect("/home");
+			arg1.sendRedirect(PATH_HOME);
 			return null;
 		} else if (serverName.equalsIgnoreCase(URL_APP)){
 			arg1.sendRedirect("/"+DEMO_APP+PATH_BOOKING);
+			return null;
+		} else if (serverName.equalsIgnoreCase(URL_FLY)){
+			arg1.sendRedirect(PATH_FLY);
 			return null;
 		} else{
 			arg1.sendRedirect(PATH_BOOKING);

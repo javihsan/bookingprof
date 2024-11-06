@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.DiaryDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.DiaryDAO;
+import com.diloso.bookhair.app.persist.entities.Diary;
 import com.diloso.bookhair.app.persist.mapper.DiaryMapper;
 
 @Component
@@ -23,27 +25,44 @@ public class DiaryManager implements IDiaryManager {
 	}
 
 	@Override
-	public DiaryDTO create(DiaryDTO diary) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public DiaryDTO create(DiaryDTO diaryDTO) throws Exception {
+		Diary diary = mapper.map(diaryDTO);
+		diary = diaryDAO.create(diary);
+		return mapper.map(diary);
 	}
 
 	@Override
 	public DiaryDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Diary diary = diaryDAO.get(id);
+		diaryDAO.delete(id);
+		if (diary == null) {
+			return null;
+		}
+		return mapper.map(diary);
 	}
 
 	@Override
-	public DiaryDTO update(DiaryDTO diary) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public DiaryDTO update(DiaryDTO diaryDTO) throws Exception {
+		Diary diary = mapper.map(diaryDTO);
+		Diary oldDiary = diaryDAO.get(diaryDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(diary, oldDiary);
+		} catch (Exception e) {
+		}
+		diary = diaryDAO.update(diary);
+		if (diary == null) {
+			return null;
+		}
+		return mapper.map(diary);
 	}
 
 	@Override
 	public DiaryDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Diary diary = diaryDAO.get(id);
+		if (diary == null) {
+			return null;
+		}
+		return mapper.map(diary);		
 	}
 	
 	

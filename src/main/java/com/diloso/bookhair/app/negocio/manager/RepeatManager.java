@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.CalendarDTO;
 import com.diloso.bookhair.app.negocio.dto.RepeatDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.RepeatDAO;
+import com.diloso.bookhair.app.persist.entities.Repeat;
 import com.diloso.bookhair.app.persist.mapper.RepeatMapper;
 
 @Component
@@ -34,27 +36,44 @@ public class RepeatManager implements IRepeatManager {
 	}
 
 	@Override
-	public RepeatDTO create(RepeatDTO event) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public RepeatDTO create(RepeatDTO repeatDTO) throws Exception {
+		Repeat repeat = mapper.map(repeatDTO);
+		repeat = repeatDAO.create(repeat);
+		return mapper.map(repeat);
 	}
 
 	@Override
 	public RepeatDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Repeat repeat = repeatDAO.get(id);
+		repeatDAO.delete(id);
+		if (repeat == null) {
+			return null;
+		}
+		return mapper.map(repeat);
 	}
 
 	@Override
-	public RepeatDTO update(RepeatDTO event) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public RepeatDTO update(RepeatDTO repeatDTO) throws Exception {
+		Repeat repeat = mapper.map(repeatDTO);
+		Repeat oldRepeat = repeatDAO.get(repeatDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(repeat, oldRepeat);
+		} catch (Exception e) {
+		}
+		repeat = repeatDAO.update(repeat);
+		if (repeat == null) {
+			return null;
+		}
+		return mapper.map(repeat);
 	}
 
 	@Override
 	public RepeatDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Repeat repeat = repeatDAO.get(id);
+		if (repeat == null) {
+			return null;
+		}
+		return mapper.map(repeat);		
 	}
 
 	@Override
@@ -116,7 +135,7 @@ public class RepeatManager implements IRepeatManager {
 			// log.warn("Eliminado repeat: " +
 			// oldEntityRepeat.getEveCalendarId()
 			// + " " + oldEntityRepeat.getEveBookingTime() + " "
-			// + oldEntityRepeat.getEveClientId());
+			// + oldEntityRepeat.getEveRepeatId());
 		}
 		return repeatMapper.map(oldEntityRepeat);
 	}
@@ -318,19 +337,19 @@ public class RepeatManager implements IRepeatManager {
 	
 	
 	/*
-	 * public List<RepeatDTO> getRepeatByClientAgo(CalendarDTO calendar, Long
-	 * clientId, Date selectedDate, int numDays) {
+	 * public List<RepeatDTO> getRepeatByRepeatAgo(CalendarDTO calendar, Long
+	 * repeatId, Date selectedDate, int numDays) {
 	 * 
 	 * List<Entity> resultQuery = null; RepeatDTO repeat = null; List<RepeatDTO>
 	 * result = new ArrayList<RepeatDTO>(); try {
 	 * 
-	 * Filter clientFilter = new FilterPredicate("repClientId",
-	 * FilterOperator.EQUAL, clientId); Filter calendarFilter = new
+	 * Filter repeatFilter = new FilterPredicate("repRepeatId",
+	 * FilterOperator.EQUAL, repeatId); Filter calendarFilter = new
 	 * FilterPredicate("eveCalendarId", FilterOperator.EQUAL, calendar.getId());
 	 * Filter enabledFilter = new FilterPredicate("enabled",
 	 * FilterOperator.EQUAL, 1);
 	 * 
-	 * Filter compositeFilter = CompositeFilterOperator.and(clientFilter,
+	 * Filter compositeFilter = CompositeFilterOperator.and(repeatFilter,
 	 * calendarFilter, enabledFilter);
 	 * 
 	 * if (selectedDate != null) { Calendar calendarGreg = new

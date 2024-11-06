@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.ClientDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.ClientDAO;
+import com.diloso.bookhair.app.persist.entities.Client;
 import com.diloso.bookhair.app.persist.mapper.ClientMapper;
 
 @Component
@@ -25,27 +27,44 @@ public class ClientManager implements IClientManager {
 	}
 
 	@Override
-	public ClientDTO create(ClientDTO client) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public ClientDTO create(ClientDTO clientDTO) throws Exception {
+		Client client = mapper.map(clientDTO);
+		client = clientDAO.create(client);
+		return mapper.map(client);
 	}
 
 	@Override
 	public ClientDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Client client = clientDAO.get(id);
+		clientDAO.delete(id);
+		if (client == null) {
+			return null;
+		}
+		return mapper.map(client);
 	}
 
 	@Override
-	public ClientDTO update(ClientDTO client) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public ClientDTO update(ClientDTO clientDTO) throws Exception {
+		Client client = mapper.map(clientDTO);
+		Client oldClient = clientDAO.get(clientDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(client, oldClient);
+		} catch (Exception e) {
+		}
+		client = clientDAO.update(client);
+		if (client == null) {
+			return null;
+		}
+		return mapper.map(client);
 	}
 
 	@Override
 	public ClientDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Client client = clientDAO.get(id);
+		if (client == null) {
+			return null;
+		}
+		return mapper.map(client);		
 	}
 
 	@Override

@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.WhereDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.WhereDAO;
+import com.diloso.bookhair.app.persist.entities.Where;
 import com.diloso.bookhair.app.persist.mapper.WhereMapper;
 
 @Component
@@ -25,27 +27,44 @@ public class WhereManager implements IWhereManager {
 	}
 
 	@Override
-	public WhereDTO create(WhereDTO where) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public WhereDTO create(WhereDTO whereDTO) throws Exception {
+		Where where = mapper.map(whereDTO);
+		where = whereDAO.create(where);
+		return mapper.map(where);
 	}
 
 	@Override
 	public WhereDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Where where = whereDAO.get(id);
+		whereDAO.delete(id);
+		if (where == null) {
+			return null;
+		}
+		return mapper.map(where);
 	}
 
 	@Override
-	public WhereDTO update(WhereDTO where) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public WhereDTO update(WhereDTO whereDTO) throws Exception {
+		Where where = mapper.map(whereDTO);
+		Where oldWhere = whereDAO.get(whereDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(where, oldWhere);
+		} catch (Exception e) {
+		}
+		where = whereDAO.update(where);
+		if (where == null) {
+			return null;
+		}
+		return mapper.map(where);
 	}
 
 	@Override
 	public WhereDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Where where = whereDAO.get(id);
+		if (where == null) {
+			return null;
+		}
+		return mapper.map(where);		
 	}
 
 	/*

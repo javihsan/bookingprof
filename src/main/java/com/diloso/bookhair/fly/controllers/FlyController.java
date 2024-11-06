@@ -1,4 +1,4 @@
-package com.diloso.bookhair.web.controllers;
+package com.diloso.bookhair.fly.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,16 +8,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
-@RequestMapping("/home") 
-public class HomeController {
+@RequestMapping(value={"/fly"})
+public class FlyController {
 	
 	@RequestMapping("")
-	protected ModelAndView inicioInit(HttpServletRequest arg0,
+	public ModelAndView init(HttpServletRequest arg0,
 			HttpServletResponse arg1) throws Exception {
 		
-		ModelAndView mav = new ModelAndView("home");
+		ModelAndView mav = new ModelAndView("fly");
 		
 		return mav;
 	}
-		
+
 }

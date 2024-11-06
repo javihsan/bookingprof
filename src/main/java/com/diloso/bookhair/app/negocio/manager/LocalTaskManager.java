@@ -1,13 +1,19 @@
 package com.diloso.bookhair.app.negocio.manager;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.LocalTaskDTO;
+import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.LocalTaskDAO;
+import com.diloso.bookhair.app.persist.entities.LocalTask;
 import com.diloso.bookhair.app.persist.mapper.LocalTaskMapper;
 
 @Component
@@ -17,6 +23,11 @@ public class LocalTaskManager implements ILocalTaskManager {
 	public static final String KEY_MULTI_LOCAL_TASK_NAME = "local_task_name_";
 	public static final String FIELD_MULTI_LOCAL_TASK_NAME = "lotNameMulti";
 	public static final String FIELD_MULTI_LOCAL_TASK_ENTITY_NAME = FIELD_MULTI_LOCAL_TASK_NAME + "Id";
+	
+	public static final String LOT_LOCAL_ID = "lotLocalId";
+	public static final String LOT_VISIBLE = "lotVisible";
+	public static final String ENABLED = "enabled";
+	public static final String ORDER_KEY_ASC = "__key__";
 
 	@Autowired
 	private LocalTaskDAO localTaskDAO;
@@ -35,27 +46,44 @@ public class LocalTaskManager implements ILocalTaskManager {
 	}
 
 	@Override
-	public LocalTaskDTO create(LocalTaskDTO task) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public LocalTaskDTO create(LocalTaskDTO localTaskDTO) throws Exception {
+		LocalTask localTask = mapper.map(localTaskDTO);
+		localTask = localTaskDAO.create(localTask);
+		return mapper.map(localTask);
 	}
 
 	@Override
 	public LocalTaskDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		LocalTask localTask = localTaskDAO.get(id);
+		localTaskDAO.delete(id);
+		if (localTask == null) {
+			return null;
+		}
+		return mapper.map(localTask);
 	}
 
 	@Override
-	public LocalTaskDTO update(LocalTaskDTO task) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public LocalTaskDTO update(LocalTaskDTO localTaskDTO) throws Exception {
+		LocalTask localTask = mapper.map(localTaskDTO);
+		LocalTask oldLocalTask = localTaskDAO.get(localTaskDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(localTask, oldLocalTask);
+		} catch (Exception e) {
+		}
+		localTask = localTaskDAO.update(localTask);
+		if (localTask == null) {
+			return null;
+		}
+		return mapper.map(localTask);
 	}
 
 	@Override
 	public LocalTaskDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		LocalTask localTask = localTaskDAO.get(id);
+		if (localTask == null) {
+			return null;
+		}
+		return mapper.map(localTask);		
 	}
 
 	@Override
@@ -90,8 +118,41 @@ public class LocalTaskManager implements ILocalTaskManager {
 
 	@Override
 	public List<LocalTaskDTO> getLocalTaskAndCombiVisible(long lotLocalId, String lang, String charAND) {
-		// TODO Auto-generated method stub
-		return null;
+		List<LocalTaskDTO> result = new ArrayList<LocalTaskDTO>();
+		//LocalTaskDTO localTask = null;
+		//MultiTextDTO multiTextKey = null;
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(LOT_LOCAL_ID, lotLocalId);
+		filters.put(LOT_VISIBLE, 1);
+		filters.put(ENABLED, 1);
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_KEY_ASC);
+		List<LocalTask> resultQuery = localTaskDAO.listOrderFilter(filters, orders);
+		//String name = null;
+		//for (LocalTask entityLocalTask : resultQuery) {
+		resultQuery.stream().forEach(entity -> {
+			LocalTaskDTO localTask = mapper.map(entity);
+			String name = "";
+			MultiTextDTO multiTextKey = null;
+			if (localTask.getLotTaskCombiId() != null && localTask.getLotTaskCombiId().size() > 0) {
+				for (Long taskId : localTask.getLotTaskCombiId()) {
+					if (name.length() > 0) {
+						name += " " + charAND + " ";
+					}
+					multiTextKey = multiTextManager.getByLanCodeAndKey(lang, getById(taskId).getLotNameMulti());
+					name += multiTextKey.getMulText();
+				}
+			} else if (localTask.getLotTaskDuration() > 0) {
+				multiTextKey = multiTextManager.getByLanCodeAndKey(lang, localTask.getLotNameMulti());
+				name = multiTextKey.getMulText();
+			}
+			if (name.length() > 0) {
+				localTask.setLotName(name);
+				result.add(localTask);
+			}
+		});
+
+		return result;
 	}
 
 	@Override

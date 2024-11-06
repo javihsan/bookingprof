@@ -1,13 +1,18 @@
 package com.diloso.bookhair.app.negocio.manager;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.MultiTextDAO;
+import com.diloso.bookhair.app.persist.entities.MultiText;
 import com.diloso.bookhair.app.persist.mapper.MultiTextMapper;
 
 @Component
@@ -15,6 +20,11 @@ import com.diloso.bookhair.app.persist.mapper.MultiTextMapper;
 public class MultiTextManager implements IMultiTextManager {
 
 	public static final String KEY_MULTI_SYSTEM = "System_";
+	
+	public static final String ENABLED = "enabled";
+	public static final String ORDER_KEY_ASC = "__key__";
+	public static final String MUL_LAN_CODE = "mulLanCode";
+	public static final String MUL_KEY = "mulKey";
 	
 	@Autowired
 	private MultiTextDAO multiTextDAO;
@@ -27,32 +37,58 @@ public class MultiTextManager implements IMultiTextManager {
 	}
 
 	@Override
-	public MultiTextDTO create(MultiTextDTO multiText) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public MultiTextDTO create(MultiTextDTO multiTextDTO) throws Exception {
+		MultiText multiText = mapper.map(multiTextDTO);
+		multiText = multiTextDAO.create(multiText);
+		return mapper.map(multiText);
 	}
 
 	@Override
 	public MultiTextDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		MultiText multiText = multiTextDAO.get(id);
+		multiTextDAO.delete(id);
+		if (multiText == null) {
+			return null;
+		}
+		return mapper.map(multiText);
 	}
 
 	@Override
-	public MultiTextDTO update(MultiTextDTO multiText) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public MultiTextDTO update(MultiTextDTO multiTextDTO) throws Exception {
+		MultiText multiText = mapper.map(multiTextDTO);
+		MultiText oldMultiText = multiTextDAO.get(multiTextDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(multiText, oldMultiText);
+		} catch (Exception e) {
+		}
+		multiText = multiTextDAO.update(multiText);
+		if (multiText == null) {
+			return null;
+		}
+		return mapper.map(multiText);
 	}
 
 	@Override
 	public MultiTextDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		MultiText multiText = multiTextDAO.get(id);
+		if (multiText == null) {
+			return null;
+		}
+		return mapper.map(multiText);		
 	}
 
 	@Override
 	public MultiTextDTO getByLanCodeAndKey(String lanCode, String key) {
-		// TODO Auto-generated method stub
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(MUL_LAN_CODE, lanCode);
+		filters.put(MUL_KEY, key);
+		filters.put(ENABLED, 1);
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_KEY_ASC);
+		List<MultiText> resultQuery = multiTextDAO.listOrderFilter(filters, orders);
+		if (resultQuery.size() == 1) {
+			return mapper.map(resultQuery.get(0));
+		}
 		return null;
 	}
 

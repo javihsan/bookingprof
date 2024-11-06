@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.diloso.bookhair.app.negocio.dto.TaskClassDTO;
+import com.diloso.bookhair.app.negocio.utils.NullAwareBeanUtilsBean;
 import com.diloso.bookhair.app.persist.dao.TaskClassDAO;
+import com.diloso.bookhair.app.persist.entities.TaskClass;
 import com.diloso.bookhair.app.persist.mapper.TaskClassMapper;
 
 @Component
@@ -30,27 +32,44 @@ public class TaskClassManager implements ITaskClassManager {
 	}
 
 	@Override
-	public TaskClassDTO create(TaskClassDTO taskClass) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public TaskClassDTO create(TaskClassDTO taskClassDTO) throws Exception {
+		TaskClass taskClass = mapper.map(taskClassDTO);
+		taskClass = taskClassDAO.create(taskClass);
+		return mapper.map(taskClass);
 	}
 
 	@Override
 	public TaskClassDTO remove(long id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		TaskClass taskClass = taskClassDAO.get(id);
+		taskClassDAO.delete(id);
+		if (taskClass == null) {
+			return null;
+		}
+		return mapper.map(taskClass);
 	}
 
 	@Override
-	public TaskClassDTO update(TaskClassDTO taskClass) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public TaskClassDTO update(TaskClassDTO taskClassDTO) throws Exception {
+		TaskClass taskClass = mapper.map(taskClassDTO);
+		TaskClass oldTaskClass = taskClassDAO.get(taskClassDTO.getId());
+		try {
+			new NullAwareBeanUtilsBean().copyProperties(taskClass, oldTaskClass);
+		} catch (Exception e) {
+		}
+		taskClass = taskClassDAO.update(taskClass);
+		if (taskClass == null) {
+			return null;
+		}
+		return mapper.map(taskClass);
 	}
 
 	@Override
 	public TaskClassDTO getById(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		TaskClass taskClass = taskClassDAO.get(id);
+		if (taskClass == null) {
+			return null;
+		}
+		return mapper.map(taskClass);		
 	}
 
 	@Override
