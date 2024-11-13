@@ -1,6 +1,9 @@
 package com.diloso.bookhair.app.negocio.manager;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,6 +19,12 @@ import com.diloso.bookhair.app.persist.mapper.ClientMapper;
 @Scope(value = "singleton")
 public class ClientManager implements IClientManager {
 
+	
+	public static final String ENABLED = "enabled";
+	public static final String RES_FIR_ID = "resFirId";
+	public static final String WHO_EMAIL = "whoEmail";
+	public static final String ORDER_KEY_DESC = "-__key__";
+	
 	@Autowired
 	private ClientDAO clientDAO;
 	
@@ -69,14 +78,31 @@ public class ClientManager implements IClientManager {
 
 	@Override
 	public ClientDTO getByEmail(long resFirId, String email) {
-		// TODO Auto-generated method stub
+		
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(RES_FIR_ID, resFirId);
+		filters.put(WHO_EMAIL, email);
+		filters.put(ENABLED, 1);
+		List<Client> resultQuery = clientDAO.listFilter(filters);
+		if (resultQuery.size() == 1) {
+			return mapper.map(resultQuery.get(0));
+		}
 		return null;
 	}
 
 	@Override
 	public List<ClientDTO> getClient(long resFirId) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(RES_FIR_ID, resFirId);
+		filters.put(ENABLED, 1);
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_KEY_DESC);
+		List<Client> resultQuery = clientDAO.listOrderFilter(filters, orders);
+		List<ClientDTO> result = new ArrayList<ClientDTO>();
+		resultQuery.stream().forEach(entity -> {
+			result.add(mapper.map(entity));
+		});
+		return result;			
 	}
 	
 	

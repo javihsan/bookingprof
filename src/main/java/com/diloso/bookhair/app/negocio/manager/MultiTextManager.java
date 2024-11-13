@@ -83,9 +83,7 @@ public class MultiTextManager implements IMultiTextManager {
 		filters.put(MUL_LAN_CODE, lanCode);
 		filters.put(MUL_KEY, key);
 		filters.put(ENABLED, 1);
-		List<String> orders = new ArrayList<String>();
-		orders.add(ORDER_KEY_ASC);
-		List<MultiText> resultQuery = multiTextDAO.listOrderFilter(filters, orders);
+		List<MultiText> resultQuery = multiTextDAO.listFilter(filters);
 		if (resultQuery.size() == 1) {
 			return mapper.map(resultQuery.get(0));
 		}

@@ -80,7 +80,7 @@ public class MultiTextController {
 			lanCode = RequestContextUtils.getLocale(arg0).getLanguage();
 		}
 		
-		// Set Locale, quitar poruqe en los móviles no va, pasar como parametro
+		// Set Locale, quitar porque en los móviles no va, pasar como parametro
 		LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(arg0);
 		LocaleEditor localeEditor = new LocaleEditor();
 		localeEditor.setAsText(lanCode);
@@ -91,7 +91,7 @@ public class MultiTextController {
 	  	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 	    syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 	    List<MultiTextDTO> listMultiText = (List<MultiTextDTO>) syncCache.get(keyMem); // read from cache
-	    if (listMultiText == null) {
+	    if (listMultiText == null || listMultiText.isEmpty()) {
 		    
 			FirmDTO firm = firmManager.getFirmDomain(domain);
 			ConfigFirm configFirm = firm.getFirConfig();

@@ -2,13 +2,13 @@ app
 		.controller(
 				"LangsController",
 				[
-						"$scope", "$state", "$location", "httpService", "$rootScope", "$mdDialog", "$mdMedia",
-						function($scope, $state, $location, httpService, $rootScope, $mdDialog, $mdMedia) {
+						"$scope", "$state", "$location", "httpService", "$rootScope", "$mdDialog", "$mdMedia", "$mdDateLocale",
+						function($scope, $state, $location, httpService, $rootScope, $mdDialog, $mdMedia, $mdDateLocale) {
 							
 							// Callback de changeLang para selectLang
 							$scope.callSelectLang = function() {
-								//console.log("estamos en booking o operator");
 								if ($state.get("booking.home")) {
+								    //console.log("estamos en booking o operator");
 									urlLocalTask = protocol_url + appHost + "/localTask/listCombi";
 							     	data = {localId:$rootScope.local.id, lanCode:$rootScope.langApp};
 							     	var promiseLocalTask = httpService.GET(urlLocalTask,data);
@@ -22,6 +22,12 @@ app
 											return $rootScope.currentScope.initBook(1);
 										}
 							     	});
+							     	
+							   		moment.locale($rootScope.langApp);
+								
+								    $mdDateLocale.shortDays = eval($rootScope.findLangTextElement("general.daysWeekShort"));
+								    $mdDateLocale.shortMonths = eval($rootScope.findLangTextElement("general.monthsShort"));
+							     	
 								} else if ($state.get("localTasks.home")) {
 									//console.log("estamos en manager");
 									return $state.go('localTasks.home');

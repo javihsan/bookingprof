@@ -127,7 +127,16 @@ var Utils = function() {
 	
 	Utils.prototype.stringToDate = function(strDate) {
 		var a = strDate.split('-');
-		return new Date(a[0],(a[1]-1),a[2]);
+		var b = a[0].split(',');
+		if (b.length==1){ // Formato 2024-11-28
+			return new Date(a[0],(a[1]-1),a[2]);
+		} else { // Formato Martes, 12-Noviembre-2024
+			year = a[2];
+			aMonth = eval(scope.findLangTextElement("general.months"));
+			month = aMonth.indexOf (a[1]);
+			day = b[1].trim();
+			return new Date(year,month,day);
+		}	
 	}
 	
 	Utils.prototype.formatDate = function(strDate) {

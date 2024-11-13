@@ -106,21 +106,72 @@ public class LocalTaskManager implements ILocalTaskManager {
 
 	@Override
 	public List<LocalTaskDTO> getLocalTaskCombi(long lotLocalId, String lang, String charAND) {
-		// TODO Auto-generated method stub
-		return null;
+		List<LocalTaskDTO> result = new ArrayList<LocalTaskDTO>();
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(LOT_LOCAL_ID, lotLocalId);
+		filters.put(ENABLED, 1);
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_KEY_ASC);
+		List<LocalTask> resultQuery = localTaskDAO.listOrderFilter(filters, orders);
+		resultQuery.stream().forEach(entity -> {
+			if (entity.getLotTaskCombiId() != null
+					&& entity.getLotTaskCombiId().size() > 0) {
+				LocalTaskDTO localTask = mapper.map(entity);
+				String name = "";
+				MultiTextDTO multiTextKey = null;
+				for (Long taskId : localTask.getLotTaskCombiId()) {
+					if (name.length() > 0) {
+						name += " " + charAND + " ";
+					}
+					multiTextKey = multiTextManager.getByLanCodeAndKey(lang,
+							getById(taskId).getLotNameMulti());
+					name += multiTextKey.getMulText();
+				}
+				localTask.setLotName(name);
+				result.add(localTask);
+			}
+		});				
+		
+		return result;
 	}
 
 	@Override
 	public List<LocalTaskDTO> getLocalTaskAndCombi(long lotLocalId, String lang, String charAND) {
-		// TODO Auto-generated method stub
-		return null;
+		List<LocalTaskDTO> result = new ArrayList<LocalTaskDTO>();
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(LOT_LOCAL_ID, lotLocalId);
+		filters.put(ENABLED, 1);
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_KEY_ASC);
+		List<LocalTask> resultQuery = localTaskDAO.listOrderFilter(filters, orders);
+		resultQuery.stream().forEach(entity -> {
+			LocalTaskDTO localTask = mapper.map(entity);
+			String name = "";
+			MultiTextDTO multiTextKey = null;
+			if (localTask.getLotTaskCombiId() != null && localTask.getLotTaskCombiId().size() > 0) {
+				for (Long taskId : localTask.getLotTaskCombiId()) {
+					if (name.length() > 0) {
+						name += " " + charAND + " ";
+					}
+					multiTextKey = multiTextManager.getByLanCodeAndKey(lang, getById(taskId).getLotNameMulti());
+					name += multiTextKey.getMulText();
+				}
+			} else if (localTask.getLotTaskDuration() > 0) {
+				multiTextKey = multiTextManager.getByLanCodeAndKey(lang, localTask.getLotNameMulti());
+				name = multiTextKey.getMulText();
+			}
+			if (name.length() > 0) {
+				localTask.setLotName(name);
+				result.add(localTask);
+			}
+		});
+
+		return result;
 	}
 
 	@Override
 	public List<LocalTaskDTO> getLocalTaskAndCombiVisible(long lotLocalId, String lang, String charAND) {
 		List<LocalTaskDTO> result = new ArrayList<LocalTaskDTO>();
-		//LocalTaskDTO localTask = null;
-		//MultiTextDTO multiTextKey = null;
 		Map<String, Object> filters = new HashMap<String, Object>();
 		filters.put(LOT_LOCAL_ID, lotLocalId);
 		filters.put(LOT_VISIBLE, 1);
@@ -128,8 +179,6 @@ public class LocalTaskManager implements ILocalTaskManager {
 		List<String> orders = new ArrayList<String>();
 		orders.add(ORDER_KEY_ASC);
 		List<LocalTask> resultQuery = localTaskDAO.listOrderFilter(filters, orders);
-		//String name = null;
-		//for (LocalTask entityLocalTask : resultQuery) {
 		resultQuery.stream().forEach(entity -> {
 			LocalTaskDTO localTask = mapper.map(entity);
 			String name = "";

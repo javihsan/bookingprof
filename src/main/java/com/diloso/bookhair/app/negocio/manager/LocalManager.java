@@ -20,7 +20,7 @@ import com.diloso.bookhair.app.persist.mapper.LocalMapper;
 public class LocalManager implements ILocalManager {
 
 	public static final String ENABLED = "enabled";
-	public static final String LOC_FIR_ID = "resFirId";
+	public static final String RES_FIR_ID = "resFirId";
 	public static final String LOC_BOOK_CLIENT = "locBookingClient";
 	public static final String ORDER_KEY_DESC = "-__key__";
 	
@@ -78,7 +78,7 @@ public class LocalManager implements ILocalManager {
 	@Override
 	public List<Long> getLocal(long resFirId) {
 		Map<String, Object> filters = new HashMap<String, Object>();
-		filters.put(LOC_FIR_ID, resFirId);
+		filters.put(RES_FIR_ID, resFirId);
 		filters.put(ENABLED, 1);
 		List<String> orders = new ArrayList<String>();
 		orders.add(ORDER_KEY_DESC);
@@ -104,14 +104,23 @@ public class LocalManager implements ILocalManager {
 
 	@Override
 	public List<LocalDTO> getLocalList(long resFirId) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(RES_FIR_ID, resFirId);
+		filters.put(ENABLED, 1);
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_KEY_DESC);
+		List<Local> resultQuery = localDAO.listOrderFilter(filters,orders);
+		List<LocalDTO> result = new ArrayList<LocalDTO>();
+		resultQuery.stream().forEach(entity -> {
+			result.add(mapper.map(entity));
+		});
+		return result;
 	}
 
 	@Override
 	public List<LocalDTO> getLocalListClient(long resFirId) {
 		Map<String, Object> filters = new HashMap<String, Object>();
-		filters.put(LOC_FIR_ID, resFirId);
+		filters.put(RES_FIR_ID, resFirId);
 		filters.put(LOC_BOOK_CLIENT, 1);
 		filters.put(ENABLED, 1);
 		List<String> orders = new ArrayList<String>();

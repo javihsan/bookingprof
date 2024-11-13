@@ -69,9 +69,10 @@
 		
 		<md-divider class="clear-min">
 		
-		<div layout="column" ng-show="isCelebration">	
+		<div layout="column" ng-show="celebration.isCelebration">	
 			<md-input-container class="md-block" flex-gt-sm>
-				<label>{{findLangTextElement("client.celebrationDate")}}</label> <md-datepicker ng-model="client.celebrationDate" md-min-date="client.celebrationDate"></md-datepicker>
+				<label>{{findLangTextElement("client.celebrationDate")}}</label> 
+				<md-datepicker ng-model="celebration.date" md-min-date="celebration.dateMin" />
 			</md-input-container>
 		</div>
 		

@@ -5,40 +5,18 @@ indexes:
     name: enabled
   - direction: desc
     name: firDomain
-  - direction: desc
-    name: __key__
-- kind: Firm
-  properties:
-  - direction: desc
-    name: firDomain
-  - direction: desc
-    name: __key__
 - kind: Firm
   properties:
   - direction: desc
     name: enabled
   - direction: desc
     name: firServer
-  - direction: desc
-    name: __key__
-- kind: Local
-  properties:
-  - direction: desc
-    name: __key__
-- kind: Local
-  properties:
-  - direction: desc
-    name: resFirId
-  - direction: desc
-    name: __key__
 - kind: Local
   properties:
   - direction: desc
     name: enabled
   - direction: desc
     name: resFirId
-  - direction: desc
-    name: __key__
 - kind: Local
   properties:
   - direction: desc
@@ -47,12 +25,6 @@ indexes:
     name: locBookingClient
   - direction: desc
     name: resFirId
-  - direction: desc
-    name: __key__
-- kind: Calendar
-  properties:
-  - direction: desc
-    name: __key__
 - kind: Calendar
   properties:
   - direction: desc
@@ -67,10 +39,6 @@ indexes:
     name: calLocalId
   - direction: asc
     name: calName
-- kind: Event
-  properties:
-  - direction: desc
-    name: __key__
 - kind: Event
   properties:
   - direction: desc
@@ -148,29 +116,17 @@ indexes:
 - kind: Client
   properties:
   - direction: desc
-    name: __key__
-- kind: Client
-  properties:
-  - direction: desc
     name: enabled
   - direction: desc
     name: resFirId
   - direction: desc
     name: whoEmail
-  - direction: desc
-    name: __key__
 - kind: Client
   properties:
   - direction: desc
     name: enabled
   - direction: desc
     name: resFirId
-  - direction: desc
-    name: __key__
-- kind: Professional
-  properties:
-  - direction: desc
-    name: __key__
 - kind: Professional
   properties:
   - direction: desc
@@ -179,20 +135,12 @@ indexes:
     name: resFirId
   - direction: desc
     name: whoEmail
-  - direction: desc
-    name: __key__
 - kind: Professional
   properties:
   - direction: desc
     name: enabled
   - direction: desc
     name: resFirId
-  - direction: desc
-    name: __key__
-- kind: AnnualDiary
-  properties:
-  - direction: desc
-    name: __key__
 - kind: AnnualDiary
   properties:
   - direction: desc
@@ -209,8 +157,6 @@ indexes:
     name: enabled
   - direction: desc
     name: anuDate
-  - direction: desc
-    name: __key__
 - kind: AnnualDiary
   properties:
   - direction: desc
@@ -219,16 +165,6 @@ indexes:
     name: enabled
   - direction: desc
     name: anuDate
-  - direction: desc
-    name: __key__
-- kind: Diary
-  properties:
-  - direction: desc
-    name: __key__
-- kind: SemanalDiary
-  properties:
-  - direction: desc
-    name: __key__
 - kind: Lang
   properties:
   - direction: desc
@@ -253,16 +189,12 @@ indexes:
     name: enabled
   - direction: desc
     name: mulLanCode
-  - direction: asc
-    name: __key__
 - kind: MultiText
   properties:
   - direction: desc
     name: enabled
   - direction: desc
     name: mulKey
-  - direction: asc
-    name: __key__
 - kind: MultiText
   properties:
   - direction: desc
@@ -271,24 +203,18 @@ indexes:
     name: mulLanCode
   - direction: desc
     name: mulKey
-  - direction: asc
-    name: __key__
 - kind: Where
   properties:
   - direction: desc
     name: enabled
   - direction: desc
     name: resFirId
-  - direction: desc
-    name: __key__
 - kind: LocalTask
   properties:
   - direction: desc
     name: enabled
   - direction: desc
     name: lotLocalId
-  - direction: asc
-    name: __key__
 - kind: Repeat
   properties:
   - direction: desc

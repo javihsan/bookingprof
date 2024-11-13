@@ -22,7 +22,7 @@ app
 							
 							$scope.disabledNextTabs = function() {
 							    //console.log ("disabledNextTabs");
-							  $scope.tabsBook[1].disabled = true;
+							    $scope.tabsBook[1].disabled = true;
 								$scope.tabsBook[2].disabled = true;
 								$scope.tabsBook[3].disabled = true;
 							    
@@ -146,6 +146,8 @@ app
 										$scope.appo.cols = 1;	
 										
 										$scope.client = {};
+										
+										$scope.celebration = {};
 
 									}
 									
@@ -328,14 +330,8 @@ app
 													$scope.selCalendar.calendars = __Utils.sortByPropChar(response.data, "calName", true);
 													$scope.selCalendar.selectedCalendar = [];
 													for (i = 0; i < $scope.selCalendar.calendars.length; i++) {
-														if ($scope.selCalendar.calendars[i].calName
-																.toLowerCase()
-																.indexOf("pere") !== -1) {
-															$scope.selCalendar.selectedCalendar[0] = $scope.selCalendar.calendars[i].id;
-														} else {
-															calAux = {id:-1};
-															$scope.selCalendar.selectedCalendar[0] = calAux;
-														}
+														calAux = {id:-1};
+														$scope.selCalendar.selectedCalendar[0] = calAux;
 													}
 												});
 							};
@@ -587,7 +583,7 @@ app
 									selectedTasksCount = $rootScope.selectedTasksCount;
 									selectedCalendars = $scope.selCalendar.selectedCalendar;
 									if ($scope.local.locSelCalendar == 1 && selectedCalendars[0].id ==-1) {
-										selectedCalendarsParam = "";
+										selectedCalendarsParam = new Array();
 									} else {
 										selectedCalendarsParam = new Array();
 										for (i in selectedCalendars){
@@ -747,7 +743,7 @@ app
 									selectedTasksCount = $rootScope.selectedTasksCount;
 									selectedCalendars = $scope.selCalendar.selectedCalendar;
 									if ($scope.local.locSelCalendar == 1 && selectedCalendars[0].id ==-1) {
-										selectedCalendarsParam = "";
+										selectedCalendarsParam = new Array();
 									} else {
 										selectedCalendarsParam = new Array();
 										for (i in selectedCalendars){
@@ -818,20 +814,21 @@ app
 								$scope.childAuto.cleanSelItem();			
 								
 								if ($rootScope.firm.firConfig.configClient.extraBook.celebrationDate) {
-									$scope.isCelebration = true;
-									$scope.client.celebrationDate = new Date();
+								    $scope.celebration.isCelebration = true;
+									$scope.celebration.date = new Date();
+									$scope.celebration.dateMin = new Date();
 								} else {
-									$scope.isCelebration = false;
+									$scope.celebration.isCelebration = false;
 								}
 								
 								$scope.tabsBook[2].disabled = false;
 								return $scope.selectedTabIndex = 2;
 								
 							};
-							
+																				
 							$scope.formatDateCelebration = function() {
-								if($scope.client && $scope.client.celebrationDate){
-									return __Utils.dateToStringFormat($scope.client.celebrationDate);
+								if($scope.celebration && $scope.celebration.date){
+									return __Utils.dateToStringFormat($scope.celebration.date);
 								}
 							};
 
@@ -845,11 +842,11 @@ app
 								$scope.newCient = true;
 								$scope.client.name = text;
 								$scope.client.email = "";
-						    $scope.client.telf = "";
+						    	$scope.client.telf = "";
 							}
 
 							$scope.querySearch = function(query) {
-								    var results = query ? $rootScope.clients.filter($scope.createFilterFor(query)) : $rootScope.clients,
+							    var results = query ? $rootScope.clients.filter($scope.createFilterFor(query)) : $rootScope.clients,
 						          deferred;
 				       			return results;
 							    
@@ -873,19 +870,21 @@ app
 							}
 
 							$scope.selectedItemChange = function(item) {    
-									if (item){
-						    		//console.log('Item changed to ' + JSON.stringify(item));
-										$scope.client = {};
-										$scope.client.id = item.id;
-						    		$scope.client.name = item.whoName;
-						    		$scope.client.email = item.whoEmail;
-						    		$scope.client.telf = item.whoTelf1;
-						    		$scope.newCient = false;
-						    	}
+								if (item){
+							    	//console.log('Item changed to ' + JSON.stringify(item));
+									var obsv = $scope.client.observ;
+									$scope.client = {};
+									$scope.client.id = item.id;
+							    	$scope.client.name = item.whoName;
+							    	$scope.client.email = item.whoEmail;
+							    	$scope.client.telf = item.whoTelf1;
+							    	$scope.client.observ = obsv;
+							    	$scope.newCient = false;
+							    }
 							}
 							
 							$scope.changeCliEmail = function() {    
-							 //console.log('changeCliEmail ',$scope.client.email );
+							    //console.log('changeCliEmail ',$scope.client.email );
 								var clients = $scope.client.email ? $rootScope.clients.filter($scope.createFilterForEmail($scope.client.email)) : $rootScope.clients,
 										deferred;
 								if (clients.length==1){
@@ -949,11 +948,12 @@ app
 								
 								selectedCalendars = $scope.selCalendar.selectedCalendar;
 								if ($scope.local.locSelCalendar == 1 && selectedCalendars[0].id ==-1) {
-									selectedCalendarsParam = "";
+									selectedCalendarsParam = new Array();
 								} else {
 									selectedCalendarsParam = new Array();
 									for (i in selectedCalendars){
 										selectedCalendarsParam[i] = selectedCalendars[i].id;
+										//console.log("typeof selectedCalendarsParam[i]: "+ typeof selectedCalendarsParam[i])									
 									}
 								}
 								data.selectedCalendars = selectedCalendarsParam;
@@ -963,14 +963,14 @@ app
 									data.numPallets = selectedTasks[0].numPallets;
 								}
 								
-								if ($scope.isCelebration){
-									data.celebrationDate = __Utils.dateToStringYearLast($scope.client.celebrationDate);
+								if ($scope.celebration.isCelebration){
+									data.celebrationDate = $scope.celebration.date.getTime();
 								}
 								
 								promiseSave = httpService.POST($rootScope.urlEventNew, data);
 						
 								var thenSave = function(response) {
-									//console.log("thenSave");
+									//console.log("thenSave",appName + "eveClient", $scope.client);
 									$scope.errorSave = undefined;
 									if (!$rootScope.adminOption) {	
 										__FacadeCore.Storage_set(appName + "eveClient", null);

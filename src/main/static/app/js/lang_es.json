@@ -41,5 +41,19 @@
 	"mulLanCode": "es",
 	"mulText": "['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo']",
 	"mulLanName": null
+}, {
+	"id": null,
+	"enabled": null,
+	"mulKey": "general.daysWeekShort",
+	"mulLanCode": "es",
+	"mulText": "['Dom','Lun','Mar','Mie','Jue','Vie','Sab']",
+	"mulLanName": null
+}, {
+	"id": null,
+	"enabled": null,
+	"mulKey": "general.monthsShort",
+	"mulLanCode": "es",
+	"mulText": "['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic']",
+	"mulLanName": null
 }
 ]

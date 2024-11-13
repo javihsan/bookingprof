@@ -15,6 +15,7 @@ hay que contruir con el grunt build cualquier cambio en la static app si queremo
 
 npm install bower -g  (archivo .bowerrc para proxy)
 npm install grunt -g
+bower install moment
 instalar ruby en windows (scoop ruby)
 SET HTTP_PROXY=http://proxy.santander.corp:8080
 gem install compass

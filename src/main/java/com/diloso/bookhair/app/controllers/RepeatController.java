@@ -464,7 +464,6 @@ public class RepeatController {
 		Date startDate = null;
 		Calendar calendarGreg = new GregorianCalendar();
 		calendarGreg.set(Calendar.MILLISECOND, 0);
-		AnnualDiaryDTO annualDiaryDTO = null; 
 		DiaryDTO diaryDTO = null;
 		RepeatDTO repeatAux = null;
 		List<RepeatDTO> listRepeatAux = repeatManager.getRepeatByDay(calendar,selectedDate);

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -316,6 +317,11 @@ public class CalendarController {
 		return result;
 	}
 	
+	public List<Long> getCalendarsId(List<String> selectedCalendars) {
+		String strSelectedCalendars = String.join(",", selectedCalendars);
+		return getCalendarsId(strSelectedCalendars);
+	}
+	
 	// Obtenemos lista de Id Calendars a partir del parametro del servicio
 	public List<Long> getCalendarsId (String selectedCalendars){
 		if (selectedCalendars==null || selectedCalendars.length()==0){
@@ -393,6 +399,21 @@ public class CalendarController {
 		}
 	}
 	
+
+	public List<List<LocalTaskDTO>> getListLocalTasks(List<Long> selectedTasks, List<Long> selectedTasksCount, List<LocalTaskDTO> listLocalTaskCombi){
+	
+		
+		List<String> listStrSelectedTasks = selectedTasks.stream().map(Object::toString)
+                .collect(Collectors.toUnmodifiableList());
+		String strSelectedTasks = String.join(",", listStrSelectedTasks);
+		
+		List<String> listStrSelectedTasksCount = selectedTasksCount.stream().map(Object::toString)
+                .collect(Collectors.toUnmodifiableList());
+		String strSelectedTasksCount = String.join(",", listStrSelectedTasksCount);
+		
+		return getListLocalTasks(strSelectedTasks, strSelectedTasksCount, listLocalTaskCombi);
+	}
+	
 	/*
 	 * Reordenamos y obtenemos la lista de tareas individuales a reservar, una cita por cada una.
 	 * Por cada persona: 
@@ -457,6 +478,15 @@ public class CalendarController {
 			listResult.add(list);
 		}
 		return listResult;
+	}
+	
+	public List<List<LocalTaskDTO>> getListLocalTasks(List<Long> selectedTasks){
+		
+		List<String> listStrSelectedTasks = selectedTasks.stream().map(Object::toString)
+                .collect(Collectors.toUnmodifiableList());
+		String strSelectedTasks = String.join(",", listStrSelectedTasks);
+		
+		return getListLocalTasks(strSelectedTasks);
 	}
 	
 	/*
@@ -953,7 +983,7 @@ public class CalendarController {
 				
 				// Lista de eventos a examinar
 				listEvents = new ArrayList<EventDTO>();
-				// Añadimos los eventos de en otras reservas
+				// Añadimos los eventos de otras reservas
 				listEvents.addAll((List<EventDTO>)calendarOpen.get(EVENTS));
 				// Añadimos los eventos de esta reserva
 				listEvents.addAll(listEventsProv);
@@ -1656,58 +1686,58 @@ public class CalendarController {
 		}
 	}
 	
-	
-	public void setMessageSourceApp(MessageSource messageSourceApp) {
-		this.messageSourceApp = messageSourceApp;
-	}
-
-	public void setAnnualDiaryDAO(IAnnualDiaryManager iAnnualDiaryManager) {
-		this.annualDiaryManager = iAnnualDiaryManager;
-	}
-
-	public void setLocalDAO(ILocalManager iLocalManager) {
-		this.localManager = iLocalManager;
-	}
-
-	public void setCalendarDAO(ICalendarManager iCalendarManager) {
-		this.calendarManager = iCalendarManager;
-	}
-
-	public void setEventDAO(IEventManager iEventManager) {
-		this.eventManager = iEventManager;
-	}
-
-	public void setRepeatDAO(IRepeatManager iRepeatManager) {
-		this.repeatManager = iRepeatManager;
-	}
-
-	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
-		this.localTaskManager = iLocalTaskManager;
-	}
-
-	public void setTaskDAO(ITaskManager iTaskManager) {
-		this.taskManager = iTaskManager;
-	}
-
-	public void setDiaryDAO(IDiaryManager iDiaryManager) {
-		this.diaryManager = iDiaryManager;
-	}
-
-	public void setSemanalDiaryDAO(ISemanalDiaryManager iSemanalDiaryManager) {
-		this.semanalDiaryManager = iSemanalDiaryManager;
-	}
-
-	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
-		this.multiTextManager = iMultiTextManager;
-	}
-
-	public void setFirmDAO(IFirmManager iFirmManager) {
-		this.firmManager = iFirmManager;
-	}
-
-	public void setRepeatController(RepeatController repeatController) {
-		this.repeatController = repeatController;
-	}
-	
+//	
+//	public void setMessageSourceApp(MessageSource messageSourceApp) {
+//		this.messageSourceApp = messageSourceApp;
+//	}
+//
+//	public void setAnnualDiaryDAO(IAnnualDiaryManager iAnnualDiaryManager) {
+//		this.annualDiaryManager = iAnnualDiaryManager;
+//	}
+//
+//	public void setLocalDAO(ILocalManager iLocalManager) {
+//		this.localManager = iLocalManager;
+//	}
+//
+//	public void setCalendarDAO(ICalendarManager iCalendarManager) {
+//		this.calendarManager = iCalendarManager;
+//	}
+//
+//	public void setEventDAO(IEventManager iEventManager) {
+//		this.eventManager = iEventManager;
+//	}
+//
+//	public void setRepeatDAO(IRepeatManager iRepeatManager) {
+//		this.repeatManager = iRepeatManager;
+//	}
+//
+//	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
+//		this.localTaskManager = iLocalTaskManager;
+//	}
+//
+//	public void setTaskDAO(ITaskManager iTaskManager) {
+//		this.taskManager = iTaskManager;
+//	}
+//
+//	public void setDiaryDAO(IDiaryManager iDiaryManager) {
+//		this.diaryManager = iDiaryManager;
+//	}
+//
+//	public void setSemanalDiaryDAO(ISemanalDiaryManager iSemanalDiaryManager) {
+//		this.semanalDiaryManager = iSemanalDiaryManager;
+//	}
+//
+//	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
+//		this.multiTextManager = iMultiTextManager;
+//	}
+//
+//	public void setFirmDAO(IFirmManager iFirmManager) {
+//		this.firmManager = iFirmManager;
+//	}
+//
+//	public void setRepeatController(RepeatController repeatController) {
+//		this.repeatController = repeatController;
+//	}
+//	
 	
 }

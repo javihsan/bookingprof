@@ -21,6 +21,7 @@ import org.springframework.dao.UncategorizedDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,6 +39,7 @@ import com.diloso.bookhair.app.negocio.dto.LocalTaskDTO;
 import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 import com.diloso.bookhair.app.negocio.dto.RepeatDTO;
 import com.diloso.bookhair.app.negocio.dto.generator.NotifCalendarDTO;
+import com.diloso.bookhair.app.negocio.dto.input.EventNewDTO;
 import com.diloso.bookhair.app.negocio.manager.ICalendarManager;
 import com.diloso.bookhair.app.negocio.manager.IClientManager;
 import com.diloso.bookhair.app.negocio.manager.IEventManager;
@@ -114,7 +116,7 @@ public class EventController {
 	 * El cliente no haya reservado más de local.getLocNumUsuDays()
 	 * El nombre de cliente es obligatorio si es nuevo 
 	 * El email  de cliente es obligatorio si es nuevo y si no admin
-	 * El telf   de cliente es obligatorio si es nuevo strCliId  y si no admin
+	 * El telf   de cliente es obligatorio si es nuevo cliId  y si no admin
 	 * El mail está repetido si es nuevo
 	*/
 	protected boolean validateNew(HttpServletRequest arg0, boolean isNew, String cliName, String cliEmail, String cliTelf, Date time, LocalDTO local, List<Map<String,Object>> listCalendarOpen, List<List<LocalTaskDTO>> listLocalTasks, boolean admin, boolean SP) throws UncategorizedDataAccessException {
@@ -182,79 +184,109 @@ public class EventController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/operator/new")
 	@ResponseStatus(HttpStatus.OK)
-	protected void newObjectAdmin(HttpServletRequest arg0, HttpServletResponse arg1, String localId, @RequestParam("selectedCalendars") String selectedCalendars)
+	protected void newObjectAdmin(HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody EventNewDTO eventNew)
 			throws Exception {
+
+		Long localId = eventNew.getLocalId();
+		List<String> selectedCalendars = eventNew.getSelectedCalendars();
+		List<Long> selectedTasks = eventNew.getSelectedTasks();
+		List<Long> selectedTasksCount = eventNew.getSelectedTasksCount();
+		
 		List<Long> listCalendarCandidate = calController.getCalendarsId(selectedCalendars);
-		String selectedTasks = arg0.getParameter("selectedTasks");
-		String selectedTasksCount = arg0.getParameter("selectedTasksCount");
-		List<LocalTaskDTO> listLocalTaskCombi = localTaskManager.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
+		
+		List<LocalTaskDTO> listLocalTaskCombi = localTaskManager.getLocalTaskCombi(localId, RequestContextUtils.getLocale(arg0).getLanguage(), "");
 		List<List<LocalTaskDTO>> listLocalTasks = calController.getListLocalTasks(selectedTasks,selectedTasksCount,listLocalTaskCombi);
-		newObject (arg0,arg1,localId,listLocalTasks,listCalendarCandidate,true, false);
+		
+		newObject (arg0,arg1,eventNew,listLocalTasks,listCalendarCandidate,true, false);
 	}
-	
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/booking/new")
 	@ResponseStatus(HttpStatus.OK)
-	protected void newObject(HttpServletRequest arg0, HttpServletResponse arg1, String localId, @RequestParam("selectedCalendars") String selectedCalendars)
+	protected void newObject(HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody EventNewDTO eventNew)
 			throws Exception {
+		
+		Long localId = eventNew.getLocalId();
+		List<String> selectedCalendars = eventNew.getSelectedCalendars();
+		List<Long> selectedTasks = eventNew.getSelectedTasks();
+		List<Long> selectedTasksCount = eventNew.getSelectedTasksCount();
+		
 		List<Long> listCalendarCandidate = calController.getCalendarsId(selectedCalendars);
-		String selectedTasks = arg0.getParameter("selectedTasks");
-		String selectedTasksCount = arg0.getParameter("selectedTasksCount");
-		List<LocalTaskDTO> listLocalTaskCombi = localTaskManager.getLocalTaskCombi(new Long(localId), RequestContextUtils.getLocale(arg0).getLanguage(), "");
+		List<LocalTaskDTO> listLocalTaskCombi = localTaskManager.getLocalTaskCombi(localId, RequestContextUtils.getLocale(arg0).getLanguage(), "");
 		List<List<LocalTaskDTO>> listLocalTasks = calController.getListLocalTasks(selectedTasks,selectedTasksCount,listLocalTaskCombi);
-		newObject (arg0,arg1,localId,listLocalTasks,listCalendarCandidate,false, false);
+		
+		newObject (arg0,arg1,eventNew,listLocalTasks,listCalendarCandidate,false, false);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/operator/newSP")
 	@ResponseStatus(HttpStatus.OK)
-	protected void newObjectAdminSP(HttpServletRequest arg0, HttpServletResponse arg1, String localId, @RequestParam("selectedCalendars") String selectedCalendars)
+	protected void newObjectAdminSP(HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody EventNewDTO eventNew)
 			throws Exception {
+		
+		List<String> selectedCalendars = eventNew.getSelectedCalendars();
+		List<Long> selectedTasks = eventNew.getSelectedTasks();
+		
 		List<Long> listCalendarCandidate = calController.getCalendarsId(selectedCalendars);
-		String selectedTasks = arg0.getParameter("selectedTasks");
 		List<List<LocalTaskDTO>> listLocalTasks = calController.getListLocalTasks(selectedTasks);
-		newObject (arg0,arg1,localId,listLocalTasks,listCalendarCandidate,true, true);
+
+		newObject (arg0,arg1,eventNew,listLocalTasks,listCalendarCandidate,true, true);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/booking/newSP")
 	@ResponseStatus(HttpStatus.OK)
-	protected void newObjectSP(HttpServletRequest arg0, HttpServletResponse arg1, String localId, @RequestParam("selectedCalendars") String selectedCalendars)
+	protected void newObjectSP(HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody EventNewDTO eventNew)
 			throws Exception {
+	
+		List<String> selectedCalendars = eventNew.getSelectedCalendars();
+		List<Long> selectedTasks = eventNew.getSelectedTasks();
+		
 		List<Long> listCalendarCandidate = calController.getCalendarsId(selectedCalendars);
-		String selectedTasks = arg0.getParameter("selectedTasks");
 		List<List<LocalTaskDTO>> listLocalTasks = calController.getListLocalTasks(selectedTasks);
-		newObject (arg0,arg1,localId,listLocalTasks,listCalendarCandidate,false, true);
+		
+		newObject (arg0,arg1,eventNew,listLocalTasks,listCalendarCandidate,false, true);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/operator/newGoods")
 	@ResponseStatus(HttpStatus.OK)
-	protected void newObjectAdminGoods(HttpServletRequest arg0, HttpServletResponse arg1, String localId, @RequestParam("selectedCalendars") String selectedCalendars, @RequestParam("numLines") int numLines, @RequestParam("numPallets") int numPallets)
+	protected void newObjectAdminGoods(HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody EventNewDTO eventNew, @RequestParam("numLines") int numLines, @RequestParam("numPallets") int numPallets)
 			throws Exception {
+		
+		Long localId = eventNew.getLocalId();
+		List<String> selectedCalendars = eventNew.getSelectedCalendars();
+		
 		List<Long> listCalendarCandidate = calController.getCalendarsId(selectedCalendars);
-		List<List<LocalTaskDTO>> listLocalTasks = calController.getListLocalTasksGoods(numLines,numPallets,localId,RequestContextUtils.getLocale(arg0));
-		newObject (arg0,arg1,localId,listLocalTasks,listCalendarCandidate,true, true);
+		List<List<LocalTaskDTO>> listLocalTasks = calController.getListLocalTasksGoods(numLines,numPallets,localId.toString(),RequestContextUtils.getLocale(arg0));
+		
+		newObject (arg0,arg1,eventNew,listLocalTasks,listCalendarCandidate,true, true);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/booking/newGoods")
 	@ResponseStatus(HttpStatus.OK)
-	protected void newObjectGoods(HttpServletRequest arg0, HttpServletResponse arg1, String localId, @RequestParam("selectedCalendars") String selectedCalendars, @RequestParam("numLines") int numLines, @RequestParam("numPallets") int numPallets)
+	protected void newObjectGoods(HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody EventNewDTO eventNew, @RequestParam("numLines") int numLines, @RequestParam("numPallets") int numPallets)
 			throws Exception {
+		
+		Long localId = eventNew.getLocalId();
+		List<String> selectedCalendars = eventNew.getSelectedCalendars();
+		
 		List<Long> listCalendarCandidate = calController.getCalendarsId(selectedCalendars);
-		List<List<LocalTaskDTO>> listLocalTasks = calController.getListLocalTasksGoods(numLines,numPallets,localId,RequestContextUtils.getLocale(arg0));
-		newObject (arg0,arg1,localId,listLocalTasks,listCalendarCandidate,false, true);
+		List<List<LocalTaskDTO>> listLocalTasks = calController.getListLocalTasksGoods(numLines,numPallets,localId.toString(),RequestContextUtils.getLocale(arg0));
+		
+		newObject (arg0,arg1,eventNew,listLocalTasks,listCalendarCandidate,false, true);
 	}
 	
-	protected void newObject(HttpServletRequest arg0, HttpServletResponse arg1, String localId, List<List<LocalTaskDTO>> listLocalTasks, List<Long> listCalendarCandidate, boolean admin, boolean SP)
+	protected void newObject(HttpServletRequest arg0, HttpServletResponse arg1, EventNewDTO eventNew, List<List<LocalTaskDTO>> listLocalTasks, List<Long> listCalendarCandidate, boolean admin, boolean SP)
 			throws Exception {
 		
 		Locale locale = RequestContextUtils.getLocale(arg0);
 		
+		Long localId = eventNew.getLocalId();
+		
 		// Propiedades de local
-		LocalDTO local = localManager.getById(new Long(localId));
+		LocalDTO local = localManager.getById(localId);
 		
 		// Propiedades de firma
 		FirmDTO firm = firmManager.getById(local.getResFirId());
 		
-		Long lngEveStartTime = new Long(arg0.getParameter("eveStartTime"));
+		Long lngEveStartTime = eventNew.getEveStartTime();
 		Date eveStartTime = new Date(lngEveStartTime);
 		
 		Calendar calendarGreg = new GregorianCalendar();
@@ -280,17 +312,17 @@ public class EventController {
 			calendarOpen.put(CalendarController.EVENTS_APO, new ArrayList<EventDTO>());
 		}
 		
-		String strCliId = arg0.getParameter("cliId");
+		Long cliId = eventNew.getCliId();
 		String cliName = null;
 		String cliEmail = null;
 		String cliTelf = null;
 		
 		boolean isNew = false;
 		
-		if (strCliId==null){
-			cliName = arg0.getParameter("cliName");
-			cliEmail = arg0.getParameter("cliEmail").toLowerCase();
-			cliTelf = arg0.getParameter("cliTelf");
+		if (cliId==null){
+			cliName = eventNew.getCliName();
+			cliEmail = eventNew.getCliEmail().toLowerCase();
+			cliTelf = eventNew.getCliTelf();
 			if (admin){ // Es nuevo seguro. Puede que no venga email (luego es nuevo); pero si viene hemos comprobado seguro que no está repetido. 
 				isNew = true;
 			} else if (!existsEmail(local.getResFirId(),cliEmail)){ // Viene el mail seguro, comprobamos que no exista 
@@ -298,7 +330,7 @@ public class EventController {
 			}
 		}
 		
-		String eveDescAlega = arg0.getParameter("eveDescAlega");
+		String eveDescAlega = eventNew.getEveDescAlega();
 						
 		if (validateNew(arg0, isNew, cliName, cliEmail, cliTelf, eveStartTime, local, listCalendarOpen, listLocalTasks, admin, SP)){ 
 		
@@ -319,7 +351,7 @@ public class EventController {
 				}	
 			} else { // Es admin
 				if (!isNew){ // Si no es nuevo, buscamos por el id
-					eveClient = clientManager.getById(new Long(strCliId));
+					eveClient = clientManager.getById(cliId);
 				}
 			}
 			if (isNew) {// Es nuevo
@@ -438,8 +470,7 @@ public class EventController {
 				if (!configClientBook.isEmpty()){
 					ConfigClientField celebrationDateField = configClientBook.get("celebrationDate");
 					if (celebrationDateField!=null){
-						String strCelebrationDate = arg0.getParameter("celebrationDate");
-						Date celebrationDate = Utils.getDateYearLast(strCelebrationDate, locale);
+						Date celebrationDate = new Date(eventNew.getCelebrationDate());
 						event.setEveCelebrationTime(celebrationDate);	
 					}					
 				}

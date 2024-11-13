@@ -48,13 +48,13 @@ public class ClientController {
 	protected MessageSource messageSourceApp;
 	
 	@Autowired
-	protected IFirmManager iFirmManager;
+	protected IFirmManager firmManager;
 	
 	@Autowired
-	protected IClientManager iClientManager;
+	protected IClientManager clientManager;
 	
 	@Autowired
-	protected ILocalManager iLocalManager;
+	protected ILocalManager localManager;
 	
 	protected UserRegistry userRegistry = new DatastoreUserRegistry();
 	
@@ -134,7 +134,7 @@ public class ClientController {
 			firm.setFirGwtUsers(firGwtUsers);
 			firm = firmDAO.update(firm);
 			*/
-			iClientManager.update(client);
+			clientManager.update(client);
 
 		}
 	}
@@ -144,10 +144,10 @@ public class ClientController {
 	public void remove(HttpServletRequest arg0, HttpServletResponse arg1, @RequestParam("id") Long id)
 			throws Exception {
 		
-		ClientDTO client = iClientManager.getById(id);
+		ClientDTO client = clientManager.getById(id);
 		if (client!=null){
 			client.setEnabled(0);
-			iClientManager.update(client);
+			clientManager.update(client);
 			log.info("Cliente borrado : "+client.getId());
 		}	
 	}
@@ -156,13 +156,13 @@ public class ClientController {
 	protected @ResponseBody
 	List<ClientDTO> list(@RequestParam("domain") String domain) throws Exception {
 
-		FirmDTO firm = iFirmManager.getFirmDomain(domain);
+		FirmDTO firm = firmManager.getFirmDomain(domain);
 		
 		MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
 		String key = CalendarController.KEY_CACHE + domain + KEY_CACHE_CLIENTS;
 		List<ClientDTO> listClient = (List<ClientDTO>) syncCache.get(key);
-		if (listClient == null) {
-			listClient = iClientManager.getClient(firm.getId());
+		if (listClient == null || listClient.isEmpty()) {
+			listClient = clientManager.getClient(firm.getId());
 			syncCache.put (key, listClient, Expiration.byDeltaSeconds(18000)); // 5 horas 60*60*5 segundos en un día
 		}
 
@@ -175,9 +175,9 @@ public class ClientController {
 	protected @ResponseBody
 	ClientDTO listByEmail(@RequestParam("domain") String domain, @RequestParam("email") String email) throws Exception {
 		
-		FirmDTO firm = iFirmManager.getFirmDomain(domain);
+		FirmDTO firm = firmManager.getFirmDomain(domain);
 		
-		ClientDTO client = iClientManager.getByEmail(firm.getId(), email);	
+		ClientDTO client = clientManager.getByEmail(firm.getId(), email);	
 					
 		return client;
 	}
@@ -189,7 +189,7 @@ public class ClientController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		
-		ClientDTO client = iClientManager.getByEmail(new Long(firmId), email);	
+		ClientDTO client = clientManager.getByEmail(new Long(firmId), email);	
 					
 		return client;
 	}
@@ -210,15 +210,15 @@ public class ClientController {
 	}
 
 	public void setFirmDAO(IFirmManager iFirmManager) {
-		this.iFirmManager = iFirmManager;
+		this.firmManager = iFirmManager;
 	}
 
 	public void setClientDAO(IClientManager iClientManager) {
-		this.iClientManager = iClientManager;
+		this.clientManager = iClientManager;
 	}
 
 	public void setLocalDAO(ILocalManager iLocalManager) {
-		this.iLocalManager = iLocalManager;
+		this.localManager = iLocalManager;
 	}
 
 	public void setUserRegistry(UserRegistry userRegistry) {

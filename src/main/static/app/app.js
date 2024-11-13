@@ -1,7 +1,7 @@
 var protocol_url = location.protocol+'//';
 var domainOfi = 'bookingprof.com';
-//var domainLocalOfi = 'localhost:8888'; // arrancar en local con el java delante
-var domainLocalOfi = 'localhost:9001'; // arrancar en local solo el front
+var domainLocalOfi = 'localhost:8888'; // arrancar en local con el java delante
+//var domainLocalOfi = 'localhost:9001'; // arrancar en local solo el front
 var domainSpotOfi = 'dilosohairapp.appspot.com';
 
 var appHost = location.host;
@@ -29,8 +29,15 @@ var App = {
 	    .warnPalette('teal')
 	    //.backgroundPalette('teal');
 		
+		$mdDateLocaleProvider.firstDayOfWeek = 1;
+		
 		$mdDateLocaleProvider.formatDate = function(date) {
-			return date ? __Utils.dateToStringFormat(date) : '';
+		   return moment(date).format('L');
+		};
+		
+		$mdDateLocaleProvider.parseDate = function(dateString) {
+		    var m = moment(dateString, 'L', true);
+		    return m.isValid() ? m.toDate() : new Date(NaN);
 		};
 		
 		
@@ -93,10 +100,10 @@ var App = {
 		
 		
 		$urlRouterProvider.otherwise(
-				function($injector, $location) {
-			//console.log('path: ',$location.path());
-			$location.replace().path("/booking");
-		});
+			function($injector, $location) {
+				//console.log('path: ',$location.path());
+				$location.replace().path("/booking");
+			});
 		
 		//$httpProvider.interceptors.push('myHttpInterceptor');
 	
@@ -156,7 +163,8 @@ var App = {
 		'$mdSidenav', 
 		'$mdDialog',
 		'$mdToast',
-		function($rootScope, $state, httpService, cacheService, $mdSidenav, $mdDialog, $mdToast) {
+		"$mdDateLocale",
+		function($rootScope, $state, httpService, cacheService, $mdSidenav, $mdDialog, $mdToast, $mdDateLocale) {
 			
 			$rootScope.$on('$stateChangeSuccess', function() {
 				//console.log ("$stateChangeSuccess", $state.current.name);
@@ -205,8 +213,8 @@ var App = {
 				__Utils = new Utils($rootScope);
 				__FacadeCore = new FacadeCore(cacheService);
 						
-				//var url = protocol_url + appHost + "/multiText/listLocaleTexts";
-				var url = "/js/lang_es.json" // "/js/lang_es_full.json" // Para rapidez al debugear solo con front
+				var url = protocol_url + appHost + "/multiText/listLocaleTexts";
+				//var url = "/js/lang_es.json" // "/js/lang_es_full.json" // Para rapidez al debugear solo con front
 				var data = {lanCode:lanCode,domain:appFirmDomain};
 								
 				httpService.GET(url,data).then(
@@ -334,18 +342,29 @@ var App = {
 				
 				a = location.pathname.split("/");
 				appFirmDomain = a[1];
-				appFirmDomain = 'demo' // Para local arrancado solo con front
-				appHost = 'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
+				
+				//appFirmDomain = 'demo' // Para local arrancado solo con front
+				//appHost = 'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
 				
 				appHost += '/'+appFirmDomain;
 				appName = 'BookingProf-' + appFirmDomain;
 				
+				
+				setFormatCalendar = function() {
+					
+			   		moment.locale($rootScope.langApp);
+				
+				    $mdDateLocale.shortDays = eval($rootScope.findLangTextElement("general.daysWeekShort"));
+				    $mdDateLocale.shortMonths = eval($rootScope.findLangTextElement("general.monthsShort"));
+				};
+				
 				// set Text multiLanguaje
-				$rootScope.changeLang($rootScope.langApp);
-
+				$rootScope.changeLang($rootScope.langApp, setFormatCalendar);		
+				
+							
 			} else {
 	
-				//console.log ("Dominio propio: ",appServerName);
+				console.log ("Dominio propio: ",appServerName);
 
 				var url = protocol_url + appHost + "/firm/getDomainServer";
 				var data = {server:appServerName};
@@ -358,8 +377,16 @@ var App = {
 						appHost += '/'+appFirmDomain;
 						appName = 'BookingProf-' + appFirmDomain;
 					
+						setFormatCalendar = function() {
+						
+		    				moment.locale($rootScope.langApp);
+						
+						    $mdDateLocale.shortDays = eval($rootScope.findLangTextElement("general.daysWeekShort"));
+						    $mdDateLocale.shortMonths = eval($rootScope.findLangTextElement("general.monthsShort"));
+						};
+						
 						// set Text multiLanguaje
-						$rootScope.changeLang($rootScope.langApp);
+						$rootScope.changeLang($rootScope.langApp, setFormatCalendar);
 
 					}
 				);	
@@ -435,7 +462,7 @@ var App = {
     };
     	 
     $(function() {
-    	console.log('Bootstrapping!');
+    	//console.log('Bootstrapping!');
     	new CordovaInit();
     }); 
 	
@@ -453,7 +480,7 @@ var App = {
     			strParam += key+"="+eval("data."+key);
     		});
     		url += strParam;
-    
+    		
     		var config = {timeout:45*1000};
     		
     		//console.log ("Llamando a GET ... "+url,config);
@@ -461,18 +488,18 @@ var App = {
     	}   
 		httpService.POST = function(url, data) { 
 			if (data==null) data = [];
-    		var keys = Object.keys(data);
-    		var strParam = "";
-    		angular.forEach(keys, function (key) {
-    			if (strParam!="") strParam += "&";
-    			else strParam += "?";
-    			strParam += key+"="+eval("data."+key);
-    		});
-    		url += strParam;
-	
+			//console.log ("Llamando a POST DATA... "+url,data);
+			
     		var config = {timeout:45*1000};
+    		//var config2 = {
+	            //headers : {
+	                //'Content-Type': 'text/plain;'
+	            //},
+	            //timeout:45*1000
+	        //}
     		//console.log ("Llamando a POST ... "+url,config);
-    		return $http.post(url,data,config); 
+    	   		
+       		return $http.post(url,data,config); 
     	}
     	return httpService; 
     }); 
