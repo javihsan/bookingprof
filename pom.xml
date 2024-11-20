@@ -297,6 +297,14 @@
 		    <artifactId>joda-time</artifactId>
 		    <version>2.10.13</version>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.36</version>
+		    <scope>provided</scope>
+		</dependency>
+
     	
     	<!-- Jetty -->
         <!-- https://mvnrepository.com/artifact/org.eclipse.jetty.ee10/jetty-ee10-servlets -->
@@ -369,6 +377,24 @@
 			<artifactId>mockito-all</artifactId>
 			<version>${mockito.version}</version>
 		</dependency>
+
+		<dependency>
+	       <groupId>org.springdoc</groupId>
+	       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+	       <version>2.6.0</version>
+	    </dependency>
+	    
+	    <dependency>
+		  <groupId>com.amadeus</groupId>
+		  <artifactId>amadeus-java</artifactId>
+		  <version>10.0.0</version>
+		</dependency>
+		
+		<!--<dependency>
+  			<groupId>com.google.code.gson</groupId>
+  			<artifactId>gson</artifactId>
+  			<version>2.11.0</version>
+		</dependency>-->
 
 	</dependencies>
 

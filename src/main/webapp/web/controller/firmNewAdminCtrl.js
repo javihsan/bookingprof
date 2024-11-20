@@ -94,7 +94,9 @@
         this.firResponTelf1.val(firm.firResponTelf1);
         this.firBilledModule[0].options.selectedIndex = firm.firBilledModule;
         this.firConfig.val(firm.firConfig);
-        this.firGwtUsers.val(firm.firGwtUsers.toString());
+        if (firm.firGwtUsers) {
+          this.firGwtUsers.val(firm.firGwtUsers.toString());
+        }
         strTaskClass = firm.firClassTasks.toString();
         a = strTaskClass.split(",");
         ref = objSelectMul[0].options;

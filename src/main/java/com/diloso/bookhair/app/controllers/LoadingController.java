@@ -5853,6 +5853,7 @@ public class LoadingController {
 		
 	}
 	
+		
 	@RequestMapping(method = RequestMethod.GET, value = "/admin/createAdveoUsers_no")
 	@ResponseStatus(HttpStatus.OK)
 	protected void createAdveoUsers(HttpServletRequest arg0,
@@ -5948,6 +5949,161 @@ public class LoadingController {
 		}
 	}
 
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/admin/classSystem3_pendiente pro")
+	@ResponseStatus(HttpStatus.OK)
+	protected void classSystem3(HttpServletRequest arg0, HttpServletResponse arg1)
+			throws Exception {
+
+		// TaskClass
+
+		MultiTextDTO nameMulti = null;
+
+		// Viaje
+
+		String nameKey = MultiTextManager.KEY_MULTI_SYSTEM
+				+ TaskClassManager.KEY_MULTI_TASKCLASS_NAME + "trip";
+		//TaskClassDTO taskClassGoods = taskClassDAO.getByName(nameKey);
+		TaskClassDTO taskClassTrip = new TaskClassDTO();
+		taskClassTrip.setEnabled(1);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("es");
+		nameMulti.setMulText("Viaje");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("en");
+		nameMulti.setMulText("Trip");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("pt");
+		nameMulti.setMulText("Jornada");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("fr");
+		nameMulti.setMulText("Voyage");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("eu");
+		nameMulti.setMulText("Bidaia");
+		multiTextManager.create(nameMulti);
+
+		taskClassTrip.setTclNameMulti(nameKey);
+
+		taskClassTrip = taskClassManager.create(taskClassTrip);
+
+
+		// Task
+
+		// Vuelo
+		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
+				+ TaskManager.KEY_MULTI_TASK_NAME + "trip_fly";
+
+		TaskDTO task = new TaskDTO();
+		task.setEnabled(1);
+		task.setTasClass(taskClassTrip);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("es");
+		nameMulti.setMulText("Vuelo");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("en");
+		nameMulti.setMulText("Fly");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("pt");
+		nameMulti.setMulText("Voo");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("fr");
+		nameMulti.setMulText("Vol");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("eu");
+		nameMulti.setMulText("Hegaldia");
+		multiTextManager.create(nameMulti);
+
+		task.setTasNameMulti(nameKey);
+
+		taskManager.create(task);
+		
+		// Hotel
+		nameKey = MultiTextManager.KEY_MULTI_SYSTEM
+				+ TaskManager.KEY_MULTI_TASK_NAME + "trip_hotel";
+
+		task = new TaskDTO();
+		task.setEnabled(1);
+		task.setTasClass(taskClassTrip);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("es");
+		nameMulti.setMulText("Hotel");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("en");
+		nameMulti.setMulText("Hotel");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("pt");
+		nameMulti.setMulText("Hotel");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("fr");
+		nameMulti.setMulText("Hôtel");
+		multiTextManager.create(nameMulti);
+
+		nameMulti = new MultiTextDTO();
+		nameMulti.setEnabled(1);
+		nameMulti.setMulKey(nameKey);
+		nameMulti.setMulLanCode("eu");
+		nameMulti.setMulText("Hotela");
+		multiTextManager.create(nameMulti);
+
+		task.setTasNameMulti(nameKey);
+
+		taskManager.create(task);
+		
+	}
 	
 	/*
 	 	@RequestMapping(method = RequestMethod.GET, value = "/admin/migrateEvent_no")

@@ -1,0 +1,48 @@
+<form>
+	<md-content>
+	  	<div layout="column">
+		  	<md-list>
+		  		<div ng-show="local.locNumPersonsApo > 1" class="block-sep">
+			  		<md-list-item  class="md-2-line">
+			 			<md-icon md-font-library="material-icons" class="md-24">person_add</md-icon>
+				  		<div class="md-list-item-text">
+							<p lnt-id="task.select.people"></p>		
+						</div>
+					</md-list-item>
+					<md-list-item class="md-2-line">
+						<md-icon></md-icon>
+			  			<div class="md-list-item-text">
+			  				<md-input-container>
+			  					<md-select ng-model="personscope.numPersons" ng-change="disabledNextTabs();changeNumPersons()" aria-label="{{findLangTextElement('task.select.people')}}">
+					  				<md-option ng-repeat="numPerson in personscope.persons" value="{{numPerson.id}}">
+					  					{{numPerson.name}}
+					  				</md-option>
+					  			</md-select>
+					  		</md-input-container>
+					  	</div>		
+					</md-list-item>
+				</div>		
+				<div ng-show="!isAdveo" ng-repeat="numPerson in personscope.persons | limitTo:personscope.numPersons" class="block-sep">
+			  		<md-list-item class="md-2-line">
+						<md-icon ng-if="local.locNumPersonsApo == 1" md-font-library="material-icons" class="md-24">build</md-icon>
+						<md-icon ng-if="local.locNumPersonsApo > 1" md-font-library="material-icons" class="md-24">looks_{{icons_num($index)}}</md-icon>
+						<div class="md-list-item-text">
+				  			<p lnt-id="label.template.job"></p>
+						</div>
+					</md-list-item>
+					<md-list-item class="md-2-line">
+						<md-icon></md-icon>
+						<div class="md-list-item-text taskSelect">
+							<a ng-href="" ng-click="goToSelectTaskPerson(numPerson.id)">
+								<font>{{personscope.selectedTasksPersonsStr[$index]}}</font>
+							</a>
+							<md-button ng-controller="LangsController" ng-show="sectionBack==null && existsMenu" ng-click="goToSelectTaskPerson(numPerson.id)">
+	          					<md-icon md-font-library="material-icons" class="md-24">arrow_drop_down</md-icon>
+							</md-button>
+						</div>
+					</md-list-item>
+				</div>	
+		  	</md-list>	
+		</div>
+	</md-content>
+</form> 

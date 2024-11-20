@@ -35,7 +35,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public class MultiTextController {
 	
 	public static final String WEB_PROP = "web.";
-	public static final String WEB_CONFIG = "config.";
+	public static final String CONFIG_PROP  = "config.";
+	public static final String FLY_PROP  = "fly.";
 	
 	@Autowired
 	protected IMultiTextManager multiTextManager;
@@ -106,7 +107,7 @@ public class MultiTextController {
 			for (String key : props.stringPropertyNames()) {
 				keyOriginal = key;
 				if (!key.startsWith(WEB_PROP)){ // Filtramos solo las de la app, no las de la web
-					if (key.startsWith(WEB_CONFIG)){ // Propiedad configurable, obtenemos solo la indicada en la config
+					if (key.startsWith(CONFIG_PROP)){ // Propiedad configurable, obtenemos solo la indicada en la config
 						String[] a = key.split("\\.");
 						keyConfig = a[1];
 						valueConfig = a[2];
@@ -131,6 +132,47 @@ public class MultiTextController {
 		return listMultiText;
 	}
 
+	@RequestMapping("/fly/listLocaleTexts")
+	protected @ResponseBody
+	List<MultiTextDTO> listLocaleTextsFly(HttpServletRequest arg0, HttpServletResponse arg1, @RequestParam("lanCode") String lanCode) throws Exception {
+		
+		if (lanCode.equals("")){
+			lanCode = RequestContextUtils.getLocale(arg0).getLanguage();
+		}
+		
+		// Set Locale, quitar porque en los móviles no va, pasar como parametro
+		LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(arg0);
+		LocaleEditor localeEditor = new LocaleEditor();
+		localeEditor.setAsText(lanCode);
+		localeResolver.setLocale(arg0, arg1, (Locale) localeEditor.getValue());
+		
+		// Using the synchronous cache
+		String keyMem = "listLocaleTexts_fly_"+lanCode;
+	  	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	    syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+	    List<MultiTextDTO> listMultiText = (List<MultiTextDTO>) syncCache.get(keyMem); // read from cache
+	    if (listMultiText == null || listMultiText.isEmpty()) {
+		    			
+			listMultiText = new ArrayList<MultiTextDTO>();
+			ExtendMessageSource messageSourceApp = (ExtendMessageSource)ApplicationContextProvider.getApplicationContext().getBean("messageSource");
+			Properties props = messageSourceApp.getResolvedProps(lanCode);
+			MultiTextDTO multiText = null;
+			for (String key : props.stringPropertyNames()) {
+				//if (key.startsWith(FLY_PROP)){ // Filtramos solo las de fly
+				if (!key.startsWith(WEB_PROP)){
+					multiText = new MultiTextDTO();
+					multiText.setMulKey(key);
+					multiText.setMulLanCode(lanCode);
+					multiText.setMulText(props.getProperty(key));
+					listMultiText.add(multiText);
+				}	
+			}
+			
+			syncCache.put(keyMem, listMultiText); // populate cache
+	    }	
+		return listMultiText;
+	}
+	
 	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
 		this.multiTextManager = iMultiTextManager;
 	}

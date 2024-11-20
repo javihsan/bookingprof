@@ -1,1 +1,1 @@
-coffee --compile --output C:\work\repository\bookingprof\src\main\webapp\app\model C:\work\repository\bookingprof\src\main\webapp\app\model\coffee
+coffee --compile --output C:\work\repository\diloso\bookingprof\src\main\webapp\app\model C:\work\repository\diloso\bookingprof\src\main\webapp\app\model\coffee

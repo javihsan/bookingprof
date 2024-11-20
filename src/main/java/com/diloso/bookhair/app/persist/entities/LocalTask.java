@@ -27,6 +27,7 @@ public class LocalTask extends StorableWithModificationTimestamp<Long> {
 	
 	protected Long lotTaskId;
 	
+	@Index
 	protected String lotNameMulti;
 	
 	protected Integer lotTaskDuration;
@@ -39,6 +40,7 @@ public class LocalTask extends StorableWithModificationTimestamp<Long> {
 
 	protected List<Integer> lotTaskCombiRes;
 	
+	@Index
 	protected Integer lotVisible;
 	
 	public Long getId() {

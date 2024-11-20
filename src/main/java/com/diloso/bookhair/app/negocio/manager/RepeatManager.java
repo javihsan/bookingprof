@@ -35,7 +35,7 @@ public class RepeatManager implements IRepeatManager {
 	public static final String EVE_CALENDAR_ID = "eveCalendarId";
 	public static final String ENABLED = "enabled";
 	public static final String ORDER_EVE_END_TIME_ASC = "eveEndTime";
-	public static final String ORDER_EVE_END_TIME_MAYQ = "eveEndTime>=";
+	public static final String EVE_END_TIME_MAYQ = "eveEndTime>=";
 
 	
 	@Autowired
@@ -91,7 +91,18 @@ public class RepeatManager implements IRepeatManager {
 
 	@Override
 	public List<RepeatDTO> getRepeatByDay(CalendarDTO calendar, String selectedDate) {
-		List<RepeatDTO> result = new ArrayList<RepeatDTO>();
+
+		return getRepeatByTime(calendar, selectedDate, Calendar.HOUR, 24);
+	
+	}
+
+	@Override
+	public List<RepeatDTO> getRepeatByWeek(CalendarDTO calendar, String selectedDate) {
+		
+		return getRepeatByTime(calendar, selectedDate, Calendar.DAY_OF_MONTH, 7);
+	}
+
+	private List<RepeatDTO> getRepeatByTime(CalendarDTO calendar, String selectedDate, int endAdvanceCalendar, int endAdvanceTime) {
 		String[] dates = selectedDate.split(CalendarController.CHAR_SEP_DATE);
 		String year = dates[0];
 		String month = dates[1];
@@ -107,249 +118,25 @@ public class RepeatManager implements IRepeatManager {
 		calendarGreg.set(Calendar.MILLISECOND, 0);
 		Date startTime = calendarGreg.getTime();
 
-		calendarGreg.add(Calendar.HOUR, 24);
+		calendarGreg.add(endAdvanceCalendar, endAdvanceTime);
 		Date endTime = calendarGreg.getTime();
 
 		Map<String, Object> filters = new HashMap<String, Object>();
 		filters.put(EVE_CALENDAR_ID, calendar.getId());
 		filters.put(ENABLED, 1);
-		filters.put(ORDER_EVE_END_TIME_MAYQ, startTime);
+		filters.put(EVE_END_TIME_MAYQ, startTime);
 		List<String> orders = new ArrayList<String>();
 		orders.add(ORDER_EVE_END_TIME_ASC);
 		List<Repeat> resultQuery = repeatDAO.listOrderFilter(filters, orders);
+		List<RepeatDTO> result = new ArrayList<RepeatDTO>();
 		resultQuery.stream().forEach(entity -> {
-
 			if (endTime.after((Date) entity.getEveStartTime())) {
 				result.add(mapper.map(entity));
 			}
-
 		});
 		return result;
-
-	}
-
-	@Override
-	public List<RepeatDTO> getRepeatByWeek(CalendarDTO calendar, String selectedDate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-	/*
-	public RepeatDTO create(RepeatDTO repeat) throws Exception {
-		EntityManager em = getEntityManager();
-		Repeat entityRepeat = repeatMapper.map(repeat);
-		try {
-			em.getTransaction().begin();
-			em.persist(entityRepeat);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return repeatMapper.map(entityRepeat);
-	}
-
-	public RepeatDTO remove(long id) throws Exception {
-		EntityManager em = getEntityManager();
-		Repeat oldEntityRepeat = new Repeat();
-		try {
-			em.getTransaction().begin();
-			Repeat entityRepeat = (Repeat) em.find(Repeat.class, id);
-			PropertyUtils.copyProperties(oldEntityRepeat, entityRepeat);
-			em.remove(em.merge(entityRepeat));
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-			// log.warn("Eliminado repeat: " +
-			// oldEntityRepeat.getEveCalendarId()
-			// + " " + oldEntityRepeat.getEveBookingTime() + " "
-			// + oldEntityRepeat.getEveRepeatId());
-		}
-		return repeatMapper.map(oldEntityRepeat);
-	}
-
-	public RepeatDTO update(RepeatDTO repeat) throws Exception {
-		EntityManager em = getEntityManager();
-		Repeat entityRepeat = repeatMapper.map(repeat);
-		Repeat oldEntityRepeat = null;
-		try {
-			em.getTransaction().begin();
-			oldEntityRepeat = (Repeat) em.find(Repeat.class,
-					entityRepeat.getId());
-			new NullAwareBeanUtilsBean().copyProperties(entityRepeat,
-					oldEntityRepeat);
-			entityRepeat = em.merge(entityRepeat);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return repeatMapper.map(entityRepeat);
-	}
-
-	public RepeatDTO getById(long id) {
-		Repeat entityRepeat = null;
-		EntityManager em = getEntityManager();
-		try {
-			entityRepeat = (Repeat) em.find(Repeat.class, id);
-		} finally {
-			em.close();
-		}
-		return repeatMapper.map(entityRepeat);
-	}
-
-	public List<RepeatDTO> getRepeatByDay(CalendarDTO calendar,
-			String selectedDate) {
-
-		List<Entity> resultQuery = null;
-		List<RepeatDTO> result = new ArrayList<RepeatDTO>();
-		RepeatDTO repeat = null;
-		try {
-
-			String[] dates = selectedDate
-					.split(CalendarController.CHAR_SEP_DATE);
-			String year = dates[0];
-			String month = dates[1];
-			String day = dates[2];
-
-			Calendar calendarGreg = new GregorianCalendar();
-			calendarGreg.set(Calendar.YEAR, new Integer(year));
-			calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
-			calendarGreg.set(Calendar.MINUTE, 0);
-			calendarGreg.set(Calendar.SECOND, 0);
-			calendarGreg.set(Calendar.MILLISECOND, 0);
-			Date startTime = calendarGreg.getTime();
-
-			calendarGreg.add(Calendar.HOUR, 24);
-			Date endTime = calendarGreg.getTime();
-
-			Filter calendarFilter = new FilterPredicate("eveCalendarId",
-					FilterOperator.EQUAL, calendar.getId());
-			Filter enabledFilter = new FilterPredicate("enabled",
-					FilterOperator.EQUAL, 1);
-			Filter untilFilter = new FilterPredicate("eveEndTime",
-					FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
-
-			Filter compositeFilter = CompositeFilterOperator.and(
-					calendarFilter, enabledFilter, untilFilter);
-
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"Repeat").setFilter(compositeFilter);
-
-			query.addSort("eveEndTime", SortDirection.ASCENDING);
-
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			resultQuery = pq.asList(FetchOptions.Builder.withLimit(10000));
-			for (Entity entity : resultQuery) {
-				if (endTime.after((Date) entity.getProperty("eveStartTime"))) {
-					repeat = repeatMapper.map(entity);
-					result.add(repeat);
-				}
-			}
-
-		} catch (Exception ex) {
-		}
-
-		return result;
-
-	}
-
-	public List<RepeatDTO> getRepeatByWeek(CalendarDTO calendar,
-			String selectedDate) {
-
-		List<Entity> resultQuery = null;
-		RepeatDTO repeat = null;
-		List<RepeatDTO> result = new ArrayList<RepeatDTO>();
-		try {
-
-			String[] dates = selectedDate
-					.split(CalendarController.CHAR_SEP_DATE);
-			String year = dates[0];
-			String month = dates[1];
-			String day = dates[2];
-
-			Calendar calendarGreg = new GregorianCalendar();
-			calendarGreg.set(Calendar.YEAR, new Integer(year));
-			calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
-			calendarGreg.set(Calendar.MINUTE, 0);
-			calendarGreg.set(Calendar.SECOND, 0);
-			calendarGreg.set(Calendar.MILLISECOND, 0);
-			Date startTime = calendarGreg.getTime();
-
-			calendarGreg.add(Calendar.DAY_OF_MONTH, 7);
-			Date endTime = calendarGreg.getTime();
-
-			Filter calendarFilter = new FilterPredicate("eveCalendarId",
-					FilterOperator.EQUAL, calendar.getId());
-			Filter enabledFilter = new FilterPredicate("enabled",
-					FilterOperator.EQUAL, 1);
-
-			Filter untilFilter = new FilterPredicate("eveEndTime",
-					FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
-
-			Filter compositeFilter = CompositeFilterOperator.and(
-					calendarFilter, enabledFilter, untilFilter);
-
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"Repeat").setFilter(compositeFilter);
-
-			query.addSort("eveEndTime", SortDirection.ASCENDING);
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			resultQuery = pq.asList(FetchOptions.Builder.withLimit(10000));
-			for (Entity entity : resultQuery) {
-				if (endTime.after((Date) entity.getProperty("eveStartTime"))) {
-					repeat = repeatMapper.map(entity);
-					result.add(repeat);
-				}
-			}
-
-		} catch (Exception ex) {
-		}
-
-		return result;
-
 	}
 	
-
-	public void setRepeatTransformer(RepeatMapper repeatMapper) {
-		this.repeatMapper = repeatMapper;
-	}
-	*/
-
 	/*
 	 * public List<RepeatDTO> getRepeatAdmin(CalendarDTO calendar) {
 	 * 

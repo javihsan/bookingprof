@@ -446,7 +446,7 @@ public class EventController {
 					tasksMail += multiTextKey.getMulText();
 				}	
 				if (listCalendarCandidate!=null && listCalendarCandidate.size()>0){
-					String keyStrCal = MultiTextController.WEB_CONFIG+"configDenCal" +"."+ firm.getFirConfig().getConfigDenon().getListDenon().get("configDenCal") + ".label.header.places";
+					String keyStrCal = MultiTextController.CONFIG_PROP+"configDenCal" +"."+ firm.getFirConfig().getConfigDenon().getListDenon().get("configDenCal") + ".label.header.places";
 					String strCal = messageSourceApp.getMessage(keyStrCal, null, locale);//config.configDenCal.court.label.header.places
 					tasksMail += CHAR_TAG_BR+strCal+": ";
 					for (Long calCanId : listCalendarCandidate) {

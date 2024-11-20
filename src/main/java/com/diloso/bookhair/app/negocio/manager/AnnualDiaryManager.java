@@ -218,87 +218,7 @@ public class AnnualDiaryManager implements IAnnualDiaryManager {
 	}
 	
 	/*
-	public AnnualDiaryDTO create(AnnualDiaryDTO annualDiary) throws Exception {
-		EntityManager em = getEntityManager();
-		AnnualDiary entityAnnualDiary = annualDiaryTransformer.map(annualDiary);
-		try {
-			em.getTransaction().begin();
-			em.persist(entityAnnualDiary);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return annualDiaryTransformer.map(entityAnnualDiary);
-	}
 
-	public AnnualDiaryDTO remove(long id) throws Exception {
-		EntityManager em = getEntityManager();
-		AnnualDiary oldEntityAnnualDiary = new AnnualDiary();
-		try {
-			em.getTransaction().begin();
-			AnnualDiary entityAnnualDiary = (AnnualDiary) em.find(AnnualDiary.class, id);
-			PropertyUtils.copyProperties(oldEntityAnnualDiary, entityAnnualDiary);
-			em.remove(em.merge(entityAnnualDiary));
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return mapper.map(oldEntityAnnualDiary);
-	}
-	
-	public AnnualDiaryDTO update(AnnualDiaryDTO annualDiary) throws Exception {
-		EntityManager em = getEntityManager();
-		AnnualDiary entityAnnualDiary = mapper.map(annualDiary);
-		AnnualDiary oldEntityAnnualDiary = null;
-		try {
-			em.getTransaction().begin();
-			oldEntityAnnualDiary = (AnnualDiary) em.find(AnnualDiary.class, entityAnnualDiary.getId());
-			new NullAwareBeanUtilsBean().copyProperties(entityAnnualDiary, oldEntityAnnualDiary);
-			entityAnnualDiary = em.merge(entityAnnualDiary);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return mapper.map(entityAnnualDiary);
-	}
-
-	public AnnualDiaryDTO getById(long id) {
-		AnnualDiary entityAnnualDiary = null;
-		EntityManager em = getEntityManager();
-		try {
-			entityAnnualDiary = (AnnualDiary) em.find(AnnualDiary.class, id);
-		} finally {
-			em.close();
-		}
-		return mapper.map(entityAnnualDiary);
-	}
 
 	public AnnualDiaryDTO getAnnualDiaryByDay(long localId, String selectedDate) {
 		EntityManager em = getEntityManager();
@@ -646,9 +566,6 @@ public class AnnualDiaryManager implements IAnnualDiaryManager {
 		return annualDiary;
 	}
 
-	public void setAnnualDiaryTransformer(AnnualDiaryMapper annualDiaryMapper) {
-		this.mapper = annualDiaryMapper;
-	}
 	*/
 
  }

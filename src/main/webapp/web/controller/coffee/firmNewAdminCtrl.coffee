@@ -83,7 +83,8 @@ class FirmNewCtrl extends Monocle.Controller
 			@firResponTelf1.val firm.firResponTelf1
 			@firBilledModule[0].options.selectedIndex = firm.firBilledModule
 			@firConfig.val firm.firConfig
-			@firGwtUsers.val firm.firGwtUsers.toString()
+			if firm.firGwtUsers
+				@firGwtUsers.val firm.firGwtUsers.toString()
 			strTaskClass = firm.firClassTasks.toString()
 			a = strTaskClass.split(",")
 			for option in objSelectMul[0].options

@@ -214,21 +214,24 @@ public class FirmController /*implements AuthenticationApp*/ {
 
 		List<FirmDTO> firmLocal = firmManager.getFirmAdmin();
 		
-		List<String> firGwtUsers = new ArrayList<String>();
+		List<String> firGwtUsers = null;
 		// Filtramos solo los MANAGER y OPERATOR, 
 		// para que no aparezcan los USER en apps con control de acceso a nivel cliente
 		AppUser user = null;
 		for (FirmDTO firm : firmLocal) {
-			firGwtUsers = new ArrayList<String>();
-			for (String strUser : firm.getFirGwtUsers()){
-				user = userRegistry.findUser(strUser, firm.getId());
-				if (user.getAuthorities().contains(AppRole.MANAGER) ||
-						user.getAuthorities().contains(AppRole.OPERATOR)){
-					firGwtUsers.add(strUser);
+			if (firm.getFirGwtUsers() !=null){
+				firGwtUsers = new ArrayList<String>();
+				for (String strUser : firm.getFirGwtUsers()){
+					user = userRegistry.findUser(strUser, firm.getId());
+					if (user.getAuthorities().contains(AppRole.MANAGER) ||
+							user.getAuthorities().contains(AppRole.OPERATOR)){
+						firGwtUsers.add(strUser);
+					}
 				}
-			}
-			firm.setFirGwtUsers(firGwtUsers);
+				firm.setFirGwtUsers(firGwtUsers);
+			}	
 		}
+	
 		
 		return firmLocal;
 	}
@@ -259,51 +262,5 @@ public class FirmController /*implements AuthenticationApp*/ {
 	
 		return firmManager.getDomainServer(server);
 	}
-	/*
-	public Long findFirm(HttpServletRequest arg0, HttpServletResponse arg1){
-		
-		if (firmManager==null){
-			firmManager = new FirmManager();
-		}
-		
-		String serverName = arg0.getServerName();
-		String domain = "";
-		if (InitController.isAppUrl(serverName)){
-			String path = arg0.getRequestURI().toLowerCase();
-			String[] a = path.split("/");
-			domain = InitController.DEMO_APP;
-			if  (a.length>0){
-				domain = a[1];
-			}
-		} else {
-			domain = firmManager.getDomainServer(serverName);
-		}
-
-		return firmManager.findId(domain);
-		
-	}
-	
-
-	public boolean isRestrictedNivelUser(HttpServletRequest arg0, HttpServletResponse arg1){
-		
-		if (firmManager==null){
-			firmManager = new FirmManager();
-		}
-		
-		String serverName = arg0.getServerName();
-		String domain = "";
-		if (InitController.isAppUrl(serverName)){
-			String path = arg0.getRequestURI().toLowerCase();
-			String[] a = path.split("/");
-			domain = InitController.DEMO_APP;
-			if  (a.length>0){
-				domain = a[1];
-			}
-		} else {
-			domain = firmManager.getDomainServer(serverName);
-		}
-		
-		return firmManager.isRestrictedNivelUser(domain);
-	}*/
 	
 }

@@ -84,99 +84,6 @@ public class ProfessionalManager implements IProfessionalManager {
 	
 	
 	/*
-	public ProfessionalDTO create(ProfessionalDTO professional)
-			throws Exception {
-		EntityManager em = getEntityManager();
-		Professional entityProfessional = professionalMapper
-				.map(professional);
-		try {
-			em.getTransaction().begin();
-			em.persist(entityProfessional);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return professionalMapper.map(
-				entityProfessional);
-	}
-
-	public ProfessionalDTO remove(long id) throws Exception {
-		EntityManager em = getEntityManager();
-		Professional oldEntityProfessional = new Professional();
-		try {
-			em.getTransaction().begin();
-			Professional entityProfessional = (Professional) em.find(
-					Professional.class, id);
-			PropertyUtils.copyProperties(oldEntityProfessional,
-					entityProfessional);
-			em.remove(em.merge(entityProfessional));
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return professionalMapper.map(
-				oldEntityProfessional);
-	}
-
-	public ProfessionalDTO update(ProfessionalDTO professional)
-			throws Exception {
-		EntityManager em = getEntityManager();
-		Professional entityProfessional = professionalMapper
-				.map(professional);
-		Professional oldEntityProfessional = null;
-		try {
-			em.getTransaction().begin();
-			oldEntityProfessional = (Professional) em.find(Professional.class,
-					entityProfessional.getId());
-			new NullAwareBeanUtilsBean().copyProperties(entityProfessional,
-					oldEntityProfessional);
-			entityProfessional = em.merge(entityProfessional);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return professionalMapper.map(
-				entityProfessional);
-	}
-
-	public ProfessionalDTO getById(long id) {
-		Professional entityProfessional = null;
-		EntityManager em = getEntityManager();
-		try {
-			entityProfessional = (Professional) em.find(Professional.class, id);
-		} finally {
-			em.close();
-		}
-		return professionalMapper.map(
-				entityProfessional);
-	}
 
 	public ProfessionalDTO getByEmail(long resFirId, String email) {
 		EntityManager em = getEntityManager();
@@ -217,9 +124,6 @@ public class ProfessionalManager implements IProfessionalManager {
 		return result;
 	}
 
-	public void setProfessionalTransformer(ProfessionalMapper professionalMapper) {
-		this.professionalMapper = professionalMapper;
-	}
 */
 	
 	

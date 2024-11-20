@@ -54,7 +54,14 @@
   <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
   <script src="bower_components/base-64/base64.js"></script>
   <script src="bower_components/angular-svg-round-progressbar/build/roundProgress.js"></script>
-  <script src="bower_components/angular-moment/angular-moment.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/moment/locale/en-gb.js"></script>
+  <script src="bower_components/moment/locale/es.js"></script>
+  <script src="bower_components/moment/locale/de.js"></script>
+  <script src="bower_components/moment/locale/fr.js"></script>
+  <script src="bower_components/moment/locale/pt.js"></script>
+  <script src="bower_components/moment/locale/eu.js"></script>
+  <script src="bower_components/moment/min/moment-with-locales.js"></script>
   <script src="bower_components/angular-gantt/assets/angular-gantt.js"></script>
   <script src="bower_components/angular-gantt/assets/angular-gantt-plugins.js"></script>
   <script src="bower_components/angular-momentjs/angular-momentjs.js"></script>
@@ -123,20 +130,17 @@
 		<md-content id="contentParent" layout="column" flex class="md-padding" ui-view></md-content>
 	</div>	
 	
-	<!-- build:js({.tmp,app}) scripts/scripts.js -->
-    
-	<script src="/app.js"></script>
+	<script src="/fly.js"></script>
 	<script src="/facadeCore.js"></script>
 	<script src="/utils.js"></script>
 
 	<script src="/calendar.js"></script>
 
 	<script src="/controllers/mainCtrl.js"></script>
-	<script src="/controllers/bookCtrl.js"></script>
+	<script src="/controllers/flyCtrl.js"></script>
 	<script src="/controllers/langsCtrl.js"></script>
 	<script src="/controllers/legalCtrl.js"></script>
- 	
- 	<!-- endbuild -->
+
 	
 	<script>
 		app
@@ -157,7 +161,7 @@
 							}, 250);
 
 							$rootScope.readyBooking = function() {
-								console.log("readyBooking");
+								console.log("readyFly");
 
 								$rootScope.adminOption = false;
 								$rootScope.operatorRead = false;
@@ -183,9 +187,9 @@
 										return $rootScope.showLocals($rootScope.findLangTextElement("label.aside.locals"),$rootScope.findLangTextElement("general.select"));
 										//__FacadeCore.Router_article("booking","list-local");
 									}
-								};
+								 };
 
-								promiseListLocal.then(thenListLocal);
+								 promiseListLocal.then(thenListLocal);
 							} // fin readyBooking
 
 							$rootScope.localReady = function() {
@@ -232,25 +236,10 @@
 															
 															// Se pone aqui porque se supone que es la que más tarda, pero debería hacerse un agrupamiento de promesas y hacerlo al acabar todas
 															
-															/*newDayAux = new Date();
-															year = newDayAux.getFullYear();
-															month = newDayAux.getMonth() + 1;
-															day = newDayAux.getDate();
-															selectedDate = year	+ "-" + month + "-" + day;
-															$rootScope.selectedDate = new String(selectedDate);*/
-															if (appFirmDomain == 'adveo' ){
-																$rootScope.urlListApoByDay = protocol_url + appHost + "/calendar/booking/listApoByDayGoods";
-																$rootScope.urlNextAposDay = protocol_url + appHost + "/calendar/booking/listNextDayWithApoGoods";
-																$rootScope.urlEventNew = protocol_url + appHost + "/event/booking/newGoods";
-															} else if ($rootScope.firm.firConfig.configLocal.configLocSP) {
-																$rootScope.urlListApoByDay = protocol_url + appHost + "/calendar/booking/listApoByDaySP";
-																$rootScope.urlNextAposDay = protocol_url + appHost + "/calendar/booking/listNextDayWithApoSP";
-																$rootScope.urlEventNew = protocol_url + appHost + "/event/booking/newSP";
-															} else {
-																$rootScope.urlListApoByDay = protocol_url + appHost + "/calendar/booking/listApoByDay";
-																$rootScope.urlNextAposDay = protocol_url + appHost + "/calendar/booking/listNextDayWithApo";
-																$rootScope.urlEventNew = protocol_url + appHost + "/event/booking/new";
-															}
+															$rootScope.urlListApoByDay = protocol_url + appHost + "/calendar/booking/listApoByDay";
+															$rootScope.urlNextAposDay = protocol_url + appHost + "/calendar/booking/listNextDayWithApo";
+															$rootScope.urlEventNew = protocol_url + appHost + "/event/booking/new";
+															
 
 															var title = $rootScope.firm.firName	+ " - " + $rootScope.local.locName;
 															document.title = "BookingProf - "+ title;
@@ -289,27 +278,6 @@
 																}
 															}
 														});	
-			
-														/*if (firm.firConfig.configAut.configAutNivelUser==1){
-															url = protocol_url+appHost+"/client/booking/getBySession";
-														data = {firmId:firm.id};
-														clientAux = $$.json (url, data);
-														clientSession = new __Model.Client({
-														         enabled: true,
-														         cliId: clientAux.id,
-														         cliName: clientAux.whoName,
-														         cliSurname: clientAux.whoSurname,
-														         cliEmail: clientAux.whoEmail,
-														         cliGender: clientAux.whoGender,
-														         cliBirthday: clientAux.whoBirthday,
-														         cliTelf1: clientAux.whoTelf1,
-														         cliTelf2: clientAux.whoTelf2,
-														         cliDesc: clientAux.whoDesc
-														       });
-														__FacadeCore.Cache_remove(appName + "clientSession");
-															__FacadeCore.Cache_set(appName + "clientSession", clientSession);
-														}*/
-
 													} else {
 														//console.log ("localId invalido");
 														__FacadeCore.Storage_remove(appName + "localId");
