@@ -17,6 +17,7 @@ import com.diloso.bookhair.fly.services.dto.ItineraryDTO;
 import com.diloso.bookhair.fly.services.dto.SearchSegmentDTO;
 import com.diloso.bookhair.fly.services.dto.input.DateRangeDTO;
 import com.diloso.bookhair.fly.services.dto.input.FlightSearchDTO;
+import com.diloso.bookhair.fly.services.dto.input.FlightSearchFlexDTO;
 
 import jakarta.inject.Singleton;
 
@@ -132,7 +133,7 @@ public class MapperFly {
 		return result;
 	}
 	
-	public FlightOfferDTO map (FlightOfferSearch flightOffer, boolean simple) {
+	public FlightOfferDTO map (FlightOfferSearch flightOffer, String destinationLocationCode, boolean simple) {
 		
 		FlightOfferDTO result = new FlightOfferDTO();
 		if (!simple){
@@ -144,21 +145,26 @@ public class MapperFly {
 		}
 		result.setPrice(Float.valueOf(flightOffer.getPrice().getGrandTotal()));
 		result.setNumberOfBookableSeats(flightOffer.getNumberOfBookableSeats());
-		result.setDate(flightOffer.getItineraries()[0].getSegments()[0].getDeparture().getAt());
+		result.setDepartureDate(flightOffer.getItineraries()[0].getSegments()[0].getDeparture().getAt());
+		int idx=1;
+		while (flightOffer.getItineraries()[idx].getSegments()[0].getDeparture().getIataCode()!= destinationLocationCode) {
+			idx++;
+		}
+		result.setReturnDate(flightOffer.getItineraries()[idx].getSegments()[0].getDeparture().getAt());
 		result.setCarriersCode(Arrays.asList(flightOffer.getValidatingAirlineCodes()));
 		return result;
 	}
 	
-	public List<FlightOfferDTO> map(FlightOfferSearch[] flightOfferSearch){
+	public List<FlightOfferDTO> map(FlightOfferSearch[] flightOfferSearch, String destinationLocationCode){
 		
-		return map(flightOfferSearch, false);		
+		return map(flightOfferSearch, destinationLocationCode, false);		
 	}
 	
-	public List<FlightOfferDTO> map(FlightOfferSearch[] flightOfferSearch, boolean simple){
+	public List<FlightOfferDTO> map(FlightOfferSearch[] flightOfferSearch, String destinationLocationCode, boolean simple){
 		
 		List<FlightOfferDTO> result = new ArrayList<FlightOfferDTO>(); 
 		for (FlightOfferSearch flightOffer : flightOfferSearch) {
-			result.add(map(flightOffer,simple));
+			result.add(map(flightOffer, destinationLocationCode, simple));
 		}
 		return result;		
 	}
@@ -166,7 +172,9 @@ public class MapperFly {
 	public Params map(Params params, DateRangeDTO dateRangeDTO){
 		
 		params.and(DEPARTURE_DATE, dateRangeDTO.getStartDate());
-		params.and(RETURN_DATE, dateRangeDTO.getEndDate());
+		if (dateRangeDTO.getEndDate()!=null) {
+			params.and(RETURN_DATE, dateRangeDTO.getEndDate());
+		}	
 		
 		return params;
 	}

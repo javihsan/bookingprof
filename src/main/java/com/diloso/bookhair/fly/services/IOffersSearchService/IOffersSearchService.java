@@ -14,5 +14,7 @@ public interface IOffersSearchService {
 	public List<FlightOfferDTO> searchFlex(FlightSearchFlexDTO searchDTO) throws ResponseException;
 	
 	public List<FlightOfferDTO> searchFlexPrice(FlightSearchFlexDTO searchDTO) throws ResponseException;
+	
+	public String skyscannerUrl(FlightSearchDTO searchDTO);
 
 }

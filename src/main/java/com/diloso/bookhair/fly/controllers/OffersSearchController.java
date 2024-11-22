@@ -34,34 +34,60 @@ public class OffersSearchController {
 	
 	@RequestMapping("/search")
 	protected @ResponseBody
-	List<FlightOfferDTO> search(HttpServletRequest arg0, HttpServletResponse arg1, FlightSearchDTO searchDTO) throws Exception {
+	List<FlightOfferDTO> search (HttpServletRequest arg0, HttpServletResponse arg1, FlightSearchDTO searchDTO) throws Exception {
 
+		if (
+			     ( searchDTO.getAdults() == null || searchDTO.getAdults() < 1 )
+			   ||( searchDTO.getOriginLocationCode() == null )
+			   ||( searchDTO.getDestinationLocationCode() == null )
+			   ||( searchDTO.getDepartureDate() == null )
+			){
+				throw new Exception();
+			}
+		
 		return offersSearchService.search(searchDTO);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/search")
 	@ResponseStatus(HttpStatus.OK)
 	protected @ResponseBody
-	List<FlightOfferDTO> searchPost(HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody FlightSearchDTO searchDTO) throws Exception {
-
+	List<FlightOfferDTO> searchPost (HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody FlightSearchDTO searchDTO) throws Exception {
+		if (
+			     ( searchDTO.getAdults() == null || searchDTO.getAdults() < 1 )
+			   ||( searchDTO.getOriginLocationCode() == null )
+			   ||( searchDTO.getDestinationLocationCode() == null )
+			   ||( searchDTO.getDepartureDate() == null )
+			){
+				throw new Exception();
+			}
+		
 		return offersSearchService.search(searchDTO);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/search-flex")
 	@ResponseStatus(HttpStatus.OK)
 	protected @ResponseBody
-	List<FlightOfferDTO> searchFlex(HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody FlightSearchFlexDTO searchDTO) throws Exception {
+	List<FlightOfferDTO> searchFlex (HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody FlightSearchFlexDTO searchDTO) throws Exception {
 		Locale locale = RequestContextUtils.getLocale(arg0);
+		
+		if (
+				  ( searchDTO.getNumDays()!=null && searchDTO.getNumDays()<1 )
+				||( searchDTO.getAdults() == null || searchDTO.getAdults() < 1 )
+				||( searchDTO.getOriginLocationCode() == null )
+				||( searchDTO.getDestinationLocationCode() == null )				
+			   ){
+				throw new Exception();
+			}
 		
 		for (DateRangeDTO dateRange : searchDTO.getDateRangers()) {
 			Date startDate = Utils.getDate(dateRange.getStartDate(), locale);
 			Date endDate = Utils.getDate(dateRange.getEndDate(), locale);
 			if (
 				!( endDate.after(startDate) )
-				||( searchDTO.getNumDays()>UtilidadesData.daysDifference(startDate,endDate) )
+				||( searchDTO.getNumDays()!=null && searchDTO.getNumDays()>UtilidadesData.daysDifference(startDate,endDate) )
 			   ){
 				throw new Exception();
-			}
+			   }
 		}	
 		return offersSearchService.searchFlex(searchDTO);
 	}
@@ -69,19 +95,46 @@ public class OffersSearchController {
 	@RequestMapping(method = RequestMethod.POST, value = "/search-flex-price")
 	@ResponseStatus(HttpStatus.OK)
 	protected @ResponseBody
-	List<FlightOfferDTO> searchFlexPrice(HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody FlightSearchFlexDTO searchDTO) throws Exception {
+	List<FlightOfferDTO> searchFlexPrice (HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody FlightSearchFlexDTO searchDTO) throws Exception {
 		Locale locale = RequestContextUtils.getLocale(arg0);
+		
+		if (
+				  ( searchDTO.getNumDays()!=null && searchDTO.getNumDays()<1 )
+				||( searchDTO.getAdults() == null || searchDTO.getAdults() < 1 )
+				||( searchDTO.getOriginLocationCode() == null )
+				||( searchDTO.getDestinationLocationCode() == null )				
+			   ){
+				throw new Exception();
+			}
 		
 		for (DateRangeDTO dateRange : searchDTO.getDateRangers()) {
 			Date startDate = Utils.getDate(dateRange.getStartDate(), locale);
 			Date endDate = Utils.getDate(dateRange.getEndDate(), locale);
 			if (
 				!( endDate.after(startDate) )
-				||( searchDTO.getNumDays()>UtilidadesData.daysDifference(startDate,endDate) )
+				||( searchDTO.getNumDays()!=null && searchDTO.getNumDays()>UtilidadesData.daysDifference(startDate,endDate) )
 			   ){
 				throw new Exception();
-			}
+			   }
 		}	
 		return offersSearchService.searchFlexPrice(searchDTO);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/url-skyscanner")
+	@ResponseStatus(HttpStatus.OK)
+	protected @ResponseBody
+	String skyscanner (HttpServletRequest arg0, HttpServletResponse arg1, @RequestBody FlightSearchDTO searchDTO) throws Exception {
+		
+		if (
+			     ( searchDTO.getAdults() == null || searchDTO.getAdults() < 1 )
+			   ||( searchDTO.getOriginLocationCode() == null )
+			   ||( searchDTO.getDestinationLocationCode() == null )
+			   ||( searchDTO.getDepartureDate() == null )
+			){
+			//((HttpServletResponse) arg1).setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			throw new Exception();
+			}
+		
+		return offersSearchService.skyscannerUrl(searchDTO);
 	}
 }

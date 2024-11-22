@@ -12,6 +12,7 @@ public class FlightOfferDTO {
 	private @Getter @Setter List<ItineraryDTO> itineraries;
 	private @Getter @Setter Float price;
 	private @Getter @Setter int numberOfBookableSeats;
-	private @Getter @Setter String date;
+	private @Getter @Setter String departureDate;
+	private @Getter @Setter String returnDate;
 	private @Getter @Setter List<String> carriersCode;
 }

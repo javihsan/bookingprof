@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.amadeus.Amadeus;
 import com.amadeus.Params;
@@ -20,6 +21,9 @@ import com.diloso.bookhair.fly.services.dto.input.DateRangeDTO;
 import com.diloso.bookhair.fly.services.dto.input.FlightSearchDTO;
 import com.diloso.bookhair.fly.services.dto.input.FlightSearchFlexDTO;
 import com.diloso.bookhair.fly.services.utils.MapperFly;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class OffersSearchService implements IOffersSearchService {
@@ -39,7 +43,7 @@ public class OffersSearchService implements IOffersSearchService {
 
 		FlightOfferSearch[] flightOfferSearch = amadeus.shopping.flightOffersSearch.get(params);
 		
-	    return mapperParams.map(flightOfferSearch);
+	    return mapperParams.map(flightOfferSearch, searchDTO.getDestinationLocationCode());
 	}
 	
 	@Override
@@ -56,18 +60,28 @@ public class OffersSearchService implements IOffersSearchService {
 	
 	protected List<FlightOfferDTO> searchFlex(FlightSearchFlexDTO searchDTO, boolean simple) throws ResponseException {
 
+		// Only max search
+		int maxSearchs = 1; //31
+		
 		Amadeus amadeus = amedeusService.get();
 
-		// Solo obtenemos el mejor precio del dia
+		// Only best price of day
 		searchDTO.setMax(1);
+		
 		Params params = mapperParams.map(searchDTO);
 	
 		List<FlightOfferDTO> result = new ArrayList<FlightOfferDTO>();
 		List<DateRangeDTO> listDateRanges =  getDatesSearch(searchDTO);
+		int idx = 0;
 		for (DateRangeDTO dateRange : listDateRanges) {
-			params = mapperParams.map(params,dateRange);
-			FlightOfferSearch[] flightOfferSearch = amadeus.shopping.flightOffersSearch.get(params);
-			result.addAll(mapperParams.map(flightOfferSearch, simple));
+			if (idx < maxSearchs) {
+				params = mapperParams.map(params,dateRange);
+				FlightOfferSearch[] flightOfferSearch = amadeus.shopping.flightOffersSearch.get(params);
+				result.addAll(mapperParams.map(flightOfferSearch, searchDTO.getDestinationLocationCode(), simple));
+				idx++;
+			} else {
+				break;
+			}
 		}
 	    return result;
 	}
@@ -77,16 +91,16 @@ public class OffersSearchService implements IOffersSearchService {
 		List<DateRangeDTO> result = new ArrayList<DateRangeDTO>();
 		
 		for (DateRangeDTO dateRange : searchDTO.getDateRangers()) {
-			result.addAll(getDatesSearch(dateRange, searchDTO.getNumDays(), searchDTO.getNumDays()));  
+			result.addAll(getDatesSearch(dateRange, searchDTO.getNumDays(), searchDTO.getStartWeekDays()));  
 		}
 				
 		return result;
 	}
 
-	protected List<DateRangeDTO> getDatesSearch(DateRangeDTO dateRange, Integer numDays, Integer numNonWorkingDays) {
+	protected List<DateRangeDTO> getDatesSearch(DateRangeDTO dateRange, Integer numDays, List<Integer> startWeekDays) {
 		
 		List<DateRangeDTO> result = new ArrayList<DateRangeDTO>();
-		
+				
 		// Start date, to 00:00:00
 		String startDate = dateRange.getStartDate();
 		String[] dates = startDate.split(CalendarController.CHAR_SEP_DATE);
@@ -119,33 +133,104 @@ public class OffersSearchService implements IOffersSearchService {
 		calendarEnd.set(Calendar.MONTH, new Integer(month) - 1);
 		calendarEnd.set(Calendar.DAY_OF_MONTH, new Integer(day));
 		
-		Calendar calendarWithNumDays = new GregorianCalendar();
-		calendarWithNumDays.setTime(calendarStart.getTime()); 
-		calendarWithNumDays.add(Calendar.DAY_OF_YEAR, numDays);
-
-		while (!calendarWithNumDays.after(calendarEnd)) {
-			result.add(getDateRange(calendarStart, numDays, numNonWorkingDays));
-			// Go to next day
-			calendarStart.add(Calendar.DAY_OF_YEAR, 1);
-			calendarWithNumDays.add(Calendar.DAY_OF_YEAR, 1); 
-		} 
+		// Only departure date, not return
+		if (numDays == null) {
+		
+			DateRangeDTO rangeNotReturn = null;
+		
+			while (!calendarStart.after(calendarEnd)) {
+				if (validateRangeDate(calendarStart, startWeekDays)) {
+					rangeNotReturn = new DateRangeDTO();
+					rangeNotReturn.setStartDate(Utils.getStrCalendar(calendarStart));
+					result.add(rangeNotReturn);
+				}
+				// Go to next day
+				calendarStart.add(Calendar.DAY_OF_YEAR, 1);
+			}
 			
+		} else {
+		
+			Calendar calendarWithNumDays = new GregorianCalendar();
+			calendarWithNumDays.setTime(calendarStart.getTime()); 
+			calendarWithNumDays.add(Calendar.DAY_OF_YEAR, numDays-1);
+			
+			while (!calendarWithNumDays.after(calendarEnd)) {
+				if (validateRangeDate(calendarStart, startWeekDays)) {
+					result.add(getDateRange(calendarStart, calendarWithNumDays));
+				}
+				// Go to next day
+				calendarStart.add(Calendar.DAY_OF_YEAR, 1);
+				calendarWithNumDays.add(Calendar.DAY_OF_YEAR, 1);
+			} 
+		}	
+		
 		return result;
 	}
 	
-	protected DateRangeDTO getDateRange(Calendar calendarGreg, Integer numDays, Integer numNonWorkingDays) {
+	// Validates that the dateStart is included in startWeekDays
+	protected boolean validateRangeDate(Calendar calendarStart, List<Integer> startWeekDays) {
+		if (startWeekDays.contains(calendarStart.get(Calendar.DAY_OF_WEEK))) {
+			return true;
+		};
+		return false;
+	}
+	
+	protected DateRangeDTO getDateRange(Calendar calendarGreg, Calendar calendarWithNumDays) {
 		
 		DateRangeDTO result = new DateRangeDTO();
+		
 		String startDate = Utils.getStrCalendar(calendarGreg);
 		result.setStartDate(startDate);
 						
-		// Vamos numDays días adelante
-		Calendar calendarWithNumDays = new GregorianCalendar();
-		calendarWithNumDays.setTime(calendarGreg.getTime()); 
-		calendarWithNumDays.add(Calendar.DAY_OF_YEAR, numDays);
 		String endDate = Utils.getStrCalendar(calendarWithNumDays);
 		result.setEndDate(endDate);
 		
 		return result;
 	}
+	
+	@Override
+	public String skyscannerUrl(FlightSearchDTO searchDTO) {
+
+		StringBuffer buffer = new StringBuffer("https://www.skyscanner.es/transporte/vuelos");
+		buffer.append("/" + searchDTO.getOriginLocationCode().toLowerCase());
+		buffer.append("/" + searchDTO.getDestinationLocationCode().toLowerCase());
+		buffer.append("/" + searchDTO.getDepartureDate().replaceAll("-", ""));
+		if (searchDTO.getReturnDate() != null) {
+			buffer.append("/" + searchDTO.getReturnDate().replaceAll("-", ""));
+		}
+		buffer.append("/?");
+		buffer.append("adultsv2=" + searchDTO.getAdults());
+		StringBuffer children = null;
+		if (searchDTO.getChildren() != null && searchDTO.getChildren() != 0) {
+			int count = searchDTO.getChildren();
+			if (children == null) {
+				children = new StringBuffer("&childrenv2=9");
+				count--;
+			}
+			for (int idx = 0; idx < count; idx++) {
+				children.append("%7C9");
+			}
+		}
+		if (searchDTO.getInfants() != null && searchDTO.getInfants() != 0) {
+			int count = searchDTO.getInfants();
+			if (children == null) {
+				children = new StringBuffer("&childrenv2=1");
+				count--;
+			}
+			for (int idx = 0; idx < count; idx++) {
+				children.append("%7C1");
+			}
+		}
+		if (children != null) {
+			buffer.append(children);
+		}
+		String cabinClass = searchDTO.getTravelClass() != null ? searchDTO.getTravelClass().toLowerCase() : "economy";
+		buffer.append("&cabinclass=" + cabinClass);
+		buffer.append("&departure-times=120-1439");
+		String direct = searchDTO.getNonStop() != null ? searchDTO.getNonStop().toString() : "false";
+		buffer.append("&preferdirects=" + direct);
+
+		return buffer.toString();
+	}
+    
 }
