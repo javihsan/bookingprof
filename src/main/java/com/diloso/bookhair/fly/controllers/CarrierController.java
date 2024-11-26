@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.diloso.bookhair.fly.services.IOffersSearchService.IOffersSearchService;
+import com.diloso.bookhair.fly.services.IOffersSearchService;
 import com.diloso.bookhair.fly.services.dto.FlightOfferDTO;
 import com.diloso.bookhair.fly.services.dto.input.FlightSearchDTO;
 

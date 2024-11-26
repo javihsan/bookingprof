@@ -15,4 +15,5 @@ public class FlightOfferDTO {
 	private @Getter @Setter String departureDate;
 	private @Getter @Setter String returnDate;
 	private @Getter @Setter List<String> carriersCode;
+	private @Getter @Setter String urlSkyscanner;
 }

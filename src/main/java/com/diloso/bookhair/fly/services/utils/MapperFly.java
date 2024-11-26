@@ -7,17 +7,19 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.amadeus.Params;
+import com.amadeus.resources.Destination;
 import com.amadeus.resources.FlightOfferSearch;
 import com.amadeus.resources.FlightOfferSearch.AirportInfo;
 import com.amadeus.resources.FlightOfferSearch.Itinerary;
 import com.amadeus.resources.FlightOfferSearch.SearchSegment;
+import com.amadeus.resources.Location;
 import com.diloso.bookhair.fly.services.dto.AirportInfoDTO;
 import com.diloso.bookhair.fly.services.dto.FlightOfferDTO;
 import com.diloso.bookhair.fly.services.dto.ItineraryDTO;
+import com.diloso.bookhair.fly.services.dto.LocationDTO;
 import com.diloso.bookhair.fly.services.dto.SearchSegmentDTO;
 import com.diloso.bookhair.fly.services.dto.input.DateRangeDTO;
 import com.diloso.bookhair.fly.services.dto.input.FlightSearchDTO;
-import com.diloso.bookhair.fly.services.dto.input.FlightSearchFlexDTO;
 
 import jakarta.inject.Singleton;
 
@@ -133,7 +135,7 @@ public class MapperFly {
 		return result;
 	}
 	
-	public FlightOfferDTO map (FlightOfferSearch flightOffer, String destinationLocationCode, boolean simple) {
+	public FlightOfferDTO map (FlightOfferSearch flightOffer, boolean simple) {
 		
 		FlightOfferDTO result = new FlightOfferDTO();
 		if (!simple){
@@ -146,25 +148,23 @@ public class MapperFly {
 		result.setPrice(Float.valueOf(flightOffer.getPrice().getGrandTotal()));
 		result.setNumberOfBookableSeats(flightOffer.getNumberOfBookableSeats());
 		result.setDepartureDate(flightOffer.getItineraries()[0].getSegments()[0].getDeparture().getAt());
-		int idx=1;
-		while (flightOffer.getItineraries()[idx].getSegments()[0].getDeparture().getIataCode()!= destinationLocationCode) {
-			idx++;
-		}
-		result.setReturnDate(flightOffer.getItineraries()[idx].getSegments()[0].getDeparture().getAt());
+		if (flightOffer.getItineraries().length>1){
+			result.setReturnDate(flightOffer.getItineraries()[1].getSegments()[0].getDeparture().getAt());
+		}	
 		result.setCarriersCode(Arrays.asList(flightOffer.getValidatingAirlineCodes()));
 		return result;
 	}
 	
-	public List<FlightOfferDTO> map(FlightOfferSearch[] flightOfferSearch, String destinationLocationCode){
+	public List<FlightOfferDTO> map(FlightOfferSearch[] flightOfferSearch){
 		
-		return map(flightOfferSearch, destinationLocationCode, false);		
+		return map(flightOfferSearch, false);		
 	}
 	
-	public List<FlightOfferDTO> map(FlightOfferSearch[] flightOfferSearch, String destinationLocationCode, boolean simple){
+	public List<FlightOfferDTO> map(FlightOfferSearch[] flightOfferSearch, boolean simple){
 		
 		List<FlightOfferDTO> result = new ArrayList<FlightOfferDTO>(); 
 		for (FlightOfferSearch flightOffer : flightOfferSearch) {
-			result.add(map(flightOffer, destinationLocationCode, simple));
+			result.add(map(flightOffer, simple));
 		}
 		return result;		
 	}
@@ -179,4 +179,23 @@ public class MapperFly {
 		return params;
 	}
 	
+	public LocationDTO map (Location location) {
+		LocationDTO result = new LocationDTO();
+		
+		result.setType(location.getSubType());
+		result.setName(location.getName());
+		result.setIataCode(location.getIataCode());
+		result.setCityCode(location.getAddress().getCityCode());
+		return result;
+	}
+	
+	public LocationDTO map (Destination destination) {
+		LocationDTO result = new LocationDTO();
+		
+		result.setType(destination.getSubtype());
+		result.setName(destination.getName());
+		result.setIataCode(destination.getIataCode());
+		//result.setCityCode(destination.getAddress().getCityCode());
+		return result;
+	}
 }

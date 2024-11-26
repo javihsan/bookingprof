@@ -39,6 +39,50 @@ public class FlightSearchDTO {
 	protected @Getter @Setter String departureDate;
 	
 	@Schema(
+		    description = "\r\n"
+		    		+ "(query)\r\n"
+		    		+ "the min hour on which the traveler will depart from the origin to go to the destination"
+		    		+ "\r\n"
+		    		+ "Example : 12", 
+		    name = "minDepartureHour", 
+		    type = "string", 
+		    example = "12")
+	protected @Getter @Setter String minDepartureHour;
+	
+	@Schema(
+		    description = "\r\n"
+		    		+ "(query)\r\n"
+		    		+ "the maximum hour on which the traveler will depart from the origin to go to the destination"
+		    		+ "\r\n"
+		    		+ "Example : 12", 
+		    name = "maxDepartureHour", 
+		    type = "string", 
+		    example = "12")
+	protected @Getter @Setter String maxDepartureHour;
+	
+	@Schema(
+		    description = "\r\n"
+		    		+ "(query)\r\n"
+		    		+ "the min hour on which the traveler will depart from the destination to go to the origin"
+		    		+ "\r\n"
+		    		+ "Example : 12", 
+		    name = "minReturnHour", 
+		    type = "string", 
+		    example = "12")
+	protected @Getter @Setter String minReturnHour;
+	
+	@Schema(
+		    description = "\r\n"
+		    		+ "(query)\r\n"
+		    		+ "the maximum hour on which the traveler will depart from the destination to go to the origin"
+		    		+ "\r\n"
+		    		+ "Example : 12", 
+		    name = "maxReturneHour", 
+		    type = "string", 
+		    example = "12")
+	protected @Getter @Setter String maxReturnHour;
+	
+	@Schema(
 		    description = "the date on which the traveler will depart from the destination to return to the origin. If this parameter is not specified, only one-way itineraries are found. If this parameter is specified, only round-trip itineraries are found. Dates are specified in the ISO 8601 YYYY-MM-DD format, e.g. 2018-02-28", 
 		    name = "returnDate", 
 		    type = "string", 

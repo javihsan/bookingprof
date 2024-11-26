@@ -10,14 +10,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.diloso.bookhair.app.datastore.UtilidadesData;
 import com.diloso.bookhair.app.negocio.utils.Utils;
-import com.diloso.bookhair.fly.services.IOffersSearchService.IOffersSearchService;
+import com.diloso.bookhair.fly.services.IOffersSearchService;
 import com.diloso.bookhair.fly.services.dto.FlightOfferDTO;
+import com.diloso.bookhair.fly.services.dto.LocationDTO;
 import com.diloso.bookhair.fly.services.dto.input.DateRangeDTO;
 import com.diloso.bookhair.fly.services.dto.input.FlightSearchDTO;
 import com.diloso.bookhair.fly.services.dto.input.FlightSearchFlexDTO;
@@ -31,6 +33,17 @@ public class OffersSearchController {
 	
 	@Autowired
 	protected IOffersSearchService offersSearchService;
+	
+	@RequestMapping("/locations")
+	protected @ResponseBody
+	List<LocationDTO> locations (HttpServletRequest arg0, HttpServletResponse arg1, @RequestParam(name="keyword") String keyword) throws Exception {
+
+		if (keyword == null) {
+			throw new Exception();
+		}
+		
+		return offersSearchService.locations(keyword);
+	}
 	
 	@RequestMapping("/search")
 	protected @ResponseBody

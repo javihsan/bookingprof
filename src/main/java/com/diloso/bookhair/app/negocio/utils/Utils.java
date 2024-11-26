@@ -12,6 +12,8 @@ import com.diloso.bookhair.app.controllers.CalendarController;
 
 public class Utils {
 	
+	public static String formatDateFly = "yyyy-MM-dd'T'HH:mm:ss";
+	public static String formatSeparatorDateFly = "T";
 	public static String formatDateICS = "yyyyMMdd'T'HHmmss";
 	public static String formatDateText = "EEEE, dd MMMM yyyy HH:mm";
 	public static String formatDateTextNoHour = "EEEE, dd MMMM yyyy";
@@ -59,12 +61,27 @@ public class Utils {
 		return result;
 	}
 	
+	public static Date getDate(String date, String format) {
+		Date result = null;
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat(format);
+			result = formatter.parse(date);
+		} catch (Exception e) {
+
+		}
+		return result;
+	}
+	
 	public static Date getDate(String date, Locale locale) {
 		return getDate(date, formatDateJava, locale);
 	}
 	
 	public static Date getDateYearLast(String fecha, Locale locale) {
 		return getDate(fecha, formatoFechaYearLast, locale);
+	}
+	
+	public static Date getDateFly(String fecha) {
+		return getDate(fecha, formatDateFly);
 	}
 	
 	public static String getStrCalendar(Calendar calendarGreg) {
