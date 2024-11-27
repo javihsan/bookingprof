@@ -98,96 +98,7 @@ public class InvoiceManager implements IInvoiceManager {
 	
 	
 	/*
-	public InvoiceDTO create(InvoiceDTO invoice) throws Exception {
-		EntityManager em = getEntityManager();
-		Invoice entityInvoice = invoiceMapper
-				.map(invoice);
-		try {
-			em.getTransaction().begin();
-			em.persist(entityInvoice);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return invoiceMapper.map(
-				entityInvoice);
-	}
-
-	public InvoiceDTO remove(long id) throws Exception {
-		EntityManager em = getEntityManager();
-		Invoice oldEntityInvoice = new Invoice();
-		try {
-			em.getTransaction().begin();
-			Invoice entityInvoice = (Invoice) em
-					.find(Invoice.class, id);
-			PropertyUtils.copyProperties(oldEntityInvoice, entityInvoice);
-			em.remove(em.merge(entityInvoice));
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return invoiceMapper.map(
-				oldEntityInvoice);
-	}
-
-	public InvoiceDTO update(InvoiceDTO invoice) throws Exception {
-		EntityManager em = getEntityManager();
-		Invoice entityInvoice = invoiceMapper
-				.map(invoice);
-		Invoice oldEntityInvoice = null;
-		try {
-			em.getTransaction().begin();
-			oldEntityInvoice = (Invoice) em.find(Invoice.class,
-					entityInvoice.getId());
-			new NullAwareBeanUtilsBean().copyProperties(entityInvoice,
-					oldEntityInvoice);
-			entityInvoice = em.merge(entityInvoice);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return invoiceMapper.map(
-				entityInvoice);
-	}
-
-	public InvoiceDTO getById(long id) {
-		Entity entityInvoice = null;
-		try {
-			Key k = KeyFactory.createKey(Invoice.class.getSimpleName(), id);
-			entityInvoice = DatastoreServiceFactory.getDatastoreService()
-					.get(k);
-		} catch (Exception ex) {
-		}
-		return invoiceMapper.map(
-				entityInvoice);
-	}
+	
 
 	public List<InvoiceDTO> getInvoiceByWeek(long invLocalId, String selectedDate) {
 
@@ -341,17 +252,7 @@ public class InvoiceManager implements IInvoiceManager {
 
 	}
 
-	public void setMultiTextDAO(multiTextManager multiTextManager) {
-		this.multiTextManager = multiTextManager;
-	}
 
-	public void setTaskDAO(taskManager taskManager) {
-		this.taskManager = taskManager;
-	}
-
-	public void setInvoiceTransformer(InvoiceMapper invoiceMapper) {
-		this.invoiceMapper = invoiceMapper;
-	}
 	*/
 	
 	

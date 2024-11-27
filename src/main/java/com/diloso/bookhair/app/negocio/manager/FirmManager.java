@@ -102,11 +102,10 @@ public class FirmManager implements IFirmManager {
 		filters.put(FIR_SERVER, server);
 		filters.put(ENABLED, 1);
 		List<Firm> resultQuery = firmDAO.listFilter(filters);
-		String result = null;
 		if (resultQuery.size() == 1) {
-			result = resultQuery.get(0).getFirDomain();
+			return resultQuery.get(0).getFirDomain();
 		}
-		return result;
+		return null;
 	}
 
 	@Override
@@ -117,8 +116,8 @@ public class FirmManager implements IFirmManager {
 		List<String> orders = new ArrayList<String>();
 		orders.add(ORDER_KEY_DESC);
 		List<Firm> resultQuery = firmDAO.listOrderFilter(filters, orders);
-		for (Firm entityFirm : resultQuery) {
-			result.add(mapper.map(entityFirm));
+		for (Firm entity : resultQuery) {
+			result.add(mapper.map(entity));
 		}
 		return result;
 	}
@@ -129,8 +128,8 @@ public class FirmManager implements IFirmManager {
 		List<String> orders = new ArrayList<String>();
 		orders.add(ORDER_KEY_DESC);
 		List<Firm> resultQuery = firmDAO.listOrder(orders);
-		for (Firm entityFirm : resultQuery) {
-			result.add(mapper.map(entityFirm));
+		for (Firm entity : resultQuery) {
+			result.add(mapper.map(entity));
 		}
 		return result;
 	}

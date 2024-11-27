@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="organization" content="Diloso">
-<meta name="author" content="Diloso">
-<meta name="origen" content="Diloso">
+<meta name="organization" content="Bookingprof">
+<meta name="author" content="Bookingprof">
+<meta name="origen" content="Bookingprof">
 <meta name="locality" content="Madrid, España">
 <meta name="lang" content="es">
 <meta name="description" content="BookingProf, booking for professionals">

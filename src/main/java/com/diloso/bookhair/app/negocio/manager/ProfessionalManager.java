@@ -1,6 +1,9 @@
 package com.diloso.bookhair.app.negocio.manager;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -16,6 +19,11 @@ import com.diloso.bookhair.app.persist.mapper.ProfessionalMapper;
 @Scope(value = "singleton")
 public class ProfessionalManager implements IProfessionalManager {
 
+	public static final String ENABLED = "enabled";
+	public static final String RES_FIR_ID = "resFirId";
+	public static final String WHO_EMAIL = "whoEmail";
+	public static final String ORDER_KEY_DESC = "-__key__";
+	
 	@Autowired
 	private ProfessionalDAO professionalDAO;
 	
@@ -71,60 +79,30 @@ public class ProfessionalManager implements IProfessionalManager {
 
 	@Override
 	public ProfessionalDTO getByEmail(long resFirId, String email) {
-		// TODO Auto-generated method stub
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(RES_FIR_ID, resFirId);
+		filters.put(WHO_EMAIL, email);
+		filters.put(ENABLED, 1);
+		List<Professional> resultQuery = professionalDAO.listFilter(filters);
+		if (resultQuery.size() == 1) {
+			return mapper.map(resultQuery.get(0));
+		}
 		return null;
 	}
 
 	@Override
 	public List<ProfessionalDTO> getProfessional(long resFirId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-	
-	/*
-
-	public ProfessionalDTO getByEmail(long resFirId, String email) {
-		EntityManager em = getEntityManager();
-		List<Professional> resultQuery = null;
-		ProfessionalDTO professional = null;
-		try {
-			Query query = em.createNamedQuery("getProfessionalEmail");
-			query.setParameter("resFirId", resFirId);
-			query.setParameter("whoEmail", email);
-			resultQuery = (List<Professional>) query.getResultList();
-			if (resultQuery.size() == 1) {
-				professional = professionalMapper
-						.map(resultQuery.get(0));
-			}
-		} finally {
-			em.close();
-		}
-		return professional;
-	}
-
-	public List<ProfessionalDTO> getProfessional(long resFirId) {
-		EntityManager em = getEntityManager();
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(RES_FIR_ID, resFirId);
+		filters.put(ENABLED, 1);
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_KEY_DESC);
+		List<Professional> resultQuery = professionalDAO.listOrderFilter(filters, orders);
 		List<ProfessionalDTO> result = new ArrayList<ProfessionalDTO>();
-		List<Professional> resultQuery = null;
-		ProfessionalDTO professional = null;
-		try {
-			Query query = em.createNamedQuery("getProfessional");
-			query.setParameter("resFirId", resFirId);
-			resultQuery = (List<Professional>) query.getResultList();
-			for (Professional entityProfessional : resultQuery) {
-				professional = professionalMapper
-						.map(entityProfessional);
-				result.add(professional);
-			}
-		} finally {
-			em.close();
+		for (Professional entity : resultQuery) {
+			result.add(mapper.map(entity));
 		}
 		return result;
 	}
 
-*/
-	
-	
 }

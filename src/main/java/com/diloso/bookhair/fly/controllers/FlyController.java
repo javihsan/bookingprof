@@ -15,7 +15,7 @@ public class FlyController {
 	public ModelAndView init(HttpServletRequest arg0,
 			HttpServletResponse arg1) throws Exception {
 		
-		ModelAndView mav = new ModelAndView("fly");
+		ModelAndView mav = new ModelAndView("/fly");
 		
 		return mav;
 	}

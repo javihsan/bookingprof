@@ -94,24 +94,25 @@ app
 						    	return icoArray[n];
 						    };
 							
-							$scope.goToBookingHome = function() {
-								//console.log("goToBookingHome");
-								$state.go('booking.home');
+							$scope.goToSearchHome = function() {
+								console.log("goToSearchHome");
+								$state.go('search.home');
 							};
 							
 							
-							// Al iniciar la pantalla de Booking
+							// Al iniciar la pantalla de Search
 							$scope.initBook = function(reset) {
-								//console.log("initBookingIntento",$rootScope.sectionTit);
+								//console.log("initSearchIntento",$rootScope.sectionTit);
 								if ($rootScope.firm) {
 									//console.log("initBook",reset);
 									
+									$scope.previusPath = "/search";
 									$rootScope.isViewLoading = true;
 									$rootScope.existsMenu = true;
 
 								 	var tabsBook = [
-							   	          { title: $rootScope.findLangTextElement("tab.tabEvent.title"), disabled: false},
-							   	          { title: $rootScope.findLangTextElement("tab.tabHour.title"), disabled: true},
+							   	          { title: $rootScope.findLangTextElement("tab.tabSearchOffers.title"), disabled: false},
+							   	          { title: $rootScope.findLangTextElement("tab.tabListOffers.title"), disabled: true},
 							   	          { title: $rootScope.findLangTextElement("tab.tabClient.title"), disabled: true},
 							   	          { title: $rootScope.findLangTextElement("tab.tabEnd.title"), disabled: true}
 						   	            ];
@@ -119,14 +120,6 @@ app
 								 	$scope.tabsBook = tabsBook;
 								 	$scope.selectedTabIndex = 0;
 
-//							   	$scope.addTab = function (title, view) {
-//							        view = view || title + " Content View";
-//							        tabs.push({ title: title, content: view, disabled: false});
-//							      };
-//							   $scope.removeTab = function (tab) {
-//							        var index = tabs.indexOf(tab);
-//							        tabs.splice(index, 1);
-//							      };
 									
 									if (reset){
 										
@@ -140,8 +133,9 @@ app
 										$rootScope.selectedDate = undefined;
 										$rootScope.selectedTasksCount = undefined;
 										$scope.showSelectedDate = true;
-										$scope.personscope = undefined;
 										
+										$scope.searchInputScope = undefined;
+																				
 										$scope.appo = {};
 										$scope.appo.cols = 1;	
 										
@@ -153,14 +147,6 @@ app
 									
 									var a, newDayAux;
 				
-									if ($rootScope.firm.firBilledModule === 0) {
-										// this.footerInvoice.hide();
-									}
-
-									if ($rootScope.operatorRead) {
-										// this.footerBook.hide();
-									}
-
 									if($rootScope.selectedDate){
 										a = $rootScope.selectedDate.split('-');
 										newDayAux = new Date(a[0], a[1] - 1, a[2]);
@@ -189,7 +175,7 @@ app
 										date : newDayAux,
 										openDays : openDaysAux
 									});
-								return $scope.initSelectTask();
+								return $scope.initSelectLocation();
 							};
 
 							$scope.onToday = function() {
@@ -216,126 +202,33 @@ app
 								}
 							};
 							
-							// Al iniciar la pantalla de SelectTask
-							$scope.initSelectTask = function() {
-								//console.log("initSelectTask", $scope.personscope);
+							// Al iniciar la pantalla de Search
+							$scope.initSelectLocation = function() {
+								console.log("initSelectLocation", $scope.searchInputScope);
 								
-								if (!$scope.personscope){
-									$scope.personscope = {};
-									$scope.personscope.persons = [];
-									for ( var i = 1; i <= $rootScope.local.locNumPersonsApo; i++) {
-										var optObj =  { id: i, name: i.toString() };
-										$scope.personscope.persons.push(optObj);
-									}
-									$scope.personscope.numPersons = 1;
-									$scope.personscope.selectedTasksPersons = [];
-									$scope.personscope.selectedTasksPersonsStr = [];
+								if (!$scope.searchInputScope){
+									$scope.searchInputScope = {};
+									var optObj =  { id: 1, name: "1" };
+									$scope.searchInputScope.originLocation = optObj;
 									
-									$scope.selCalendar = {};
-									$scope.selCalendar.calendars = [];
-									$scope.selCalendar.selectedCalendar = [];
+									$scope.searchInputScope.selectedOriginLocation = {};
+									$scope.searchInputScope.selectedOriginLocationStr = "";
+									
 								}
 								
-								return $scope.changeNumPersons();
+								return $scope.showLocations();
 
 							};
 
-							$scope.changeNumPersons = function() {
-								//console.log("changeNumPersons");
+							$scope.showLocations = function() {
+								console.log("showLocations");
+								var selectedLocation = $scope.searchInputScope.selectedOriginLocation;
 
-								var defaultTask, selectedTasksPer, taskSelPer, h, i, ind;
-
-								defaultTask = __Utils.findByProp($rootScope.combiTasks, "id", $rootScope.local.locTaskDefaultId);
-								taskSelPer = {
-									id : defaultTask.id,
-									tasName : defaultTask.lotName
-								};
-								if (appFirmDomain === 'adveo') {
-									taskSelPer.numLines = 1;
-									taskSelPer.numPallets = 1;
-								}
-								ind = 0;
-								for (h = 0; h < $scope.personscope.numPersons; h++) {
-									selectedTasksPer = $scope.personscope.selectedTasksPersons[h];
-									if (!selectedTasksPer) {
-										if ($rootScope.selectedTasksCount
-												&& $rootScope.selectedTasksCount[h]) {
-											selectedTasksPer = new Array();
-											for (i = 0; i <= $rootScope.selectedTasksCount[h]; i++) {
-												selectedTasksPer[i] = $rootScope.selectedTasks[ind];
-												i++;
-												ind++;
-											}
-										} else {
-											selectedTasksPer = new Array();
-											selectedTasksPer[0] = taskSelPer;
-										}
-										$scope.personscope.selectedTasksPersons[h] = selectedTasksPer;
-									}	
-								}
-
-								if (appFirmDomain == 'adveo') {
-									$scope.isAdveo = true;
-									//return this.showTasksGoods();
-								} else {
-									$scope.isAdveo = false;
-									//return this.showTasks();
-								}
-								return $scope.showTasks();
-							};
-
-							$scope.showTasks = function() {
-								//console.log("showTasks");
-								var h, i, selectedTasksPer, strTask, tasksSelect;
-								for (h = 0; h < $scope.personscope.numPersons; h++) {
-									selectedTasksPer = $scope.personscope.selectedTasksPersons[h];
-									strTask = "";
-									for (i = 0; i < selectedTasksPer.length; i++) {
-										if (i > 0) {
-											strTask += " , ";
-										}
-										strTask += selectedTasksPer[i].tasName;
-									}
-									$scope.personscope.selectedTasksPersonsStr[h] = strTask; 
-								}
-								if ($rootScope.local.locSelCalendar == 1) {
-									$scope.fillSelCalendar();
-								}
+								$scope.searchInputScope.selectedOriginLocationStr = selectedLocation.name;
+								
 								return $rootScope.isViewLoading = false;
 							};
-							
-							$scope.fillSelCalendar = function() {
-								//console.log("fillSelCalendar");
-								var data, h, j, i, selectTaskParam, selectedTasksPer, url;
-								j = 0;
-								selectTaskParam = new Array()
-								for (h = 0; h < $scope.personscope.numPersons; h++) {
-									selectedTasksPer = $scope.personscope.selectedTasksPersons[h];
-									for (i = 0; i < selectedTasksPer.length; i++) {
-										if (selectTaskParam.indexOf(selectedTasksPer[i].id) == -1) {
-											selectTaskParam[j] = selectedTasksPer[i].id;
-											j++;
-										}
-									}
-								}
-								url = protocol_url + appHost + "/calendar/listCandidate";
-								data = {
-									localId : $rootScope.local.id,
-									selectedTasks : selectTaskParam
-								};
-								return httpService
-										.GET(url, data)
-										.then(
-												function(response) {
-													$scope.selCalendar.calendars = __Utils.sortByPropChar(response.data, "calName", true);
-													$scope.selCalendar.selectedCalendar = [];
-													for (i = 0; i < $scope.selCalendar.calendars.length; i++) {
-														calAux = {id:-1};
-														$scope.selCalendar.selectedCalendar[0] = calAux;
-													}
-												});
-							};
-							
+														
 							$scope.saveTaskSelect = function() {
 								//console.log("saveTaskSelect");
 								
@@ -363,48 +256,33 @@ app
 								$scope.initDayAppos();
 							};
 							
-							/* SelectTaskPerson  ********************************************/
+							/* SelectOriginLocation  ********************************************/
 							
-							// Ir a la pantalla de SelectTaskPerson
-							$scope.goToSelectTaskPerson = function(numPerson) {
-								//console.log("goToSelectTaskPerson", numPerson);
-								$scope.personscope.selectedTasksNumPerson = numPerson;
-								var selectedTasksPer = $scope.personscope.selectedTasksPersons[$scope.personscope.selectedTasksNumPerson-1];
-								$scope.personscope.cabText = $rootScope.findLangTextElement("label.template.job");
-							    if ($rootScope.local.locNumPersonsApo > 1) {
-							    	$scope.personscope.cabText += " " + $rootScope.findLangTextElement("label.template.jobForPerson") + " " + $scope.personscope.selectedTasksNumPerson;
-							    }
-								$scope.showTaskPerson($scope.personscope.cabText, $rootScope.findLangTextElement("general.select"), selectedTasksPer);
+							// Ir a la pantalla de SelectLocation
+							$scope.goToSelectOriginLocation = function() {
+								console.log("goToSelectOriginLocation");
+								$scope.showOriginLocation($rootScope.findLangTextElement("label.template.job"), $rootScope.findLangTextElement("general.select"), $scope.originLocation);
 							}
 							
-							$scope.showTaskPerson = function(titleDialog, titleContent, selectedTasksPer) {
-								//console.log ("showTaskPerson: ",titleDialog, titleContent, selectedTasksPer);
+							$scope.showOriginLocation = function(titleDialog, titleContent, selectedLocation) {
+								console.log ("showOriginLocation: ",titleDialog, titleContent, selectedLocation);
 								
 						    	$mdDialog.show({
-							      controller: DialogController,
+							      controller: DialogFlyController,
 							      templateUrl: 'views/modalDialogTasks.html',
 							      parent: angular.element(document.body),
 							      clickOutsideToClose:true,
-						          locals: { titleDialog: titleDialog, titleContent: titleContent, selectedTasksPer: selectedTasksPer }
+						          locals: { titleDialog: titleDialog, titleContent: titleContent, selectedLocation: selectedLocation }
 							    })
 							    .then(function(obj) {
-							    	if ($scope.saveTaskPerson(obj)){
+							    	if ($scope.saveOriginLocation(obj)){
 							    		$scope.disabledNextTabs();	
 							    	} 
 							    });
 							};
 							
-							var DialogController = function ($scope, $mdDialog, titleDialog, titleContent, selectedTasksPer) {
-								
-								$scope.tasMultiple = true;
-								if ($rootScope.local.locMulServices == 0) {
-									$scope.tasMultiple = false;
-								}
-								
-								$scope.selectedTasksPersonsChecks = [];
-								for (i = 0; i < selectedTasksPer.length; i++) {
-									$scope.selectedTasksPersonsChecks.push(selectedTasksPer[i].id);
-								}
+							
+							var DialogFlyController = function ($scope, $mdDialog, titleDialog, titleContent, selectedLocation) {
 								
 								$scope.acceptText = $rootScope.findLangTextElement("form.accept");
 								$scope.cancelText = $rootScope.findLangTextElement("form.cancel");
@@ -412,14 +290,15 @@ app
 
 								$scope.titleDialog = titleDialog;
 							    $scope.titleContent = titleContent;
-							    $scope.selectedTasksPer = selectedTasksPer;
+							    $scope.selectedLocation = selectedLocation;
 
-							    
-							    $scope.selectObj = function(obj) {
-							    	$scope.selectTaskPerson(obj);
+								$scope.selectedLocationChecks = [];
+
+ 								$scope.selectObj = function(obj) {
+							    	$scope.selectElement(obj);
 								}
-							
-								$scope.hide = function() {
+
+							   	$scope.hide = function() {
 									$mdDialog.hide();
 								};
 								  
@@ -428,42 +307,25 @@ app
 								};
 								  
 								$scope.answer = function() {
-								    $mdDialog.hide($scope.selectedTasksPersonsChecks);
+								    $mdDialog.hide($scope.selectedLocationChecks);
 								};
 								
 								// Al seleccionar/des un servicio en Person
-								$scope.selectTaskPerson = function(taskId) {
-									//console.log("selectTaskPerson", taskId);
+								$scope.selectElement = function(taskId) {
+									console.log("selectElement", taskId);
 									var idx = $scope.selectedTasksPersonsChecks.indexOf(taskId);
-									if ($scope.tasMultiple){
-										// is currently selected
-									    if (idx > -1) {
-									      $scope.selectedTasksPersonsChecks.splice(idx, 1);
-									    }
-									    // is newly selected
-									    else {
-									      $scope.selectedTasksPersonsChecks.push(taskId);
-									    }
-									} else {
-							    		// Not is currently selected
-									    if (idx == -1) {
-									    	$scope.selectedTasksPersonsChecks = [];
-									    	$scope.selectedTasksPersonsChecks.push(taskId);
-									    }	
-							    	}
-								}
-								
-								// Limpiamos servicios en Multiple Person
-								$scope.cleanTaskPerson = function() {
-									//console.log("cleanTaskPerson");
-									$scope.selectedTasksPersonsChecks = [];
-								}
+									// Not is currently selected
+									if (idx == -1) {
+									   	$scope.selectedLocationChecks = [];
+									   	$scope.selectedLocationChecks.push(taskId);
+									}
+								}								
 								
 							}
 							
-							// Salvamos seleccion de servicios en Person
-							$scope.saveTaskPerson = function(selectedTasksPersonsChecks) {
-								//console.log("saveTaskPerson", selectedTasksPersonsChecks);
+							// Salvamos seleccion de Location
+							$scope.saveOriginLocation = function(selectedLocationChecks) {
+								console.log("saveOriginLocation", selectedLocationChecks);
 								
 								var taskSelPer = undefined;
 								var taskAux = undefined;
@@ -500,7 +362,7 @@ app
 						            return false;
 						          } else {
 						        	  $scope.personscope.selectedTasksPersons[$scope.personscope.selectedTasksNumPerson-1] = selectedTasksPer;
-						        	  $scope.showTasks();
+						        	  $scope.showLocations();
 						        	  return true;
 						          }
 						        } else {
@@ -916,14 +778,6 @@ app
 							   
 								appointment = $scope.appo.appoSel;
 								startTime = appointment.apoStartTime;
-								/*if ($rootScope.adminOption) {
-									a = this.eveTime.val().split(':');
-									startTime = new Date(startTime);
-									startTime.setUTCHours(a[0]);
-									startTime.setUTCMinutes(a[1]);
-									startTime = startTime.getTime();
-									}
-								}*/
 								data = {
 									eveDescAlega: $scope.client.observ,
 									localId : $rootScope.local.id,
@@ -1048,23 +902,23 @@ app.directive('showSearch', function() {
 	};
 });
 
-app.directive('showAposDay', function() {
+app.directive('showListOffers', function() {
 	return {
-		templateUrl : 'views/bookingAposDay.html',
+		templateUrl : 'views/flyListOffers.html',
 		restrict : 'E'
 	};
 });
 
-app.directive('showAposNew', function() {
+app.directive('showSaveSearch', function() {
 	return {
-		templateUrl : 'views/bookingAposNew.html',
+		templateUrl : 'views/flySaveSearch.html',
 		restrict : 'E'
 	};
 });
 
-app.directive('showAposEnd', function() {
+app.directive('showSaveSearchEnd', function() {
 	return {
-		templateUrl : 'views/bookingAposEnd.html',
+		templateUrl : 'views/flySaveSearchEnd.html',
 		restrict : 'E'
 	};
 });

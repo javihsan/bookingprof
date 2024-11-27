@@ -30,7 +30,7 @@ public class ReplaceInternalResourceViewResolver extends
     			viewName += getSufixAPP();
     		}
     	} else {
-    		if (viewName.endsWith("fly")){
+    		if (viewName.endsWith("/fly")){
     			viewName += getSufixAPPMaterial();
     		} else {
     			viewName = getPrefixWEB() + viewName;

@@ -1,4 +1,4 @@
-<%@ page import="com.diloso.bookhair.web.negocio.utils.Utils" %>
+<%@ page import="com.diloso.bookhair.app.negocio.utils.Utils" %>
 	
 		<footer>	
 			<div class="content">

@@ -1,9 +1,4 @@
 var protocol_url = location.protocol+'//';
-var domainOfi = 'bookingprof.com';
-//var domainLocalOfi = 'localhost:8888'; // arrancar en local con el java delante
-var domainLocalOfi = 'localhost:9001'; // arrancar en local solo el front
-var domainSpotOfi = 'dilosohairapp.appspot.com';
-
 var appHost = location.host;
 var appServerName = appHost.split(":")[0];
 
@@ -41,13 +36,13 @@ var App = {
 		};
 		
 		$stateProvider
-			.state('booking', {
+			.state('search', {
 				abstract: true,
-				url: '/booking',
+				url: '/search',
 				template:'<div ui-view></div>',
 				controller: 'FlyController'
 			})
-			.state('booking.home', {
+			.state('search.home', {
 				url: '',
 				templateUrl: 'views/flyHome.html',
 				controller: function($scope,$rootScope){
@@ -55,7 +50,7 @@ var App = {
 					$rootScope.setBack(null,$scope);
 		          },
 	            onEnter: function($rootScope){
-	            	//console.log("onEnter booking.home");
+	            	//console.log("onEnter search.home");
 	            	$rootScope.sectionTit = $rootScope.findLangTextElement("label.aside.bookings");
 	              }
 			})
@@ -75,34 +70,16 @@ var App = {
 	            	$rootScope.sectionTit = $rootScope.findLangTextElement("label.aside.info");
 	               	$rootScope.setBack();
 	              }
-			})
-			.state('clients', {
-				abstract: true,
-				url: '/clients',
-				template:'<div ui-view></div>',
-				controller: 'ClientsController'
-			})
-			.state('clients.home', {
-				url: '',
-				templateUrl: 'views/clients.html',
-				controller: function($scope){
-					$scope.initClients();
-		          },
-	            onEnter: function($rootScope){
-	            	$rootScope.sectionTit = $rootScope.findLangTextElement("label.aside.clients");
-	               	$rootScope.setBack();
-	              }
 			});			
 		
 		
 		$urlRouterProvider.otherwise(
 			function($injector, $location) {
 				//console.log('path: ',$location.path());
-				$location.replace().path("/booking");
-			});
-		
-		//$httpProvider.interceptors.push('myHttpInterceptor');
-	
+				$location.replace().path("/search");
+			}
+		);
+
 	});
 	
 
@@ -127,11 +104,6 @@ var App = {
 				}
 				if (errorCode!=409){
 					funCall = null;
-//						funCall = function() {
-//							if (Lungo.dom("#booking")[0]){
-//								__FacadeCore.Router_article("booking","table-month");
-//							}
-//						};
 				} else { // Estamos en el caso de no refrescar la pantalla por errores de formulario
 					funCall = null;
 				}
@@ -209,8 +181,8 @@ var App = {
 				__Utils = new Utils($rootScope);
 				__FacadeCore = new FacadeCore(cacheService);
 						
-				//var url = protocol_url + appHost + "/multiText/fly/listLocaleTexts";
-				var url = "/js/lang_es.json" // "/js/lang_es_full.json" // Para rapidez al debugear solo con front
+				var url = protocol_url + appHost + "/multiText/fly/listLocaleTexts";
+				//var url = "/js/lang_es.json" // "/js/lang_es_full.json" // Para rapidez al debugear solo con front
 				var data = {lanCode:lanCode};
 								
 				httpService.GET(url,data).then(
@@ -239,65 +211,6 @@ var App = {
 					return "incorre";
 				}
 				return "";
-			};
-				   	
-		   	/* LOCALS */
-			// Cambiamos el local
-			$rootScope.selectLocal = function(localId) {
-				//console.log("selectLocal", localId);
-				if (!$rootScope.local 
-						|| ($rootScope.local && $rootScope.local.id != localId)) {
-					$rootScope.isViewLoading = true;
-					__FacadeCore.Storage_set(appName+ "localId", localId);
-					return $rootScope.localReady();
-				}
-			};
-			
-		   	$rootScope.showLocals = function(titleDialog, titleContent) {
-				//console.log ("showLocals: titleDialog, titleContent",titleDialog, titleContent);
-				$mdDialog.show({
-			      controller: DialogLocalController,
-			      templateUrl: 'views/modalDialogLocals.html',
-			      parent: angular.element(document.body),
-			      clickOutsideToClose:true,
-		          locals: { titleDialog: titleDialog, titleContent: titleContent}
-			    })
-			    .then(function(obj) {
-			    	$rootScope.selectLocal(obj.id);
-			    	$rootScope.toggleSidenav('close');
-					$rootScope.openNotif($rootScope.findLangTextElement("local.selected.text") + " " + obj.locName, 2, null);
-			    });
-				
-			};
-			
-			var DialogLocalController = function ($scope, $mdDialog, titleDialog, titleContent) {
-
-				$scope.acceptText = $rootScope.findLangTextElement("form.accept");
-				$scope.cancelText = $rootScope.findLangTextElement("form.cancel");
-				
-				$scope.titleDialog = titleDialog;
-			    $scope.titleContent = titleContent;
-
-			    $scope.returnObj = undefined;
-			    if ($rootScope.local){
-			    	$scope.returnObj = __Utils.findByProp($rootScope.listLocal, 'id', $rootScope.local.id);
-			    }
-			    $scope.selectObj = function(obj) {
-			    	$scope.returnObj = obj;
-			    }
-			    
-				$scope.hide = function() {
-					$mdDialog.hide();
-				};
-				  
-				$scope.cancel = function() {
-				    $mdDialog.cancel();
-				};
-				  
-				$scope.answer = function() {
-				    $mdDialog.hide($scope.returnObj);
-				};
-
 			};
 			
 			$rootScope.openNotif = function (titleContent, timeHideDelay, funPos) {
@@ -444,13 +357,7 @@ var App = {
 			//console.log ("Llamando a POST DATA... "+url,data);
 			
     		var config = {timeout:45*1000};
-    		//var config2 = {
-	            //headers : {
-	                //'Content-Type': 'text/plain;'
-	            //},
-	            //timeout:45*1000
-	        //}
-    		//console.log ("Llamando a POST ... "+url,config);
+      		//console.log ("Llamando a POST ... "+url,config);
     	   		
        		return $http.post(url,data,config); 
     	}

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="">
-<meta name="author" content="Diloso">
+<meta name="author" content="Bookingprof">
 <meta name="format-detection" content="telephone=no">
 <meta http-equiv="cleartype" content="on">
 <meta name="viewport" content="width=device-width">
@@ -78,19 +78,19 @@
 			<!-- <img src="images/logoMain.png" alt="">-->
 			<div layout="column" layout-align="space-around center">
 				<h1><span ng-show="sectionBack==null && existsMenu" class="md-breadcrumb-page"> {{firm.firName}}</span></h1>
-				<div layout="row" layout-align="start center">
+				<!--<div layout="row" layout-align="start center">
 	      			<md-button class="md-fab md-mini md-hue-1" ng-show="sectionBack==null && existsMenu" ng-click="showLocals($rootScope.findLangTextElement('label.aside.locals'),$rootScope.findLangTextElement('general.select'))">
 	          			<span>{{local.locName.charAt(0)}}</span>
 	          		</md-button>
 	          		<md-button ng-show="sectionBack==null && existsMenu" ng-click="showLocals($rootScope.findLangTextElement('label.aside.locals'),$rootScope.findLangTextElement('general.select'))" style="text-transform: none;">
 	          			<span>{{local.locName}}</span>
 	          		</md-button>
-          		</div>	
+          		</div>-->
           	</div>
     	</header>
     	<md-content flex="">
 	        <ul class="mainMenu" ng-controller="MenuBehaviour">
-		      	<li ng-click="toggleSidenav()" onClick="document.location='#!/booking'" ng-class="{current: isActive('booking')}">
+		      	<li ng-click="toggleSidenav()" onClick="document.location='#!/search'" ng-class="{current: isActive('search')}">
 		      		<md-icon md-font-library="material-icons" class="md-24">border_color</md-icon>
 		      		<a lnt-id="label.aside.bookings">Booking</a>
 		      	</li><!--
@@ -130,6 +130,8 @@
 		<md-content id="contentParent" layout="column" flex class="md-padding" ui-view></md-content>
 	</div>	
 	
+	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+	
 	<script src="/fly.js"></script>
 	<script src="/facadeCore.js"></script>
 	<script src="/utils.js"></script>
@@ -141,6 +143,7 @@
 	<script src="/controllers/langsCtrl.js"></script>
 	<script src="/controllers/legalCtrl.js"></script>
 
+	<!-- endbuild -->
 	
 	<script>
 		app
@@ -154,14 +157,14 @@
 						function($rootScope, $q, httpService, cacheService, $location, $interval) {
 							var stop = $interval(function() {
 								if (appFirmDomain != '') {
-									$rootScope.readyBooking();
+									$rootScope.readyFly();
 									// impedimos que se vuelva a ejecutar esta función
 									$interval.cancel(stop);
 								}
 							}, 250);
 
-							$rootScope.readyBooking = function() {
-								console.log("readyFly");
+							$rootScope.readyFly = function() {
+								//console.log("readyFly");
 
 								$rootScope.adminOption = false;
 								$rootScope.operatorRead = false;
@@ -185,12 +188,11 @@
 										return $rootScope.localReady();
 									} else { // No hay locales
 										return $rootScope.showLocals($rootScope.findLangTextElement("label.aside.locals"),$rootScope.findLangTextElement("general.select"));
-										//__FacadeCore.Router_article("booking","list-local");
 									}
 								 };
 
 								 promiseListLocal.then(thenListLocal);
-							} // fin readyBooking
+							} // fin readyFly
 
 							$rootScope.localReady = function() {
 								//console.log ("localReady");
@@ -207,7 +209,6 @@
 								var promiseFirm = httpService.GET(url, data);
 
 								localId = __FacadeCore.Storage_get(appName + "localId");
-
 								url = protocol_url + appHost + "/local/getClient";
 								data = {
 									id : localId
@@ -224,48 +225,6 @@
 
 													if ($rootScope.local.id) {
 
-														url = protocol_url	+ appHost + "/localTask/listCombi";
-														data = {
-															localId : $rootScope.local.id,
-															lanCode:$rootScope.langApp
-														};
-														var promiseLocalTask = httpService.GET(url, data);
-														promiseLocalTask.then(function(response) {
-															var combiTasks = __Utils.sortByPropChar(response.data, "lotName", true);
-															$rootScope.combiTasks = combiTasks;
-															
-															// Se pone aqui porque se supone que es la que más tarda, pero debería hacerse un agrupamiento de promesas y hacerlo al acabar todas
-															
-															$rootScope.urlListApoByDay = protocol_url + appHost + "/calendar/booking/listApoByDay";
-															$rootScope.urlNextAposDay = protocol_url + appHost + "/calendar/booking/listNextDayWithApo";
-															$rootScope.urlEventNew = protocol_url + appHost + "/event/booking/new";
-															
-
-															var title = $rootScope.firm.firName	+ " - " + $rootScope.local.locName;
-															document.title = "BookingProf - "+ title;
-
-															var path = $location.path();
-															if (path != "/booking") {
-																$location.replace().path("/booking");
-															} else {
-																$rootScope.currentScope.initBook(1);
-															}
-															// Se pone aqui porque se supone que es la que más tarda, pero debería hacerse un agrupamiento de promesas y hacerlo al acabar todas
-														});
-
-														url = protocol_url	+ appHost + "/calendar/list";
-														var promiseCalendars = httpService.GET(url, data);
-														promiseCalendars.then(function(response) {
-															var calCandidates = __Utils.sortByPropChar(response.data, "calName", true);
-															$rootScope.calCandidates = calCandidates;
-														});
-
-														url = protocol_url	+ appHost + "/calendar/numCals";
-														var promiseNumCals = httpService.GET(url, data);
-														promiseNumCals.then(function(response) {
-															$rootScope.numCals = response.data;
-														});
-
 														url = protocol_url+appHost+"/lang/list"
 														var promiseLangs = httpService.GET(url, null);
 														promiseLangs.then(function(response) {
@@ -277,12 +236,27 @@
 																	$rootScope.langs.push(lang);
 																}
 															}
+																																			
+															//$rootScope.urlListApoByDay = protocol_url + appHost + "/calendar/booking/listApoByDay";
+															//$rootScope.urlNextAposDay = protocol_url + appHost + "/calendar/booking/listNextDayWithApo";
+															//$rootScope.urlEventNew = protocol_url + appHost + "/event/booking/new";
+														
+															var title = $rootScope.firm.firName	+ " - " + $rootScope.local.locName;
+															document.title = "BookingProf - "+ title;
+
+															var path = $location.path();
+															if (path != "/search") {
+																$location.replace().path("/search");
+															} else {
+																$rootScope.currentScope.initBook(1);
+															}
+																				
 														});	
+														
 													} else {
 														//console.log ("localId invalido");
 														__FacadeCore.Storage_remove(appName + "localId");
 														return $rootScope.showLocals($rootScope.findLangTextElement("label.aside.locals"),$rootScope.findLangTextElement("general.select"));
-														//__FacadeCore.Router_article("booking","list-local");
 													}
 												});
 							} // fin localReady 

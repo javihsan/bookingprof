@@ -22,6 +22,7 @@
 				        </md-button>
 				  	</div>
 			    </md-toolbar>
+			    
 				<show-month id="table-month" ng-show="!isViewLoading && showSelectedDate">
 				</show-month>
 								
@@ -42,22 +43,18 @@
     	
     		<md-tab label="{{tabsBook[1].title}}" ng-disabled="tabsBook[1].disabled" ng-click="$parent.selectedTabIndex = 1;">
     			<loading></loading>
-     			<show-apos-day ng-show="!isViewLoading">
-				</show-apos-day>
+     			<show-list-offers ng-show="!isViewLoading" />
       		</md-tab>
       		
-      		<md-tab label="{{tabsBook[2].title}}" ng-disabled="tabsBook[2].disabled" ng-click="$parent.selectedTabIndex = 2;">
+      		<!--<md-tab label="{{tabsBook[2].title}}" ng-disabled="tabsBook[2].disabled" ng-click="$parent.selectedTabIndex = 2;">
       			<loading></loading>
-				<show-apos-new ng-show="!isViewLoading && !adminOption">
-				</show-apos-new>
-				<show-apos-new-admin ng-show="!isViewLoading && adminOption">
-				</show-apos-new-admin>
+				<show-save-search ng-show="!isViewLoading && !adminOption" />
       		</md-tab>
 
 			<md-tab label="{{tabsBook[3].title}}" ng-disabled="tabsBook[3].disabled" ng-click="$parent.selectedTabIndex = 3;">
       			<loading></loading>
-				<show-apos-end ng-show="!isViewLoading" />
-      		</md-tab>
+				<show-save-search-end ng-show="!isViewLoading" />
+      		</md-tab>-->
 
    	</md-tabs>
 </article>

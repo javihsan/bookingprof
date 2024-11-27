@@ -106,6 +106,7 @@ app
 								if ($rootScope.firm) {
 									//console.log("initBook",reset);
 									
+									$scope.previusPath = "/booking";
 									$rootScope.isViewLoading = true;
 									$rootScope.existsMenu = true;
 
@@ -370,11 +371,11 @@ app
 								//console.log("goToSelectTaskPerson", numPerson);
 								$scope.personscope.selectedTasksNumPerson = numPerson;
 								var selectedTasksPer = $scope.personscope.selectedTasksPersons[$scope.personscope.selectedTasksNumPerson-1];
-								$scope.personscope.cabText = $rootScope.findLangTextElement("label.template.job");
+								var personscopeCabText = $rootScope.findLangTextElement("label.template.job");
 							    if ($rootScope.local.locNumPersonsApo > 1) {
-							    	$scope.personscope.cabText += " " + $rootScope.findLangTextElement("label.template.jobForPerson") + " " + $scope.personscope.selectedTasksNumPerson;
+							    	personscopeCabText += " " + $rootScope.findLangTextElement("label.template.jobForPerson") + " " + $scope.personscope.selectedTasksNumPerson;
 							    }
-								$scope.showTaskPerson($scope.personscope.cabText, $rootScope.findLangTextElement("general.select"), selectedTasksPer);
+								$scope.showTaskPerson(personscopeCabText, $rootScope.findLangTextElement("general.select"), selectedTasksPer);
 							}
 							
 							$scope.showTaskPerson = function(titleDialog, titleContent, selectedTasksPer) {

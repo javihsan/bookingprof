@@ -84,6 +84,16 @@ public class Utils {
 		return getDate(fecha, formatDateFly);
 	}
 	
+	public static String getCurrentDate(String format) {
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat(format);
+			Date currentTime_1 = new Date();
+			return formatter.format(currentTime_1);
+		} catch (Exception e) {
+		}
+		return "";
+	}
+	
 	public static String getStrCalendar(Calendar calendarGreg) {
 		StringBuffer strBuffer = new StringBuffer(String.valueOf(calendarGreg.get(Calendar.YEAR)));
 		strBuffer.append(CalendarController.CHAR_SEP_DATE);

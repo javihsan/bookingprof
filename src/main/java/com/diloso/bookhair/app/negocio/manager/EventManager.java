@@ -29,6 +29,10 @@ public class EventManager implements IEventManager {
 
 	public static final String EVE_CALENDAR_ID = "eveCalendarId";
 	public static final String EVE_CLIENT_ID = "eveClientId";
+	public static final String EVE_ICS = "eveICS";
+	public static final String EVE_BOOKING = "eveBooking";
+	public static final String EVE_CONSUMED = "eveConsumed";
+	public static final String EVE_LOCAL_ID = "eveLocalTaskId";
 	public static final String ENABLED = "enabled";
 	public static final String ORDER_EVE_START_TIME_ASC = "eveStartTime";
 	public static final String EVE_START_TIME_MAYQ = "eveStartTime>=";
@@ -91,8 +95,16 @@ public class EventManager implements IEventManager {
 
 	@Override
 	public List<EventDTO> getEventAdmin(CalendarDTO calendar) {
-		// TODO Auto-generated method stub
-		return null;
+		List<EventDTO> result = new ArrayList<EventDTO>();
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(EVE_CALENDAR_ID, calendar.getId());
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_EVE_START_TIME_ASC);
+		List<Event> resultQuery = eventDAO.listOrderFilter(filters, orders);
+		resultQuery.stream().forEach(entity -> {
+			result.add(mapper.map(entity));
+		});
+		return result;
 	}
 
 	@Override
@@ -138,8 +150,37 @@ public class EventManager implements IEventManager {
 
 	@Override
 	public List<EventDTO> getEventByWeek(CalendarDTO calendar, String selectedDate) {
-		// TODO Auto-generated method stub
-		return null;
+		String[] dates = selectedDate.split(CalendarController.CHAR_SEP_DATE);
+		String year = dates[0];
+		String month = dates[1];
+		String day = dates[2];
+
+		Calendar calendarGreg = new GregorianCalendar();
+		calendarGreg.set(Calendar.YEAR, new Integer(year));
+		calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
+		calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
+		calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
+		calendarGreg.set(Calendar.MINUTE, 0);
+		calendarGreg.set(Calendar.SECOND, 0);
+		calendarGreg.set(Calendar.MILLISECOND, 0);
+		Date startTime = calendarGreg.getTime();
+
+		calendarGreg.add(Calendar.DAY_OF_MONTH, 7);
+		Date endTime = calendarGreg.getTime();
+
+		List<EventDTO> result = new ArrayList<EventDTO>();
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(EVE_CALENDAR_ID, calendar.getId());
+		filters.put(ENABLED, 1);
+		filters.put(EVE_START_TIME_MAYQ, startTime);
+		filters.put(EVE_START_TIME_MENQ, endTime);
+		List<String> orders = new ArrayList<String>();
+		orders.add(ORDER_EVE_START_TIME_ASC);
+		List<Event> resultQuery = eventDAO.listOrderFilter(filters, orders);
+		resultQuery.stream().forEach(entity -> {
+			result.add(mapper.map(entity));
+		});
+		return result;
 	}
 
 	@Override
@@ -172,133 +213,163 @@ public class EventManager implements IEventManager {
 
 	@Override
 	public List<EventDTO> getEventByICS(String ICS) {
-		// TODO Auto-generated method stub
-		return null;
+		List<EventDTO> result = new ArrayList<EventDTO>();
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(EVE_ICS, ICS);
+		List<Event> resultQuery = eventDAO.listFilter(filters);
+		resultQuery.stream().forEach(entity -> {
+			result.add(mapper.map(entity));
+		});
+		return result;
 	}
 
 	@Override
 	public Integer getEventNumber(CalendarDTO calendar, String startDate, String endDate, Boolean consumed) {
-		// TODO Auto-generated method stub
-		return null;
+		String[] dates = startDate.split(CalendarController.CHAR_SEP_DATE);
+		String year = dates[0];
+		String month = dates[1];
+		String day = dates[2];
+
+		Calendar calendarGreg = new GregorianCalendar();
+		calendarGreg.set(Calendar.YEAR, new Integer(year));
+		calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
+		calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
+		calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
+		calendarGreg.set(Calendar.MINUTE, 0);
+		calendarGreg.set(Calendar.SECOND, 0);
+		calendarGreg.set(Calendar.MILLISECOND, 0);
+		Date startTime = calendarGreg.getTime();
+
+		dates = endDate.split(CalendarController.CHAR_SEP_DATE);
+		year = dates[0];
+		month = dates[1];
+		day = dates[2];
+
+		calendarGreg.set(Calendar.YEAR, new Integer(year));
+		calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
+		calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
+		calendarGreg.add(Calendar.DAY_OF_MONTH, 1);
+
+		Date endTime = calendarGreg.getTime();
+
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(EVE_CALENDAR_ID, calendar.getId());
+		filters.put(ENABLED, 1);
+		filters.put(EVE_START_TIME_MAYQ, startTime);
+		filters.put(EVE_START_TIME_MENQ, endTime);
+
+		if (consumed != null) {
+			int intConsumed = consumed.booleanValue() ? 1 : 0;
+			filters.put(EVE_CONSUMED, intConsumed);
+		}
+		List<Event> resultQuery = eventDAO.listFilter(filters);
+		List<String> listICS = new ArrayList<String>();
+		resultQuery.stream().forEach(entity -> {
+			String ICS = (String) entity.getEveICS();
+			if (!listICS.contains(ICS)) {
+				listICS.add(ICS);
+			}
+		});
+		return listICS.size();
 	}
 
 	@Override
 	public Integer getEventNumberBooking(CalendarDTO calendar, String startDate, String endDate, Integer booking) {
-		// TODO Auto-generated method stub
-		return null;
+
+		String[] dates = startDate.split(CalendarController.CHAR_SEP_DATE);
+		String year = dates[0];
+		String month = dates[1];
+		String day = dates[2];
+
+		Calendar calendarGreg = new GregorianCalendar();
+		calendarGreg.set(Calendar.YEAR, new Integer(year));
+		calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
+		calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
+		calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
+		calendarGreg.set(Calendar.MINUTE, 0);
+		calendarGreg.set(Calendar.SECOND, 0);
+		calendarGreg.set(Calendar.MILLISECOND, 0);
+		Date startTime = calendarGreg.getTime();
+
+		dates = endDate.split(CalendarController.CHAR_SEP_DATE);
+		year = dates[0];
+		month = dates[1];
+		day = dates[2];
+
+		calendarGreg.set(Calendar.YEAR, new Integer(year));
+		calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
+		calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
+		calendarGreg.add(Calendar.DAY_OF_MONTH, 1);
+
+		Date endTime = calendarGreg.getTime();
+
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(EVE_CALENDAR_ID, calendar.getId());
+		filters.put(ENABLED, 1);
+		filters.put(EVE_START_TIME_MAYQ, startTime);
+		filters.put(EVE_START_TIME_MENQ, endTime);
+		if (booking != null) {
+			filters.put(EVE_BOOKING, booking);
+		}
+		List<Event> resultQuery = eventDAO.listFilter(filters);
+		List<String> listICS = new ArrayList<String>();
+		resultQuery.stream().forEach(entity -> {
+			String ICS = (String) entity.getEveICS();
+			if (!listICS.contains(ICS)) {
+				listICS.add(ICS);
+			}
+		});
+		return listICS.size();
 	}
 
 	@Override
 	public Integer getEventNumberTask(CalendarDTO calendar, String startDate, String endDate, Long localTaskId,
 			Boolean consumed) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
-	
-/*
+		
+		String[] dates = startDate.split(CalendarController.CHAR_SEP_DATE);
+		String year = dates[0];
+		String month = dates[1];
+		String day = dates[2];
 
-	
-	public List<EventDTO> getEventAdmin(CalendarDTO calendar) {
+		Calendar calendarGreg = new GregorianCalendar();
+		calendarGreg.set(Calendar.YEAR, new Integer(year));
+		calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
+		calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
+		calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
+		calendarGreg.set(Calendar.MINUTE, 0);
+		calendarGreg.set(Calendar.SECOND, 0);
+		calendarGreg.set(Calendar.MILLISECOND, 0);
+		Date startTime = calendarGreg.getTime();
 
-		List<Entity> resultQuery = null;
-		List<EventDTO> result = new ArrayList<EventDTO>();
-		EventDTO event = null;
-		try {
+		dates = endDate.split(CalendarController.CHAR_SEP_DATE);
+		year = dates[0];
+		month = dates[1];
+		day = dates[2];
 
-			Filter calendarFilter = new FilterPredicate("eveCalendarId",
-					FilterOperator.EQUAL, calendar.getId());
+		calendarGreg.set(Calendar.YEAR, new Integer(year));
+		calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
+		calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
+		calendarGreg.add(Calendar.DAY_OF_MONTH, 1);
 
-			Filter compositeFilter = CompositeFilterOperator.and(
-					calendarFilter);
+		Date endTime = calendarGreg.getTime();
 
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"Event").setFilter(compositeFilter);
-
-			query.addSort("eveStartTime", SortDirection.ASCENDING);
-
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			resultQuery = pq.asList(FetchOptions.Builder.withLimit(10000));
-			for (Entity entity : resultQuery) {
-				event = eventMapper.map(
-						entity);
-				result.add(event);
-			}
-
-		} catch (Exception ex) {
+		Map<String, Object> filters = new HashMap<String, Object>();
+		filters.put(EVE_CALENDAR_ID, calendar.getId());
+		filters.put(ENABLED, 1);
+		filters.put(EVE_START_TIME_MAYQ, startTime);
+		filters.put(EVE_START_TIME_MENQ, endTime);
+		if (consumed != null) {
+			int intConsumed = consumed.booleanValue() ? 1 : 0;
+			filters.put(EVE_CONSUMED, intConsumed);
+		}
+		if (localTaskId != null) {
+			filters.put(EVE_LOCAL_ID, localTaskId);
 		}
 
-		return result;
-
+		return eventDAO.listFilter(filters).size();
+		
 	}
 	
-	public List<EventDTO> getEventByDay(CalendarDTO calendar,
-			String selectedDate) {
-
-		List<Entity> resultQuery = null;
-		List<EventDTO> result = new ArrayList<EventDTO>();
-		EventDTO event = null;
-		try {
-
-			String[] dates = selectedDate
-					.split(CalendarController.CHAR_SEP_DATE);
-			String year = dates[0];
-			String month = dates[1];
-			String day = dates[2];
-
-			Calendar calendarGreg = new GregorianCalendar();
-			calendarGreg.set(Calendar.YEAR, new Integer(year));
-			calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
-			calendarGreg.set(Calendar.MINUTE, 0);
-			calendarGreg.set(Calendar.SECOND, 0);
-			calendarGreg.set(Calendar.MILLISECOND, 0);
-			Date startTime = calendarGreg.getTime();
-
-			calendarGreg.add(Calendar.HOUR, 24);
-			Date endTime = calendarGreg.getTime();
-
-			Filter calendarFilter = new FilterPredicate("eveCalendarId",
-					FilterOperator.EQUAL, calendar.getId());
-			Filter enabledFilter = new FilterPredicate("enabled",
-					FilterOperator.EQUAL, 1);
-			Filter fromFilter = new FilterPredicate("eveStartTime",
-					FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
-			Filter untilFilter = new FilterPredicate("eveStartTime",
-					FilterOperator.LESS_THAN_OR_EQUAL, endTime);
-
-			Filter compositeFilter = CompositeFilterOperator.and(
-					calendarFilter, enabledFilter, fromFilter, untilFilter);
-
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"Event").setFilter(compositeFilter);
-
-			query.addSort("eveStartTime", SortDirection.ASCENDING);
-
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			resultQuery = pq.asList(FetchOptions.Builder.withLimit(10000));
-			for (Entity entity : resultQuery) {
-				event = eventMapper.map(
-						entity);
-				if (event.getEveEndTime()==null){
-					setEveEndTime(event);
-				}	
-				result.add(event);
-			}
-
-		} catch (Exception ex) {
-		}
-
-		return result;
-
-	}
-	*/
 	public void setEveEndTime(EventDTO event){
 		LocalTaskDTO localTask = event.getEveLocalTask();
 		Calendar calendarGreg = new GregorianCalendar();
@@ -307,389 +378,5 @@ public class EventManager implements IEventManager {
 				localTask.getLotTaskDuration());
 		event.setEveEndTime(calendarGreg.getTime());
 	}
-	/*
-	public List<EventDTO> getEventByWeek(CalendarDTO calendar,
-			String selectedDate) {
 
-		List<Entity> resultQuery = null;
-		EventDTO event = null;
-		List<EventDTO> result = new ArrayList<EventDTO>();
-		try {
-
-			String[] dates = selectedDate
-					.split(CalendarController.CHAR_SEP_DATE);
-			String year = dates[0];
-			String month = dates[1];
-			String day = dates[2];
-
-			Calendar calendarGreg = new GregorianCalendar();
-			calendarGreg.set(Calendar.YEAR, new Integer(year));
-			calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
-			calendarGreg.set(Calendar.MINUTE, 0);
-			calendarGreg.set(Calendar.SECOND, 0);
-			calendarGreg.set(Calendar.MILLISECOND, 0);
-			Date startTime = calendarGreg.getTime();
-
-			calendarGreg.add(Calendar.DAY_OF_MONTH, 7);
-			Date endTime = calendarGreg.getTime();
-
-			Filter calendarFilter = new FilterPredicate("eveCalendarId",
-					FilterOperator.EQUAL, calendar.getId());
-			Filter enabledFilter = new FilterPredicate("enabled",
-					FilterOperator.EQUAL, 1);
-			Filter fromFilter = new FilterPredicate("eveStartTime",
-					FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
-			Filter untilFilter = new FilterPredicate("eveStartTime",
-					FilterOperator.LESS_THAN_OR_EQUAL, endTime);
-
-			Filter compositeFilter = CompositeFilterOperator.and(
-					calendarFilter, enabledFilter, fromFilter, untilFilter);
-
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"Event").setFilter(compositeFilter);
-
-			query.addSort("eveStartTime", SortDirection.ASCENDING);
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			resultQuery = pq.asList(FetchOptions.Builder.withLimit(10000));
-			for (Entity entity : resultQuery) {
-				event = eventMapper.map(entity);
-				result.add(event);
-			}
-
-		} catch (Exception ex) {
-		}
-
-		return result;
-
-	}
-
-	public List<EventDTO> getEventByClientAgo(CalendarDTO calendar,
-			Long clientId, Date selectedDate, int numDays) {
-
-		List<Entity> resultQuery = null;
-		EventDTO event = null;
-		List<EventDTO> result = new ArrayList<EventDTO>();
-		try {
-
-			Filter clientFilter = new FilterPredicate("eveClientId",
-					FilterOperator.EQUAL, clientId);
-			Filter calendarFilter = new FilterPredicate("eveCalendarId",
-					FilterOperator.EQUAL, calendar.getId());
-			Filter enabledFilter = new FilterPredicate("enabled",
-					FilterOperator.EQUAL, 1);
-
-			Filter compositeFilter = CompositeFilterOperator.and(clientFilter,
-					calendarFilter, enabledFilter);
-
-			if (selectedDate != null) {
-				Calendar calendarGreg = new GregorianCalendar();
-				calendarGreg.setTime(selectedDate);
-				calendarGreg.set(Calendar.MILLISECOND, 0);
-				calendarGreg.add(Calendar.DAY_OF_MONTH, -numDays);
-				Date startTime = calendarGreg.getTime();
-
-				Filter fromFilter = new FilterPredicate("eveBookingTime",
-						FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
-
-				compositeFilter = CompositeFilterOperator.and(compositeFilter,
-						fromFilter);
-			}
-
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"Event").setFilter(compositeFilter);
-
-			query.addSort("eveBookingTime", SortDirection.ASCENDING);
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			resultQuery = pq.asList(FetchOptions.Builder.withLimit(10000));
-			for (Entity entity : resultQuery) {
-				event =eventMapper.map(
-						entity);
-				result.add(event);
-			}
-
-		} catch (Exception ex) {
-		}
-
-		return result;
-
-	}
-	
-	public List<EventDTO> getEventByICS(String ICS){
-	
-		List<Entity> resultQuery = null;
-		EventDTO event = null;
-		List<EventDTO> result = new ArrayList<EventDTO>();
-		try {
-		
-			Filter ICSFilter = new FilterPredicate("eveICS",
-					FilterOperator.EQUAL, ICS);
-			Filter enabledFilter = new FilterPredicate("enabled",
-					FilterOperator.EQUAL, 1);
-
-			Filter compositeFilter = CompositeFilterOperator.and(
-					ICSFilter, enabledFilter);
-
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"Event").setFilter(compositeFilter);
-
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			resultQuery = pq.asList(FetchOptions.Builder.withLimit(100));
-			for (Entity entity : resultQuery) {
-				event = eventMapper.map(entity);
-				result.add(event);
-			}
-
-		} catch (Exception ex) {
-		}
-
-		return result;
-
-	}
-	
-	public Integer getEventNumber(CalendarDTO calendar, String startDate,
-			String endDate, Boolean consumed) {
-
-		Integer result = 0;
-		List<Entity> resultQuery = null;
-		String ICS = null;
-		List<String> listICS = new ArrayList<String>();
-		try {
-
-			String[] dates = startDate.split(CalendarController.CHAR_SEP_DATE);
-			String year = dates[0];
-			String month = dates[1];
-			String day = dates[2];
-
-			Calendar calendarGreg = new GregorianCalendar();
-			calendarGreg.set(Calendar.YEAR, new Integer(year));
-			calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
-			calendarGreg.set(Calendar.MINUTE, 0);
-			calendarGreg.set(Calendar.SECOND, 0);
-			calendarGreg.set(Calendar.MILLISECOND, 0);
-			Date startTime = calendarGreg.getTime();
-
-			dates = endDate.split(CalendarController.CHAR_SEP_DATE);
-			year = dates[0];
-			month = dates[1];
-			day = dates[2];
-
-			calendarGreg.set(Calendar.YEAR, new Integer(year));
-			calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			calendarGreg.add(Calendar.DAY_OF_MONTH, 1);
-
-			Date endTime = calendarGreg.getTime();
-
-			Filter calendarFilter = new FilterPredicate("eveCalendarId",
-					FilterOperator.EQUAL, calendar.getId());
-			Filter enabledFilter = new FilterPredicate("enabled",
-					FilterOperator.EQUAL, 1);
-			Filter fromFilter = new FilterPredicate("eveStartTime",
-					FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
-			Filter untilFilter = new FilterPredicate("eveStartTime",
-					FilterOperator.LESS_THAN_OR_EQUAL, endTime);
-
-			Filter compositeFilter = CompositeFilterOperator.and(
-					calendarFilter, enabledFilter, fromFilter, untilFilter);
-
-			if (consumed != null) {
-				int intConsumed = consumed.booleanValue() ? 1 : 0;
-				Filter consumedFilter = new FilterPredicate("eveConsumed",
-						FilterOperator.EQUAL, intConsumed);
-				compositeFilter = CompositeFilterOperator.and(compositeFilter,
-						consumedFilter);
-
-			}
-
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"Event").setFilter(compositeFilter);
-		
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			resultQuery = pq.asList(FetchOptions.Builder.withLimit(10000));
-			for (Entity entity : resultQuery) {
-				ICS = (String)entity.getProperty("eveICS");
-				if (!listICS.contains(ICS)){ 
-					listICS.add(ICS);
-					result ++;
-				}	
-			}
-		} catch (Exception ex) {
-		}
-		return result;
-	}
-
-	
-	public Integer getEventNumberBooking(CalendarDTO calendar, String startDate,
-			String endDate, Integer booking) {
-
-		Integer result = 0;
-		List<Entity> resultQuery = null;
-		String ICS = null;
-		List<String> listICS = new ArrayList<String>();
-
-		try {
-
-			String[] dates = startDate.split(CalendarController.CHAR_SEP_DATE);
-			String year = dates[0];
-			String month = dates[1];
-			String day = dates[2];
-
-			Calendar calendarGreg = new GregorianCalendar();
-			calendarGreg.set(Calendar.YEAR, new Integer(year));
-			calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
-			calendarGreg.set(Calendar.MINUTE, 0);
-			calendarGreg.set(Calendar.SECOND, 0);
-			calendarGreg.set(Calendar.MILLISECOND, 0);
-			Date startTime = calendarGreg.getTime();
-
-			dates = endDate.split(CalendarController.CHAR_SEP_DATE);
-			year = dates[0];
-			month = dates[1];
-			day = dates[2];
-
-			calendarGreg.set(Calendar.YEAR, new Integer(year));
-			calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			calendarGreg.add(Calendar.DAY_OF_MONTH, 1);
-
-			Date endTime = calendarGreg.getTime();
-
-			Filter calendarFilter = new FilterPredicate("eveCalendarId",
-					FilterOperator.EQUAL, calendar.getId());
-			Filter enabledFilter = new FilterPredicate("enabled",
-					FilterOperator.EQUAL, 1);
-			Filter fromFilter = new FilterPredicate("eveStartTime",
-					FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
-			Filter untilFilter = new FilterPredicate("eveStartTime",
-					FilterOperator.LESS_THAN_OR_EQUAL, endTime);
-
-			Filter compositeFilter = CompositeFilterOperator.and(
-					calendarFilter, enabledFilter, fromFilter, untilFilter);
-
-			if (booking != null) {
-				Filter consumedFilter = new FilterPredicate("eveBooking",
-						FilterOperator.EQUAL, booking);
-				compositeFilter = CompositeFilterOperator.and(compositeFilter,
-						consumedFilter);
-			}
-						
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"Event").setFilter(compositeFilter);
-
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			resultQuery = pq.asList(FetchOptions.Builder.withLimit(10000));
-			for (Entity entity : resultQuery) {
-				ICS = (String)entity.getProperty("eveICS");
-				if (!listICS.contains(ICS)){ 
-					listICS.add(ICS);
-					result ++;
-				}	
-			}
-
-		} catch (Exception ex) {
-		}
-		return result;
-	}
-	
-	public Integer getEventNumberTask(CalendarDTO calendar, String startDate,
-			String endDate, Long localTaskId, Boolean consumed) {
-
-		Integer result = null;
-
-		try {
-
-			String[] dates = startDate.split(CalendarController.CHAR_SEP_DATE);
-			String year = dates[0];
-			String month = dates[1];
-			String day = dates[2];
-
-			Calendar calendarGreg = new GregorianCalendar();
-			calendarGreg.set(Calendar.YEAR, new Integer(year));
-			calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			calendarGreg.set(Calendar.HOUR_OF_DAY, 0);
-			calendarGreg.set(Calendar.MINUTE, 0);
-			calendarGreg.set(Calendar.SECOND, 0);
-			calendarGreg.set(Calendar.MILLISECOND, 0);
-			Date startTime = calendarGreg.getTime();
-
-			dates = endDate.split(CalendarController.CHAR_SEP_DATE);
-			year = dates[0];
-			month = dates[1];
-			day = dates[2];
-
-			calendarGreg.set(Calendar.YEAR, new Integer(year));
-			calendarGreg.set(Calendar.MONTH, new Integer(month) - 1);
-			calendarGreg.set(Calendar.DAY_OF_MONTH, new Integer(day));
-			calendarGreg.add(Calendar.DAY_OF_MONTH, 1);
-
-			Date endTime = calendarGreg.getTime();
-
-			Filter calendarFilter = new FilterPredicate("eveCalendarId",
-					FilterOperator.EQUAL, calendar.getId());
-			Filter enabledFilter = new FilterPredicate("enabled",
-					FilterOperator.EQUAL, 1);
-			Filter fromFilter = new FilterPredicate("eveStartTime",
-					FilterOperator.GREATER_THAN_OR_EQUAL, startTime);
-			Filter untilFilter = new FilterPredicate("eveStartTime",
-					FilterOperator.LESS_THAN_OR_EQUAL, endTime);
-
-			Filter compositeFilter = CompositeFilterOperator.and(
-					calendarFilter, enabledFilter, fromFilter,
-					untilFilter);
-
-			if (localTaskId != null) {
-				Filter taskFilter = new FilterPredicate("eveLocalTaskId",
-						FilterOperator.EQUAL, localTaskId);
-				compositeFilter = CompositeFilterOperator.and(compositeFilter,
-						taskFilter);
-			}
-			if (consumed != null) {
-//				if (consumed){
-//					Filter consumedFilter = new FilterPredicate("eveConsumed",
-//							FilterOperator.GREATER_THAN, 0);
-//				} else {
-//					Filter consumedFilter = new FilterPredicate("eveConsumed",
-//							FilterOperator.EQUAL, 0);
-//				}
-				int intConsumed = consumed.booleanValue() ? 1 : 0;
-				Filter consumedFilter = new FilterPredicate("eveConsumed",
-						FilterOperator.EQUAL, intConsumed);
-				compositeFilter = CompositeFilterOperator.and(compositeFilter,
-						consumedFilter);
-			}
-			com.google.appengine.api.datastore.Query query = new com.google.appengine.api.datastore.Query(
-					"Event").setFilter(compositeFilter);
-
-			DatastoreService dataStore = DatastoreServiceFactory
-					.getDatastoreService();
-			PreparedQuery pq = dataStore.prepare(query);
-			result = pq.countEntities(FetchOptions.Builder.withDefaults());
-
-		} catch (Exception ex) {
-		}
-		return result;
-	}
-
-	public void setEventTransformer(EventMapper eventMapper) {
-		this.eventMapper = eventMapper;
-	}	
-
-	*/
 }

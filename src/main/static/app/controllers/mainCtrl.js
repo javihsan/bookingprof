@@ -1,9 +1,7 @@
 app.controller("MenuBehaviour", [
   		"$scope", "$location", "$rootScope", 
 		function($scope, $location, $rootScope) {
-  			
-  			$scope.previusPath = "/booking";
-  			
+  			  			
   			$scope.isActive = function(viewLocation) {
 				var pattern = '/' + viewLocation, re = new RegExp(pattern);
 				var path = $location.path();

@@ -111,96 +111,7 @@ public class BilledManager implements IBilledManager {
 	
 	
 /*
-	public BilledDTO create(BilledDTO billed) throws Exception {
-		EntityManager em = getEntityManager();
-		Billed entityBilled = billedMapper
-				.map(billed);
-		try {
-			em.getTransaction().begin();
-			em.persist(entityBilled);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return billedMapper.map(
-				entityBilled);
-	}
 
-	public BilledDTO remove(long id) throws Exception {
-		EntityManager em = getEntityManager();
-		Billed oldEntityBilled = new Billed();
-		try {
-			em.getTransaction().begin();
-			Billed entityBilled = (Billed) em
-					.find(Billed.class, id);
-			PropertyUtils.copyProperties(oldEntityBilled, entityBilled);
-			em.remove(em.merge(entityBilled));
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return billedMapper.map(
-				oldEntityBilled);
-	}
-
-	public BilledDTO update(BilledDTO billed) throws Exception {
-		EntityManager em = getEntityManager();
-		Billed entityBilled = billedMapper
-				.map(billed);
-		Billed oldEntityBilled = null;
-		try {
-			em.getTransaction().begin();
-			oldEntityBilled = (Billed) em.find(Billed.class,
-					entityBilled.getId());
-			new NullAwareBeanUtilsBean().copyProperties(entityBilled,
-					oldEntityBilled);
-			entityBilled = em.merge(entityBilled);
-			em.getTransaction().commit();
-		} catch (Exception ex) {
-			try {
-				if (em.getTransaction().isActive()) {
-					em.getTransaction().rollback();
-				}
-			} catch (Exception e) {
-				throw e;
-			}
-			throw ex;
-		} finally {
-			em.close();
-		}
-		return billedMapper.map(
-				entityBilled);
-	}
-
-	public BilledDTO getById(long id) {
-		Entity entityBilled = null;
-		try {
-			Key k = KeyFactory.createKey(Billed.class.getSimpleName(), id);
-			entityBilled = DatastoreServiceFactory.getDatastoreService()
-					.get(k);
-		} catch (Exception ex) {
-		}
-		return billedMapper.map(
-				entityBilled);
-	}
 
 	public List<BilledDTO> getBilledByInvoice(long bilInvoiceId, String lang) {
 		List<Entity> resultQuery = null;
@@ -479,25 +390,7 @@ public class BilledManager implements IBilledManager {
 		return result;
 	}
 
-	public void setMultiTextDAO(IMultiTextManager iMultiTextManager) {
-		this.iMultiTextManager = iMultiTextManager;
-	}
 
-	public void setTaskDAO(ITaskManager iTaskManager) {
-		this.iTaskManager = iTaskManager;
-	}
-
-	public void setLocalTaskDAO(ILocalTaskManager iLocalTaskManager) {
-		this.iLocalTaskManager = iLocalTaskManager;
-	}
-
-	public void setProductDAO(IProductManager iProductManager) {
-		this.iProductManager = iProductManager;
-	}
-
-	public void setBilledTransformer(BilledMapper billedMapper) {
-		this.billedMapper = billedMapper;
-	}
 */
 	
 

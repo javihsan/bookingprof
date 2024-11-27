@@ -34,6 +34,20 @@ app
 								} else if ($state.get("reportSales.home")) {
 									//console.log("estamos en report");
 									return $state.go('reportSales.home');
+								} else if ($state.get("search.home")) {
+									//console.log("estamos en search");
+									var path = $location.path();
+									if (path != "/search") {
+										return $state.go("search.home");
+									} else {
+										return $rootScope.currentScope.initBook(1);
+									}									
+							     	
+							   		moment.locale($rootScope.langApp);
+								
+								    $mdDateLocale.shortDays = eval($rootScope.findLangTextElement("general.daysWeekShort"));
+								    $mdDateLocale.shortMonths = eval($rootScope.findLangTextElement("general.monthsShort"));
+							     	
 								}
 							};
 							
