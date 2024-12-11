@@ -36,8 +36,8 @@ export function calendar(time, formats) {
             time = undefined;
         }
     }
-    // We want to compare the start of today, vs this.
-    // Getting start-of-today depends on whether we're local/utc/offset or not.
+    // We want to compare the start of saveSearch, vs this.
+    // Getting start-of-saveSearch depends on whether we're local/utc/offset or not.
     var now = time || createLocal(),
         sod = cloneWithOffset(now, this).startOf('day'),
         format = hooks.calendarFormat(this, sod) || 'sameElse',

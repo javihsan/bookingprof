@@ -427,7 +427,7 @@
     }
 
     var defaultCalendar = {
-        sameDay: '[Today at] LT',
+        sameDay: '[saveSearch at] LT',
         nextDay: '[Tomorrow at] LT',
         nextWeek: 'dddd [at] LT',
         lastDay: '[Yesterday at] LT',
@@ -2687,7 +2687,7 @@
         }
 
         // Default to current date.
-        // * if no year, month, day of month are given, default to today
+        // * if no year, month, day of month are given, default to saveSearch
         // * if day of month is given, default month and year
         // * if month is given, default only year
         // * if year is given, don't default anything
@@ -3818,8 +3818,8 @@
                 time = undefined;
             }
         }
-        // We want to compare the start of today, vs this.
-        // Getting start-of-today depends on whether we're local/utc/offset or not.
+        // We want to compare the start of saveSearch, vs this.
+        // Getting start-of-saveSearch depends on whether we're local/utc/offset or not.
         var now = time || createLocal(),
             sod = cloneWithOffset(now, this).startOf('day'),
             format = hooks.calendarFormat(this, sod) || 'sameElse',
@@ -5263,7 +5263,7 @@
                 (milliseconds <= 0 && days <= 0 && months <= 0)
             )
         ) {
-            milliseconds += absCeil(monthsToDays(months) + days) * 864e5;
+            milliseconds += absCeil(monthssaveSearchs(months) + days) * 864e5;
             days = 0;
             months = 0;
         }
@@ -5286,7 +5286,7 @@
         // convert days to months
         monthsFromDays = absFloor(daysToMonths(days));
         months += monthsFromDays;
-        days -= absCeil(monthsToDays(monthsFromDays));
+        days -= absCeil(monthssaveSearchs(monthsFromDays));
 
         // 12 months -> 1 year
         years = absFloor(months / 12);
@@ -5305,7 +5305,7 @@
         return (days * 4800) / 146097;
     }
 
-    function monthsToDays(months) {
+    function monthssaveSearchs(months) {
         // the reverse of daysToMonths
         return (months * 146097) / 4800;
     }
@@ -5333,7 +5333,7 @@
             }
         } else {
             // handle milliseconds separately because of floating point math errors (issue #1867)
-            days = this._days + Math.round(monthsToDays(this._months));
+            days = this._days + Math.round(monthssaveSearchs(this._months));
             switch (units) {
                 case 'week':
                     return days / 7 + milliseconds / 6048e5;

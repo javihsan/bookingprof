@@ -1,5 +1,5 @@
 app
-		.controller(
+	.controller(
 				"LangsController",
 				[
 						"$scope", "$state", "$location", "httpService", "$rootScope", "$mdDialog", "$mdMedia", "$mdDateLocale",

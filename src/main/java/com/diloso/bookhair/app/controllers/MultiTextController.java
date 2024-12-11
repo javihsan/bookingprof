@@ -106,7 +106,7 @@ public class MultiTextController {
 			String keyOriginal = null;
 			for (String key : props.stringPropertyNames()) {
 				keyOriginal = key;
-				if (!key.startsWith(WEB_PROP)){ // Filtramos solo las de la app, no las de la web
+				if (!key.startsWith(WEB_PROP) && !key.startsWith(FLY_PROP)){ // Filtramos solo las de la app, no las de la web ni de fly
 					if (key.startsWith(CONFIG_PROP)){ // Propiedad configurable, obtenemos solo la indicada en la config
 						String[] a = key.split("\\.");
 						keyConfig = a[1];
@@ -152,19 +152,41 @@ public class MultiTextController {
 	    syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
 	    List<MultiTextDTO> listMultiText = (List<MultiTextDTO>) syncCache.get(keyMem); // read from cache
 	    if (listMultiText == null || listMultiText.isEmpty()) {
-		    			
+		    
+	    	FirmDTO firm = firmManager.getFirmDomain("fly");
+			ConfigFirm configFirm = firm.getFirConfig();
+	    	
 			listMultiText = new ArrayList<MultiTextDTO>();
 			ExtendMessageSource messageSourceApp = (ExtendMessageSource)ApplicationContextProvider.getApplicationContext().getBean("messageSource");
 			Properties props = messageSourceApp.getResolvedProps(lanCode);
 			MultiTextDTO multiText = null;
+			String keyConfig = null;
+			String valueConfig = null;
+			String keyOriginal = null;
 			for (String key : props.stringPropertyNames()) {
-				//if (key.startsWith(FLY_PROP)){ // Filtramos solo las de fly
-				if (!key.startsWith(WEB_PROP)){
-					multiText = new MultiTextDTO();
-					multiText.setMulKey(key);
-					multiText.setMulLanCode(lanCode);
-					multiText.setMulText(props.getProperty(key));
-					listMultiText.add(multiText);
+				keyOriginal = key;
+				if (key.startsWith(FLY_PROP)
+						|| key.startsWith("general.")
+						|| key.startsWith("form.")
+						|| key.startsWith("lang.")
+						|| key.startsWith("label.")){ // Filtramos solo las de fly y generales
+					if (key.startsWith(CONFIG_PROP)){ // Propiedad configurable, obtenemos solo la indicada en la config
+						String[] a = key.split("\\.");
+						keyConfig = a[1];
+						valueConfig = a[2];
+						if (configFirm.getConfigDenon().getListDenon().get(keyConfig).equals(valueConfig)){
+							key = key.substring(key.indexOf(valueConfig)+valueConfig.length()+1);	
+						} else {
+							key = null;
+						}
+					}
+					if (key!=null){
+						multiText = new MultiTextDTO();
+						multiText.setMulKey(key);
+						multiText.setMulLanCode(lanCode);
+						multiText.setMulText(props.getProperty(keyOriginal));
+						listMultiText.add(multiText);
+					}
 				}	
 			}
 			

@@ -72,7 +72,7 @@ export function configFromArray(config) {
     }
 
     // Default to current date.
-    // * if no year, month, day of month are given, default to today
+    // * if no year, month, day of month are given, default to saveSearch
     // * if day of month is given, default month and year
     // * if month is given, default only year
     // * if year is given, don't default anything

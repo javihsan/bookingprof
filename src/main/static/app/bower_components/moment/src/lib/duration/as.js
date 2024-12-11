@@ -1,4 +1,4 @@
-import { daysToMonths, monthsToDays } from './bubble';
+import { daysToMonths, monthssaveSearchs } from './bubble';
 import { normalizeUnits } from '../units/aliases';
 
 export function as(units) {
@@ -24,7 +24,7 @@ export function as(units) {
         }
     } else {
         // handle milliseconds separately because of floating point math errors (issue #1867)
-        days = this._days + Math.round(monthsToDays(this._months));
+        days = this._days + Math.round(monthssaveSearchs(this._months));
         switch (units) {
             case 'week':
                 return days / 7 + milliseconds / 6048e5;

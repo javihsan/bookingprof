@@ -428,6 +428,7 @@
 				<includes>
 					<include>com/diloso/bookhair/app/client/*.properties</include>
 					<include>com/diloso/bookhair/web/client/*.properties</include>
+					<include>com/diloso/bookhair/fly/client/*.properties</include>
 				</includes>
 			</resource>
 		</resources>

@@ -175,7 +175,7 @@ a4.format("dddd, MMMM Do YYYY, h:mm:ss a");
 a4.format("ddd, hA");
 
 moment().format('\\L');
-moment().format('[today] DDDD');
+moment().format('[saveSearch] DDDD');
 
 var a5 = moment([2007, 0, 29]);
 var b5 = moment([2007, 0, 28]);
@@ -299,7 +299,7 @@ adur.subtract(1).days();
 adur.subtract(1, 'd').days();
 
 var calendarFormat = {
-    sameDay: '[Today]',
+    sameDay: '[saveSearch]',
     nextDay: '[Tomorrow]',
     nextWeek: 'dddd',
     lastDay: '[Yesterday]',
@@ -367,7 +367,7 @@ moment.locale('en', {
     },
     calendar: {
         lastDay: '[Yesterday at] LT',
-        sameDay: '[Today at] LT',
+        sameDay: '[saveSearch at] LT',
         nextDay: '[Tomorrow at] LT',
         lastWeek: '[last] dddd [at] LT',
         nextWeek: 'dddd [at] LT',
@@ -518,7 +518,7 @@ moment.locale('en', {
 moment.locale('en', {
     calendar : {
         lastDay : '[Yesterday at] LT',
-        sameDay : '[Today at] LT',
+        sameDay : '[saveSearch at] LT',
         nextDay : function () {
           return '[hoy a la' + ((this.hours() !== 1) ? 's' : '') + '] LT';
         },

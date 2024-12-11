@@ -316,8 +316,8 @@ public class OffersSearchService implements IOffersSearchService {
 		
 		Location[] locations = amadeus.referenceData.locations.get(Params
 		  .with("keyword", keyword)
-		  .and("subType", Locations.ANY));
-		
+		  .and("subType", Locations.ANY)
+			  .and("page[limit]", 20));		
 	    List<LocationDTO> result = new ArrayList<LocationDTO>();
 		for (Location location : locations) {
 			if (location.getSubType().equals(LocationType.CITY.toString()) 

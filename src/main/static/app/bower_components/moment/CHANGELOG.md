@@ -852,7 +852,7 @@ Added support for parsing month names in the current language.
 
 Added escape blocks for parsing tokens.
 
-Added `moment.fn.calendar` to format strings like 'Today 2:30 PM', 'Tomorrow 1:25 AM', and 'Last Sunday 4:30 AM'.
+Added `moment.fn.calendar` to format strings like 'saveSearch 2:30 PM', 'Tomorrow 1:25 AM', and 'Last Sunday 4:30 AM'.
 
 Added `moment.fn.day` as a setter.
 

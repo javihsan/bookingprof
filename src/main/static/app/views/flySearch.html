@@ -3,10 +3,77 @@
 	  	<div layout="column">
 		  	<md-list>
 		  		<div class="block-sep">
+		  		
+		  		  	<div layout="column" layout-gt-sm="row">
+						<md-list-item class="md-2-line">
+							<md-icon md-font-library="material-icons" class="md-24">email</md-icon>
+							<div class="md-list-item-text taskSelect" ng-controller="LocOriginContrAuto as ctrl">
+								<md-autocomplete class="md-2-line" md-floating-label="{{findLangTextElement('fly.location.origin')}}" md-min-length="1" md-input-name="locOrigin" md-input-maxlength="100" md-no-cache="true"
+								    md-items="location in ctrl.querySearch(ctrl.searchText)"
+				          			md-item-text="location.name"
+				          			md-selected-item="ctrl.selectedItem"
+							        md-search-text="ctrl.searchText"
+							       	md-escape-options="clear"
+									md-clear-button="true"
+								>
+					          		<md-item-template>
+					          			<md-icon ng-show="location.type=='CITY'" md-font-library="material-icons" class="md-24">location_city</md-icon>
+					          			<span ng-show="location.type=='CITY'" style="font-weight: bold;">{{location.name}}</span>
+									    <md-icon ng-show="location.type=='AIRPORT'" md-font-library="material-icons" class="md-24">local_airport</md-icon>
+						     		    <span ng-show="location.type=='AIRPORT'">{{location.name}}</span>
+					        		</md-item-template>
+								</md-autocomplete>
+							</div>
+							<md-icon md-font-library="material-icons" class="md-24">email</md-icon>
+							<div class="md-list-item-text taskSelect" ng-controller="LocDestContrAuto as ctrl">
+								<md-autocomplete class="md-2-line" md-floating-label="{{findLangTextElement('fly.location.dest')}}" md-min-length="1" md-input-name="locOrigin" md-input-maxlength="100" md-no-cache="true"
+								    md-items="location in ctrl.querySearch(ctrl.searchText)"
+				          			md-item-text="location.name"
+				          			md-selected-item="ctrl.selectedItem"
+							        md-search-text="ctrl.searchText"
+							       	md-escape-options="clear"
+									md-clear-button="true"
+								>
+					          		<md-item-template>
+					          			<md-icon ng-show="location.type=='CITY'" md-font-library="material-icons" class="md-24">location_city</md-icon>
+					          			<span ng-show="location.type=='CITY'" style="font-weight: bold;">{{location.name}}</span>
+									    <md-icon ng-show="location.type=='AIRPORT'" md-font-library="material-icons" class="md-24">local_airport</md-icon>
+						     		    <span ng-show="location.type=='AIRPORT'">{{location.name}}</span>
+					        		</md-item-template>
+								</md-autocomplete>
+							</div>
+						</md-list-item>
+				 	</div>
+			    </div>
+			    
+			    <div class="block-sep">
+				    <md-toolbar ng-show="!isViewLoading && searchInputScope.dateOrigin">
+					    <div class="md-toolbar-tools date" >
+					      	<span flex></span>
+					      	<span flex></span>
+					      	<span flex></span>
+					  	</div>
+					    <div class="md-toolbar-tools date year" layout-align="start center">
+					    	<span flex ng-bind="extractYear()"></span>
+					      	<span flex></span>
+					      	<span flex></span>
+					     </div>
+					    <div class="md-toolbar-tools date" layout-align="start center">
+					    	<span flex="70" ng-bind="extractDayWeekMonth()"></span>
+					    	<span flex></span>
+							<md-button ng-click="toggleShowCalendar()">
+					        	<md-icon md-font-library="material-icons" class="md-24 md-light">arrow_drop_down_circle</md-icon>
+					        </md-button>
+					  	</div>
+				    </md-toolbar>
+			    </div>
+			    
+			    
+			    <div class="block-sep">
 			  		<md-list-item class="md-2-line">
-						<md-icon md-font-library="material-icons" class="md-24">build</md-icon>
+						<md-icon md-font-library="material-icons" class="md-24">person</md-icon>
 						<div class="md-list-item-text">
-				  			<p lnt-id="label.template.job"></p>
+				  			<p lnt-id="fly.travelers.text"></p>
 						</div>
 					</md-list-item>
 					<md-list-item class="md-2-line">
@@ -20,7 +87,8 @@
 							</md-button>
 						</div>
 					</md-list-item>
-				</div>	
+				</div>
+			    
 		  	</md-list>	
 		</div>
 	</md-content>

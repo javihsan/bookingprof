@@ -2901,7 +2901,7 @@
             LLLL: 'dddd, D MMMM YYYY h:mm A',
         },
         calendar: {
-            sameDay: '[Today at] LT',
+            sameDay: '[saveSearch at] LT',
             nextDay: '[Tomorrow at] LT',
             nextWeek: 'dddd [at] LT',
             lastDay: '[Yesterday at] LT',
@@ -2966,7 +2966,7 @@
             LLLL: 'dddd, MMMM D, YYYY h:mm A',
         },
         calendar: {
-            sameDay: '[Today at] LT',
+            sameDay: '[saveSearch at] LT',
             nextDay: '[Tomorrow at] LT',
             nextWeek: 'dddd [at] LT',
             lastDay: '[Yesterday at] LT',
@@ -3027,7 +3027,7 @@
             LLLL: 'dddd, D MMMM YYYY HH:mm',
         },
         calendar: {
-            sameDay: '[Today at] LT',
+            sameDay: '[saveSearch at] LT',
             nextDay: '[Tomorrow at] LT',
             nextWeek: 'dddd [at] LT',
             lastDay: '[Yesterday at] LT',
@@ -3092,7 +3092,7 @@
             LLLL: 'dddd D MMMM YYYY HH:mm',
         },
         calendar: {
-            sameDay: '[Today at] LT',
+            sameDay: '[saveSearch at] LT',
             nextDay: '[Tomorrow at] LT',
             nextWeek: 'dddd [at] LT',
             lastDay: '[Yesterday at] LT',
@@ -3157,7 +3157,7 @@
             LLLL: 'dddd, D MMMM YYYY HH:mm',
         },
         calendar: {
-            sameDay: '[Today at] LT',
+            sameDay: '[saveSearch at] LT',
             nextDay: '[Tomorrow at] LT',
             nextWeek: 'dddd [at] LT',
             lastDay: '[Yesterday at] LT',
@@ -3218,7 +3218,7 @@
             LLLL: 'dddd, D MMMM YYYY h:mm A',
         },
         calendar: {
-            sameDay: '[Today at] LT',
+            sameDay: '[saveSearch at] LT',
             nextDay: '[Tomorrow at] LT',
             nextWeek: 'dddd [at] LT',
             lastDay: '[Yesterday at] LT',
@@ -3283,7 +3283,7 @@
             LLLL: 'dddd, D MMMM YYYY h:mm A',
         },
         calendar: {
-            sameDay: '[Today at] LT',
+            sameDay: '[saveSearch at] LT',
             nextDay: '[Tomorrow at] LT',
             nextWeek: 'dddd [at] LT',
             lastDay: '[Yesterday at] LT',
@@ -3348,7 +3348,7 @@
             LLLL: 'dddd, D MMMM YYYY HH:mm',
         },
         calendar: {
-            sameDay: '[Today at] LT',
+            sameDay: '[saveSearch at] LT',
             nextDay: '[Tomorrow at] LT',
             nextWeek: 'dddd [at] LT',
             lastDay: '[Yesterday at] LT',

@@ -34,7 +34,7 @@ var annualsBooking = function(){
 		promiseAnnuals.then(function (response) {
 			this.scope.annuals = response.data;
 			this.markup();
-		    this.setToday();
+		    this.setsaveSearch();
 		    this.loadAnnuals();
      	});
 	}
@@ -97,21 +97,21 @@ var annualsBooking = function(){
 				this_f = 9;
 			}
 			this_col =  (d % 7)-1 < 0 ? 6 : (d % 7)-1;
-			today = new Date();
-			today.setHours(0);
-			today.setMinutes(0);
-			today.setSeconds(0);
-			today.setMilliseconds(0)
+			saveSearch = new Date();
+			saveSearch.setHours(0);
+			saveSearch.setMinutes(0);
+			saveSearch.setSeconds(0);
+			saveSearch.setMilliseconds(0)
 			oneDay = 1000 * 60 * 60 * 24;
 			maxDate = new Date();
-			maxDate.setTime(today.getTime() + ((_this.settings.openDays-1)*oneDay) );
-			_this.dayMarkup(dayElem, this_f, this_d, this_m, this_y, this_col,today,maxDate)
+			maxDate.setTime(saveSearch.getTime() + ((_this.settings.openDays-1)*oneDay) );
+			_this.dayMarkup(dayElem, this_f, this_d, this_m, this_y, this_col,saveSearch,maxDate)
 		})
 
 		return this_month;
 	}
 	
-	this.dayMarkup = function(this_day,format,day,month,year,column,today,maxDate) {
+	this.dayMarkup = function(this_day,format,day,month,year,column,saveSearch,maxDate) {
 		
 		if ( format == 0 ) {
 			//this_day.addClass('prevmonth');
@@ -128,7 +128,7 @@ var annualsBooking = function(){
 			}
 		}
 		dd = new Date(year, (month-1), day);
-		if (dd<today || dd>maxDate){
+		if (dd<saveSearch || dd>maxDate){
 			//this_day.addClass('date_not_enabled');
 			this_day.parent().addClass('date_not_enabled');
 		}
@@ -143,10 +143,10 @@ var annualsBooking = function(){
 		return dd.getDate();
 	}
 	
-	this.setToday = function() {
+	this.setsaveSearch = function() {
 		var date = new Date();
 		var obj = this.elementId.find("span[datetime='"+date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate()+"']")
-		obj.addClass('today');
+		obj.addClass('saveSearch');
     }
    	
 	this.sameDay = function(date1, date2) {

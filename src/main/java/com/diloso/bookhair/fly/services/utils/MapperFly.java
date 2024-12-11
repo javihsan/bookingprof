@@ -17,6 +17,7 @@ import com.diloso.bookhair.fly.services.dto.AirportInfoDTO;
 import com.diloso.bookhair.fly.services.dto.FlightOfferDTO;
 import com.diloso.bookhair.fly.services.dto.ItineraryDTO;
 import com.diloso.bookhair.fly.services.dto.LocationDTO;
+import com.diloso.bookhair.fly.services.dto.LocationType;
 import com.diloso.bookhair.fly.services.dto.SearchSegmentDTO;
 import com.diloso.bookhair.fly.services.dto.input.DateRangeDTO;
 import com.diloso.bookhair.fly.services.dto.input.FlightSearchDTO;
@@ -183,7 +184,11 @@ public class MapperFly {
 		LocationDTO result = new LocationDTO();
 		
 		result.setType(location.getSubType());
-		result.setName(location.getName());
+		if (location.getSubType().equals(LocationType.AIRPORT.toString())) {
+			result.setName(location.getAddress().getCityCode()+" "+location.getName());
+		} else {
+			result.setName(location.getName());
+		}
 		result.setIataCode(location.getIataCode());
 		result.setCityCode(location.getAddress().getCityCode());
 		return result;

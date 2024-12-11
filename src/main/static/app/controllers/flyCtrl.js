@@ -21,16 +21,16 @@ app
 							$scope.appo.cols = 1;							
 							
 							$scope.disabledNextTabs = function() {
-							    //console.log ("disabledNextTabs");
+							    console.log ("disabledNextTabs");
 							    $scope.tabsBook[1].disabled = true;
-								$scope.tabsBook[2].disabled = true;
-								$scope.tabsBook[3].disabled = true;
+								//$scope.tabsBook[2].disabled = true;
+								//$scope.tabsBook[3].disabled = true;
 							    
 							};
 							
-							$scope.toggleSelectDate = function() {
-								//console.log ("toggleSelectDate");
-								$scope.showSelectedDate = !$scope.showSelectedDate;
+							$scope.toggleShowCalendar = function() {
+								//console.log ("toggleShowCalendar");
+								$scope.showCalendar = !$scope.showCalendar;
 							};
 														
 							$scope.formatDateSelected = function() {
@@ -41,8 +41,8 @@ app
 							};
 							
 							$scope.extractYear = function() {
-								if($rootScope.selectedDate){
-									date = __Utils.stringToDate($rootScope.selectedDate);
+								if($scope.searchInputScope){
+									date = __Utils.stringToDate($scope.searchInputScope.dateOrigin);
 									return date.getFullYear();
 								}
 							};
@@ -56,16 +56,16 @@ app
 							};
 							
 							$scope.extractDayWeekMonth = function() {
-								if($rootScope.selectedDate){
-									date = $rootScope.selectedDate;
+								if($scope.searchInputScope){
+									date = $scope.searchInputScope.dateOrigin;
 									date = __Utils.stringToDate(date);
 									return __Utils.dateToDayWeekMonthFormat(date);
 								}
 							};
 							
 							$scope.extractDayMonth = function(sel) {
-								if($rootScope.selectedDate){
-									date = $rootScope.selectedDate;
+								if($scope.searchInputScope){
+									date = $scope.searchInputScope.dateOrigin;
 									date = __Utils.stringToDate(date);
 									if (sel){
 										date.setDate(date.getDate() + sel);
@@ -75,8 +75,8 @@ app
 							};
 							
 							$scope.extractSemDay = function(sel) {
-								if($rootScope.selectedDate){
-									date = $rootScope.selectedDate;
+								if($scope.searchInputScope){
+									date = $scope.searchInputScope.dateOrigin;
 									date = __Utils.stringToDate(date);
 									if (sel){
 										date.setDate(date.getDate() + sel);
@@ -101,47 +101,45 @@ app
 							
 							
 							// Al iniciar la pantalla de Search
-							$scope.initBook = function(reset) {
-								//console.log("initSearchIntento",$rootScope.sectionTit);
+							$scope.initSearch = function(reset) {
+								console.log("initSearchIntento",$rootScope.sectionTit);
 								if ($rootScope.firm) {
-									//console.log("initBook",reset);
+									console.log("initSearch",reset);
 									
 									$scope.previusPath = "/search";
 									$rootScope.isViewLoading = true;
 									$rootScope.existsMenu = true;
 
 								 	var tabsBook = [
-							   	          { title: $rootScope.findLangTextElement("tab.tabSearchOffers.title"), disabled: false},
-							   	          { title: $rootScope.findLangTextElement("tab.tabListOffers.title"), disabled: true},
-							   	          { title: $rootScope.findLangTextElement("tab.tabClient.title"), disabled: true},
-							   	          { title: $rootScope.findLangTextElement("tab.tabEnd.title"), disabled: true}
+							   	          { title: $rootScope.findLangTextElement("fly.tab.tabSearchOffers.title"), disabled: false},
+							   	          { title: $rootScope.findLangTextElement("fly.tab.tabListOffers.title"), disabled: true},
+							   	          { title: $rootScope.findLangTextElement("fly.tab.tabClient.title"), disabled: true},
+							   	          { title: $rootScope.findLangTextElement("fly.tab.tabEnd.title"), disabled: true}
 						   	            ];
 								 	
 								 	$scope.tabsBook = tabsBook;
 								 	$scope.selectedTabIndex = 0;
-
-									
+																		
 									if (reset){
 										
-										$rootScope.sectionTit = $rootScope.findLangTextElement("label.aside.bookings");
+										$rootScope.sectionTit = $rootScope.findLangTextElement("fly.label.aside.offers");
 										
 										$scope.selectedTabIndex = 0;
 										$scope.tabsBook[1].disabled = true;
-										$scope.tabsBook[2].disabled = true;
-										$scope.tabsBook[3].disabled = true;
+										//$scope.tabsBook[2].disabled = true;
+										//$scope.tabsBook[3].disabled = true;
 										
 										$rootScope.selectedDate = undefined;
-										$rootScope.selectedTasksCount = undefined;
-										$scope.showSelectedDate = true;
+										$scope.showCalendar = false;
 										
 										$scope.searchInputScope = undefined;
 																				
 										$scope.appo = {};
 										$scope.appo.cols = 1;	
 										
-										$scope.client = {};
+										//$scope.client = {};
 										
-										$scope.celebration = {};
+										//$scope.celebration = {};
 
 									}
 									
@@ -164,8 +162,32 @@ app
 								}
 							};
 
+							// Al iniciar la pantalla de Search
+							$scope.initSearchInput = function() {
+								console.log("initSearchInput", $scope.searchInputScope);
+								
+								if (!$scope.searchInputScope){
+									$scope.searchInputScope = {};
+									$scope.searchInputScope.dateOrigin = __Utils.dateToString(new Date());
+								}
+								
+								return $scope.showTravelers();
+
+							};
+
+							$scope.showTravelers = function() {
+								console.log("showTravelers");
+								
+								var selectedTravelers = $scope.searchInputScope.selectedTravelers;
+
+								$scope.searchInputScope.selectedTravelersStr = "1 adulto";
+								
+								return $rootScope.isViewLoading = false;
+							};
+
+
 							$scope.createCalendar = function(newDayAux) {
-								//console.log("createCalendar",newDayAux);
+								console.log("createCalendar",newDayAux);
 								var openDaysAux, weekDaysClosed, tableMonth;
 
 								tableMonth = $("#table-month");
@@ -175,7 +197,7 @@ app
 										date : newDayAux,
 										openDays : openDaysAux
 									});
-								return $scope.initSelectLocation();
+								return $scope.initSearchInput();
 							};
 
 							$scope.onToday = function() {
@@ -197,40 +219,15 @@ app
 											|| !elemen.parent().hasClass('date_not_enabled')) {
 										var selectedDate = elemen.attr("datetime");
 										$rootScope.selectedDate = new String(selectedDate);
-										$scope.toggleSelectDate();
+										console.log ("$rootScope.selectedDate: "+$rootScope.selectedDate)
+										$scope.toggleShowCalendar();
 									}
 								}
 							};
-							
-							// Al iniciar la pantalla de Search
-							$scope.initSelectLocation = function() {
-								console.log("initSelectLocation", $scope.searchInputScope);
-								
-								if (!$scope.searchInputScope){
-									$scope.searchInputScope = {};
-									var optObj =  { id: 1, name: "1" };
-									$scope.searchInputScope.originLocation = optObj;
-									
-									$scope.searchInputScope.selectedOriginLocation = {};
-									$scope.searchInputScope.selectedOriginLocationStr = "";
-									
-								}
-								
-								return $scope.showLocations();
-
-							};
-
-							$scope.showLocations = function() {
-								console.log("showLocations");
-								var selectedLocation = $scope.searchInputScope.selectedOriginLocation;
-
-								$scope.searchInputScope.selectedOriginLocationStr = selectedLocation.name;
-								
-								return $rootScope.isViewLoading = false;
-							};
 														
-							$scope.saveTaskSelect = function() {
-								//console.log("saveTaskSelect");
+														
+							$scope.saveSearch = function() {
+								//console.log("saveSearch");
 								
 								$rootScope.isViewLoading = true;
 								
@@ -362,7 +359,7 @@ app
 						            return false;
 						          } else {
 						        	  $scope.personscope.selectedTasksPersons[$scope.personscope.selectedTasksNumPerson-1] = selectedTasksPer;
-						        	  $scope.showLocations();
+						        	  $scope.showTravelers();
 						        	  return true;
 						          }
 						        } else {
@@ -557,31 +554,6 @@ app
 										$rootScope.openNotif($rootScope.findLangTextElement("label.notification.notavailablesearch") + " " + $scope.formatDateSelected(), 3, null);
 										$rootScope.isViewLoading = false;
 										return $scope.nextDayAppos();
-//										Lungo.Notification
-//												.success(
-//														findLangTextElement("label.notification.notavailableAdmin.title"),
-//														findLangTextElement("label.notification.notavailableAdmin.text"),
-//														null, 5);
-//										a = data.selectedDate.split('-');
-//										newDayAux = new Date(a[0], a[1] - 1,
-//												a[2]);
-//										todayAux = new Date();
-//										newDayAux
-//												.setHours(todayAux.getHours()
-//														- (todayAux
-//																.getTimezoneOffset() / 60));
-//										newDayAux.setMinutes(todayAux
-//												.getMinutes());
-//										appointment = new __Model.Appointment({
-//											enabled : true,
-//											apoStartTime : newDayAux
-//										});
-//										__FacadeCore.Cache_remove(appName
-//												+ "newApo");
-//										__FacadeCore.Cache_set(appName
-//												+ "newApo", appointment);
-//										return __FacadeCore
-//												.Router_section("#newEvent");
 									}
 								}
 							};
@@ -708,18 +680,19 @@ app
 							}
 
 							$scope.querySearch = function(query) {
-							    var results = query ? $rootScope.clients.filter($scope.createFilterFor(query)) : $rootScope.clients,
-						          deferred;
-				       			return results;
-							    
-//							    	var urlClients = protocol_url + appHost + "/client/operator/list"
-//								    var data = {domain:appFirmDomain}
-//							        return httpService.GET(urlClients,data).then(
-//							       		function(response) {
-//							       			var results = response.data;
-//							       			return results;
-//										}
-//									)
+							    console.log("querySearch: "+query);
+							    url = protocol_url	+ appHost + "/flight-offers/locations";
+								data = {
+									keyword : query
+								};
+								var promiseLocations = httpService.GET(url, data);
+								
+								return httpService.GET(url,data).then(
+							    	function(response) {
+							    	  var results = response.data;
+							    	  return results;
+									}
+								)
 						    }
 
 					
@@ -731,20 +704,6 @@ app
 									};
 							}
 
-							$scope.selectedItemChange = function(item) {    
-								if (item){
-							    	//console.log('Item changed to ' + JSON.stringify(item));
-									var obsv = $scope.client.observ;
-									$scope.client = {};
-									$scope.client.id = item.id;
-							    	$scope.client.name = item.whoName;
-							    	$scope.client.email = item.whoEmail;
-							    	$scope.client.telf = item.whoTelf1;
-							    	$scope.client.observ = obsv;
-							    	$scope.newCient = false;
-							    }
-							}
-							
 							$scope.changeCliEmail = function() {    
 							    //console.log('changeCliEmail ',$scope.client.email );
 								var clients = $scope.client.email ? $rootScope.clients.filter($scope.createFilterForEmail($scope.client.email)) : $rootScope.clients,
@@ -863,34 +822,39 @@ app
 
 						app
 						.controller(
-								"BookControllerAuto",
+								"LocOriginContrAuto",
 								[
 										"$scope",
 										"$rootScope",
 										function($scope, $rootScope) {
-
-						var parentScope = $scope.$parent.$parent;
-						parentScope.childAuto = $scope;
-						
-						var self = this;
-						self.querySearch =  $scope.querySearch;
-						self.selectedItemChange = $scope.selectedItemChange;
-						self.actionNewClient = $scope.actionNewClient;
-						self.isNewClient = $scope.isNewClient;
-				
-						$scope.cleanSelItem = function() {
-							self.selectedItem = null;
-							self.searchText = "";
-						}
-
-						$scope.setSelItem = function(client) {
-							self.selectedItem = client;
-						}
-												
-					} ]);
-app.directive('showMonth', function() {
+	
+							var parentScope = $scope.$parent.$parent;
+							parentScope.childAuto = $scope;
+							
+							var self = this;
+							self.querySearch =  $scope.querySearch;
+																		
+					    } ]);
+					    
+					    app
+						.controller(
+								"LocDestContrAuto",
+								[
+										"$scope",
+										"$rootScope",
+										function($scope, $rootScope) {
+	
+							var parentScope = $scope.$parent.$parent;
+							parentScope.childAuto = $scope;
+							
+							var self = this;
+							self.querySearch =  $scope.querySearch;
+																		
+					    } ]);
+					
+app.directive('showCalendarTable', function() {
 	return {
-		templateUrl : 'views/tableMonthBooking.html',
+		templateUrl : 'views/flyCalendarTable.html',
 		restrict : 'E'
 	};
 });

@@ -20,7 +20,7 @@ export function bubble() {
             (milliseconds <= 0 && days <= 0 && months <= 0)
         )
     ) {
-        milliseconds += absCeil(monthsToDays(months) + days) * 864e5;
+        milliseconds += absCeil(monthssaveSearchs(months) + days) * 864e5;
         days = 0;
         months = 0;
     }
@@ -43,7 +43,7 @@ export function bubble() {
     // convert days to months
     monthsFromDays = absFloor(daysToMonths(days));
     months += monthsFromDays;
-    days -= absCeil(monthsToDays(monthsFromDays));
+    days -= absCeil(monthssaveSearchs(monthsFromDays));
 
     // 12 months -> 1 year
     years = absFloor(months / 12);
@@ -62,7 +62,7 @@ export function daysToMonths(days) {
     return (days * 4800) / 146097;
 }
 
-export function monthsToDays(months) {
+export function monthssaveSearchs(months) {
     // the reverse of daysToMonths
     return (months * 146097) / 4800;
 }

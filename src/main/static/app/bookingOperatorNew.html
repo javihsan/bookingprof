@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="/styles/skin.css">
   <!-- endbuild -->
 
-  <!-- build:js(.) scripts/vendor.js -->
+  <!-- build:js(.) scripts/vendorOpe.js -->
   <!-- bower:js -->
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>
@@ -129,16 +129,21 @@
 		<md-content id="contentParent" layout="column" flex class="md-padding" ui-view></md-content>
 	</div>	
 	
-	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+	<!-- build:js({.tmp,app}) scripts/scriptsOpe.js -->
     
 	<script src="/app.js"></script>
+	<script src="/controllers/bookCtrl.js"></script>
+	
+	<!-- endbuild -->
+	
+	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+	
 	<script src="/facadeCore.js"></script>
 	<script src="/utils.js"></script>
 
 	<script src="/calendar.js"></script>
 
 	<script src="/controllers/mainCtrl.js"></script>
-	<script src="/controllers/bookCtrl.js"></script>
 	<script src="/controllers/langsCtrl.js"></script>
 	<script src="/controllers/legalCtrl.js"></script>
  	

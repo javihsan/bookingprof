@@ -29,7 +29,7 @@
   <link rel="stylesheet" href="/styles/skin.css">
   <!-- endbuild -->
 
-  <!-- build:js(.) scripts/vendor.js -->
+  <!-- build:js(.) scripts/vendorFly.js -->
   <!-- bower:js -->
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script src="bower_components/angular/angular.js"></script>
@@ -92,7 +92,7 @@
 	        <ul class="mainMenu" ng-controller="MenuBehaviour">
 		      	<li ng-click="toggleSidenav()" onClick="document.location='#!/search'" ng-class="{current: isActive('search')}">
 		      		<md-icon md-font-library="material-icons" class="md-24">border_color</md-icon>
-		      		<a lnt-id="label.aside.bookings">Booking</a>
+		      		<a lnt-id="fly.label.aside.offers">Booking</a>
 		      	</li><!--
 		      	<md-divider></md-divider>
 		      	<li ng-click="toggleSidenav()" onClick="document.location='#!/legal'" ng-class="{current: isActive('legal')}">
@@ -130,16 +130,21 @@
 		<md-content id="contentParent" layout="column" flex class="md-padding" ui-view></md-content>
 	</div>	
 	
-	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+	<!-- build:js({.tmp,app}) scripts/scriptsFly.js -->
 	
 	<script src="/fly.js"></script>
+	<script src="/controllers/flyCtrl.js"></script>
+
+	<!-- endbuild -->
+	
+	<!-- build:js({.tmp,app}) scripts/scripts.js -->
+	
 	<script src="/facadeCore.js"></script>
 	<script src="/utils.js"></script>
 
 	<script src="/calendar.js"></script>
 
 	<script src="/controllers/mainCtrl.js"></script>
-	<script src="/controllers/flyCtrl.js"></script>
 	<script src="/controllers/langsCtrl.js"></script>
 	<script src="/controllers/legalCtrl.js"></script>
 
@@ -214,15 +219,15 @@
 									id : localId
 								};
 								var promiseLocal = httpService.GET(url, data);
-
+															
 								$q
-										.all([ promiseFirm, promiseLocal ])
+										.all([ promiseFirm, promiseLocal])
 										.then(
 												function(response) {
 
 													$rootScope.firm = response[0].data;
 													$rootScope.local = response[1].data;
-
+											
 													if ($rootScope.local.id) {
 
 														url = protocol_url+appHost+"/lang/list"
@@ -248,7 +253,7 @@
 															if (path != "/search") {
 																$location.replace().path("/search");
 															} else {
-																$rootScope.currentScope.initBook(1);
+																$rootScope.currentScope.initSearch(1);
 															}
 																				
 														});	

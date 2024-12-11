@@ -1,4 +1,5 @@
-app.controller("MenuBehaviour", [
+app
+	.controller("MenuBehaviour", [
   		"$scope", "$location", "$rootScope", 
 		function($scope, $location, $rootScope) {
   			  			

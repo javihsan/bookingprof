@@ -1090,7 +1090,7 @@
 	{
 		"id": null,
 		"enabled": null,
-		"mulKey": "label.header.today",
+		"mulKey": "label.header.saveSearch",
 		"mulLanCode": "es",
 		"mulText": "Hoy",
 		"mulLanName": null

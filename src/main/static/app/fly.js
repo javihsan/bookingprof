@@ -46,12 +46,12 @@ var App = {
 				url: '',
 				templateUrl: 'views/flyHome.html',
 				controller: function($scope,$rootScope){
-					$scope.initBook(1);
+					$scope.initSearch(1);
 					$rootScope.setBack(null,$scope);
 		          },
 	            onEnter: function($rootScope){
 	            	//console.log("onEnter search.home");
-	            	$rootScope.sectionTit = $rootScope.findLangTextElement("label.aside.bookings");
+	            	$rootScope.sectionTit = $rootScope.findLangTextElement("fly.label.aside.offers");
 	              }
 			})
 			.state('legal', {
@@ -182,17 +182,17 @@ var App = {
 				__FacadeCore = new FacadeCore(cacheService);
 						
 				var url = protocol_url + appHost + "/multiText/fly/listLocaleTexts";
-				//var url = "/js/lang_es.json" // "/js/lang_es_full.json" // Para rapidez al debugear solo con front
 				var data = {lanCode:lanCode};
 								
 				httpService.GET(url,data).then(
 					function(response) {
+						//console.log("changeLang: "+url)
 						$rootScope.langApp = response.data[0].mulLanCode;
 						$rootScope.langAppName = $rootScope.langApp.substr(0,2).toUpperCase();
 						$rootScope.lntData = response.data;
 						
-						$rootScope.selectedTasks = undefined;
-						$rootScope.selectedTasksCount = undefined;
+						//$rootScope.selectedTasks = undefined;
+						//$rootScope.selectedTasksCount = undefined;
 											 
 						if (fun){
 							fun();
@@ -238,10 +238,9 @@ var App = {
 			$rootScope.local = undefined;
 			$rootScope.showLang = false;
 			$rootScope.isViewLoading = undefined; 
-			$rootScope.selectedDate = undefined;
 		
 			appFirmDomain = 'fly' // Para local arrancado solo con front
-			appHost = 'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
+			//appHost = 'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
 			
 			appHost += '/'+appFirmDomain;
 			appName = 'BookingProf-' + appFirmDomain;
