@@ -23,14 +23,17 @@ public class Invoice extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Integer enabled;
 
+	@Index
 	protected Long invLocalId;
 	
 	protected String invDesc;
 
+	@Index
 	protected Long invClientId;
 
 	protected Date invIssueTime;
 
+	@Index
 	protected Date invTime;
 
 	protected Float invRate;

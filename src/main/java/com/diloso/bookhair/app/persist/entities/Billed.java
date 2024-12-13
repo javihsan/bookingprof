@@ -23,18 +23,24 @@ public class Billed extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Integer enabled;
 	
+	@Index
 	protected Long bilCalendarId;
 
 	protected Long bilClientId;
 
+	@Index
 	protected Long bilLocalTaskId;
 	
+	@Index
 	protected Long bilProductId;
 
+	@Index
 	protected Date bilTime;
 	
+	@Index
 	protected Float bilRate;
 
+	@Index
 	protected Long bilInvoiceId;
 
 	public Long getId() {
