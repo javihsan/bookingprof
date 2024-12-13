@@ -10,8 +10,8 @@ import jakarta.inject.Singleton;
 @Singleton
 public class AmedeusService {
 
-	private static String CLIENT_ID = "id";
-	private static String CLIENT_SECRET = "pas";
+	private static String CLIENT_ID = "wX2W9ZSJywu6qAAIfExkNUDK5GsQjakp";
+	private static String CLIENT_SECRET = "UEffPAruWkzXPFi5";
 
 	protected static final Amadeus amadeusInstance = Amadeus.builder(CLIENT_ID, CLIENT_SECRET).build();
 

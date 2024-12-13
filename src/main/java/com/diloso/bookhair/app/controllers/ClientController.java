@@ -165,9 +165,7 @@ public class ClientController {
 			listClient = clientManager.getClient(firm.getId());
 			syncCache.put (key, listClient, Expiration.byDeltaSeconds(18000)); // 5 horas 60*60*5 segundos en un día
 		}
-
-		//List<ClientDTO> listClient = clientDAO.getClient(firm.getId());	
-					
+			
 		return listClient;
 	}
 	

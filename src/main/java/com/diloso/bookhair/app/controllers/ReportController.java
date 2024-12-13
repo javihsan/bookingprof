@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.mail.SendFailedException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -43,28 +44,28 @@ public class ReportController {
 	protected String TYPE_STRING = "string";
 	protected String TYPE_NUMBER = "number";
 	
-	//@Autowired
+	@Autowired
 	protected MessageSource messageSourceApp;
 	
-	//@Autowired
+	@Autowired
 	protected ILocalManager localManager;
 	
-	//@Autowired
+	@Autowired
 	protected ICalendarManager calendarManager;
 	
-	//@Autowired
+	@Autowired
 	protected IFirmManager firmManager;
 	
-	//@Autowired
+	@Autowired
 	protected IEventManager eventManager;
 	
-	//@Autowired
+	@Autowired
 	protected IBilledManager billedManager;
 	
-	//@Autowired
+	@Autowired
 	protected ILocalTaskManager localTaskManager;
 	
-	//@Autowired
+	@Autowired
 	protected IProductManager productManager;
 	
 	@RequestMapping("")

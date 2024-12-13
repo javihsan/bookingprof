@@ -36,6 +36,9 @@ public class AnnualDiary extends StorableWithModificationTimestamp<Long> {
 
 	protected Long anuDayDiaryId;
 	
+	@Index
+	protected Long anuRepeatId;
+	
 	public Long getId() {
 		return id;
 	}
@@ -72,8 +75,6 @@ public class AnnualDiary extends StorableWithModificationTimestamp<Long> {
 		this.anuCalendarId = anuCalendarId;
 	}
 
-
-
 	public void setAnuDate(Date anuDate) {
 		this.anuDate = anuDate;
 	}
@@ -94,6 +95,12 @@ public class AnnualDiary extends StorableWithModificationTimestamp<Long> {
 		this.anuDayDiaryId = anuDayDiaryId;
 	}
 
-	
-	
+	public Long getAnuRepeatId() {
+		return anuRepeatId;
+	}
+
+	public void setAnuRepeatId(Long anuRepeatId) {
+		this.anuRepeatId = anuRepeatId;
+	}
+		
 }

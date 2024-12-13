@@ -35,10 +35,10 @@ public class EventManager implements IEventManager {
 	public static final String EVE_LOCAL_ID = "eveLocalTaskId";
 	public static final String ENABLED = "enabled";
 	public static final String ORDER_EVE_START_TIME_ASC = "eveStartTime";
-	public static final String EVE_START_TIME_MAYQ = "eveStartTime>=";
-	public static final String EVE_START_TIME_MENQ = "eveStartTime<="; 
+	public static final String EVE_START_TIME_MAYQ = "eveStartTime >=";
+	public static final String EVE_START_TIME_MENQ = "eveStartTime <="; 
 	public static final String ORDER_EVE_BOOKING_TIME_ASC = "eveBookingTime";
-	public static final String EVE_BOOKING_TIME_MAYQ = "eveBookingTime>=";
+	public static final String EVE_BOOKING_TIME_MAYQ = "eveBookingTime >=";
 	
 	protected static final Logger log = Logger.getLogger(EventManager.class.getName());
 

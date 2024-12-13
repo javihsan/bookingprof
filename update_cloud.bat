@@ -1,4 +1,4 @@
-SET PATH=C:\GCloudSDK\google-cloud-sdk\bin;C:\openjdk_1.8.0\bin;%PATH%;
+SET PATH=C:\Users\fjsanchez\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin;%PATH%;
 
 gcloud config set project dilosohairapp
 mvn package appengine:deploy -P prod
@@ -8,9 +8,5 @@ mvn clean package appengine:deployIndex
 
 gcloud app deploy .\target\dilosohairapp\WEB-INF\cron.yaml
 
-Indexado?
-Task
-TaskClass
-RepeatClient
-ProductClass
-Product
+Si falla el índice en el deploy a Pro, lanzar primero el deployIndex 
+

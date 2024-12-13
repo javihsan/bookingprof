@@ -41,6 +41,15 @@ indexes:
     name: calName
 - kind: Event
   properties:
+  - name: eveBookingTime>=
+  - name: eveBookingTime
+- kind: Event
+  properties:
+  - name: eveStartTime<=
+  - name: eveStartTime>=
+  - name: eveStartTime
+- kind: Event
+  properties:
   - direction: desc
     name: eveCalendarId
   - direction: asc

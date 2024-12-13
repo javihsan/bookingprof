@@ -35,7 +35,7 @@ public class RepeatManager implements IRepeatManager {
 	public static final String EVE_CALENDAR_ID = "eveCalendarId";
 	public static final String ENABLED = "enabled";
 	public static final String ORDER_EVE_END_TIME_ASC = "eveEndTime";
-	public static final String EVE_END_TIME_MAYQ = "eveEndTime>=";
+	public static final String EVE_END_TIME_MAYQ = "eveEndTime >=";
 
 	
 	@Autowired

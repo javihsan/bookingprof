@@ -5950,7 +5950,7 @@ public class LoadingController {
 	}
 
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/admin/classSystem3_pendiente pro")
+	@RequestMapping(method = RequestMethod.GET, value = "/admin/classSystem3_no")
 	@ResponseStatus(HttpStatus.OK)
 	protected void classSystem3(HttpServletRequest arg0, HttpServletResponse arg1)
 			throws Exception {
@@ -5963,7 +5963,6 @@ public class LoadingController {
 
 		String nameKey = MultiTextManager.KEY_MULTI_SYSTEM
 				+ TaskClassManager.KEY_MULTI_TASKCLASS_NAME + "trip";
-		//TaskClassDTO taskClassGoods = taskClassDAO.getByName(nameKey);
 		TaskClassDTO taskClassTrip = new TaskClassDTO();
 		taskClassTrip.setEnabled(1);
 
@@ -6106,7 +6105,7 @@ public class LoadingController {
 	}
 	
 	/*
-	 	@RequestMapping(method = RequestMethod.GET, value = "/admin/migrateEvent_no")
+	@RequestMapping(method = RequestMethod.GET, value = "/admin/migrateEvent_no")
 	@ResponseStatus(HttpStatus.OK)
 	protected void migrateEvent(HttpServletRequest arg0,
 			HttpServletResponse arg1) throws Exception {
