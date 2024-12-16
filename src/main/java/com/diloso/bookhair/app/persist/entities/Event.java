@@ -28,6 +28,7 @@ public class Event extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Long eveCalendarId;
 	
+	@Index
 	protected Long eveClientId;
 	
 	@Index
@@ -49,6 +50,7 @@ public class Event extends StorableWithModificationTimestamp<Long> {
 	@Index
 	protected Long eveLocalTaskId;
 	
+	@Index
 	protected String eveICS;
 	
 	protected String eveIDGCalendar;
