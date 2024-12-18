@@ -3,18 +3,15 @@
  		
 	    	<md-tab label="{{tabsBook[0].title}}" ng-disabled="tabsBook[0].disabled" ng-click="$parent.selectedTabIndex = 0;">
 		  		<loading></loading>
-		 	  				    
-				<show-calendar-table id="table-month" ng-show="!isViewLoading && showCalendar">
-				</show-calendar-table>
-				
+		 	  	
 				<show-search ng-show="!isViewLoading">
 				</show-search>
 
 				<md-divider class="clear">
 				
-				<div ng-show="!isViewLoading && searchInputScope.dateOrigin" layout="row" class="md-actions" layout-align="start center">
+				<div ng-show="!isViewLoading" layout="row" class="md-actions" layout-align="start center">
 	    			<span flex></span>
-	    			<md-button ng-click="saveSearch()" class="md-primary md-hue-2">
+	    			<md-button ng-click="saveSearchInput()" ng-disabled="!validSearchInput()" class="md-primary md-hue-2">
 	    				<span lnt-id="fly.action.searchOffers">Ver resultados</span>
 	    				<md-icon md-font-library="material-icons" class="md-24 md-accents">search</md-icon>
 	    			</md-button>

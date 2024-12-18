@@ -21,74 +21,13 @@ app
 							$scope.appo.cols = 1;							
 							
 							$scope.disabledNextTabs = function() {
-							    console.log ("disabledNextTabs");
-							    $scope.tabsBook[1].disabled = true;
-								//$scope.tabsBook[2].disabled = true;
-								//$scope.tabsBook[3].disabled = true;
+						    console.log ("disabledNextTabs");
+						    $scope.tabsBook[1].disabled = true;
+							//$scope.tabsBook[2].disabled = true;
+							//$scope.tabsBook[3].disabled = true;
 							    
 							};
-							
-							$scope.toggleShowCalendar = function() {
-								//console.log ("toggleShowCalendar");
-								$scope.showCalendar = !$scope.showCalendar;
-							};
-														
-							$scope.formatDateSelected = function() {
-								if($rootScope.selectedDate){
-									date = __Utils.stringToDate($rootScope.selectedDate);
-									return __Utils.dateToStringFormat(date);
-								}
-							};
-							
-							$scope.extractYear = function() {
-								if($scope.searchInputScope){
-									date = __Utils.stringToDate($scope.searchInputScope.dateOrigin);
-									return date.getFullYear();
-								}
-							};
-							
-							$scope.extractDayWeek = function(selDate) {
-								if (selDate){
-									date = selDate;
-									date = __Utils.stringToDate(date);
-									return __Utils.dateToDayWeekDayMonthFormat(date);
-								}
-							};
-							
-							$scope.extractDayWeekMonth = function() {
-								if($scope.searchInputScope){
-									date = $scope.searchInputScope.dateOrigin;
-									date = __Utils.stringToDate(date);
-									return __Utils.dateToDayWeekMonthFormat(date);
-								}
-							};
-							
-							$scope.extractDayMonth = function(sel) {
-								if($scope.searchInputScope){
-									date = $scope.searchInputScope.dateOrigin;
-									date = __Utils.stringToDate(date);
-									if (sel){
-										date.setDate(date.getDate() + sel);
-									}
-									return date.getDate();
-								}
-							};
-							
-							$scope.extractSemDay = function(sel) {
-								if($scope.searchInputScope){
-									date = $scope.searchInputScope.dateOrigin;
-									date = __Utils.stringToDate(date);
-									if (sel){
-										date.setDate(date.getDate() + sel);
-									}
-									return __Utils.dateToDayWeekFormat(date);
-								}
-							};
-							
-							$scope.range = function(n) {
-						        return new Array(n);
-						    };
-						    
+															    
 						    $scope.icons_num = function(n) {
 						        var icoArray = ['one','two','3','4','5','6'];
 						    	return icoArray[n];
@@ -102,7 +41,7 @@ app
 							
 							// Al iniciar la pantalla de Search
 							$scope.initSearch = function(reset) {
-								console.log("initSearchIntento",$rootScope.sectionTit);
+								//console.log("initSearchIntento",$rootScope.sectionTit);
 								if ($rootScope.firm) {
 									console.log("initSearch",reset);
 									
@@ -129,7 +68,6 @@ app
 										//$scope.tabsBook[2].disabled = true;
 										//$scope.tabsBook[3].disabled = true;
 										
-										$rootScope.selectedDate = undefined;
 										$scope.showCalendar = false;
 										
 										$scope.searchInputScope = undefined;
@@ -145,8 +83,8 @@ app
 									
 									var a, newDayAux;
 				
-									if($rootScope.selectedDate){
-										a = $rootScope.selectedDate.split('-');
+									if($scope.searchInputScope && $scope.searchInputScope.departureDate){
+										a = $scope.searchInputScope.departureDate.split('-');
 										newDayAux = new Date(a[0], a[1] - 1, a[2]);
 									} else {
 										newDayAux = new Date();
@@ -168,7 +106,8 @@ app
 								
 								if (!$scope.searchInputScope){
 									$scope.searchInputScope = {};
-									$scope.searchInputScope.dateOrigin = __Utils.dateToString(new Date());
+									$scope.searchInputScope.departureDate = __Utils.dateToString(new Date());
+									$scope.searchInputScope.returnDate = __Utils.dateToString(new Date());
 								}
 								
 								return $scope.showTravelers();
@@ -184,8 +123,9 @@ app
 								
 								return $rootScope.isViewLoading = false;
 							};
-
-
+															
+							
+							/* Calendar  ********************************************/
 							$scope.createCalendar = function(newDayAux) {
 								console.log("createCalendar",newDayAux);
 								var openDaysAux, weekDaysClosed, tableMonth;
@@ -200,6 +140,10 @@ app
 								return $scope.initSearchInput();
 							};
 
+							$scope.range = function(n) {
+						        return new Array(n);
+						    };
+
 							$scope.onToday = function() {
 								//console.log("onToday");
 								var newDayAux = new Date();
@@ -212,74 +156,168 @@ app
 							};
 							
 							$scope.onSelectDate= function(event) {
-								//console.log("onSelectDate",event);
+								console.log("onSelectDate",event);
 								var elemen = $(event.currentTarget).find("span#date");
 								if (!elemen.parent().hasClass('date_closed')) {
 									if ($rootScope.adminOption
 											|| !elemen.parent().hasClass('date_not_enabled')) {
 										var selectedDate = elemen.attr("datetime");
-										$rootScope.selectedDate = new String(selectedDate);
-										console.log ("$rootScope.selectedDate: "+$rootScope.selectedDate)
+										if ($scope.dateToSelect=='departureDate'){
+											$scope.searchInputScope.departureDate = __Utils.formatDate(selectedDate);
+										} else if ($scope.dateToSelect=='returnDate'){
+											$scope.searchInputScope.returnDate = __Utils.formatDate(selectedDate);
+										}
+										if ($scope.searchInputScope.departureDate<$scope.searchInputScope.returnDate){
+											console.log("hacerrrrrrrrrrr algooooooo nerrorrrrrr");
+										}
 										$scope.toggleShowCalendar();
 									}
 								}
 							};
-														
-														
-							$scope.saveSearch = function() {
-								//console.log("saveSearch");
-								
-								$rootScope.isViewLoading = true;
-								
-								$scope.tabsBook[1].disabled = false;
-								$scope.selectedTabIndex = 1;
-
-								
-								var h, i, s, selectedTasks, selectedTasksCount, selectedTasksPer;
-								selectedTasks = new Array();
-						        selectedTasksCount = new Array();
-						        s = 0;
-								for (h = 0; h < $scope.personscope.numPersons; h++) {
-									selectedTasksPer = $scope.personscope.selectedTasksPersons[h];
-									for (i = 0; i < selectedTasksPer.length; i++) {
-										selectedTasks[s] = selectedTasksPer[i];
-										s++;
+							
+							// date_closed or date_not_enabled
+							$scope.isNotSel = function(dateApos) {
+								//console.log("isNotSelIntento", dateApos);
+								if (typeof _this !== 'undefined' && $scope.searchInputScope && $scope.searchInputScope.departureDate){
+									//console.log("isNotSel", dateApos);
+									var date = __Utils.stringToDate($scope.searchInputScope.departureDate);
+									date.setDate(date.getDate() + dateApos);
+									var weekDaysClosed = $rootScope.local.locSemanalDiary.closedDiary;
+									var dayWeek = date.getDay();
+									if (dayWeek==0){
+										dayWeek = 6;
+									} else {
+										dayWeek = dayWeek-1;
 									}
-							        selectedTasksCount[h] = selectedTasksPer.length;
+									for (i=0;i<weekDaysClosed.length;i++){
+										if (dayWeek==weekDaysClosed[i]) {
+											return true;
+										}
+									}
+									var today = new Date();
+									today.setHours(0);
+									today.setMinutes(0);
+									today.setSeconds(0);
+									today.setMilliseconds(0)
+									var oneDay = 1000 * 60 * 60 * 24;
+									var maxDate = new Date();
+									maxDate.setTime(today.getTime() + ((_this.settings.openDays-1)*oneDay) );
+									if (date<today || date>maxDate){
+										return true;
+									}
+									var annual = {};
+									for (var i = 0; i < $scope.annuals.length; i++) {
+										annual = $scope.annuals[i];
+										day = new Date(annual.anuDate);
+										strDay = __Utils.dateToString(day);
+										strDate = __Utils.dateToString(date);	
+										if (strDate == strDay) {
+											if (annual.anuClosed == 1) {
+												return true;
+											}
+										}
+									}
+									return false;
 								}
-								$rootScope.selectedTasks = selectedTasks;
-								$rootScope.selectedTasksCount = selectedTasksCount;
-
-								$scope.initDayAppos();
-							};
-							
-							/* SelectOriginLocation  ********************************************/
-							
-							// Ir a la pantalla de SelectLocation
-							$scope.goToSelectOriginLocation = function() {
-								console.log("goToSelectOriginLocation");
-								$scope.showOriginLocation($rootScope.findLangTextElement("label.template.job"), $rootScope.findLangTextElement("general.select"), $scope.originLocation);
+								return false;
 							}
 							
-							$scope.showOriginLocation = function(titleDialog, titleContent, selectedLocation) {
-								console.log ("showOriginLocation: ",titleDialog, titleContent, selectedLocation);
+							$scope.selectDepartureDate = function() {
+								//console.log ("selectDepartureDate");
+								$scope.dateToSelect = 'departureDate';
+								$scope.toggleShowCalendar();
+							};
+							
+							$scope.selectReturnDate = function() {
+								//console.log ("selectReturnDate");
+								$scope.dateToSelect = 'returnDate';
+								$scope.toggleShowCalendar();
+							};
+							
+							$scope.toggleShowCalendar = function() {
+								//console.log ("toggleShowCalendar");
+								$scope.showCalendar = !$scope.showCalendar;
+							};
+														
+							$scope.formatDateSelected = function(strDate) {
+								if(strDate){
+									date = __Utils.stringToDate(strDate);
+									return __Utils.dateToStringFormat(date);
+								}
+							};
+							
+							$scope.extractYear = function() {
+								if($scope.searchInputScope){
+									date = __Utils.stringToDate($scope.searchInputScope.departureDate);
+									return date.getFullYear();
+								}
+							};
+							
+							$scope.extractDayWeek = function(selDate) {
+								if (selDate){
+									date = selDate;
+									date = __Utils.stringToDate(date);
+									return __Utils.dateToDayWeekDayMonthFormat(date);
+								}
+							};
+							
+							$scope.extractDayWeekMonth = function() {
+								if($scope.searchInputScope){
+									date = $scope.searchInputScope.departureDate;
+									date = __Utils.stringToDate(date);
+									return __Utils.dateToDayWeekMonthFormat(date);
+								}
+							};
+							
+							$scope.extractDayMonth = function(sel) {
+								if($scope.searchInputScope){
+									date = $scope.searchInputScope.departureDate;
+									date = __Utils.stringToDate(date);
+									if (sel){
+										date.setDate(date.getDate() + sel);
+									}
+									return date.getDate();
+								}
+							};
+							
+							$scope.extractSemDay = function(sel) {
+								if($scope.searchInputScope){
+									date = $scope.searchInputScope.departureDate;
+									date = __Utils.stringToDate(date);
+									if (sel){
+										date.setDate(date.getDate() + sel);
+									}
+									return __Utils.dateToDayWeekFormat(date);
+								}
+							};
+							
+							/* SelectTravelers  ********************************************/
+							
+							// Ir a la pantalla de SelectTravelers
+							$scope.goToSelectTravelers = function() {
+								console.log("goToSelectTravelers");
+								$scope.showSelectTravelers($rootScope.findLangTextElement("label.template.job"), $rootScope.findLangTextElement("general.select"), $scope.originLocation);
+							}
+							
+							$scope.showSelectTravelers = function(titleDialog, titleContent, selectedLocation) {
+								console.log ("showSelectTravelers: ",titleDialog, titleContent, selectedLocation);
 								
 						    	$mdDialog.show({
-							      controller: DialogFlyController,
-							      templateUrl: 'views/modalDialogTasks.html',
+							      controller: DialogTravelersCtrl,
+							      templateUrl: 'views/modalDialogTravelers.html',
 							      parent: angular.element(document.body),
 							      clickOutsideToClose:true,
 						          locals: { titleDialog: titleDialog, titleContent: titleContent, selectedLocation: selectedLocation }
 							    })
 							    .then(function(obj) {
-							    	if ($scope.saveOriginLocation(obj)){
+							    	if ($scope.saveTravelers(obj)){
 							    		$scope.disabledNextTabs();	
 							    	} 
 							    });
 							};
 							
 							
-							var DialogFlyController = function ($scope, $mdDialog, titleDialog, titleContent, selectedLocation) {
+							var DialogTravelersCtrl = function ($scope, $mdDialog, titleDialog, titleContent, selectedLocation) {
 								
 								$scope.acceptText = $rootScope.findLangTextElement("form.accept");
 								$scope.cancelText = $rootScope.findLangTextElement("form.cancel");
@@ -313,16 +351,16 @@ app
 									var idx = $scope.selectedTasksPersonsChecks.indexOf(taskId);
 									// Not is currently selected
 									if (idx == -1) {
-									   	$scope.selectedLocationChecks = [];
-									   	$scope.selectedLocationChecks.push(taskId);
+									   	$scope.selectedTravelersChecks = [];
+									   	$scope.selectedTravelersChecks.push(taskId);
 									}
 								}								
 								
 							}
 							
-							// Salvamos seleccion de Location
-							$scope.saveOriginLocation = function(selectedLocationChecks) {
-								console.log("saveOriginLocation", selectedLocationChecks);
+							// Salvamos seleccion de Travelers
+							$scope.saveTravelers = function(selectedTravelersChecks) {
+								console.log("saveTravelers", selectedTravelersChecks);
 								
 								var taskSelPer = undefined;
 								var taskAux = undefined;
@@ -368,58 +406,45 @@ app
 						        }
 							}
 							
-							/* AposDay ********************************************/
+							/* Guardamos datos de Search y buscamos ************************/
 							
-							// date_closed or date_not_enabled
-							$scope.isNotSel = function(dateApos) {
-								//console.log("isNotSelIntento", dateApos);
-								if ($rootScope.selectedDate){
-									//console.log("isNotSel", dateApos);
-									var date = __Utils.stringToDate($rootScope.selectedDate);
-									date.setDate(date.getDate() + dateApos);
-									var weekDaysClosed = $rootScope.local.locSemanalDiary.closedDiary;
-									var dayWeek = date.getDay();
-									if (dayWeek==0){
-										dayWeek = 6;
-									} else {
-										dayWeek = dayWeek-1;
-									}
-									for (i=0;i<weekDaysClosed.length;i++){
-										if (dayWeek==weekDaysClosed[i]) {
-											return true;
-										}
-									}
-									var today = new Date();
-									today.setHours(0);
-									today.setMinutes(0);
-									today.setSeconds(0);
-									today.setMilliseconds(0)
-									var oneDay = 1000 * 60 * 60 * 24;
-									var maxDate = new Date();
-									maxDate.setTime(today.getTime() + ((_this.settings.openDays-1)*oneDay) );
-									if (date<today || date>maxDate){
-										return true;
-									}
-									var annual = {};
-									for (var i = 0; i < $scope.annuals.length; i++) {
-										annual = $scope.annuals[i];
-										day = new Date(annual.anuDate);
-										strDay = __Utils.dateToString(day);
-										strDate = __Utils.dateToString(date);	
-										if (strDate == strDay) {
-											if (annual.anuClosed == 1) {
-												return true;
-											}
-										}
-									}
+							$scope.validSearchInput = function() {
+								//console.log("validSearchInput", $scope.searchInputScope);
+								
+								if (!$scope.searchInputScope){
 									return false;
 								}
-								return false;
-							}
+								if (!$scope.searchInputScope.departureDate){
+									return false;
+								}
+								if (!$scope.searchInputScope.originLocIata){
+									return false;
+								}
+								if (!$scope.searchInputScope.destLocIata){
+									return false;
+								}
+																
+								return true;
+
+							};
 							
-							// Al iniciar la pantalla de Booking Days
-							$scope.initDayAppos = function(dateIncr,event,dateApos) {
-								//console.log("initDayAppos", dateIncr, event, dateApos);
+							$scope.saveSearchInput = function() {
+								console.log("saveSearchInput");
+								
+								$rootScope.isViewLoading = true;
+								
+								$scope.tabsBook[1].disabled = false;
+								$scope.selectedTabIndex = 1;
+
+								$scope.initSearchList();
+							};					
+							
+							/* SearchList ********************************************/
+													
+							
+							// Al iniciar la pantalla de SearchList
+							$scope.initSearchList = function(dateIncr,event) {
+								console.log("initSearchList", dateIncr, event);
 								if (event){
 									var elemen = $(event.currentTarget);
 									if (elemen.hasClass('date_closed') ||
@@ -429,64 +454,39 @@ app
 								}	
 								
 								$rootScope.isViewLoading = true;
+																		
+								if (dateIncr){
+									date = __Utils.stringToDate($scope.searchInputScope.departureDate);
+									date.setDate(date.getDate() + dateIncr);
+									$scope.searchInputScope.departureDate = __Utils.dateToString(date); 
+								}
+																
+								var data = {
+									originLocationCode : $scope.searchInputScope.originLocIata,
+									destinationLocationCode : $scope.searchInputScope.destLocIata,
+									departureDate : $scope.searchInputScope.departureDate,
+									adults : 2,
+									children : 2,
+									infants : 0,
+									nonStop: true									
+								};
 								
-								$scope.appo = {};
-								$scope.appo.appointments = new Array();
-								$scope.appo.appoSel = undefined;
-								$scope.appo.cols = 1;
+								if ($scope.searchInputScope.returnDate){
+									data.returnDate = $scope.searchInputScope.returnDate;
+								}
+								console.log("dataaaaa", data);
+								var promiseAposDay = httpService.GET($rootScope.urlListOffersDay, data);
 								
-								var data, selectTaskParam, selectedCalendars, selectedCalendarsParam, selectedTasks, selectedTasksCount, h, i;
-
-								selectedTasks = $rootScope.selectedTasks;
-								if (selectedTasks) {
-									selectedTasksCount = $rootScope.selectedTasksCount;
-									selectedCalendars = $scope.selCalendar.selectedCalendar;
-									if ($scope.local.locSelCalendar == 1 && selectedCalendars[0].id ==-1) {
-										selectedCalendarsParam = new Array();
-									} else {
-										selectedCalendarsParam = new Array();
-										for (i in selectedCalendars){
-											selectedCalendarsParam[i] = selectedCalendars[i].id;
-										}
+								return promiseAposDay.then(
+									function(response) {
+										return $scope.showListOffers(response, data);
 									}
-									
-									if (dateApos){
-										$rootScope.selectedDate = dateApos; 
-									} else if (dateIncr){
-										date = __Utils.stringToDate($rootScope.selectedDate);
-										date.setDate(date.getDate() + dateIncr);
-										$rootScope.selectedDate = __Utils.dateToString(date); 
-									}
-									
-									selectTaskParam = new Array();
-									for (h in selectedTasks){	
-										selectTaskParam[h] = selectedTasks[h].id;
-										h++;
-									}
-									
-									data = {
-										localId : $rootScope.local.id,
-										selectedDate : $rootScope.selectedDate.toString(),
-										selectedTasks : selectTaskParam,
-										selectedTasksCount : selectedTasksCount,
-										selectedCalendars : selectedCalendarsParam
-									};
-									if (selectedTasks[0].numLines) {
-										data.numLines = selectedTasks[0].numLines;
-										data.numPallets = selectedTasks[0].numPallets;
-									}
-
-									var promiseAposDay = httpService.GET($rootScope.urlListApoByDay, data);
-									return promiseAposDay.then(
-										function(response) {
-											return $scope.showCalendarDay(response, data);
-										}
-									);
-								} 
+								);
+								
 							};
 							
-							$scope.showCalendarDay = function(response, data) {
-								//console.log("showCalendarDay");
+							$scope.showListOffers = function(response, data) {
+								console.log("showListOffers");
 								var a, appointment, bgColor, cal, h, hourAux, hours, newDayAux, num_apo, resultAppos, todayAux, top_hour, view, x, _j, _l, _len, _len1, _len2, _m;
 																
 								if (response.data.length > 0) {
@@ -679,56 +679,6 @@ app
 						    	$scope.client.telf = "";
 							}
 
-							$scope.querySearch = function(query) {
-							    console.log("querySearch: "+query);
-							    url = protocol_url	+ appHost + "/flight-offers/locations";
-								data = {
-									keyword : query
-								};
-								var promiseLocations = httpService.GET(url, data);
-								
-								return httpService.GET(url,data).then(
-							    	function(response) {
-							    	  var results = response.data;
-							    	  return results;
-									}
-								)
-						    }
-
-					
-							$scope.createFilterFor = function(query) {   	
-									var lowercaseQuery = query.toLowerCase();
-									return function filterFn(client) {
-										var lowercaseClient = client.whoName.toLowerCase();
-											return (lowercaseClient.indexOf(lowercaseQuery) !== -1);
-									};
-							}
-
-							$scope.changeCliEmail = function() {    
-							    //console.log('changeCliEmail ',$scope.client.email );
-								var clients = $scope.client.email ? $rootScope.clients.filter($scope.createFilterForEmail($scope.client.email)) : $rootScope.clients,
-										deferred;
-								if (clients.length==1){
-									// Asignamos el cliente
-								  $scope.childAuto.setSelItem(clients[0]);	
-								}
-							}
-							 
-							$scope.createFilterForEmail = function(email) {   	
-								//console.log('createFilterForEmail ',email );
-								if (email){
-									var lowercaseQuery = email.toLowerCase();
-									return function filterFn(client) {
-										if (client.whoEmail){
-											var lowercaseClient = client.whoEmail.toLowerCase();
-											if (lowercaseClient === lowercaseQuery){
-												return client;
-											}
-										}			
-									};
-								}	
-						}
-
 							$scope.sendNewAppo = function() {
 								//console.log("sendNewAppo");
 																
@@ -817,6 +767,45 @@ app
 		
 							};	
 							
+							$scope.querySearch = function(query) {
+							    //console.log("querySearch: "+query);
+							    url = protocol_url	+ appHost + "/flight-offers/locations";
+								data = {
+									keyword : query
+								};
+								var promiseLocations = httpService.GET(url, data);
+								
+								return httpService.GET(url,data).then(
+							    	function(response) {
+							    	  var results = response.data;
+							    	  return results;
+									}
+								)
+						    }	
+							
+							$scope.selectedOriginLoc = function(item) {    
+								//console.log("selectedOriginLoc: "+item);
+								if (item){
+							    	// console.log('Item changed to ' + JSON.stringify(item));
+									$scope.searchInputScope.originLocIata = item.iataCode;
+							    	$scope.searchInputScope.originLocName = item.name;
+							    } else {
+							   		$scope.searchInputScope.originLocIata = undefined;
+							    	$scope.searchInputScope.originLocName = undefined;
+							    }
+							}
+							
+							$scope.selectedDestLoc = function(item) {    
+								//console.log("selectedDestLoc: "+item);
+								if (item){
+							    	//console.log('Item changed to ' + JSON.stringify(item));
+									$scope.searchInputScope.destLocIata = item.iataCode;
+							    	$scope.searchInputScope.destLocName = item.name;
+							    } else {
+							   		$scope.searchInputScope.destLocIata = undefined;
+							    	$scope.searchInputScope.destLocName = undefined;
+							    }
+							}
 						
 						} ]);
 
@@ -833,6 +822,7 @@ app
 							
 							var self = this;
 							self.querySearch =  $scope.querySearch;
+							self.selectedItemChange = $scope.selectedOriginLoc;
 																		
 					    } ]);
 					    
@@ -849,6 +839,7 @@ app
 							
 							var self = this;
 							self.querySearch =  $scope.querySearch;
+							self.selectedItemChange = $scope.selectedDestLoc;
 																		
 					    } ]);
 					

@@ -1,9 +1,11 @@
 package com.diloso.bookhair.fly.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import com.amadeus.resources.FlightOfferSearch;
 import com.amadeus.resources.Location;
 import com.diloso.bookhair.app.controllers.CalendarController;
 import com.diloso.bookhair.app.datastore.StringUtils;
+import com.diloso.bookhair.app.negocio.dto.MultiTextDTO;
 import com.diloso.bookhair.app.negocio.utils.Utils;
 import com.diloso.bookhair.fly.services.dto.FlightOfferDTO;
 import com.diloso.bookhair.fly.services.dto.LocationDTO;
@@ -25,6 +28,9 @@ import com.diloso.bookhair.fly.services.dto.input.DateRangeDTO;
 import com.diloso.bookhair.fly.services.dto.input.FlightSearchDTO;
 import com.diloso.bookhair.fly.services.dto.input.FlightSearchFlexDTO;
 import com.diloso.bookhair.fly.services.utils.MapperFly;
+import com.google.appengine.api.memcache.ErrorHandlers;
+import com.google.appengine.api.memcache.MemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 
 @Component
 public class OffersSearchService implements IOffersSearchService {
@@ -43,14 +49,27 @@ public class OffersSearchService implements IOffersSearchService {
 
 		Amadeus amadeus = amedeusService.get();
 
+		if (searchDTO.getMax()==null) {
+			searchDTO.setMax(20);
+		}
 		Params params = mapper.map(searchDTO);
+		
 
 		FlightOfferSearch[] flightOfferSearch = amadeus.shopping.flightOffersSearch.get(params);
 		
 		List<FlightOfferDTO> result = mapper.map(flightOfferSearch);
+		int minDepartureTimes;
+		int minReturnTimes;
 		for (FlightOfferDTO flightOfferDTO : result) {
-			searchDTO.setMinDepartureHour(flightOfferDTO.getDepartureDate());
-			searchDTO.setMinReturnHour(flightOfferDTO.getReturnDate());
+			minDepartureTimes = Utils.getDateFly(flightOfferDTO.getDepartureDate()).getHours();
+			searchDTO.setMinDepartureHour(String.valueOf(minDepartureTimes));
+			searchDTO.setMaxDepartureHour(String.valueOf(minDepartureTimes+1));
+			if (flightOfferDTO.getReturnDate()!=null) {
+				minReturnTimes = Utils.getDateFly(flightOfferDTO.getReturnDate()).getHours();
+				searchDTO.setMinReturnHour(String.valueOf(minReturnTimes));
+				searchDTO.setMaxReturnHour(String.valueOf(minReturnTimes+1));
+			}
+			searchDTO.setIncludedAirlineCodes(StringUtils.join(",",flightOfferDTO.getCarriersCode()));
 			flightOfferDTO.setUrlSkyscanner(skyscannerUrl(searchDTO));
 		}
 		return result;
@@ -276,7 +295,7 @@ public class OffersSearchService implements IOffersSearchService {
 		String direct = searchDTO.getNonStop() != null ? searchDTO.getNonStop().toString() : "false";
 		buffer.append("&preferdirects=" + direct);
 		
-		if (searchDTO.getIncludedAirlineCodes().length()>0){
+		if (searchDTO.getIncludedAirlineCodes()!= null && searchDTO.getIncludedAirlineCodes().length()>0){
 			StringBuffer airlines = new StringBuffer("&airlines=");
 			if (searchDTO.getIncludedAirlineCodes().contains("IB")) {
 				airlines.append("-32222,");	
@@ -302,6 +321,12 @@ public class OffersSearchService implements IOffersSearchService {
 			if (searchDTO.getIncludedAirlineCodes().contains("FR")) {
 				airlines.append("-31915,");	
 			}
+			if (searchDTO.getIncludedAirlineCodes().contains("VY")) {
+				airlines.append("-31685,");	
+			}
+			if (searchDTO.getIncludedAirlineCodes().contains("VS")) {
+				airlines.append("-31697,");	
+			}
 			buffer.append(airlines.deleteCharAt(airlines.length()-1));
 		}
 		return buffer.toString();
@@ -312,29 +337,37 @@ public class OffersSearchService implements IOffersSearchService {
 	@Override
 	public List<LocationDTO> locations(String keyword) throws ResponseException {
 	
-		Amadeus amadeus = amedeusService.get();
+		// Using the synchronous cache
+		String keyMem = "locations_fly_"+keyword;
+	  	MemcacheService syncCache = MemcacheServiceFactory.getMemcacheService();
+	    syncCache.setErrorHandler(ErrorHandlers.getConsistentLogAndContinue(Level.INFO));
+	    List<LocationDTO> result = (List<LocationDTO>) syncCache.get(keyMem); // read from cache
+	    if (result == null || result.isEmpty()) {
 		
-		Location[] locations = amadeus.referenceData.locations.get(Params
-		  .with("keyword", keyword)
-		  .and("subType", Locations.ANY)
-			  .and("page[limit]", 20));		
-	    List<LocationDTO> result = new ArrayList<LocationDTO>();
-		for (Location location : locations) {
-			if (location.getSubType().equals(LocationType.CITY.toString()) 
-				|| location.getSubType().equals(LocationType.AIRPORT.toString())) {
-				result.add(mapper.map(location));
+			Amadeus amadeus = amedeusService.get();
+			
+			Location[] locations = amadeus.referenceData.locations.get(Params
+			  .with("keyword", keyword)
+			  .and("subType", Locations.ANY)
+				  .and("page[limit]", 20));		
+		    result = new ArrayList<LocationDTO>();
+			for (Location location : locations) {
+				if (location.getSubType().equals(LocationType.CITY.toString()) 
+					|| location.getSubType().equals(LocationType.AIRPORT.toString())) {
+					result.add(mapper.map(location));
+				}
 			}
-		}
-		// Order by cityCode, type(first CITY)
-		result = result.stream().sorted((o1, o2)->{
-				if (o1.getCityCode().compareTo(o2.getCityCode()) == 0) {
-		            return o2.getType().compareTo(o1.getType());
-		        } else {
-		            return o1.getCityCode().compareTo(o2.getCityCode());
-		        } 
-			}).
-            collect(Collectors.toList());
-		
+			// Order by cityCode, type(first CITY)
+			/*result = result.stream().sorted((o1, o2)->{
+					if (o1.getCityCode().compareTo(o2.getCityCode()) == 0) {
+			            return o2.getType().compareTo(o1.getType());
+			        } else {
+			            return o1.getCityCode().compareTo(o2.getCityCode());
+			        } 
+				}).
+	            collect(Collectors.toList());*/
+			syncCache.put(keyMem, result); // populate cache
+	    }	
 		return result;
 	}
 

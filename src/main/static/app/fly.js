@@ -240,7 +240,7 @@ var App = {
 			$rootScope.isViewLoading = undefined; 
 		
 			appFirmDomain = 'fly' // Para local arrancado solo con front
-			//appHost = 'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
+			appHost = 'localhost:8888';//'r8-0-0-dot-dilosohairapp.appspot.com'//'localhost:8888' //Para tirar de un determinado back
 			
 			appHost += '/'+appFirmDomain;
 			appName = 'BookingProf-' + appFirmDomain;

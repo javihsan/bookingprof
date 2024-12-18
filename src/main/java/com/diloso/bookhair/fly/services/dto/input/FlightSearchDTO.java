@@ -1,13 +1,17 @@
 package com.diloso.bookhair.fly.services.dto.input;
 
 
+import java.io.Serializable;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 @Schema(
 	    description = "DTO for FlightSearch", 
 	    name = "FlightSearchDTO")
-public class FlightSearchDTO {
+public class FlightSearchDTO implements Serializable {
+	
+	protected static final long serialVersionUID = 1L;
 	
 	@Schema(
 		    description = "city/airport IATA code from which the traveler will depart, e.g. BOS for Boston\r\n"

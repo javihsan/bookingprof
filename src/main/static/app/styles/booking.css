@@ -286,7 +286,7 @@ md-dialog{
 	min-height: 10px;
 }
 
-.booking_calendar md-select, .taskSelect {
+.booking_calendar md-select, .select {
    font-size: 14px;
 } 
 

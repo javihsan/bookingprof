@@ -19,8 +19,15 @@ var Utils = function() {
 	  var day, month, year;
 	
 	  year = date.getFullYear();
-	  month = date.getMonth() + 1;
-	  day = date.getDate();
+	  month = (date.getMonth() + 1).toString();
+      if (parseInt(month) <= 9) {
+    	month = "0" + month;
+      }
+      day = (date.getDate()).toString();
+      if (parseInt(day) <= 9) {
+        day = "0" + day;
+      }
+	  	  
 	  return year + "-" + month + "-" + day;
 	};
 	

@@ -1,5 +1,6 @@
 package com.diloso.bookhair.fly.services.dto.input;
 
+import java.io.Serializable;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -7,7 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Schema(description = "DTO for FlightSearchFlex", name = "FlightSearchFlexDTO")
-public class FlightSearchFlexDTO extends FlightSearchDTO {
+public class FlightSearchFlexDTO extends FlightSearchDTO implements Serializable {
+	
+	protected static final long serialVersionUID = 1L;
 
 	@Schema(description = "date range to search " + "\r\n"
 			+ "Example : 2023-05-02", name = "dateRangers", type = "list", example = "2023-05-02")
