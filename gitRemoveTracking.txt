@@ -1,0 +1,1 @@
+git update-index --skip-worktree C:/work/repository/diloso/bookingprof/src/main/java/com/diloso/bookhair/fly/services/AmedeusService.java
